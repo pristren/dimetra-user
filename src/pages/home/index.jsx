@@ -1,10 +1,9 @@
-import { useLazyQuery } from "@apollo/client";
-import { useEffect } from "react";
-import { GET_CATEGORISE } from "./graphql/queries/getCategories.gql";
-
 import Navbar from "@/components/common/navbar";
 import { Button } from "@/components/ui/button";
+import { useLazyQuery } from "@apollo/client";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { GET_CATEGORISE } from "./graphql/queries/getCategories.gql";
 
 export default function Home() {
   const [getCategories] = useLazyQuery(GET_CATEGORISE, {
@@ -21,7 +20,6 @@ export default function Home() {
   useEffect(() => {
     getCategories();
   }, []);
-  return <div>Home</div>;
   return (
     <div className="">
       <Navbar />
