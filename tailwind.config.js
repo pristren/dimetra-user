@@ -8,6 +8,9 @@ export default {
       fontFamily: {
         poppins: ["Poppins", "sans-serif"],
       },
+      backgroundImage: {
+        authBackground: "url('./src/assets/auth-bg.svg')",
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -25,7 +28,7 @@ export default {
           foreground: "hsl(var(--popover-foreground))",
         },
         primary: {
-          DEFAULT: "hsl(var(--primary))",
+          DEFAULT: "#145374",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -44,9 +47,10 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        border: "hsl(var(--border))",
+        // border: "hsl(var(--border))",
+        border: "#E2E8F0",
         input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        ring: "#7EA2B5",
         chart: {
           1: "hsl(var(--chart-1))",
           2: "hsl(var(--chart-2))",
