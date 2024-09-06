@@ -12,8 +12,9 @@ import {
 import { Input } from "../../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import LoginFooter from "@/components/auth/login/login-footer";
 import AuthFooter from "@/components/helper-ui/auth-footer";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
 
 export default function LoginForm() {
   const formSchema = z.object({
@@ -96,7 +97,20 @@ export default function LoginForm() {
                 }}
               />
             </div>
-            <LoginFooter />
+            <div className="flex justify-between mt-4 mb-8">
+              <div className="flex items-center space-x-2">
+                <Checkbox id="remember" />
+                <Label
+                  className="text-[#6F767E] font-normal tracking-wide cursor-pointer"
+                  htmlFor="remember"
+                >
+                  Remember me
+                </Label>
+              </div>
+              <p className="text-destructive underline text-sm cursor-pointer">
+                Forgot your password?
+              </p>
+            </div>
             <Button type="submit" className="block w-2/4 mx-auto">
               Login
             </Button>
