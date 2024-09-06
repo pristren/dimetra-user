@@ -1,4 +1,4 @@
-import LoginForm from "@/components/helper-ui/login-form";
+import LoginForm from "@/components/auth/login/login-form";
 import AuthLayout from "@/layout/auth-layout";
 
 export default function LoginPage() {

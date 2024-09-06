@@ -31,8 +31,13 @@ export default function Home() {
             <Button variant="default">Login</Button>
           </Link>
           <Button variant="secondary">Register</Button>
-          <Button variant="outline">Forget Password</Button>
-          <Button variant="secondary">Forgot Password Input</Button>
+
+          <Link to="/forgot-password">
+            <Button variant="outline">Forget Password</Button>
+          </Link>
+          <Link to="/reset-password">
+            <Button variant="secondary">Forgot Password Input</Button>
+          </Link>
         </div>
       </div>
     </div>

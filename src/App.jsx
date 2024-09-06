@@ -3,6 +3,8 @@ import WrongPath from "@/pages/wrong-path";
 import { Route, Routes } from "react-router-dom";
 import Login from "./pages/authentication/login";
 import Register from "./pages/authentication/register";
+import ForgotPassword from "./pages/authentication/forgot-password";
+import ResetPassword from "./pages/authentication/reset-password";
 
 function App() {
   return (
@@ -10,6 +12,8 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="*" element={<WrongPath />} />
     </Routes>
   );

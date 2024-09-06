@@ -9,7 +9,7 @@ export default {
         poppins: ["Poppins", "sans-serif"],
       },
       backgroundImage: {
-        authBackground: "url('./src/assets/auth-bg.svg')",
+        authBackground: "url('@/assets/auth-bg.svg')",
       },
       borderRadius: {
         lg: "var(--radius)",
