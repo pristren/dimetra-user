@@ -5,6 +5,8 @@ import Login from "./pages/authentication/login";
 import Register from "./pages/authentication/register";
 import ForgotPassword from "./pages/authentication/forgot-password";
 import ResetPassword from "./pages/authentication/reset-password";
+import OrderHistory from "./pages/order-history/OrderHistory";
+import OrderLayout from "./layout/order-layout";
 
 function App() {
   return (
@@ -15,6 +17,9 @@ function App() {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="*" element={<WrongPath />} />
+      <Route path="/order/" element={<OrderLayout />}>
+        <Route path="history" element={<OrderHistory />} />
+      </Route>
     </Routes>
   );
 }

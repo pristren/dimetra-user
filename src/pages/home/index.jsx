@@ -30,8 +30,9 @@ export default function Home() {
           <Link to="/login">
             <Button variant="default">Login</Button>
           </Link>
-          <Button variant="secondary">Register</Button>
-
+          <Link to="/register">
+            <Button variant="outline">Register</Button>
+          </Link>
           <Link to="/forgot-password">
             <Button variant="outline">Forget Password</Button>
           </Link>
