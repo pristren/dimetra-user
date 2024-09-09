@@ -1,4 +1,4 @@
-import CommonSelect from "@/components/common/CommonSelect";
+import AppSelect from "@/components/common/AppSelect";
 import OrderHistoryTable from "@/components/order/OrderHistoryTable";
 import { DatePicker } from "@/components/ui/DatePIcker";
 import { Input } from "@/components/ui/input";
@@ -16,7 +16,7 @@ const OrderHistory = () => {
           <DatePicker date={date} setDate={setDate} />
         </div>
         <div className="flex items-center gap-4 ">
-          <CommonSelect items={filters} placeholder="filters" className="max-w-sm" />
+          <AppSelect items={filters} placeholder="filters" className="max-w-sm" />
           <div className="relative">
             <Input placeholder="Search" className="w-60" />
             <Search className="absolute right-2 top-1/2 -translate-y-1/2" />

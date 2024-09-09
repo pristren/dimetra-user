@@ -7,6 +7,7 @@ import ForgotPassword from "./pages/authentication/forgot-password";
 import ResetPassword from "./pages/authentication/reset-password";
 import OrderHistory from "./pages/order-history/OrderHistory";
 import OrderLayout from "./layout/order-layout";
+import CreateOrder from "./pages/create-order/CreateOrder";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/create-order" element={<CreateOrder />} />
       <Route path="*" element={<WrongPath />} />
       <Route path="/order/" element={<OrderLayout />}>
         <Route path="history" element={<OrderHistory />} />

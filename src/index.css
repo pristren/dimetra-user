@@ -57,11 +57,15 @@
     --chart-5: 340 75% 55%;
   }
 }
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @layer base {
   * {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-poppins;
+    @apply bg-background text-foreground font-poppins max-w-[1440px] mx-auto;
   }
 }
