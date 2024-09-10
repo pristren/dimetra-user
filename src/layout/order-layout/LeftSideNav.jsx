@@ -28,7 +28,7 @@ const LeftSideNav = () => {
         <p>History</p>
       </Link>
       <Link
-        to="/order/settings"
+        to="/order/setting"
         className={`flex items-center gap-2 mb-8 cursor-pointer ${
           isActive("/order/settings") ? "bg-primary text-white px-2 py-2 rounded-md" : ""
         }`}

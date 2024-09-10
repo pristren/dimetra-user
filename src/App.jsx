@@ -5,9 +5,11 @@ import Login from "./pages/authentication/login";
 import Register from "./pages/authentication/register";
 import ForgotPassword from "./pages/authentication/forgot-password";
 import ResetPassword from "./pages/authentication/reset-password";
-import OrderHistory from "./pages/order-history/OrderHistory";
+import OrderHistory from "./pages/order/order-history/OrderHistory";
 import OrderLayout from "./layout/order-layout";
-import CreateOrder from "./pages/create-order/CreateOrder";
+import CreateOrder from "./pages/order/create-order/CreateOrder";
+import OrderSettings from "./pages/order/order-settings/OrderSettings";
+import SendRequest from "./pages/order/send-request/SendRequest";
 
 function App() {
   return (
@@ -21,6 +23,9 @@ function App() {
       <Route path="*" element={<WrongPath />} />
       <Route path="/order/" element={<OrderLayout />}>
         <Route path="history" element={<OrderHistory />} />
+        <Route path="all-orders" element={<OrderHistory />} />
+        <Route path="setting" element={<OrderSettings />} />
+        <Route path="send-request" element={<SendRequest />} />
       </Route>
     </Routes>
   );
