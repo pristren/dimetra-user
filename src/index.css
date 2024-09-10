@@ -60,6 +60,42 @@
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+/* we don't have to modify className in each large/heading tag if we use any heading tag from here */
+h1 {
+  font-size: 4rem;
+  line-height: 1;
+  font-weight: 700;
+}
+h2 {
+  font-size: 3.5rem /* 36px */;
+    line-height: 2.5rem;
+  font-weight: 700;
+}
+h3 {
+  font-size: 3rem /* 36px */;
+    line-height: 2.0rem;
+  font-weight: 700;
+}
+h4 {
+  font-size: 2.50rem;
+  line-height: 1;
+  font-weight: 600;
+}
+h5 {
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 600;
+}
+h6 {
+  font-size: 1.5rem;
+  line-height: 1;
+  font-weight: 500;
+}
+.highlight {
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 500;
+}
 
 @layer base {
   * {

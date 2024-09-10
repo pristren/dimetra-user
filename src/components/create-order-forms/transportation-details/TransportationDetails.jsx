@@ -89,7 +89,7 @@ const TransportationDetails = ({ handleFormChange }) => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid grid-cols-3 gap-5">
-              <div className="border-r pr-5">
+              <div className="pr-5">
                 <h2 className="text-lg font-medium mb-4">
                   Transportart (einfach Auswahl)
                 </h2>
@@ -125,7 +125,7 @@ const TransportationDetails = ({ handleFormChange }) => {
                 />
               </div>
 
-              <div className="border-r pr-5">
+              <div className="pr-5">
                 <h2 className="text-lg font-medium mb-4">
                   Beförderungsart (mehrfach Auswahl)
                 </h2>
