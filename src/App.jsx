@@ -7,6 +7,7 @@ import ForgotPassword from "./pages/authentication/forgot-password";
 import ResetPassword from "./pages/authentication/reset-password";
 import OrderHistory from "./pages/order-history/OrderHistory";
 import OrderLayout from "./layout/order-layout";
+import PrivateRoute from "./layout/PrivateRoute";
 
 function App() {
   return (
@@ -18,7 +19,14 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="*" element={<WrongPath />} />
       <Route path="/order/" element={<OrderLayout />}>
-        <Route path="history" element={<OrderHistory />} />
+        <Route
+          path="history"
+          element={
+            <PrivateRoute>
+              <OrderHistory />
+            </PrivateRoute>
+          }
+        />
       </Route>
     </Routes>
   );

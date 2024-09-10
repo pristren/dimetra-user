@@ -1,25 +1,24 @@
-import { createSlice } from "@reduxjs/toolkit";
+// redux/userSlice.js
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: 0,
+  user: null,
+  accessToken: null,
 };
 
-export const counterSlice = createSlice({
-  name: "counter",
+const userSlice = createSlice({
+  name: 'user',
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    setUser: (state, action) => {
+      state.user = action.payload;
     },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
+    setAccessToken: (state, action) => {
+      state.accessToken = action.payload;
     },
   },
 });
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { setUser, setAccessToken } = userSlice.actions;
 
-export default counterSlice.reducer;
+export default userSlice.reducer;
