@@ -1,6 +1,7 @@
 import { EllipsisVertical } from "lucide-react";
 import { Button } from "../ui/button";
 import { AppTable } from "../common/AppTable";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
 
 const data = [
   {
@@ -87,7 +88,17 @@ const columns = [
   {
     accessorKey: "action",
     header: "Action",
-    cell: () => <EllipsisVertical className="h-4 w-4 cursor-pointer" />,
+    cell: () => (
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <EllipsisVertical className="h-4 w-4 cursor-pointer" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>View Details</DropdownMenuItem>
+          <DropdownMenuItem>Print Order</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ),
   },
 ];
 
