@@ -8,7 +8,9 @@ const LeftSideNav = () => {
 
   return (
     <div className="w-60 border-r border-gray-300 shadow-xl text-gray-500 min-h-screen p-4">
-      <Logo className="mx-auto" />
+      <Link to="/">
+        <Logo className="mx-auto" />
+      </Link>
       <Link
         to="/order"
         className={`flex items-center gap-2 mb-8 cursor-pointer mt-10 ${
@@ -21,7 +23,9 @@ const LeftSideNav = () => {
       <Link
         to="/order/history"
         className={`flex items-center gap-2 mb-8 cursor-pointer ${
-          isActive("/order/history") ? "bg-primary text-white px-2 py-2 rounded-md" : ""
+          isActive("/order/history")
+            ? "bg-primary text-white px-2 py-2 rounded-md"
+            : ""
         }`}
       >
         <CarFront />
@@ -30,7 +34,9 @@ const LeftSideNav = () => {
       <Link
         to="/order/settings"
         className={`flex items-center gap-2 mb-8 cursor-pointer ${
-          isActive("/order/settings") ? "bg-primary text-white px-2 py-2 rounded-md" : ""
+          isActive("/order/settings")
+            ? "bg-primary text-white px-2 py-2 rounded-md"
+            : ""
         }`}
       >
         <Settings />
@@ -39,7 +45,9 @@ const LeftSideNav = () => {
       <Link
         to="/order/Chat"
         className={`flex items-center gap-2 mb-8 cursor-pointer ${
-          isActive("/order/Chat") ? "bg-primary text-white px-2 py-2 rounded-md" : ""
+          isActive("/order/Chat")
+            ? "bg-primary text-white px-2 py-2 rounded-md"
+            : ""
         }`}
       >
         <MessageCircle />
