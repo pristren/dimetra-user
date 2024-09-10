@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
 import BackAndNext from "@/components/common/BackAndNext";
@@ -15,8 +16,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { DatePicker } from "@/components/ui/DatePIcker";
 import AppSelect from "@/components/common/AppSelect";
+import { useEffect, useState } from "react";
 
-const DestinationDetails = ({handleFormChange}) => {
+const DestinationDetails = ({ handleFormChange, setDestinationProgress }) => {
+  const [dropDate, setDropDate] = useState(null);
+  const [returnDate, setReturnDate] = useState(null);
+  
   const formSchema = z.object({
     // Pick-Up fields
     pickUpName: z.string().min(1, "Name is required"),
@@ -33,6 +38,12 @@ const DestinationDetails = ({handleFormChange}) => {
     dropOffCity: z.string().min(1, "City is required"),
     dropOffCountry: z.string().min(1, "Country is required"),
     dropOffPhone: z.string().min(1, "Phone is required"),
+
+    // Return Journey fields
+    returnDate: z.string().min(1, "Date is required"),
+    today: z.string().min(1, "This field is required"),
+    time: z.string().min(1, "Approx. Time is required"),
+    floor: z.string().optional(), // Assuming floor is optional
   });
 
   const form = useForm({
@@ -53,8 +64,85 @@ const DestinationDetails = ({handleFormChange}) => {
       dropOffCity: "",
       dropOffCountry: "",
       dropOffPhone: "",
+
+      // Return Journey fields
+      returnDate: "",
+      today: "",
+      time: "",
+      floor: "",
     },
   });
+
+  const timeOptions = [
+    "00:00",
+    "01:00",
+    "02:00",
+    "03:00",
+    "04:00",
+    "05:00",
+    "06:00",
+    "07:00",
+    "08:00",
+    "09:00",
+    "10:00",
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+    "21:00",
+    "22:00",
+    "23:00",
+  ];
+
+  const calculateProgress = () => {
+    const fieldsFilled = [
+      form.watch("pickUpName"),
+      form.watch("pickUpAddress"),
+      form.watch("pickUpCity"),
+      form.watch("pickUpCountry"),
+      form.watch("pickUpEmployeeName"),
+      form.watch("dropOffPickUpTime"),
+      form.watch("dropOffName"),
+      form.watch("dropOffAddress"),
+      form.watch("dropOffCity"),
+      form.watch("dropOffCountry"),
+      form.watch("dropOffPhone"),
+      dropDate,
+      returnDate,
+      form.watch("floor"),
+    ];
+
+    const filledCount = fieldsFilled.filter(Boolean).length;
+    const progressPercentage = (filledCount / fieldsFilled.length) * 100;
+
+    setDestinationProgress(progressPercentage);
+  };
+
+  useEffect(() => {
+    calculateProgress();
+  }, [
+    form.watch("pickUpName"),
+    form.watch("pickUpAddress"),
+    form.watch("pickUpCity"),
+    form.watch("pickUpCountry"),
+    form.watch("pickUpEmployeeName"),
+    form.watch("dropOffDate"),
+    form.watch("dropOffPickUpTime"),
+    form.watch("dropOffName"),
+    form.watch("dropOffAddress"),
+    form.watch("dropOffCity"),
+    form.watch("dropOffCountry"),
+    form.watch("dropOffPhone"),
+    dropDate,
+    returnDate,
+    form.watch("floor"),
+  ]);
 
   const onSubmit = (data) => {
     console.log("Submitted data:", data);
@@ -200,7 +288,7 @@ const DestinationDetails = ({handleFormChange}) => {
                         Date <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker />
+                        <DatePicker date={dropDate} setDate={setDropDate} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -339,17 +427,19 @@ const DestinationDetails = ({handleFormChange}) => {
                     </FormItem>
                   )}
                 />
-                <h2 className="text-xl font-semibold mt-8 mb-4">Rückfahrt</h2>
+                <h2 className="text-xl font-semibold mt-8 mb-4">
+                  Return journey
+                </h2>
                 <FormField
                   control={form.control}
-                  name="dropOffDate"
+                  name="returnDate"
                   render={({ field }) => (
                     <FormItem className="mb-5">
                       <FormLabel>
                         Date <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker />
+                        <DatePicker date={returnDate} setDate={setReturnDate} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -363,8 +453,13 @@ const DestinationDetails = ({handleFormChange}) => {
                       <FormLabel>Today</FormLabel>
                       <FormControl>
                         <AppSelect
-                          items={["1 day letter", "2 day letter", "3 day letter"]}
+                          items={[
+                            "1 day letter",
+                            "2 day letter",
+                            "3 day letter",
+                          ]}
                           placeholder="1 day letter"
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -376,15 +471,12 @@ const DestinationDetails = ({handleFormChange}) => {
                   name="time"
                   render={({ field }) => (
                     <FormItem className="mb-5">
-                      <FormLabel>Time</FormLabel>
+                      <FormLabel>Approx. Time</FormLabel>
                       <FormControl>
-                        <Input
-                          className={
-                            form.formState.errors.dropOffPhone
-                              ? "border-red-500"
-                              : ""
-                          }
-                          placeholder="20:54"
+                        <AppSelect
+                          items={timeOptions}
+                          placeholder="00:00"
+                          isTime={true}
                           {...field}
                         />
                       </FormControl>
@@ -392,21 +484,19 @@ const DestinationDetails = ({handleFormChange}) => {
                     </FormItem>
                   )}
                 />
-
                 <FormField
                   control={form.control}
-                  name="stock"
+                  name="floor"
                   render={({ field }) => (
                     <FormItem className="mb-5">
-                      <FormLabel>Stock / Abteilung</FormLabel>
+                      <FormLabel>Floor/Department</FormLabel>
                       <FormControl>
                         <Input
                           className={
-                            form.formState.errors.dropOffPhone
+                            form.formState.errors.floor
                               ? "border-red-500"
                               : ""
                           }
-                          placeholder="Type the phone number"
                           {...field}
                         />
                       </FormControl>
@@ -416,7 +506,12 @@ const DestinationDetails = ({handleFormChange}) => {
                 />
               </div>
             </div>
-            <BackAndNext isFillForm={true} back="patient" next ="billing" handleFormChange={handleFormChange}/>
+            <BackAndNext
+              isFillForm={true}
+              back="patient"
+              next="billing"
+              handleFormChange={handleFormChange}
+            />
           </form>
         </Form>
       </CardContent>

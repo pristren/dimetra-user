@@ -14,8 +14,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 
-const PatientDetails = ({ handleFormChange }) => {
+const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
   const formSchema = z.object({
     name: z.string().min(1, "Name is required"),
     surname: z.string().min(1, "Surname is required"),
@@ -42,6 +43,25 @@ const PatientDetails = ({ handleFormChange }) => {
       patientAbove90kg: false,
     },
   });
+
+  const calculateProgress = () => {
+    const fieldsFilled = [
+      form.watch("name"),
+      form.watch("surname"),
+      form.watch("dateOfBirth"),
+      form.watch("areaRoom"),
+      form.watch("kostenstelle"),
+    ];
+
+    const filledCount = fieldsFilled.filter(Boolean).length;
+    const progressPercentage = (filledCount / fieldsFilled.length) * 100;
+
+    setPatientProgress(progressPercentage);
+  };
+
+  useEffect(() => {
+    calculateProgress();
+  }, [form.watch()]);
 
   const onSubmit = (data) => {
     console.log("Submitted data:", data);
@@ -258,7 +278,12 @@ const PatientDetails = ({ handleFormChange }) => {
                 )}
               />
             </div>
-            <BackAndNext isFillForm={true} back="transport" next ="destination" handleFormChange={handleFormChange}/>
+            <BackAndNext
+              isFillForm={true}
+              back="transport"
+              next="destination"
+              handleFormChange={handleFormChange}
+            />
           </form>
         </Form>
       </CardContent>

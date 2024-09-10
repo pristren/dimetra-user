@@ -8,7 +8,9 @@ import TransportationDetails from "@/components/create-order-forms/transportatio
 import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 
 const CreateOrder = () => {
-  // Initialize state with isTransport set to true by default
+  const [transportationProgress, setTransportationProgress] = useState(0);
+  const [patientProgress, setPatientProgress] = useState(0);
+  const [destinationProgress, setDestinationProgress] = useState(0);
   const [showForm, setShowForm] = useState({
     isTransport: true,
     isPatient: false,
@@ -28,6 +30,9 @@ const CreateOrder = () => {
   const props = {
     showForm,
     handleFormChange,
+    setTransportationProgress,
+    setPatientProgress,
+    setDestinationProgress,
   };
 
   return (
@@ -37,17 +42,17 @@ const CreateOrder = () => {
           className="size-40 text-white bg-[#B4DB1A] h-max p-3 rounded-full cursor-pointer"
           onClick={() => handleFormChange("transport")}
         />
-        <Progress />
+        <Progress value={transportationProgress} />
         <User
           className="size-40 text-white bg-[#B4DB1A] h-max p-3 rounded-full cursor-pointer"
           onClick={() => handleFormChange("patient")}
         />
-        <Progress />
+        <Progress value={patientProgress} />
         <Truck
           className="size-40 text-white bg-[#B4DB1A] h-max p-3 rounded-full cursor-pointer"
           onClick={() => handleFormChange("destination")}
         />
-        <Progress />
+        <Progress value={destinationProgress} />
         <Send
           className="size-40 text-white bg-[#B4DB1A] h-max p-3 rounded-full cursor-pointer"
           onClick={() => handleFormChange("billing")}

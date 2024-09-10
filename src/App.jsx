@@ -10,6 +10,7 @@ import OrderLayout from "./layout/order-layout";
 import CreateOrder from "./pages/order/create-order/CreateOrder";
 import OrderSettings from "./pages/order/order-settings/OrderSettings";
 import SendRequest from "./pages/order/send-request/SendRequest";
+import AllOrders from "./pages/order/all-orders/AllOrders";
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
       <Route path="*" element={<WrongPath />} />
       <Route path="/order/" element={<OrderLayout />}>
         <Route path="history" element={<OrderHistory />} />
-        <Route path="all-orders" element={<OrderHistory />} />
+        <Route path="all-orders" element={<AllOrders />} />
         <Route path="setting" element={<OrderSettings />} />
         <Route path="send-request" element={<SendRequest />} />
       </Route>

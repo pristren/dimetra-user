@@ -12,9 +12,9 @@ const LeftSideNav = () => {
         <Logo className="mx-auto" />
       </Link>
       <Link
-        to="/order"
+        to="/order/all-orders"
         className={`flex items-center gap-2 mb-8 cursor-pointer mt-10 ${
-          isActive("/order") ? "bg-primary text-white px-2 py-2 rounded-md" : ""
+          isActive("/order/all-orders") ? "bg-primary text-white px-2 py-2 rounded-md" : ""
         }`}
       >
         <ClipboardList />
@@ -34,7 +34,7 @@ const LeftSideNav = () => {
       <Link
         to="/order/setting"
         className={`flex items-center gap-2 mb-8 cursor-pointer ${
-          isActive("/order/settings")
+          isActive("/order/setting")
             ? "bg-primary text-white px-2 py-2 rounded-md"
             : ""
         }`}
@@ -43,9 +43,9 @@ const LeftSideNav = () => {
         <p>Settings</p>
       </Link>
       <Link
-        to="/order/Chat"
+        to="/order/send-request"
         className={`flex items-center gap-2 mb-8 cursor-pointer ${
-          isActive("/order/Chat")
+          isActive("/order/send-request")
             ? "bg-primary text-white px-2 py-2 rounded-md"
             : ""
         }`}
