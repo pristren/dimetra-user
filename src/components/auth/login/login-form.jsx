@@ -16,8 +16,9 @@ import AuthFooter from "@/components/helper-ui/auth-footer";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useDispatch } from "react-redux";
-import { setAccessToken, setUser } from "@/redux/slices/counter/counterSlice";
+
 import { useNavigate } from "react-router-dom";
+import { setAccessToken, setUser } from "@/redux/slices/user/userSlice";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -26,8 +27,8 @@ export default function LoginForm() {
     email: z.string().email({
       message: "Please enter a valid email address",
     }),
-    password: z.string().min(1, {
-      message: "Password is required",
+    password: z.string().min(6, {
+      message: "Password must be at least 6 characters",
     }),
   });
 
