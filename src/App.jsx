@@ -7,6 +7,7 @@ import ForgotPassword from "./pages/authentication/forgot-password";
 import ResetPassword from "./pages/authentication/reset-password";
 import OrderHistory from "./pages/order/order-history/OrderHistory";
 import OrderLayout from "./layout/order-layout";
+import PrivateRoute from "./layout/PrivateRoute";
 import CreateOrder from "./pages/order/create-order/CreateOrder";
 import OrderSettings from "./pages/order/order-settings/OrderSettings";
 import SendRequest from "./pages/order/send-request/SendRequest";
@@ -23,6 +24,14 @@ function App() {
       <Route path="/create-order" element={<CreateOrder />} />
       <Route path="*" element={<WrongPath />} />
       <Route path="/order/" element={<OrderLayout />}>
+        <Route
+          path="history"
+          element={
+            <PrivateRoute>
+              <OrderHistory />
+            </PrivateRoute>
+          }
+        />
         <Route path="history" element={<OrderHistory />} />
         <Route path="all-orders" element={<AllOrders />} />
         <Route path="setting" element={<OrderSettings />} />

@@ -1,11 +1,6 @@
 import { z } from "zod";
-import { Button } from "@/components/../ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/../ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -13,21 +8,27 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/../ui/form";
-import { Input } from "@/components/../ui/input";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import AuthFooter from "@/components/helper-ui/auth-footer";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { useDispatch } from "react-redux";
+import { setAccessToken, setUser } from "@/redux/slices/counter/counterSlice";
 
 export default function LoginForm() {
+  const dispatch = useDispatch();
   const formSchema = z.object({
     email: z.string().email({
       message: "Please enter a valid email address",
     }),
+    password: z.string().min(1, {
+      message: "Password is required",
+    }),
   });
-  // 1. Define your form.
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,12 +37,11 @@ export default function LoginForm() {
     },
   });
 
-  // 2. Define a submit handler.
   function onSubmit(values) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    dispatch(setUser({ email: values.email, password: values.password }));
+    dispatch(setAccessToken("123456"));
   }
+
   return (
     <Card className="w-[480px] px-5 py-5">
       <CardHeader className="mb-4">
@@ -55,51 +55,45 @@ export default function LoginForm() {
                 control={form.control}
                 name="email"
                 type="email"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input
-                          className={
-                            form.formState.errors.email !== undefined
-                              ? "border-red-500"
-                              : ""
-                          }
-                          placeholder="your@email.com"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.email !== undefined
+                            ? "border-red-500"
+                            : ""
+                        }
+                        placeholder="your@email.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
               <FormField
                 control={form.control}
                 name="password"
-                type="text"
-                render={({ field }) => {
-                  return (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input
-                          className={
-                            form.formState.errors.password !== undefined
-                              ? "border-red-500"
-                              : ""
-                          }
-                          placeholder="Type your password"
-                          {...field}
-                        />
-                      </FormControl>
-
-                      <FormMessage />
-                    </FormItem>
-                  );
-                }}
+                type="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.password !== undefined
+                            ? "border-red-500"
+                            : ""
+                        }
+                        placeholder="Type your password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
             <div className="flex justify-between mt-4 mb-8">
