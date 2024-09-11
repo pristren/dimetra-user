@@ -17,6 +17,15 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import AppSelect from "@/components/common/AppSelect";
 import { DatePicker } from "@/components/ui/DatePIcker";
+import { calculateFormProgress } from "@/utils";
+import {
+  transportModesOptions,
+  transportOptions,
+  transportWithOptions,
+  weekdaysOptions,
+  durationOptions,
+  timeOptions,
+} from "@/components/create-order-forms/helpers";
 
 const TransportationDetails = ({
   handleFormChange,
@@ -54,76 +63,6 @@ const TransportationDetails = ({
     console.log("Submitted data:", data);
   };
 
-  const transportOptions = [
-    { value: "transferTrip", label: "Transfer trip" },
-    { value: "investigationTrip", label: "Investigation trip" },
-    { value: "privatTrips", label: "Private trips" },
-    { value: "collectionOrder", label: "Collection order" },
-    { value: "reccurring", label: "Recurring" },
-  ];
-
-  const transportModesOptions = [
-    { value: "relocation", label: "Relocation" },
-    { value: "wheelchairMts", label: "Wheelchair (MTS)" },
-    { value: "ownWheelchair", label: "In Own Wheelchair" },
-    { value: "lyingDown", label: "Lying Down" },
-    { value: "pedestrian", label: "Pedestrian" },
-    { value: "secondTransportHelper", label: "Second Transport Helper" },
-    { value: "carryingChair", label: "Carrying Chair" },
-  ];
-
-  const transportWithOptions = [
-    { value: "noneOfThat", label: "None of That" },
-    { value: "infusion", label: "Infusion" },
-    { value: "infusomat", label: "Infusomat" },
-    { value: "accompanyingReason", label: "Accompanying Reason" },
-    { value: "oxygenLitersPerMin", label: "Oxygen (Liters/Min)" },
-  ];
-
-  const weekdaysOptions = [
-    { value: "monday", label: "Monday" },
-    { value: "tuesday", label: "Tuesday" },
-    { value: "wednesday", label: "Wednesday" },
-    { value: "thursday", label: "Thursday" },
-    { value: "friday", label: "Friday" },
-    { value: "saturday", label: "Saturday" },
-    { value: "sunday", label: "Sunday" },
-  ];
-
-  const durationOptions = [
-    { value: "1month", label: "1 Month" },
-    { value: "3months", label: "3 Months" },
-    { value: "6months", label: "6 Months" },
-    { value: "1year", label: "After 1 Year" },
-  ];
-
-  const timeOptions = [
-    "00:00",
-    "01:00",
-    "02:00",
-    "03:00",
-    "04:00",
-    "05:00",
-    "06:00",
-    "07:00",
-    "08:00",
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-    "19:00",
-    "20:00",
-    "21:00",
-    "22:00",
-    "23:00",
-  ];
-
   const calculateMonthlyOccurrences = (weekdays) => {
     return weekdays.length * 4;
   };
@@ -137,32 +76,19 @@ const TransportationDetails = ({
     );
   };
 
-  const calculateProgress = () => {
-    const fieldsFilled = [
-      form.watch("transportType"),
-      form.watch("transportModes").length > 0,
-      form.watch("transportWith").length > 0,
-      form.watch("duration"),
-      selectedWeekdays.length > 0,
-      startDate,
-      endDate,
-    ];
-    const progressPercentage =
-      (fieldsFilled.filter(Boolean).length / fieldsFilled.length) * 100;
-    setTransportationProgress(progressPercentage);
-  };
-
-  useEffect(() => {
-    calculateProgress();
-  }, [
+  const fieldsFilled = [
     form.watch("transportType"),
-    form.watch("transportModes"),
-    form.watch("transportWith"),
-    selectedWeekdays,
+    form.watch("transportModes").length > 0,
+    form.watch("transportWith").length > 0,
+    form.watch("duration"),
+    selectedWeekdays.length > 0,
     startDate,
     endDate,
-    form.watch("duration"),
-  ]);
+  ];
+
+  useEffect(() => {
+    setTransportationProgress(calculateFormProgress(fieldsFilled));
+  }, [...fieldsFilled]);
 
   return (
     <Card className="w-[65%] px-5 py-5">

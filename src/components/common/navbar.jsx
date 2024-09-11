@@ -1,6 +1,6 @@
 import DefaultAvatar from "@/assets/icons/default-avatar";
 import Logo from "@/assets/icons/logo";
-import Language from "../helper-ui/language";
+import Language from "@/components/helper-ui/language";
 
 export default function Navbar() {
   return (

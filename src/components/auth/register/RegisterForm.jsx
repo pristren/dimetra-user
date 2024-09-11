@@ -13,7 +13,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Camera, CircleUserRound, Plus, UserRound, UserRoundPen } from "lucide-react";
+import {
+  Camera,
+  CircleUserRound,
+  Plus,
+  UserRound,
+  UserRoundPen,
+} from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -42,7 +48,6 @@ const RegisterForm = () => {
       setProfileImage(URL.createObjectURL(file)); // Create a URL for the selected image
     }
   };
-
 
   const onSubmit = (data) => {
     console.log(data);
@@ -86,32 +91,31 @@ const RegisterForm = () => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      
-                      <CircleUserRound  className="w-[150px] h-[150px] mx-auto text-primary" />
+                      <CircleUserRound className="w-[150px] h-[150px] mx-auto text-primary" />
                     )}
                   </>
                 )}
               </Avatar>
 
               {!profileLoading && (
-                <Label
-                  htmlFor="profileImage"
-                  className={`cursor-pointer absolute inset-0 flex items-center justify-center ${
-                    hover ? "z-30" : "hidden"
-                  }`}
-                >
-                  <Camera className="text-white" />
-                </Label>
-              )}
-              {!profileLoading && (
-                <Label
-                  htmlFor="profileImage"
-                  className={`cursor-pointer absolute -right-1 p-2 bg-primary rounded-full bottom-3 ${
-                    hover ? "hidden" : "z-30"
-                  }`}
-                >
-                  <Plus className="text-white" />
-                </Label>
+                <>
+                  <Label
+                    htmlFor="profileImage"
+                    className={`cursor-pointer absolute inset-0 flex items-center justify-center ${
+                      hover ? "z-30" : "hidden"
+                    }`}
+                  >
+                    <Camera className="text-white" />
+                  </Label>
+                  <Label
+                    htmlFor="profileImage"
+                    className={`cursor-pointer absolute -right-1 p-2 bg-primary rounded-full bottom-3 ${
+                      hover ? "hidden" : "z-30"
+                    }`}
+                  >
+                    <Plus className="text-white" />
+                  </Label>
+                </>
               )}
               <Input
                 type="file"

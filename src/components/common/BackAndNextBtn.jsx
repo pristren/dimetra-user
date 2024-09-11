@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import { ArrowLeft } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 
-const BackAndNext = ({
+const BackAndNextBtn = ({
   back,
   next,
   isFillForm,
@@ -34,4 +34,4 @@ const BackAndNext = ({
   );
 };
 
-export default BackAndNext;
+export default BackAndNextBtn;

@@ -1,12 +1,12 @@
 import { BookText, EllipsisVertical } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { AppTable } from "../common/AppTable";
+} from "@/components/ui/dropdown-menu";
+import { AppTable } from "@/components/common/AppTable";
 import Pencil from "@/assets/icons/Pencil";
 import Trash from "@/assets/icons/Trash";
 
@@ -67,9 +67,17 @@ const columns = [
           <EllipsisVertical className="h-4 w-4 cursor-pointer" />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          <DropdownMenuItem className="flex items-center gap-3"><Pencil /> Edit</DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-3"><Trash />Storno</DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-3"><BookText />View Details</DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-3">
+            <Pencil /> Edit
+          </DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-3">
+            <Trash />
+            Storno
+          </DropdownMenuItem>
+          <DropdownMenuItem className="flex items-center gap-3">
+            <BookText />
+            View Details
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ),

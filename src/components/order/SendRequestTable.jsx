@@ -1,5 +1,5 @@
-import { AppTable } from "../common/AppTable";
-import { Button } from "../ui/button";
+import { AppTable } from "@/components/common/AppTable";
+import { Button } from "@/components/ui/button";
 
 const data = [
   {

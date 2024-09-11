@@ -1,7 +1,12 @@
 import { EllipsisVertical } from "lucide-react";
-import { Button } from "../ui/button";
-import { AppTable } from "../common/AppTable";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { AppTable } from "@/components/common/AppTable";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const data = [
   {

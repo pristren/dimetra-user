@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
-import BackAndNext from "@/components/common/BackAndNext";
+import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
@@ -17,11 +17,12 @@ import { useForm } from "react-hook-form";
 import { DatePicker } from "@/components/ui/DatePIcker";
 import AppSelect from "@/components/common/AppSelect";
 import { useEffect, useState } from "react";
+import { calculateFormProgress } from "@/utils";
 
 const DestinationDetails = ({ handleFormChange, setDestinationProgress }) => {
   const [dropDate, setDropDate] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
-  
+
   const formSchema = z.object({
     // Pick-Up fields
     pickUpName: z.string().min(1, "Name is required"),
@@ -100,39 +101,12 @@ const DestinationDetails = ({ handleFormChange, setDestinationProgress }) => {
     "23:00",
   ];
 
-  const calculateProgress = () => {
-    const fieldsFilled = [
-      form.watch("pickUpName"),
-      form.watch("pickUpAddress"),
-      form.watch("pickUpCity"),
-      form.watch("pickUpCountry"),
-      form.watch("pickUpEmployeeName"),
-      form.watch("dropOffPickUpTime"),
-      form.watch("dropOffName"),
-      form.watch("dropOffAddress"),
-      form.watch("dropOffCity"),
-      form.watch("dropOffCountry"),
-      form.watch("dropOffPhone"),
-      dropDate,
-      returnDate,
-      form.watch("floor"),
-    ];
-
-    const filledCount = fieldsFilled.filter(Boolean).length;
-    const progressPercentage = (filledCount / fieldsFilled.length) * 100;
-
-    setDestinationProgress(progressPercentage);
-  };
-
-  useEffect(() => {
-    calculateProgress();
-  }, [
+  const fieldsFilled = [
     form.watch("pickUpName"),
     form.watch("pickUpAddress"),
     form.watch("pickUpCity"),
     form.watch("pickUpCountry"),
     form.watch("pickUpEmployeeName"),
-    form.watch("dropOffDate"),
     form.watch("dropOffPickUpTime"),
     form.watch("dropOffName"),
     form.watch("dropOffAddress"),
@@ -142,7 +116,11 @@ const DestinationDetails = ({ handleFormChange, setDestinationProgress }) => {
     dropDate,
     returnDate,
     form.watch("floor"),
-  ]);
+  ];
+
+  useEffect(() => {
+    setDestinationProgress(calculateFormProgress(fieldsFilled));
+  }, [...fieldsFilled]);
 
   const onSubmit = (data) => {
     console.log("Submitted data:", data);
@@ -493,9 +471,7 @@ const DestinationDetails = ({ handleFormChange, setDestinationProgress }) => {
                       <FormControl>
                         <Input
                           className={
-                            form.formState.errors.floor
-                              ? "border-red-500"
-                              : ""
+                            form.formState.errors.floor ? "border-red-500" : ""
                           }
                           {...field}
                         />
@@ -506,7 +482,7 @@ const DestinationDetails = ({ handleFormChange, setDestinationProgress }) => {
                 />
               </div>
             </div>
-            <BackAndNext
+            <BackAndNextBtn
               isFillForm={true}
               back="patient"
               next="billing"

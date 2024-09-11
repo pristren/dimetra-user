@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { z } from "zod";
-import BackAndNext from "@/components/common/BackAndNext";
+import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
+import { calculateFormProgress } from "@/utils";
 
 const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
   const formSchema = z.object({
@@ -44,23 +45,16 @@ const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
     },
   });
 
-  const calculateProgress = () => {
-    const fieldsFilled = [
-      form.watch("name"),
-      form.watch("surname"),
-      form.watch("dateOfBirth"),
-      form.watch("areaRoom"),
-      form.watch("kostenstelle"),
-    ];
-
-    const filledCount = fieldsFilled.filter(Boolean).length;
-    const progressPercentage = (filledCount / fieldsFilled.length) * 100;
-
-    setPatientProgress(progressPercentage);
-  };
+  const fieldsFilled = [
+    form.watch("name"),
+    form.watch("surname"),
+    form.watch("dateOfBirth"),
+    form.watch("areaRoom"),
+    form.watch("kostenstelle"),
+  ];
 
   useEffect(() => {
-    calculateProgress();
+    setPatientProgress(calculateFormProgress(fieldsFilled));
   }, [form.watch()]);
 
   const onSubmit = (data) => {
@@ -278,7 +272,7 @@ const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
                 )}
               />
             </div>
-            <BackAndNext
+            <BackAndNextBtn
               isFillForm={true}
               back="transport"
               next="destination"

@@ -12,7 +12,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import BackAndNext from "@/components/common/BackAndNext";
+import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 
 const BillingDetails = ({ handleFormChange }) => {
   const formSchema = z.object({
@@ -144,7 +144,7 @@ const BillingDetails = ({ handleFormChange }) => {
                 )}
               />
             </div>
-            <BackAndNext
+            <BackAndNextBtn
               isFillForm={true}
               back="destination"
               next="preview"
