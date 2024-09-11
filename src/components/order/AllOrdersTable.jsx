@@ -1,4 +1,4 @@
-import { BookText, EllipsisVertical } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -9,6 +9,7 @@ import {
 import { AppTable } from "@/components/common/AppTable";
 import Pencil from "@/assets/icons/Pencil";
 import Trash from "@/assets/icons/Trash";
+import Document from "@/assets/icons/Documents";
 
 const data = [
   {
@@ -185,7 +186,7 @@ const columns = [
             Storno
           </DropdownMenuItem>
           <DropdownMenuItem className="flex items-center gap-3">
-            <BookText />
+            <Document />
             View Details
           </DropdownMenuItem>
         </DropdownMenuContent>
