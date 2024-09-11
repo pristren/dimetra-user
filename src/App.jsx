@@ -1,6 +1,5 @@
-import Home from "@/pages/home";
 import WrongPath from "@/pages/wrong-path";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/authentication/login";
 import Register from "./pages/authentication/register";
 import ForgotPassword from "./pages/authentication/forgot-password";
@@ -16,27 +15,35 @@ import AllOrders from "./pages/order/all-orders/AllOrders";
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<Navigate to="/order/all-orders" />} />
+
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
-      <Route path="/create-order" element={<CreateOrder />} />
-      <Route path="*" element={<WrongPath />} />
-      <Route path="/order/" element={<OrderLayout />}>
-        <Route
-          path="history"
-          element={
-            <PrivateRoute>
-              <OrderHistory />
-            </PrivateRoute>
-          }
-        />
+      <Route
+        path="/create-order"
+        element={
+          <PrivateRoute>
+            <CreateOrder />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/order"
+        element={
+          <PrivateRoute>
+            <OrderLayout />
+          </PrivateRoute>
+        }
+      >
+        <Route index element={<Navigate to="all-orders" />} />
         <Route path="history" element={<OrderHistory />} />
         <Route path="all-orders" element={<AllOrders />} />
         <Route path="setting" element={<OrderSettings />} />
         <Route path="send-request" element={<SendRequest />} />
       </Route>
+      <Route path="*" element={<WrongPath />} />
     </Routes>
   );
 }
