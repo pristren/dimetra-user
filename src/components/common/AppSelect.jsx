@@ -7,10 +7,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const CommonSelect = ({ items, placeholder }) => {
+const AppSelect = ({ items, placeholder, isTime =false }) => {
   return (
     <Select>
-      <SelectTrigger>
+      <SelectTrigger isTime={isTime}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
@@ -24,4 +24,4 @@ const CommonSelect = ({ items, placeholder }) => {
   );
 };
 
-export default CommonSelect;
+export default AppSelect;

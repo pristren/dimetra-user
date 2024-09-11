@@ -1,53 +1,114 @@
 import { EllipsisVertical } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { AppTable } from "@/components/common/AppTable";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
-import { Button } from "../ui/button";
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const data = [
+  {
+    date: "2024-09-08",
+    time: "14:30",
+    pickUp: "123 Main St.",
+    destination: "456 Elm St.",
+    vehicle: "Sedan",
+    driver: "John Doe",
+    dispatcher: "Jane Smith",
+    status: "Completed",
+    rateToDriver: "Rate the driver",
+    action: "View",
+  },
+  {
+    date: "2024-09-08",
+    time: "14:30",
+    pickUp: "123 Main St.",
+    destination: "456 Elm St.",
+    vehicle: "Sedan",
+    driver: "John Doe",
+    dispatcher: "Jane Smith",
+    status: "Completed",
+    rateToDriver: "Rate the driver",
+    action: "View",
+  },
+  {
+    date: "2024-09-08",
+    time: "14:30",
+    pickUp: "123 Main St.",
+    destination: "456 Elm St.",
+    vehicle: "Sedan",
+    driver: "John Doe",
+    dispatcher: "Jane Smith",
+    status: "Completed",
+    rateToDriver: "Rate the driver",
+    action: "View",
+  },
+];
+
+const columns = [
+  {
+    accessorKey: "date",
+    header: "Date & Time",
+  },
+  {
+    accessorKey: "pickUp",
+    header: "Pick Up",
+  },
+  {
+    accessorKey: "destination",
+    header: "Destination",
+  },
+  {
+    accessorKey: "vehicle",
+    header: "Vehicle",
+  },
+  {
+    accessorKey: "driver",
+    header: "Driver",
+  },
+  {
+    accessorKey: "dispatcher",
+    header: "Dispatcher",
+  },
+  {
+    accessorKey: "status",
+    header: "Status",
+    cell: ({ row }) => (
+      <Button className="py-2 px-2 bg-lime-200 hover:bg-lime-300 rounded-md w-max text-black">
+        {row.getValue("status")}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "rateToDriver",
+    header: "Rate to driver",
+    cell: ({ row }) => (
+      <Button className="py-2 px-4 bg-lime-500 hover:bg-lime-600 rounded-md w-max text-black">
+        {row.getValue("rateToDriver")}
+      </Button>
+    ),
+  },
+  {
+    accessorKey: "action",
+    header: "Action",
+    cell: () => (
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <EllipsisVertical className="h-4 w-4 cursor-pointer" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem>View Details</DropdownMenuItem>
+          <DropdownMenuItem>Print Order</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    ),
+  },
+];
 
 const OrderHistoryTable = () => {
-  return (
-    <Table>
-      <TableHeader>
-        <TableRow className="bg-[#E2E8F0] hover:bg-[#E2E8F0] rounded-t-md">
-          <TableHead className="font-semibold">Date & Time</TableHead>
-          <TableHead className="font-semibold">Pick Up</TableHead>
-          <TableHead className="font-semibold">Destination</TableHead>
-          <TableHead className="font-semibold">Vehicle</TableHead>
-          <TableHead className="font-semibold">Driver</TableHead>
-          <TableHead className="font-semibold">Dispatcher</TableHead>
-          <TableHead className="font-semibold">Status</TableHead>
-          <TableHead className="font-semibold">Rate to driver</TableHead>
-          <TableHead className="font-semibold">Action</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow className="bg-white">
-          <TableCell className="py-2">
-            2024-09-08 <br /> 14:30
-          </TableCell>
-          <TableCell className="py-2">123 Main St.</TableCell>
-          <TableCell className="py-2">456 Elm St.</TableCell>
-          <TableCell className="py-2">Sedan</TableCell>
-          <TableCell className="py-2">John Doe</TableCell>
-          <TableCell className="py-2">Jane Smith</TableCell>
-          <TableCell>
-            <Button className="py-2 px-2 bg-lime-200 hover:bg-lime-300 rounded-md w-max text-black">Completed</Button>
-          </TableCell>
-          <TableCell>
-            <Button className="py-2 px-4 bg-lime-500 hover:bg-lime-600 rounded-md w-max text-black">Rate the driver</Button>
-          </TableCell>
-          <TableCell className="py-2">
-            <EllipsisVertical />
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
-  );
+  return <AppTable columns={columns} data={data} />;
 };
 
 export default OrderHistoryTable;

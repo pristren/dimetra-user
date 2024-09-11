@@ -13,7 +13,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Camera, Plus, UserRound } from "lucide-react";
+import {
+  Camera,
+  CircleUserRound,
+  Plus,
+  UserRound,
+  UserRoundPen,
+} from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -43,13 +49,12 @@ const RegisterForm = () => {
     }
   };
 
-
   const onSubmit = (data) => {
     console.log(data);
   };
 
   return (
-    <Card className="w-1/2 px-5 py-5 max-h-[80vh] overflow-y-auto">
+    <Card className="w-1/2 px-5 py-5 max-h-[80vh] overflow-y-auto hide-scrollbar">
       <CardHeader className="mb-4">
         <CardTitle className="text-center">Register</CardTitle>
       </CardHeader>
@@ -62,7 +67,7 @@ const RegisterForm = () => {
               onMouseLeave={() => setHover(false)}
             >
               <Avatar
-                className={`w-[150px] h-[150px] border relative transition-all duration-300 ${
+                className={`w-[150px] h-[150px] relative transition-all duration-300 ${
                   hover && !profileLoading
                     ? "filter brightness-50 cursor-pointer"
                     : ""
@@ -86,33 +91,33 @@ const RegisterForm = () => {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <UserRound className="w-full h-full" />
+                      <CircleUserRound className="w-[150px] h-[150px] mx-auto text-primary" />
                     )}
                   </>
                 )}
               </Avatar>
 
               {!profileLoading && (
-                <Label
-                  htmlFor="profileImage"
-                  className={`cursor-pointer absolute inset-0 flex items-center justify-center ${
-                    hover ? "z-30" : "hidden"
-                  }`}
-                >
-                  <Camera className="text-white" />
-                </Label>
+                <>
+                  <Label
+                    htmlFor="profileImage"
+                    className={`cursor-pointer absolute inset-0 flex items-center justify-center ${
+                      hover ? "z-30" : "hidden"
+                    }`}
+                  >
+                    <Camera className="text-white" />
+                  </Label>
+                  <Label
+                    htmlFor="profileImage"
+                    className={`cursor-pointer absolute -right-1 p-2 bg-primary rounded-full bottom-3 ${
+                      hover ? "hidden" : "z-30"
+                    }`}
+                  >
+                    <Plus className="text-white" />
+                  </Label>
+                </>
               )}
-              {!profileLoading && (
-                <Label
-                  htmlFor="profileImage"
-                  className={`cursor-pointer absolute -right-1 p-2 bg-primary rounded-full bottom-3 ${
-                    hover ? "hidden" : "z-30"
-                  }`}
-                >
-                  <Plus className="text-white" />
-                </Label>
-              )}
-              <input
+              <Input
                 type="file"
                 onChange={handleFileInputChange}
                 className="hidden"
