@@ -6,7 +6,7 @@ import DestinationDetails from "@/components/create-order-forms/destination-deta
 import PatientDetails from "@/components/create-order-forms/patient-details/PatientDetails";
 import TransportationDetails from "@/components/create-order-forms/transportation-details/TransportationDetails";
 import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
-import Navbar from "@/components/common/navbar";
+import Navbar from "@/components/common/Navbar";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -17,6 +17,12 @@ const CreateOrder = () => {
     isPatient: false,
     isDestination: false,
     isBilling: false,
+  });
+
+  const [orderData, setOrderData] = useState({
+    typeOfTransport: "",
+    modeOfTransportation: [],
+    transportWith: [],
   });
 
   const handleFormChange = (formType) => {
@@ -30,10 +36,13 @@ const CreateOrder = () => {
 
   const props = {
     showForm,
+    orderData,
+    transportationProgress,
     handleFormChange,
     setTransportationProgress,
     setPatientProgress,
     setDestinationProgress,
+    setOrderData,
   };
 
   return (

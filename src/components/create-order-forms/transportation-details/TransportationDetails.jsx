@@ -30,6 +30,9 @@ import {
 const TransportationDetails = ({
   handleFormChange,
   setTransportationProgress,
+  transportationProgress,
+  setOrderData,
+  orderData,
 }) => {
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
   const [startDate, setStartDate] = useState(null);
@@ -59,8 +62,28 @@ const TransportationDetails = ({
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Submitted data:", data);
+  const handleModeOfTransportationChange = (value) => {
+    setOrderData((prevData) => {
+      const newModes = prevData.modeOfTransportation.includes(value)
+        ? prevData.modeOfTransportation.filter((mode) => mode !== value)
+        : [...prevData.modeOfTransportation, value];
+      return {
+        ...prevData,
+        modeOfTransportation: newModes,
+      };
+    });
+  };
+
+  const handleTransportWithChange = (value) => {
+    setOrderData((prevData) => {
+      const newWithOptions = prevData.transportWith.includes(value)
+        ? prevData.transportWith.filter((option) => option !== value)
+        : [...prevData.transportWith, value];
+      return {
+        ...prevData,
+        transportWith: newWithOptions,
+      };
+    });
   };
 
   const calculateMonthlyOccurrences = (weekdays) => {
@@ -75,20 +98,28 @@ const TransportationDetails = ({
         : [...prev, value]
     );
   };
-
-  const fieldsFilled = [
-    form.watch("transportType"),
-    form.watch("transportModes").length > 0,
-    form.watch("transportWith").length > 0,
-    form.watch("duration"),
-    selectedWeekdays.length > 0,
-    startDate,
-    endDate,
-  ];
+  let fieldsFilled;
+  if (orderData?.typeOfTransport === "reccurring") {
+    fieldsFilled = [
+      form.watch("transportType"),
+      form.watch("duration"),
+      orderData?.modeOfTransportation.length > 0,
+      orderData?.transportWith.length > 0,
+      selectedWeekdays.length > 0,
+      startDate,
+      endDate,
+    ];
+  } else {
+    fieldsFilled = [
+      orderData?.typeOfTransport,
+      orderData?.modeOfTransportation.length > 0,
+      orderData?.transportWith.length > 0,
+    ];
+  }
 
   useEffect(() => {
     setTransportationProgress(calculateFormProgress(fieldsFilled));
-  }, [...fieldsFilled]);
+  }, [...fieldsFilled, setTransportationProgress, orderData]);
 
   return (
     <Card className="w-[65%] px-5 py-5">
@@ -97,7 +128,7 @@ const TransportationDetails = ({
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form>
             <div className="grid grid-cols-3 gap-5">
               <div className="pr-5">
                 <h6 className="mb-4">
@@ -112,7 +143,13 @@ const TransportationDetails = ({
                       <FormControl>
                         <RadioGroup
                           value={field.value}
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            setOrderData((prev) => ({
+                              ...prev,
+                              typeOfTransport: value,
+                            }));
+                          }}
                         >
                           {transportOptions.map((option) => (
                             <div
@@ -143,21 +180,14 @@ const TransportationDetails = ({
                 </h6>
                 {transportModesOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
-                    <input
-                      type="checkbox"
+                    <Checkbox
                       id={option.value}
-                      checked={form
-                        .watch("transportModes")
-                        .includes(option.value)}
-                      onChange={(e) => {
-                        const { checked } = e.target;
-                        const newModes = checked
-                          ? [...form.watch("transportModes"), option.value]
-                          : form
-                              .watch("transportModes")
-                              .filter((v) => v !== option.value);
-                        form.setValue("transportModes", newModes);
-                      }}
+                      checked={orderData.modeOfTransportation.includes(
+                        option.value
+                      )}
+                      onClick={() =>
+                        handleModeOfTransportationChange(option.value)
+                      }
                     />
                     <Label className="ml-2" htmlFor={option.value}>
                       {option.label}
@@ -173,21 +203,10 @@ const TransportationDetails = ({
                 </h6>
                 {transportWithOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
-                    <input
-                      type="checkbox"
+                    <Checkbox
                       id={option.value}
-                      checked={form
-                        .watch("transportWith")
-                        .includes(option.value)}
-                      onChange={(e) => {
-                        const { checked } = e.target;
-                        const newWith = checked
-                          ? [...form.watch("transportWith"), option.value]
-                          : form
-                              .watch("transportWith")
-                              .filter((v) => v !== option.value);
-                        form.setValue("transportWith", newWith);
-                      }}
+                      checked={orderData.transportWith.includes(option.value)}
+                      onClick={() => handleTransportWithChange(option.value)}
                     />
                     <Label className="ml-2" htmlFor={option.value}>
                       {option.label}
@@ -196,93 +215,101 @@ const TransportationDetails = ({
                 ))}
               </div>
             </div>
+            {orderData?.typeOfTransport === "reccurring" && (
+              <div>
+                <h3 className="text-lg font-medium mb-3 mt-5">
+                  Select Weekdays:
+                </h3>
+                <AppSelect items={["Week", "Month"]} placeholder="Week" />
 
-            <h3 className="text-lg font-medium mb-3 mt-5">Select Weekdays:</h3>
-            <AppSelect items={["Week", "Month"]} placeholder="Week" />
-
-            <h3 className="text-lg font-medium mt-10 mb-5">
-              Select Start Date and Time*:
-            </h3>
-            <div className="mb-5 flex w-max gap-4 items-center">
-              <DatePicker date={startDate} setDate={setStartDate} />
-              <AppSelect
-                items={timeOptions}
-                placeholder="00:00"
-                isTime={true}
-              />
-            </div>
-
-            <h3 className="text-lg font-medium mt-10 mb-5">
-              Select Return Time* :
-            </h3>
-            <div className="mb-5 flex w-max gap-4 items-center">
-              <DatePicker date={endDate} setDate={setEndDate} />
-              <AppSelect
-                items={timeOptions}
-                placeholder="00:00"
-                isTime={true}
-              />
-            </div>
-
-            <h3 className="text-lg font-medium mb-3 mt-5">
-              Select Weekdays{" "}
-              <span className="text-[15px]">(multiple selection)</span>:
-            </h3>
-            <div className="grid grid-cols-3 gap-3 mt-2">
-              {weekdaysOptions.map((option) => (
-                <div key={option.value} className="flex items-center mb-2">
-                  <Checkbox
-                    id={option.value}
-                    checked={selectedWeekdays.includes(option.value)}
-                    onClick={() => handleWeekdayChange(option)}
+                <h3 className="text-lg font-medium mt-10 mb-5">
+                  Select Start Date and Time*:
+                </h3>
+                <div className="mb-5 flex w-max gap-4 items-center">
+                  <DatePicker date={startDate} setDate={setStartDate} />
+                  <AppSelect
+                    items={timeOptions}
+                    placeholder="00:00"
+                    isTime={true}
                   />
-                  <Label className="ml-2" htmlFor={option.value}>
-                    {option.label}
-                  </Label>
                 </div>
-              ))}
-            </div>
 
-            <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
-            <FormField
-              control={form.control}
-              name="duration"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <RadioGroup
-                      value={field.value}
-                      onValueChange={(value) =>
-                        form.setValue("duration", value)
-                      }
-                    >
-                      {durationOptions.map((option) => (
-                        <div
-                          key={option.value}
-                          className="flex items-center space-x-2 mb-2"
+                <h3 className="text-lg font-medium mt-10 mb-5">
+                  Select Return Time* :
+                </h3>
+                <div className="mb-5 flex w-max gap-4 items-center">
+                  <DatePicker date={endDate} setDate={setEndDate} />
+                  <AppSelect
+                    items={timeOptions}
+                    placeholder="00:00"
+                    isTime={true}
+                  />
+                </div>
+
+                <h3 className="text-lg font-medium mb-3 mt-5">
+                  Select Weekdays{" "}
+                  <span className="text-[15px]">(multiple selection)</span>:
+                </h3>
+                <div className="grid grid-cols-3 gap-3 mt-2">
+                  {weekdaysOptions.map((option) => (
+                    <div key={option.value} className="flex items-center mb-2">
+                      <Checkbox
+                        id={option.value}
+                        checked={selectedWeekdays.includes(option.value)}
+                        onClick={() => handleWeekdayChange(option)}
+                      />
+                      <Label className="ml-2" htmlFor={option.value}>
+                        {option.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+
+                <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
+                <FormField
+                  control={form.control}
+                  name="duration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroup
+                          value={field.value}
+                          onValueChange={(value) =>
+                            form.setValue("duration", value)
+                          }
                         >
-                          <RadioGroupItem
-                            value={option.value}
-                            id={option.value}
-                          />
-                          <Label htmlFor={option.value}>{option.label}</Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                          {durationOptions.map((option) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center space-x-2 mb-2"
+                            >
+                              <RadioGroupItem
+                                value={option.value}
+                                id={option.value}
+                              />
+                              <Label htmlFor={option.value}>
+                                {option.label}
+                              </Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <h2 className="text-lg font-semibold mt-5">
-              Summary: Monthly on day{" "}
-              {calculateMonthlyOccurrences(selectedWeekdays)}
-            </h2>
+                <h2 className="text-lg font-semibold mt-5">
+                  Summary: Monthly on day{" "}
+                  {calculateMonthlyOccurrences(selectedWeekdays)}
+                </h2>
+              </div>
+            )}
 
             <div className="flex items-center justify-center w-full">
               <Button
                 type="submit"
+                disabled={transportationProgress < 100}
                 className="mt-5 bg-secondary text-black hover:text-white px-12"
                 onClick={() => handleFormChange("patient")}
               >

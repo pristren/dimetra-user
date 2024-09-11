@@ -9,19 +9,26 @@ import { Link } from "react-router-dom";
 
 const AllOrders = () => {
   const [date, setDate] = useState(null);
-  const filters = ["rafi", "rami", "rayan"];
+  const [selectedFilter, setSelectedFilter] = useState(null);
+  const filters = ["All Order", "Recurring"];
+
+  const handleFilterChange = (value) => {
+    setSelectedFilter(value);
+  };
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between gap-5 w-full mb-10">
         <div className="flex items-center gap-3">
-          <h3 className="text-2xl font-bold">History</h3>
+          <h3 className="text-2xl font-bold text-nowrap">All Order</h3>
           <DatePicker date={date} setDate={setDate} />
         </div>
-        <div className="flex items-center gap-4 ">
+        <div className="flex items-center gap-4">
           <AppSelect
             items={filters}
-            placeholder="filters"
+            placeholder="Filters"
             className="max-w-sm"
+            onValueChange={handleFilterChange}
           />
           <div className="relative">
             <Input placeholder="Search" className="w-60" />
@@ -32,7 +39,7 @@ const AllOrders = () => {
           </Link>
         </div>
       </div>
-      <AllOrdersTable />
+      <AllOrdersTable filter={selectedFilter} selectedFilter={selectedFilter}/>
     </div>
   );
 };

@@ -10,192 +10,123 @@ import { AppTable } from "@/components/common/AppTable";
 import Pencil from "@/assets/icons/Pencil";
 import Trash from "@/assets/icons/Trash";
 import Document from "@/assets/icons/Documents";
+import ArrowUpDown from "@/assets/icons/ArrowUpDown";
 
-const data = [
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-  {
-    date: "2024-09-08",
-    time: "14:30",
-    pickUp: "123 Main St.",
-    destination: "456 Elm St.",
-    driver: "John Doe",
-    patientName: "Sedan",
-    orderType: "Jane Smith",
-    status: "Completed",
-    action: "View",
-  },
-];
 
-const columns = [
-  {
-    accessorKey: "date",
-    header: "Date & Time",
-  },
-  {
-    accessorKey: "pickUp",
-    header: "Pick Up",
-  },
-  {
-    accessorKey: "destination",
-    header: "Destination",
-  },
-  {
-    accessorKey: "driver",
-    header: "Driver",
-  },
-  {
-    accessorKey: "patientName",
-    header: "Patient Name",
-  },
-  {
-    accessorKey: "orderType",
-    header: "Order Type",
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <Button className="py-2 px-2 bg-lime-200 hover:bg-lime-300 rounded-md w-max text-black">
-        {row.getValue("status")}
-      </Button>
-    ),
-  },
-  {
-    accessorKey: "action",
-    header: "Action",
-    cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <EllipsisVertical className="h-4 w-4 cursor-pointer" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem className="flex items-center gap-3">
-            <Pencil /> Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-3">
-            <Trash />
-            Storno
-          </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center gap-3">
-            <Document />
-            View Details
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
-  },
-];
 const AllOrdersTable = () => {
-  return <AppTable columns={columns} data={data} />;
+  const allOrdersData = [
+    {
+      date: "2024-09-08",
+      pickUp: "123 Main St.",
+      destination: "456 Elm St.",
+      driver: "John Doe",
+      patientName: "Sedan",
+      orderType: "Jane Smith",
+      status: "Completed",
+    },
+  ];
+  
+  const columns = [
+    {
+      accessorKey: "date",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Date & Time
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "pickUp",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Pick Up
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "destination",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Destination
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "driver",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Driver
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "patientName",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Patient Name
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "orderType",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Order Type
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "status",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Status
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+      cell: ({ row }) => (
+        <Button className="py-2 px-2 bg-lime-200 hover:bg-lime-300 rounded-md w-max text-black">
+          {row.getValue("status")}
+        </Button>
+      ),
+    },
+    {
+      accessorKey: "action",
+      header: () => (
+        <div className="text-center flex items-center justify-center">
+          <ArrowUpDown className="h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+      cell: () => (
+        <div className="flex justify-center items-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <EllipsisVertical className="h-4 w-4 cursor-pointer" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-3">
+                <Pencil className="size-6" /> Edit
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-3">
+                <Trash className="size-6" />
+                Storno
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-3">
+                <Document className="size-6" />
+                View Details
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      ),
+    },
+  ];
+  return <AppTable columns={columns} data={allOrdersData} />;
 };
 
 export default AllOrdersTable;

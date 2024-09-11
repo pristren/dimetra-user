@@ -7,7 +7,7 @@ const LeftSideNav = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="w-72 h-screen border-r text-gray-500 p-4 pt-8">
+    <div className="w-72 h-screen border-r text-gray-500 p-4 pt-8 sticky top-0">
       <Link to="/">
         <Logo className="mx-auto" />
       </Link>

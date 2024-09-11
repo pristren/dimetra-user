@@ -16,7 +16,7 @@ const OrderHistory = () => {
           <DatePicker date={date} setDate={setDate} />
         </div>
         <div className="flex items-center gap-4 ">
-          <AppSelect items={filters} placeholder="filters" className="max-w-sm" />
+          <AppSelect items={filters} placeholder="filters" className="gap-10" />
           <div className="relative">
             <Input placeholder="Search" className="w-60" />
             <Search className="absolute right-2 top-1/2 -translate-y-1/2" />

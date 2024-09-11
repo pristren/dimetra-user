@@ -7,10 +7,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const AppSelect = ({ items, placeholder, isTime =false }) => {
+const AppSelect = ({
+  items,
+  placeholder,
+  isTime = false,
+  className,
+  onValueChange,
+}) => {
   return (
-    <Select>
-      <SelectTrigger isTime={isTime}>
+    <Select onValueChange={onValueChange}>
+      <SelectTrigger isTime={isTime} className={className}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
