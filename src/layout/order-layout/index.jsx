@@ -6,9 +6,9 @@ const OrderLayout = () => {
   return (
     <div className="flex items-start justify-start w-full">
       <LeftSideNav />
-      <div className="w-full">
+      <div className="w-full h-screen overflow-hidden overflow-y-auto">
         <Navbar />
-        <div className="px-5 bg-[#F9FCFF] min-h-[93vh] py-8">
+        <div className="px-5 bg-[#F9FCFF] py-8">
           <Outlet />
         </div>
       </div>

@@ -17,8 +17,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useDispatch } from "react-redux";
 import { setAccessToken, setUser } from "@/redux/slices/counter/counterSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginForm() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const formSchema = z.object({
     email: z.string().email({
@@ -40,6 +42,7 @@ export default function LoginForm() {
   function onSubmit(values) {
     dispatch(setUser({ email: values.email, password: values.password }));
     dispatch(setAccessToken("123456"));
+    navigate("/order/all-orders");
   }
 
   return (
