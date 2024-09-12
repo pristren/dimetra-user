@@ -6,14 +6,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
   const url = window.location.pathname;
   const handleLogout = () => {
-    localStorage.removeItem("user")
-    localStorage.removeItem("accessToken")
-  }
+    localStorage.removeItem("user");
+    localStorage.removeItem("accessToken");
+  };
   return (
     <nav
       className={`
@@ -30,7 +30,9 @@ export default function Navbar() {
             <p className="text-sm">Mahmud</p>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">Logout</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+              Logout
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

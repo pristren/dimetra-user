@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import AppPagination from "./AppPagination";
+import AppPagination from "@/components/common/AppPagination";
 
 export function AppTable({ data, columns }) {
   const [sorting, setSorting] = React.useState([]);
@@ -57,13 +57,13 @@ export function AppTable({ data, columns }) {
                   return (
                     <TableHead key={header.id}>
                       <p className="text-black">
-                          {header.isPlaceholder
-                            ? null
-                            : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
-                        </p>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </p>
                     </TableHead>
                   );
                 })}
@@ -102,7 +102,7 @@ export function AppTable({ data, columns }) {
         <div className="flex items-center gap-5 justify-between text-nowrap px-5 mt-10 border-t py-5">
           <p>Showing 1 to 1 of 1 entries</p>
           <div>
-          <AppPagination />
+            <AppPagination />
           </div>
         </div>
       </div>
