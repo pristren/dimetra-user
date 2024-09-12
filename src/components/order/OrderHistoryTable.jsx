@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import ArrowUpDown from "@/assets/icons/ArrowUpDown";
 
 const data = [
   {
@@ -50,31 +51,87 @@ const data = [
 const columns = [
   {
     accessorKey: "date",
-    header: "Date & Time",
+    header: () => (
+      <div className="flex items-center gap-2">
+        <span>Date & Time</span>
+        <ArrowUpDown
+          className="ml-2 h-4 w-4 cursor-pointer"
+          aria-label="Sort by Date & Time"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "pickUp",
-    header: "Pick Up",
+    header: () => (
+      <div className="flex items-center gap-2">
+        <span>Pick Up</span>
+        <ArrowUpDown
+          className="ml-2 h-4 w-4 cursor-pointer"
+          aria-label="Sort by Pick Up"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "destination",
-    header: "Destination",
+    header: () => (
+      <div className="flex items-center gap-2">
+        <span>Destination</span>
+        <ArrowUpDown
+          className="ml-2 h-4 w-4 cursor-pointer"
+          aria-label="Sort by Destination"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "vehicle",
-    header: "Vehicle",
+    header: () => (
+      <div className="flex items-center gap-2">
+        <span>Vehicle</span>
+        <ArrowUpDown
+          className="ml-2 h-4 w-4 cursor-pointer"
+          aria-label="Sort by Vehicle"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "driver",
-    header: "Driver",
+    header: () => (
+      <div className="flex items-center gap-2">
+        <span>Driver</span>
+        <ArrowUpDown
+          className="ml-2 h-4 w-4 cursor-pointer"
+          aria-label="Sort by Driver"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "dispatcher",
-    header: "Dispatcher",
+    header: () => (
+      <div className="flex items-center gap-2">
+        <span>Dispatcher</span>
+        <ArrowUpDown
+          className="ml-2 h-4 w-4 cursor-pointer"
+          aria-label="Sort by Dispatcher"
+        />
+      </div>
+    ),
   },
   {
     accessorKey: "status",
-    header: "Status",
+    header: () => (
+      <div className="flex items-center gap-2">
+        <span>Status</span>
+        <ArrowUpDown
+          className="ml-2 h-4 w-4 cursor-pointer"
+          aria-label="Sort by Status"
+        />
+      </div>
+    ),
     cell: ({ row }) => (
       <Button className="py-2 px-2 bg-lime-200 hover:bg-lime-300 rounded-md w-max text-black">
         {row.getValue("status")}
@@ -83,7 +140,15 @@ const columns = [
   },
   {
     accessorKey: "rateToDriver",
-    header: "Rate to driver",
+    header: () => (
+      <div className="flex items-center gap-2">
+        <span>Rate to Driver</span>
+        <ArrowUpDown
+          className="ml-2 h-4 w-4 cursor-pointer"
+          aria-label="Sort by Rate to Driver"
+        />
+      </div>
+    ),
     cell: ({ row }) => (
       <Button className="py-2 px-4 bg-lime-500 hover:bg-lime-600 rounded-md w-max text-black">
         {row.getValue("rateToDriver")}
@@ -92,17 +157,30 @@ const columns = [
   },
   {
     accessorKey: "action",
-    header: "Action",
+    header: () => (
+      <p className="text-center flex justify-center items-center">
+        Action
+        <ArrowUpDown
+          className="ml-2 h-4 w-4 cursor-pointer"
+          aria-label="Sort by Action"
+        />
+      </p>
+    ),
     cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger>
-          <EllipsisVertical className="h-4 w-4 cursor-pointer" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem>View Details</DropdownMenuItem>
-          <DropdownMenuItem>Print Order</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="flex items-center justify-center">
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <EllipsisVertical
+              className="h-4 w-4 cursor-pointer"
+              aria-label="More options"
+            />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem>View Details</DropdownMenuItem>
+            <DropdownMenuItem>Print Order</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     ),
   },
 ];

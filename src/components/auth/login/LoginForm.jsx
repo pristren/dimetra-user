@@ -41,8 +41,12 @@ export default function LoginForm() {
   });
 
   function onSubmit(values) {
-    dispatch(setUser({ email: values.email, password: values.password }));
+    dispatch(setUser({ email: values.email }));
     dispatch(setAccessToken("123456"));
+
+    localStorage.setItem('user', JSON.stringify({ email: values.email }));
+    localStorage.setItem('accessToken', '123456');
+    
     navigate("/order/all-orders");
   }
 

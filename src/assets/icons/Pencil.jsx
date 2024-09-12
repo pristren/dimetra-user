@@ -1,5 +1,6 @@
-const Pencil = () => (
+const Pencil = ({className}) => (
   <svg
+  className={className}
     width="18"
     height="18"
     viewBox="0 0 18 18"

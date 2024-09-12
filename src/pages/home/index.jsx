@@ -1,4 +1,4 @@
-import Navbar from "@/components/common/navbar";
+import Navbar from "@/components/common/Navbar";
 import { Button } from "@/components/ui/button";
 import { useLazyQuery } from "@apollo/client";
 import { useEffect } from "react";

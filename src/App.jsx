@@ -1,16 +1,16 @@
 import WrongPath from "@/pages/wrong-path";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Login from "./pages/authentication/login";
-import Register from "./pages/authentication/register";
-import ForgotPassword from "./pages/authentication/forgot-password";
-import ResetPassword from "./pages/authentication/reset-password";
-import OrderHistory from "./pages/order/order-history/OrderHistory";
+import Login from "@/pages/authentication/login";
+import Register from "@/pages/authentication/register";
+import ForgotPassword from "@/pages/authentication/forgot-password";
+import ResetPassword from "@/pages/authentication/reset-password";
+import OrderHistory from "@/pages/order/order-history/OrderHistory";
 import OrderLayout from "./layout/order-layout";
 import PrivateRoute from "./layout/PrivateRoute";
-import CreateOrder from "./pages/order/create-order/CreateOrder";
-import OrderSettings from "./pages/order/order-settings/OrderSettings";
-import SendRequest from "./pages/order/send-request/SendRequest";
-import AllOrders from "./pages/order/all-orders/AllOrders";
+import CreateOrder from "@/pages/order/create-order/CreateOrder";
+import OrderSettings from "@/pages/order/order-settings/OrderSettings";
+import SendRequest from "@/pages/order/send-request/SendRequest";
+import AllOrders from "@/pages/order/all-orders/AllOrders";
 
 function App() {
   return (

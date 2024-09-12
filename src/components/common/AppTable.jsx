@@ -16,9 +16,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import AppPagination from "@/components/common/AppPagination";
 
-
-export function AppTable({data, columns}) {
+export function AppTable({ data, columns }) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
@@ -45,21 +45,25 @@ export function AppTable({data, columns}) {
 
   return (
     <div className="w-full">
-    
-      <div className="rounded-md border">
+      <div className="rounded-md border w-full">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="bg-secondary hover:bg-secondary">
+              <TableRow
+                key={headerGroup.id}
+                className="bg-secondary hover:bg-secondary"
+              >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                      <p className="text-black">
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </p>
                     </TableHead>
                   );
                 })}
@@ -95,6 +99,12 @@ export function AppTable({data, columns}) {
             )}
           </TableBody>
         </Table>
+        <div className="flex items-center gap-5 justify-between text-nowrap px-5 mt-10 border-t py-5">
+          <p>Showing 1 to 1 of 1 entries</p>
+          <div>
+            <AppPagination />
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -102,6 +102,6 @@ h6 {
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-poppins max-w-[1560px] my-0 mx-auto p-0;
+    @apply bg-background text-foreground font-poppins my-0 mx-auto p-0;
   }
 }
