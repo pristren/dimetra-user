@@ -35,7 +35,6 @@ const CreateOrder = () => {
     isolation: false,
     patientAbove90kg: false,
   });
-  console.log(patientData);
 
   const [destinationDetailsData, setDestinationDetailsData] = useState({
     //pick up details
