@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect } from "react";
 import { z } from "zod";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
@@ -7,8 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
+  FormItem,
   FormLabel,
   FormMessage,
+  FormField,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -42,7 +43,6 @@ const PatientDetails = ({
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-
     setPatientData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
@@ -61,8 +61,6 @@ const PatientDetails = ({
     setPatientProgress(calculateFormProgress(fieldsFilled));
   }, [patientData, setPatientProgress]);
 
-  const { register } = form;
-
   return (
     <Card className="w-[65%] px-5 py-5">
       <CardHeader>
@@ -72,200 +70,289 @@ const PatientDetails = ({
         <Form {...form}>
           <form>
             <div className="grid grid-cols-2 gap-5">
-              <div>
-                <FormLabel className="text-[15px] tracking-wide">
-                  {transportationData?.typeOfTransport === "collectionOrder"
-                    ? "Name Collection"
-                    : "Name"}
-                  <sup className="text-[13px]">*</sup>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className={
-                      `${form.formState.errors.name ? "border-red-500" : ""} mt-2`
-                    }
-                    {...register("name")}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {transportationData?.typeOfTransport === "collectionOrder"
+                        ? "Name Collection"
+                        : "Name"}
+                      <sup className="text-[13px]">*</sup>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.name ? "border-red-500" : ""
+                        }
+                        placeholder="Enter patient's name"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div>
-                <FormLabel className="text-[15px] tracking-wide">
-                  {transportationData?.typeOfTransport === "collectionOrder"
-                    ? "Number Patients"
-                    : "Surname"}
-                  <sup className="text-[13px]">*</sup>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className={
-                      `${form.formState.errors.surname ? "border-red-500" : ""} mt-2`
-                    }
-                    {...register("surname")}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
+              <FormField
+                control={form.control}
+                name="surname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {transportationData?.typeOfTransport === "collectionOrder"
+                        ? "Number Patients"
+                        : "Surname"}
+                      <sup className="text-[13px]">*</sup>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.surname ? "border-red-500" : ""
+                        }
+                        placeholder="Enter patient's surname"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div>
-                <FormLabel className="text-[15px] tracking-wide">
-                  {transportationData?.typeOfTransport === "collectionOrder"
-                    ? "Area/Room"
-                    : "Date of Birth"}
-                  <sup className="text-[13px]">*</sup>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className={
-                      `${form.formState.errors.dateOfBirth ? "border-red-500" : ""} mt-2`
-                    }
-                    {...register("dateOfBirth")}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
+              <FormField
+                control={form.control}
+                name="dateOfBirth"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {transportationData?.typeOfTransport === "collectionOrder"
+                        ? "Area/Room"
+                        : "Date of Birth"}
+                      <sup className="text-[13px]">*</sup>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.dateOfBirth
+                            ? "border-red-500"
+                            : ""
+                        }
+                        placeholder="Enter patient's date of birth"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div>
-                <FormLabel className="text-[15px] tracking-wide">
-                  {transportationData?.typeOfTransport === "collectionOrder"
-                    ? "Cost center"
-                    : "Area/Room"}
-                  <sup className="text-[13px]">*</sup>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className={
-                      `${form.formState.errors.areaRoom ? "border-red-500" : ""} mt-2`
-                    }
-                    {...register("areaRoom")}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
+              <FormField
+                control={form.control}
+                name="areaRoom"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {transportationData?.typeOfTransport === "collectionOrder"
+                        ? "Cost Center"
+                        : "Area/Room"}
+                      <sup className="text-[13px]">*</sup>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.areaRoom ? "border-red-500" : ""
+                        }
+                        placeholder="Enter patient's area/room"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div>
-                <FormLabel className="text-[15px] tracking-wide">
-                  {transportationData?.typeOfTransport === "collectionOrder"
-                    ? "How much"
-                    : "Cost Center"}
-                  {transportationData?.typeOfTransport !==
-                    "collectionOrder" && <sup className="text-[13px]">*</sup>}
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className={
-                      `${form.formState.errors.costCenter ? "border-red-500" : ""} mt-2`
-                    }
-                    {...register("costCenter")}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
+              <FormField
+                control={form.control}
+                name="costCenter"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {transportationData?.typeOfTransport === "collectionOrder"
+                        ? "How much"
+                        : "Cost Center"}
+                      {transportationData?.typeOfTransport !==
+                        "collectionOrder" && (
+                        <sup className="text-[13px]">*</sup>
+                      )}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.costCenter
+                            ? "border-red-500"
+                            : ""
+                        }
+                        placeholder="Enter cost center"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
               {transportationData?.typeOfTransport !== "collectionOrder" && (
-                <div>
-                  <FormLabel className="text-[15px] tracking-wide">How Much</FormLabel>
-                  <FormControl>
-                    <Input
-                      className={
-                        `${form.formState.errors.howMuch ? "border-red-500" : ""} mt-2`
-                      }
-                      {...register("howMuch")}
-                      onChange={handleInputChange}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="howMuch"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>How Much</FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            form.formState.errors.howMuch
+                              ? "border-red-500"
+                              : ""
+                          }
+                          placeholder="Enter amount"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               )}
 
-              <div>
-                <p className="block mb-2 font-medium">Isolation</p>
-                <div className="flex items-center">
-                  <FormControl>
-                    <Checkbox
-                      className={
-                        `${form.formState.errors.isolation ? "border-red-500" : ""}`
-                      }
-                      id="isolation"
-                      {...register("isolation")}
-                      onCheckedChange={(checked) =>
-                        handleInputChange({
-                          target: {
-                            name: "isolation",
-                            type: "checkbox",
-                            checked,
-                          },
-                        })
-                      }
-                    />
-                  </FormControl>
-                  <Label
-                    htmlFor="isolation"
-                    className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
-                  >
-                    Yes
-                  </Label>
-                </div>
-                <FormMessage />
-              </div>
+              <FormField
+                control={form.control}
+                name="isolation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="block mb-3">Isolation</FormLabel>
+                    <div className="flex items-center">
+                    <FormControl>
+                      <Checkbox
+                        className={
+                          form.formState.errors.isolation
+                            ? "border-red-500"
+                            : ""
+                        }
+                        id="isolation"
+                        {...field}
+                        onCheckedChange={(checked) =>
+                          handleInputChange({
+                            target: {
+                              name: "isolation",
+                              type: "checkbox",
+                              checked,
+                            },
+                          })
+                        }
+                      />
+                    </FormControl>
+                    <Label
+                      htmlFor="isolation"
+                      className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
+                    >
+                      Yes
+                    </Label>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div>
-                <p className="block mb-2 font-medium">Patient Above 90 kg</p>
-                <div className="flex items-center">
-                  <FormControl>
-                    <Checkbox
-                      className={
-                        form.formState.errors.patientAbove90kg
-                          ? "border-red-500"
-                          : ""
-                      }
-                      id="patientAbove90kg"
-                      {...register("patientAbove90kg")}
-                      onCheckedChange={(checked) =>
-                        handleInputChange({
-                          target: {
-                            name: "patientAbove90kg",
-                            type: "checkbox",
-                            checked,
-                          },
-                        })
-                      }
-                    />
-                  </FormControl>
-                  <Label
-                    htmlFor="patientAbove90kg"
-                    className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
-                  >
-                    Yes
-                  </Label>
-                </div>
-                <FormMessage />
-              </div>
+              <FormField
+                control={form.control}
+                name="patientAbove90kg"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="block mb-3">
+                      Patient Above 90 kg
+                    </FormLabel>
+                    <div className="flex items-center">
+                    <FormControl>
+                      <Checkbox
+                        className={
+                          form.formState.errors.patientAbove90kg
+                            ? "border-red-500"
+                            : ""
+                        }
+                        id="patientAbove90kg"
+                        {...field}
+                        onCheckedChange={(checked) =>
+                          handleInputChange({
+                            target: {
+                              name: "patientAbove90kg",
+                              type: "checkbox",
+                              checked,
+                            },
+                          })
+                        }
+                      />
+                    </FormControl>
+                    <Label
+                      htmlFor="patientAbove90kg"
+                      className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
+                    >
+                      Yes
+                    </Label>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div
-                className={`${
-                  transportationData?.typeOfTransport === "collectionOrder" &&
-                  "col-span-2"
-                }`}
-              >
-                <FormLabel className="text-[15px] tracking-wide">Special</FormLabel>
-                <FormControl>
-                  <Input
-                    className={
-                      `${form.formState.errors.special ? "border-red-500" : ""} mt-2`
-                    }
-                    {...register("special")}
-                    onChange={handleInputChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
+              <FormField
+                control={form.control}
+                name="special"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Special</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.special ? "border-red-500" : ""
+                        }
+                        placeholder="Enter special notes"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
 
             <BackAndNextBtn

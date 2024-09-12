@@ -3,6 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
+  FormField,
+  FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
@@ -25,7 +27,8 @@ const BillingDetails = ({
 
   useEffect(() => {
     setBillingProgress(calculateFormProgress(fieldsFilled));
-  }, [...fieldsFilled]);
+  }, [preName, name, street, place, contact]);
+
   const formSchema = z.object({
     preName: z.string().min(1, "Prename/Institution is required"),
     name: z.string().min(1, "Name is required"),
@@ -37,16 +40,13 @@ const BillingDetails = ({
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      preName: "",
-      name: "",
-      street: "",
-      place: "",
-      contact: "",
+      preName: billingDetailsData.preName,
+      name: billingDetailsData.name,
+      street: billingDetailsData.street,
+      place: billingDetailsData.place,
+      contact: billingDetailsData.contact,
     },
   });
-
-  const { register, formState } = form;
-  const { errors } = formState;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -65,85 +65,121 @@ const BillingDetails = ({
         <Form {...form}>
           <form>
             <div className="grid grid-cols-2 gap-5">
-              <div>
-                <FormLabel className="text-[15px] tracking-wide">
-                  Prename/Institution <sup className="text-[13px]">*</sup>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className={`${errors.preName ? "border-red-500" : ""} mt-2`}
-                    {...register("preName")}
-                    onChange={handleInputChange}
-                    value={preName}
-                    placeholder="Type your prename or institution"
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
-
-              <div>
-                <FormLabel className="text-[15px] tracking-wide">
-                  Name <sup className="text-[13px]">*</sup>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className={`${errors.name ? "border-red-500" : ""} mt-2`}
-                    {...register("name")}
-                    onChange={handleInputChange}
-                    value={name}
-                    placeholder="Type your name"
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
-
-              <div>
-                <FormLabel className="text-[15px] tracking-wide">
-                  Street <sup className="text-[13px]">*</sup>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className={`${errors.street ? "border-red-500" : ""} mt-2`}
-                    {...register("street")}
-                    onChange={handleInputChange}
-                    value={street}
-                    placeholder="Type your street"
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
-
-              <div>
-                <FormLabel className="text-[15px] tracking-wide">
-                  Place <sup className="text-[13px]">*</sup>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className={`${errors.place ? "border-red-500" : ""} mt-2`}
-                    {...register("place")}
-                    onChange={handleInputChange}
-                    value={place}
-                    placeholder="Type your place"
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
-
-              <div>
-                <FormLabel className="text-[15px] tracking-wide">
-                  Contact <sup className="text-[13px]">*</sup>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    className={`${errors.contact ? "border-red-500" : ""} mt-2`}
-                    {...register("contact")}
-                    onChange={handleInputChange}
-                    value={contact}
-                    placeholder="Type your contact number"
-                  />
-                </FormControl>
-                <FormMessage />
-              </div>
+              <FormField
+                control={form.control}
+                name="preName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Prename/Institution</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.preName ? "border-red-500" : ""
+                        }
+                        placeholder="Type your prename or institution"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.name ? "border-red-500" : ""
+                        }
+                        placeholder="Type your name"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="street"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Street</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.street ? "border-red-500" : ""
+                        }
+                        placeholder="Type your street"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="place"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Place</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.place ? "border-red-500" : ""
+                        }
+                        placeholder="Type your place"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="contact"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Contact</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.contact ? "border-red-500" : ""
+                        }
+                        placeholder="Type your contact number"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <BackAndNextBtn
               isFillForm={true}

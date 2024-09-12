@@ -15,7 +15,9 @@ const CreateOrder = () => {
   const [destinationProgress, setDestinationProgress] = useState(0);
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
- 
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [selectedWeekdays, setSelectedWeekdays] = useState([]);
   const [transportationData, setTransportationData] = useState({
     typeOfTransport: "",
     modeOfTransportation: [],
@@ -33,6 +35,7 @@ const CreateOrder = () => {
     isolation: false,
     patientAbove90kg: false,
   });
+  console.log(patientData);
 
   const [destinationDetailsData, setDestinationDetailsData] = useState({
     //pick up details
@@ -55,13 +58,13 @@ const CreateOrder = () => {
     returnFloor: "",
   });
 
-  const [billingDetailsData, setBillingDetailsData] = useState({
-    preName: "",
-    name: "",
-    street: "",
-    place: "",
-    contact: "",
-  });
+    const [billingDetailsData, setBillingDetailsData] = useState({
+      preName: "",
+      name: "",
+      street: "",
+      place: "",
+      contact: "",
+    });
 
   const handleFormChange = (step) => {
     setCurrentStep(step);
@@ -90,6 +93,12 @@ const CreateOrder = () => {
     billingDetailsData,
     billingProgress,
     currentStep,
+    endDate,
+    startDate,
+    selectedWeekdays,
+    setSelectedWeekdays,
+    setEndDate,
+    setStartDate,
     setCurrentStep,
     setBillingProgress,
     setBillingDetailsData,
@@ -106,8 +115,7 @@ const CreateOrder = () => {
       <Navbar />
       <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
         <div className="flex items-center gap-5 mb-5">
-
-        {/* I will remove this code. Just put it for safety */}
+          {/* I will remove this code. Just put it for safety */}
 
           {/* <Pencil
             className={`${

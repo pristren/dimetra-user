@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -5,44 +6,26 @@ import { DatePicker } from "@/components/ui/DatePIcker";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import AppSelect from "@/components/common/AppSelect";
+import {
+  durationOptions,
+  timeOptions,
+  transportModesOptions,
+  transportOptions,
+  transportWithOptions,
+  weekdaysOptions,
+} from "../helpers";
 
-const PreviewDetails = () => {
-  const transportOptions = [
-    { value: "ambulance", label: "Ambulance" },
-    { value: "helicopter", label: "Helicopter" },
-    { value: "privateCar", label: "Private Car" },
-  ];
-
-  const transportModesOptions = [
-    { value: "bus", label: "Bus" },
-    { value: "train", label: "Train" },
-    { value: "car", label: "Car" },
-    { value: "bike", label: "Bike" },
-  ];
-
-  const transportWithOptions = [
-    { value: "driver", label: "Driver" },
-    { value: "guide", label: "Guide" },
-    { value: "assistant", label: "Assistant" },
-    { value: "accompanied", label: "Accompanied" },
-  ];
-
-  const weekdaysOptions = [
-    { value: "monday", label: "Monday" },
-    { value: "tuesday", label: "Tuesday" },
-    { value: "wednesday", label: "Wednesday" },
-    { value: "thursday", label: "Thursday" },
-    { value: "friday", label: "Friday" },
-    { value: "saturday", label: "Saturday" },
-    { value: "sunday", label: "Sunday" },
-  ];
-
-  const durationOptions = [
-    { value: "1month", label: "1 Month" },
-    { value: "3months", label: "3 Months" },
-    { value: "6months", label: "6 Months" },
-    { value: "1year", label: "After 1 Year" },
-  ];
+const PreviewDetails = ({
+  transportationData,
+  endDate,
+  startDate,
+  setEndDate,
+  setStartDate,
+  selectedWeekdays,
+}) => {
+  const calculateMonthlyOccurrences = (weekdays) => {
+    return weekdays.length * 4;
+  };
   return (
     <div className="w-[65%] p-8">
       {/* Single Card for all details */}
@@ -53,15 +36,16 @@ const PreviewDetails = () => {
         <CardContent className="px-10">
           <div className="space-y-8">
             <div className="grid grid-cols-3 gap-5">
-              <div className="border-r pr-5">
-                <h2 className="text-lg font-medium mb-4">
-                  Transportart (einfach Auswahl)
-                </h2>
+              <div className="pr-5">
+                <h6 className="mb-4">
+                  Type of transport{" "}
+                  <span className="text-[15px]">(simple selection)</span>
+                </h6>
                 <RadioGroup>
                   {transportOptions.map((option) => (
                     <div
                       key={option.value}
-                      className="flex items-center space-x-2"
+                      className="flex items-center space-x-2 mb-2"
                     >
                       <RadioGroupItem value={option.value} id={option.value} />
                       <Label htmlFor={option.value}>{option.label}</Label>
@@ -70,13 +54,19 @@ const PreviewDetails = () => {
                 </RadioGroup>
               </div>
 
-              <div className="border-r pr-5">
-                <h2 className="text-lg font-medium mb-4">
-                  Beförderungsart (mehrfach Auswahl)
-                </h2>
+              <div className="pr-5">
+                <h6 className="mb-4">
+                  Mode of transportation
+                  <span className="text-[15px]">(multiple selection)</span>
+                </h6>
                 {transportModesOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-2">
-                    <Checkbox id={option.value} />
+                  <div key={option.value} className="flex items-center mb-4">
+                    <Checkbox
+                      id={option.value}
+                      checked={transportationData.modeOfTransportation.includes(
+                        option.value
+                      )}
+                    />
                     <Label className="ml-2" htmlFor={option.value}>
                       {option.label}
                     </Label>
@@ -85,12 +75,18 @@ const PreviewDetails = () => {
               </div>
 
               <div>
-                <h2 className="text-lg font-medium mb-4">
-                  Transport MIT (mehrfach Auswahl)
-                </h2>
+                <h6 className="mb-4">
+                  Transport with
+                  <span className="text-[15px]">(multiple selection)</span>
+                </h6>
                 {transportWithOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-2">
-                    <Checkbox id={option.value} />
+                  <div key={option.value} className="flex items-center mb-4">
+                    <Checkbox
+                      id={option.value}
+                      checked={transportationData.transportWith.includes(
+                        option.value
+                      )}
+                    />
                     <Label className="ml-2" htmlFor={option.value}>
                       {option.label}
                     </Label>
@@ -99,49 +95,72 @@ const PreviewDetails = () => {
               </div>
             </div>
 
-            <h3 className="text-lg font-medium mb-3 mt-5">Select Weekdays:</h3>
-            <AppSelect
-              items={["Week 1", "Week 2", "Week 3"]}
-              placeholder="Week 1"
-            />
+            {transportationData?.typeOfTransport === "reccurring" && (
+              <div>
+                <h3 className="text-lg font-medium mb-3 mt-5">
+                  Select Weekdays:
+                </h3>
+                <AppSelect items={["Week", "Month"]} placeholder="Week" />
 
-            <h3 className="text-lg font-medium mb-3 mt-5">
-              Select Start Date and Time:
-            </h3>
-            <div className="mb-5 flex w-max gap-4 items-center">
-              <DatePicker />
-              <Input placeholder="00:00" />
-            </div>
-
-            <h3 className="text-lg font-medium mb-3">
-              Select Weekdays (mehrfach Auswahl):
-            </h3>
-            <div className="grid grid-cols-3 gap-3 mt-2">
-              {weekdaysOptions.map((option) => (
-                <div key={option.value} className="flex items-center mb-2">
-                  <Checkbox id={option.value} />
-                  <Label className="ml-2" htmlFor={option.value}>
-                    {option.label}
-                  </Label>
+                <h3 className="text-lg font-medium mt-10 mb-5">
+                  Select Start Date and Time*:
+                </h3>
+                <div className="mb-5 flex w-max gap-4 items-center">
+                  <DatePicker date={startDate} setDate={setStartDate} />
+                  <AppSelect
+                    items={timeOptions}
+                    placeholder="00:00"
+                    isTime={true}
+                  />
                 </div>
-              ))}
-            </div>
 
-            <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
-            <RadioGroup>
-              {durationOptions.map((option) => (
-                <div
-                  key={option.value}
-                  className="flex items-center space-x-2 mb-2"
-                >
-                  <RadioGroupItem value={option.value} id={option.value} />
-                  <Label htmlFor={option.value}>{option.label}</Label>
+                <h3 className="text-lg font-medium mt-10 mb-5">
+                  Select Return Time* :
+                </h3>
+                <div className="mb-5 flex w-max gap-4 items-center">
+                  <DatePicker date={endDate} setDate={setEndDate} />
+                  <AppSelect
+                    items={timeOptions}
+                    placeholder="00:00"
+                    isTime={true}
+                  />
                 </div>
-              ))}
-            </RadioGroup>
-            <h2 className="text-lg font-semibold mt-5">
-              Summary: Monthly on day 4
-            </h2>
+
+                <h3 className="text-lg font-medium mb-3 mt-5">
+                  Select Weekdays{" "}
+                  <span className="text-[15px]">(multiple selection)</span>:
+                </h3>
+                <div className="grid grid-cols-3 gap-3 mt-2">
+                  {weekdaysOptions.map((option) => (
+                    <div key={option.value} className="flex items-center mb-2">
+                      <Checkbox
+                        id={option.value}
+                        checked={selectedWeekdays.includes(option.value)}
+                      />
+                      <Label className="ml-2" htmlFor={option.value}>
+                        {option.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+
+                <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
+                {durationOptions.map((option) => (
+                  <div
+                    key={option.value}
+                    className="flex items-center space-x-2 mb-2"
+                  >
+                    <RadioGroupItem value={option.value} id={option.value} />
+                    <Label htmlFor={option.value}>{option.label}</Label>
+                  </div>
+                ))}
+
+                <h2 className="text-lg font-semibold mt-5">
+                  Summary: Monthly on day{" "}
+                  {calculateMonthlyOccurrences(selectedWeekdays)}
+                </h2>
+              </div>
+            )}
             <div>
               <h2 className="text-2xl font-semibold mb-4">Patient Details</h2>
               <div className="grid grid-cols-2 gap-5">

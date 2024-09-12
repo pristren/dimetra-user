@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { z } from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,10 +33,13 @@ const TransportationDetails = ({
   transportationProgress,
   setTransportationData,
   transportationData,
+  endDate,
+  startDate,
+  setEndDate,
+  setStartDate,
+  selectedWeekdays,
+  setSelectedWeekdays,
 }) => {
-  const [selectedWeekdays, setSelectedWeekdays] = useState([]);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const formSchema = z.object({
     typeOfTransport: z.string().min(1, "Transport type is required"),
     transportModes: z
@@ -197,7 +200,9 @@ const TransportationDetails = ({
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={transportationData.transportWith.includes(option.value)}
+                      checked={transportationData.transportWith.includes(
+                        option.value
+                      )}
                       onClick={() =>
                         handleCheckBox("transportWith", option.value)
                       }
@@ -305,7 +310,7 @@ const TransportationDetails = ({
                 type="submit"
                 disabled={transportationProgress < 100}
                 className="mt-5 bg-secondary text-black hover:text-white px-12"
-                onClick={() => handleFormChange("patientDetails")}
+                onClick={() => handleFormChange("patient")}
               >
                 Next
               </Button>

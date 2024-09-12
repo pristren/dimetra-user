@@ -6,10 +6,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import UsaLogo from "@/assets/icons/UsaLogo";
 export default function Language() {
   const languages = [
     {
-      icon: "🇬🇧",
+      icon: <UsaLogo />,
       name: "English",
     },
     {
