@@ -31,8 +31,8 @@ const TransportationDetails = ({
   handleFormChange,
   setTransportationProgress,
   transportationProgress,
-  setOrderData,
-  orderData,
+  setTransportationData,
+  transportationData,
 }) => {
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
@@ -63,7 +63,7 @@ const TransportationDetails = ({
   });
 
   const handleCheckBox = (type, value) => {
-    setOrderData((prevData) => {
+    setTransportationData((prevData) => {
       const newData = prevData[type].includes(value)
         ? prevData[type].filter((mode) => mode !== value)
         : [...prevData[type], value];
@@ -87,22 +87,22 @@ const TransportationDetails = ({
     );
   };
   let fieldsFilled;
-  if (orderData?.typeOfTransport === "reccurring") {
+  if (transportationData?.typeOfTransport === "reccurring") {
     fieldsFilled = [
       form.watch("typeOfTransport"),
       form.watch("duration"),
-      orderData?.modeOfTransportation.length > 0,
-      orderData?.transportWith.length > 0,
+      transportationData?.modeOfTransportation.length > 0,
+      transportationData?.transportWith.length > 0,
       selectedWeekdays.length > 0,
       startDate,
       endDate,
     ];
   } else {
     fieldsFilled = [
-      orderData?.typeOfTransport,
+      transportationData?.typeOfTransport,
       null,
-      orderData?.modeOfTransportation.length > 0,
-      orderData?.transportWith.length > 0,
+      transportationData?.modeOfTransportation.length > 0,
+      transportationData?.transportWith.length > 0,
       null,
       null,
       null,
@@ -137,7 +137,7 @@ const TransportationDetails = ({
                           value={field.value}
                           onValueChange={(value) => {
                             field.onChange(value);
-                            setOrderData((prev) => ({
+                            setTransportationData((prev) => ({
                               ...prev,
                               typeOfTransport: value,
                             }));
@@ -174,7 +174,7 @@ const TransportationDetails = ({
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={orderData.modeOfTransportation.includes(
+                      checked={transportationData.modeOfTransportation.includes(
                         option.value
                       )}
                       onClick={() =>
@@ -197,7 +197,7 @@ const TransportationDetails = ({
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={orderData.transportWith.includes(option.value)}
+                      checked={transportationData.transportWith.includes(option.value)}
                       onClick={() =>
                         handleCheckBox("transportWith", option.value)
                       }
@@ -209,7 +209,7 @@ const TransportationDetails = ({
                 ))}
               </div>
             </div>
-            {orderData?.typeOfTransport === "reccurring" && (
+            {transportationData?.typeOfTransport === "reccurring" && (
               <div>
                 <h3 className="text-lg font-medium mb-3 mt-5">
                   Select Weekdays:

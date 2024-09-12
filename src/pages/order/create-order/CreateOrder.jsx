@@ -19,11 +19,24 @@ const CreateOrder = () => {
     isBilling: false,
   });
 
-  const [orderData, setOrderData] = useState({
+  const [transportationData, setTransportationData] = useState({
     typeOfTransport: "",
     modeOfTransportation: [],
     transportWith: [],
   });
+
+  const [patientData, setPatientData] = useState({
+    name: "",
+    surname: "",
+    dateOfBirth: "",
+    areaRoom: "",
+    kostenstelle: "",
+    howMuch: "",
+    special: "",
+    isolation: false,
+    patientAbove90kg: false,
+  });
+  console.log(patientData);
 
   const handleFormChange = (formType) => {
     setShowForm({
@@ -36,13 +49,15 @@ const CreateOrder = () => {
 
   const props = {
     showForm,
-    orderData,
+    transportationData,
+    patientData,
     transportationProgress,
     handleFormChange,
     setTransportationProgress,
     setPatientProgress,
     setDestinationProgress,
-    setOrderData,
+    setTransportationData,
+    setPatientData,
   };
 
   return (
