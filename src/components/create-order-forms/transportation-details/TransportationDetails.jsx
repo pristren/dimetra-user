@@ -35,10 +35,10 @@ const TransportationDetails = ({
   orderData,
 }) => {
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
   const formSchema = z.object({
-    transportType: z.string().min(1, "Transport type is required"),
+    typeOfTransport: z.string().min(1, "Transport type is required"),
     transportModes: z
       .array(z.string())
       .nonempty("At least one mode must be selected"),
@@ -53,7 +53,7 @@ const TransportationDetails = ({
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      transportType: "",
+      typeOfTransport: "",
       transportModes: [],
       transportWith: [],
       duration: "",
@@ -62,26 +62,14 @@ const TransportationDetails = ({
     },
   });
 
-  const handleModeOfTransportationChange = (value) => {
+  const handleCheckBox = (type, value) => {
     setOrderData((prevData) => {
-      const newModes = prevData.modeOfTransportation.includes(value)
-        ? prevData.modeOfTransportation.filter((mode) => mode !== value)
-        : [...prevData.modeOfTransportation, value];
+      const newData = prevData[type].includes(value)
+        ? prevData[type].filter((mode) => mode !== value)
+        : [...prevData[type], value];
       return {
         ...prevData,
-        modeOfTransportation: newModes,
-      };
-    });
-  };
-
-  const handleTransportWithChange = (value) => {
-    setOrderData((prevData) => {
-      const newWithOptions = prevData.transportWith.includes(value)
-        ? prevData.transportWith.filter((option) => option !== value)
-        : [...prevData.transportWith, value];
-      return {
-        ...prevData,
-        transportWith: newWithOptions,
+        [type]: newData,
       };
     });
   };
@@ -101,7 +89,7 @@ const TransportationDetails = ({
   let fieldsFilled;
   if (orderData?.typeOfTransport === "reccurring") {
     fieldsFilled = [
-      form.watch("transportType"),
+      form.watch("typeOfTransport"),
       form.watch("duration"),
       orderData?.modeOfTransportation.length > 0,
       orderData?.transportWith.length > 0,
@@ -112,14 +100,18 @@ const TransportationDetails = ({
   } else {
     fieldsFilled = [
       orderData?.typeOfTransport,
+      null,
       orderData?.modeOfTransportation.length > 0,
       orderData?.transportWith.length > 0,
+      null,
+      null,
+      null,
     ];
   }
 
   useEffect(() => {
     setTransportationProgress(calculateFormProgress(fieldsFilled));
-  }, [...fieldsFilled, setTransportationProgress, orderData]);
+  }, [...fieldsFilled]);
 
   return (
     <Card className="w-[65%] px-5 py-5">
@@ -137,7 +129,7 @@ const TransportationDetails = ({
                 </h6>
                 <FormField
                   control={form.control}
-                  name="transportType"
+                  name="typeOfTransport"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
@@ -186,7 +178,7 @@ const TransportationDetails = ({
                         option.value
                       )}
                       onClick={() =>
-                        handleModeOfTransportationChange(option.value)
+                        handleCheckBox("modeOfTransportation", option.value)
                       }
                     />
                     <Label className="ml-2" htmlFor={option.value}>
@@ -206,7 +198,9 @@ const TransportationDetails = ({
                     <Checkbox
                       id={option.value}
                       checked={orderData.transportWith.includes(option.value)}
-                      onClick={() => handleTransportWithChange(option.value)}
+                      onClick={() =>
+                        handleCheckBox("transportWith", option.value)
+                      }
                     />
                     <Label className="ml-2" htmlFor={option.value}>
                       {option.label}
