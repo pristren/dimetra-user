@@ -11,6 +11,7 @@ const AllOrders = () => {
   const [date, setDate] = useState(null);
   const [selectedFilter, setSelectedFilter] = useState(null);
   const filters = ["All Order", "Recurring"];
+  console.log(date);
 
   const handleFilterChange = (value) => {
     setSelectedFilter(value);

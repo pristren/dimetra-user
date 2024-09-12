@@ -11,49 +11,52 @@ import Pencil from "@/assets/icons/Pencil";
 import Trash from "@/assets/icons/Trash";
 import Document from "@/assets/icons/Documents";
 import ArrowUpDown from "@/assets/icons/ArrowUpDown";
-import { Link } from "react-router-dom";
+import Pause from "@/assets/icons/Pause";
 
-const AllOrdersTable = () => {
-  const allOrdersData = [
+const RecurringOrdersTable = () => {
+  const recurringOrdersData = [
     {
       date: "2024-09-08",
       pickUp: "123 Main St.",
       destination: "456 Elm St.",
+      vehicle: "Car",
       driver: "John Doe",
-      patientName: "Sedan",
-      orderType: "Jane Smith",
       status: "Completed",
+      patientName: "Jane Doe",
+      orderType: "Regular",
     },
     {
       date: "2024-09-08",
       pickUp: "123 Main St.",
       destination: "456 Elm St.",
+      vehicle: "Car",
       driver: "John Doe",
-      patientName: "Sedan",
-      orderType: "Jane Smith",
       status: "Rejected",
+      patientName: "Jane Doe",
+      orderType: "Regular",
     },
     {
       date: "2024-09-08",
       pickUp: "123 Main St.",
       destination: "456 Elm St.",
+      vehicle: "Car",
       driver: "John Doe",
-      patientName: "Sedan",
-      orderType: "Jane Smith",
       status: "Confirmed",
+      patientName: "Jane Doe",
+      orderType: "Regular",
     },
     {
       date: "2024-09-08",
       pickUp: "123 Main St.",
       destination: "456 Elm St.",
+      vehicle: "Car",
       driver: "John Doe",
-      patientName: "Sedan",
-      orderType: "Jane Smith",
       status: "Paused",
+      patientName: "Jane Doe",
+      orderType: "Regular",
     },
   ];
 
-  // Function to determine the button color based on the status
   const getStatusColor = (status) => {
     switch (status) {
       case "Completed":
@@ -93,6 +96,15 @@ const AllOrdersTable = () => {
       header: () => (
         <div className="flex items-center gap-2">
           Destination
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "vehicle",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Vehicle
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -167,14 +179,13 @@ const AllOrdersTable = () => {
                 <Trash className="size-6" />
                 Storno
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link
-                  to="/order/recurring-orders/123" // Use a dynamic ID if available
-                  className="flex items-center gap-3 text-[16px] mb-3"
-                >
-                  <Document className="size-6" />
-                  View Details
-                </Link>
+              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-3">
+                <Document className="size-6" />
+                View Details
+              </DropdownMenuItem>
+              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-3">
+                <Pause className="size-6" />
+                Pause
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -183,7 +194,7 @@ const AllOrdersTable = () => {
     },
   ];
 
-  return <AppTable columns={columns} data={allOrdersData} />;
+  return <AppTable columns={columns} data={recurringOrdersData} />;
 };
 
-export default AllOrdersTable;
+export default RecurringOrdersTable;

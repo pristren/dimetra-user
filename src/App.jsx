@@ -11,6 +11,7 @@ import CreateOrder from "@/pages/order/create-order/CreateOrder";
 import OrderSettings from "@/pages/order/order-settings/OrderSettings";
 import SendRequest from "@/pages/order/send-request/SendRequest";
 import AllOrders from "@/pages/order/all-orders/AllOrders";
+import RecurringOrders from "./pages/order/recurring-orders/RecurringOrders";
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
         <Route index element={<Navigate to="all-orders" />} />
         <Route path="history" element={<OrderHistory />} />
         <Route path="all-orders" element={<AllOrders />} />
+        <Route path="recurring-orders/:id" element={<RecurringOrders />} />
         <Route path="setting" element={<OrderSettings />} />
         <Route path="send-request" element={<SendRequest />} />
       </Route>
