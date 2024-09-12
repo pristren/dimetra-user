@@ -7,8 +7,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
-  FormField,
-  FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
@@ -16,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { calculateFormProgress } from "@/utils";
+import { Label } from "@/components/ui/label";
 
 const PatientDetails = ({
   handleFormChange,
@@ -29,7 +28,7 @@ const PatientDetails = ({
     surname: z.string().min(1, "Surname is required"),
     dateOfBirth: z.string().min(1, "Date of Birth is required"),
     areaRoom: z.string().min(1, "Area/Room is required"),
-    kostenstelle: z.string().min(1, "Kostenstelle is required"),
+    costCenter: z.string().min(1, "Cost center is required"),
     howMuch: z.string().min(1, "How much is required"),
     special: z.string().optional(),
     isolation: z.boolean().optional(),
@@ -41,18 +40,12 @@ const PatientDetails = ({
     defaultValues: patientData,
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setPatientData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
 
-  const handleCheckboxChange = (name, checked) => {
     setPatientData((prev) => ({
       ...prev,
-      [name]: checked,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
@@ -62,11 +55,13 @@ const PatientDetails = ({
       patientData.surname,
       patientData.dateOfBirth,
       patientData.areaRoom,
-      patientData.kostenstelle,
+      patientData.costCenter,
     ];
 
     setPatientProgress(calculateFormProgress(fieldsFilled));
   }, [patientData, setPatientProgress]);
+
+  const { register } = form;
 
   return (
     <Card className="w-[65%] px-5 py-5">
@@ -77,260 +72,206 @@ const PatientDetails = ({
         <Form {...form}>
           <form>
             <div className="grid grid-cols-2 gap-5">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {transportationData?.typeOfTransport === "collectionOrder"
-                        ? "Name Collection"
-                        : "Name"}
-                      <sup className="text-[13px]">*</sup>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        value={form.getValues("name")}
-                        className={
-                          form.formState.errors.name ? "border-red-500" : ""
-                        }
-                        placeholder="Type your name"
-                        {...field}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="surname"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {transportationData?.typeOfTransport === "collectionOrder"
-                        ? "Number Patients"
-                        : "Surname"}
-                      <sup className="text-[13px]">*</sup>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        value={form.getValues("surname")}
-                        className={
-                          form.formState.errors.surname ? "border-red-500" : ""
-                        }
-                        placeholder="Type your surname"
-                        {...field}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="dateOfBirth"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {transportationData?.typeOfTransport === "collectionOrder"
-                        ? "Area/Room"
-                        : "Date of Birth"}
-                      <sup className="text-[13px]">*</sup>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        value={form.getValues("dateOfBirth")}
-                        className={
-                          form.formState.errors.dateOfBirth
-                            ? "border-red-500"
-                            : ""
-                        }
-                        placeholder="Type your date of birth"
-                        {...field}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="areaRoom"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {transportationData?.typeOfTransport === "collectionOrder"
-                        ? "Cost center"
-                        : "Area/Room"}
-                      <sup className="text-[13px]">*</sup>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        value={form.getValues("areaRoom")}
-                        className={
-                          form.formState.errors.areaRoom ? "border-red-500" : ""
-                        }
-                        placeholder="Type your area or room"
-                        {...field}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="kostenstelle"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {transportationData?.typeOfTransport === "collectionOrder"
-                        ? "How much"
-                        : "Kostenstelle"}
-                      {transportationData?.typeOfTransport !==
-                        "collectionOrder" && (
-                        <sup className="text-[13px]">*</sup>
-                      )}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        value={form.getValues("kostenstelle")}
-                        className={
-                          form.formState.errors.kostenstelle
-                            ? "border-red-500"
-                            : ""
-                        }
-                        placeholder="Type your kostenstelle"
-                        {...field}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div>
+                <FormLabel className="text-[15px] tracking-wide">
+                  {transportationData?.typeOfTransport === "collectionOrder"
+                    ? "Name Collection"
+                    : "Name"}
+                  <sup className="text-[13px]">*</sup>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className={
+                      `${form.formState.errors.name ? "border-red-500" : ""} mt-2`
+                    }
+                    {...register("name")}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
+
+              <div>
+                <FormLabel className="text-[15px] tracking-wide">
+                  {transportationData?.typeOfTransport === "collectionOrder"
+                    ? "Number Patients"
+                    : "Surname"}
+                  <sup className="text-[13px]">*</sup>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className={
+                      `${form.formState.errors.surname ? "border-red-500" : ""} mt-2`
+                    }
+                    {...register("surname")}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
+
+              <div>
+                <FormLabel className="text-[15px] tracking-wide">
+                  {transportationData?.typeOfTransport === "collectionOrder"
+                    ? "Area/Room"
+                    : "Date of Birth"}
+                  <sup className="text-[13px]">*</sup>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className={
+                      `${form.formState.errors.dateOfBirth ? "border-red-500" : ""} mt-2`
+                    }
+                    {...register("dateOfBirth")}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
+
+              <div>
+                <FormLabel className="text-[15px] tracking-wide">
+                  {transportationData?.typeOfTransport === "collectionOrder"
+                    ? "Cost center"
+                    : "Area/Room"}
+                  <sup className="text-[13px]">*</sup>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className={
+                      `${form.formState.errors.areaRoom ? "border-red-500" : ""} mt-2`
+                    }
+                    {...register("areaRoom")}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
+
+              <div>
+                <FormLabel className="text-[15px] tracking-wide">
+                  {transportationData?.typeOfTransport === "collectionOrder"
+                    ? "How much"
+                    : "Cost Center"}
+                  {transportationData?.typeOfTransport !==
+                    "collectionOrder" && <sup className="text-[13px]">*</sup>}
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    className={
+                      `${form.formState.errors.costCenter ? "border-red-500" : ""} mt-2`
+                    }
+                    {...register("costCenter")}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
+
               {transportationData?.typeOfTransport !== "collectionOrder" && (
-                <FormField
-                  control={form.control}
-                  name="howMuch"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>How Much</FormLabel>
-                      <FormControl>
-                        <Input
-                          value={form.getValues("howMuch")}
-                          className={
-                            form.formState.errors.howMuch
-                              ? "border-red-500"
-                              : ""
-                          }
-                          placeholder="Type how much"
-                          {...field}
-                          onChange={handleChange}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div>
+                  <FormLabel className="text-[15px] tracking-wide">How Much</FormLabel>
+                  <FormControl>
+                    <Input
+                      className={
+                        `${form.formState.errors.howMuch ? "border-red-500" : ""} mt-2`
+                      }
+                      {...register("howMuch")}
+                      onChange={handleInputChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </div>
               )}
-              <FormField
-                control={form.control}
-                name="isolation"
-                render={({ field }) => (
-                  <FormItem>
-                    <p className="block mb-2 font-medium">Isolation</p>
-                    <div className="flex items-center">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          className={
-                            form.formState.errors.isolation
-                              ? "border-red-500"
-                              : ""
-                          }
-                          {...field}
-                          onCheckedChange={(checked) =>
-                            handleCheckboxChange("isolation", checked)
-                          }
-                        />
-                      </FormControl>
-                      <FormLabel className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
-                        Yes
-                      </FormLabel>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="patientAbove90kg"
-                render={({ field }) => (
-                  <FormItem>
-                    <p className="block mb-2 font-medium">
-                      Patient Above 90 kg
-                    </p>
-                    <div className="flex items-center">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          className={
-                            form.formState.errors.patientAbove90kg
-                              ? "border-red-500"
-                              : ""
-                          }
-                          {...field}
-                          onCheckedChange={(checked) =>
-                            handleCheckboxChange("patientAbove90kg", checked)
-                          }
-                        />
-                      </FormControl>
-                      <FormLabel className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
-                        Yes
-                      </FormLabel>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="special"
-                render={({ field }) => (
-                  <FormItem
-                    className={`${
-                      transportationData?.typeOfTransport ===
-                        "collectionOrder" && "col-span-2"
-                    }`}
+
+              <div>
+                <p className="block mb-2 font-medium">Isolation</p>
+                <div className="flex items-center">
+                  <FormControl>
+                    <Checkbox
+                      className={
+                        `${form.formState.errors.isolation ? "border-red-500" : ""}`
+                      }
+                      id="isolation"
+                      {...register("isolation")}
+                      onCheckedChange={(checked) =>
+                        handleInputChange({
+                          target: {
+                            name: "isolation",
+                            type: "checkbox",
+                            checked,
+                          },
+                        })
+                      }
+                    />
+                  </FormControl>
+                  <Label
+                    htmlFor="isolation"
+                    className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
                   >
-                    <FormLabel>Special</FormLabel>
-                    <FormControl>
-                      <Input
-                        value={form.getValues("special")}
-                        className={
-                          form.formState.errors.special ? "border-red-500" : ""
-                        }
-                        placeholder="Type any special requirements"
-                        {...field}
-                        onChange={handleChange}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+                    Yes
+                  </Label>
+                </div>
+                <FormMessage />
+              </div>
+
+              <div>
+                <p className="block mb-2 font-medium">Patient Above 90 kg</p>
+                <div className="flex items-center">
+                  <FormControl>
+                    <Checkbox
+                      className={
+                        form.formState.errors.patientAbove90kg
+                          ? "border-red-500"
+                          : ""
+                      }
+                      id="patientAbove90kg"
+                      {...register("patientAbove90kg")}
+                      onCheckedChange={(checked) =>
+                        handleInputChange({
+                          target: {
+                            name: "patientAbove90kg",
+                            type: "checkbox",
+                            checked,
+                          },
+                        })
+                      }
+                    />
+                  </FormControl>
+                  <Label
+                    htmlFor="patientAbove90kg"
+                    className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
+                  >
+                    Yes
+                  </Label>
+                </div>
+                <FormMessage />
+              </div>
+
+              <div
+                className={`${
+                  transportationData?.typeOfTransport === "collectionOrder" &&
+                  "col-span-2"
+                }`}
+              >
+                <FormLabel className="text-[15px] tracking-wide">Special</FormLabel>
+                <FormControl>
+                  <Input
+                    className={
+                      `${form.formState.errors.special ? "border-red-500" : ""} mt-2`
+                    }
+                    {...register("special")}
+                    onChange={handleInputChange}
+                  />
+                </FormControl>
+                <FormMessage />
+              </div>
             </div>
+
             <BackAndNextBtn
               isFillForm={true}
-              back="transport"
-              next="review"
-              onClick={() => handleFormChange("patientDetails")}
+              handleGoPrev={() => handleFormChange("transportDetails")}
+              handleGoNext={() => handleFormChange("destinationDetails")}
             />
           </form>
         </Form>

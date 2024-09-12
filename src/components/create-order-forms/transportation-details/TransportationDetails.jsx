@@ -100,12 +100,12 @@ const TransportationDetails = ({
   } else {
     fieldsFilled = [
       transportationData?.typeOfTransport,
-      null,
+      // null,
       transportationData?.modeOfTransportation.length > 0,
       transportationData?.transportWith.length > 0,
-      null,
-      null,
-      null,
+      // null,
+      // null,
+      // null,
     ];
   }
 
@@ -305,7 +305,7 @@ const TransportationDetails = ({
                 type="submit"
                 disabled={transportationProgress < 100}
                 className="mt-5 bg-secondary text-black hover:text-white px-12"
-                onClick={() => handleFormChange("patient")}
+                onClick={() => handleFormChange("patientDetails")}
               >
                 Next
               </Button>

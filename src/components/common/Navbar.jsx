@@ -7,6 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const url = window.location.pathname;
@@ -21,7 +22,9 @@ export default function Navbar() {
         flex justify-between items-center border-b px-8 py-2.5 sticky top-0 bg-white z-20
       `}
     >
+      <Link to="/">
       <Logo className={url === "/create-order" ? "" : "md:hidden"} />
+      </Link>
       <div className="flex items-center gap-3">
         <Language />
         <DropdownMenu>

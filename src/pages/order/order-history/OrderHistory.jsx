@@ -18,7 +18,7 @@ const OrderHistory = () => {
         <div className="flex items-center gap-4 ">
           <AppSelect items={filters} placeholder="filters" className="gap-10" />
           <div className="relative">
-            <Input placeholder="Search" className="w-60" />
+            <Input placeholder="Search" className="w-60 h-10" />
             <Search className="absolute right-2 top-1/2 -translate-y-1/2" />
           </div>
         </div>

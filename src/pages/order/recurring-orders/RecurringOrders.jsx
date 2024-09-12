@@ -24,7 +24,7 @@ const RecurringOrders = () => {
             <AppSelect placeholder="00:00" items={timeOptions} isTime={true} />
           </div>
           <div className="relative">
-            <Input placeholder="Search" className="w-60" />
+            <Input placeholder="Search" className="w-60 h-10" />
             <Search className="absolute right-2 top-1/2 -translate-y-1/2" />
           </div>
         </div>

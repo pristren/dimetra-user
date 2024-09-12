@@ -3,24 +3,24 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const BackAndNextBtn = ({
-  back,
-  next,
   isFillForm,
+  isLastPage,
   isDisabled,
-  handleFormChange,
+  handleGoNext,
+  handleGoPrev
 }) => {
   return (
     <div className="flex items-center justify-between mt-5">
       <Button
         className="flex gap-1 items-center"
         variant="outline"
-        onClick={() => handleFormChange(back)}
+        onClick={handleGoPrev}
       >
         <ArrowLeft /> Back
       </Button>
       <Button
         disabled={isDisabled}
-        onClick={() => handleFormChange(next)}
+        onClick={handleGoNext}
         type="submit"
         className={`${
           isFillForm
@@ -28,7 +28,7 @@ const BackAndNextBtn = ({
             : "bg-secondary text-gray-500 hover:bg-secondary"
         } px-12`}
       >
-        Check Preview
+        {isLastPage ? "Check Preview" : "Next"}
       </Button>
     </div>
   );
