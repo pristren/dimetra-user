@@ -51,7 +51,7 @@ export function AppTable({ data, columns }) {
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="bg-secondary hover:bg-secondary"
+                className="bg-secondary hover:bg-secondary text-nowrap"
               >
                 {headerGroup.headers.map((header) => {
                   return (
@@ -99,7 +99,7 @@ export function AppTable({ data, columns }) {
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center gap-5 justify-between text-nowrap px-5 mt-10 border-t py-5">
+        <div className="flex items-center gap-5 justify-between text-nowrap px-5 border-t py-5">
           <p>Showing 1 to 1 of 1 entries</p>
           <div>
             <AppPagination />

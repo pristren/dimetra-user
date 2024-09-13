@@ -9,12 +9,7 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
-export function DatePicker({
-  className,
-  date,
-  setDate,
-}) {
-
+export function DatePicker({ className, date, setDate }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -31,7 +26,9 @@ export function DatePicker({
           ) : (
             <span className="text-black">Pick a date</span>
           )}
-          <CalendarIcon className="size-8 text-white bg-primary p-2 rounded-full" />
+          <div className="w-6 h-6 rounded-full p-1  flex justify-center items-center bg-primary text-white">
+            <CalendarIcon className="w-4 h-4   " />
+          </div>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="left">
