@@ -12,6 +12,7 @@ import Trash from "@/assets/icons/Trash";
 import Document from "@/assets/icons/Documents";
 import ArrowUpDown from "@/assets/icons/ArrowUpDown";
 import Pause from "@/assets/icons/Pause";
+import { Link } from "react-router-dom";
 
 const RecurringOrdersTable = () => {
   const recurringOrdersData = [
@@ -33,7 +34,7 @@ const RecurringOrdersTable = () => {
       driver: "John Doe",
       status: "Rejected",
       patientName: "Jane Doe",
-      orderType: "Regular",
+      orderType: "Something",
     },
     {
       date: "2024-09-08",
@@ -129,12 +130,8 @@ const RecurringOrdersTable = () => {
     },
     {
       accessorKey: "orderType",
-      header: () => (
-        <div className="flex items-center gap-2">
-          Order Type
-          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
-        </div>
-      ),
+      cell: () => null,
+      header: () => null,
     },
     {
       accessorKey: "status",
@@ -150,7 +147,7 @@ const RecurringOrdersTable = () => {
 
         return (
           <Button
-            className="py-2 px-2 rounded-md w-max text-black"
+            className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs"
             style={{ backgroundColor: statusColor }}
           >
             {status}
@@ -162,35 +159,45 @@ const RecurringOrdersTable = () => {
       accessorKey: "action",
       header: () => (
         <div className="text-center flex items-center justify-center">
+          Actions
           <ArrowUpDown className="h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
-      cell: () => (
-        <div className="flex justify-center items-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <EllipsisVertical className="h-4 w-4 cursor-pointer" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="-translate-x-5">
-              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-3">
-                <Pencil className="size-6" /> Edit
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-3">
-                <Trash className="size-6" />
-                Storno
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-3">
-                <Document className="size-6" />
-                View Details
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-3">
-                <Pause className="size-6" />
-                Pause
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex justify-center items-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisVertical className="h-4 w-4 cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="-translate-x-5 p-4 w-60">
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                  <Pencil className="size-5 text-gray-600" />
+                  <span className="text-gray-700 text-sm">Edit</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                  <Trash className="size-5" />
+
+                  <span className="text-gray-700 text-sm">Storno</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="py-2 mb-2">
+                  <Link
+                    to={`/orders/order-details/${row.original.id}   `}
+                    className="flex items-center gap-3 text-[16px]"
+                  >
+                    <Document className="size-5" />
+                    <span className="text-gray-700 text-sm">View Details</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                  <Pause className="size-5" />
+                  <span className="text-gray-700 text-sm">Pause</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      },
     },
   ];
 

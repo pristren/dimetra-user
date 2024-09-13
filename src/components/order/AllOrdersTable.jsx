@@ -17,53 +17,67 @@ import Pause from "@/assets/icons/Pause";
 const AllOrdersTable = () => {
   const allOrdersData = [
     {
+      id: "1",
       date: "2024-09-08",
       pickUp: "Universität Spital, 4056 Basel something something",
       destination: "St. Clara Spital, 4058 Basel",
       driver: "JohnDoe JohnDoe",
       patientName: "Sedan",
-      orderType: "Jane Smith",
-      status: "Completed",
+      orderType: "Recurring",
+      status: "Pending",
     },
     {
+      id: "2",
       date: "2024-09-08",
       pickUp: "Universität Spital, 4056 Basel",
       destination: "St. Clara Spital, 4058 Basel",
       driver: "John Doe",
       patientName: "Sedan Elon",
-      orderType: "Jane Smith",
-      status: "Rejected",
+      orderType: "Verlegungsart",
+      status: "On Ride",
     },
     {
+      id: "3",
       date: "2024-09-08",
       pickUp: "123 Main St.",
       destination: "456 Elm St. Germain",
       driver: "John Doe",
       patientName: "Sedan",
-      orderType: "Jane Smith",
+      orderType: "Sammelauftrag",
       status: "Confirmed",
     },
     {
+      id: "4",
       date: "2024-09-08",
       pickUp: "123 Main St.",
       destination: "456 Elm St.",
       driver: "John Doe",
       patientName: "Sedan",
-      orderType: "Jane Smith",
+      orderType: "Privatfahrt",
       status: "Paused",
+    },
+    {
+      id: "5",
+      date: "2024-09-08",
+      pickUp: "Universität Spital, 4056 Basel",
+      destination: "St. Clara Spital, 4058 Basel",
+      driver: "John Doe",
+      patientName: "Sedan Elon",
+      orderType: "Verlegungsart",
+      status: "On Ride",
     },
   ];
 
   // Function to determine the button color based on the status
   const getStatusColor = (status) => {
     switch (status) {
-      case "Completed":
-        return "#F0F8D1";
-      case "Rejected":
-        return "#F9D1D1";
+      case "On Ride":
+        return "#FEF1E0";
       case "Confirmed":
         return "#D1F8D5";
       case "Paused":
+        return "#DCF3FF";
+      case "Pending":
         return "#DCF3FF";
       default:
         return "#FFFFFF"; // Default color if status is unknown
@@ -155,39 +169,46 @@ const AllOrdersTable = () => {
           <ArrowUpDown className="h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
-      cell: () => (
-        <div className="flex justify-center items-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <EllipsisVertical className="h-4 w-4 cursor-pointer" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="-translate-x-5 p-4 w-60">
-              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
-                <Pencil className="size-5 text-gray-600" />
-                <span className="text-gray-700 text-sm">Edit</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
-                <Trash className="size-5" />
+      cell: ({ row }) => {
+        const orderType = row.getValue("orderType");
+        return (
+          <div className="flex justify-center items-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisVertical className="h-4 w-4 cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="-translate-x-5 p-4 w-60">
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                  <Pencil className="size-5 text-gray-600" />
+                  <span className="text-gray-700 text-sm">Edit</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                  <Trash className="size-5" />
 
-                <span className="text-gray-700 text-sm">Storno</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="py-2 mb-2">
-                <Link
-                  to="/order/recurring-orders/123" // Use a dynamic ID if available
-                  className="flex items-center gap-3 text-[16px]"
-                >
-                  <Document className="size-5" />
-                  <span className="text-gray-700 text-sm">View Details</span>
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
-                <Pause className="size-5" />
-                <span className="text-gray-700 text-sm">Pause</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      ),
+                  <span className="text-gray-700 text-sm">Storno</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="py-2 mb-2">
+                  <Link
+                    to={`${
+                      orderType === "Recurring"
+                        ? `/orders/recurring-orders/${row.original.id}`
+                        : `/orders/order-details/${row.original.id}`
+                    }`}
+                    className="flex items-center gap-3 text-[16px]"
+                  >
+                    <Document className="size-5" />
+                    <span className="text-gray-700 text-sm">View Details</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                  <Pause className="size-5" />
+                  <span className="text-gray-700 text-sm">Pause</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      },
     },
   ];
 

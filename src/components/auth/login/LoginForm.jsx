@@ -47,7 +47,7 @@ export default function LoginForm() {
     localStorage.setItem("user", JSON.stringify({ email: values.email }));
     localStorage.setItem("accessToken", "123456");
 
-    navigate("/order/all-orders");
+    navigate("/orders/all-orders");
   }
 
   return (

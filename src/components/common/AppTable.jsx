@@ -17,6 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import AppPagination from "@/components/common/AppPagination";
+// import { Input } from "../ui/input";
 
 export function AppTable({ data, columns }) {
   const [sorting, setSorting] = React.useState([]);
@@ -46,6 +47,14 @@ export function AppTable({ data, columns }) {
   return (
     <div className="w-full">
       <div className="rounded-md border w-full">
+        {/* <Input
+          placeholder="Filter emails..."
+          value={table.getColumn("orderType")?.getFilterValue() ?? ""}
+          onChange={(event) =>
+            table.getColumn("orderType")?.setFilterValue(event.target.value)
+          }
+          className="max-w-sm"
+        /> */}
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
