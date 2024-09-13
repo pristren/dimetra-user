@@ -17,13 +17,26 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import AppPagination from "@/components/common/AppPagination";
-// import { Input } from "../ui/input";
+import AppHead from "./AppHead";
 
-export function AppTable({ data, columns }) {
+export function AppTable({
+  data,
+  columns,
+  pageTitle,
+  addButton,
+  date,
+  setDate,
+  filters,
+  isDateVisible,
+  isFilterVisible,
+  isSearchVisible,
+  isRecurring = false,
+}) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [globalFilter, setGlobalFilter] = React.useState("");
 
   const table = useReactTable({
     data,
@@ -36,25 +49,33 @@ export function AppTable({ data, columns }) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter,
     },
   });
 
   return (
     <div className="w-full">
+      <AppHead
+        pageTitle={pageTitle}
+        addButton={addButton}
+        date={date}
+        setDate={setDate}
+        filters={filters}
+        isDateVisible={isDateVisible}
+        isFilterVisible={isFilterVisible}
+        table={table}
+        globalFilter={globalFilter}
+        setGlobalFilter={setGlobalFilter}
+        isSearchVisible={isSearchVisible}
+        isRecurring={isRecurring}
+      />
       <div className="rounded-md border w-full">
-        {/* <Input
-          placeholder="Filter emails..."
-          value={table.getColumn("orderType")?.getFilterValue() ?? ""}
-          onChange={(event) =>
-            table.getColumn("orderType")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        /> */}
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
