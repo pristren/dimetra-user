@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import AuthFooter from "@/components/helper-ui/auth-footer";
+import AuthFooter from "@/components/helper-ui/AuthFooter";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useDispatch } from "react-redux";
@@ -44,9 +44,9 @@ export default function LoginForm() {
     dispatch(setUser({ email: values.email }));
     dispatch(setAccessToken("123456"));
 
-    localStorage.setItem('user', JSON.stringify({ email: values.email }));
-    localStorage.setItem('accessToken', '123456');
-    
+    localStorage.setItem("user", JSON.stringify({ email: values.email }));
+    localStorage.setItem("accessToken", "123456");
+
     navigate("/order/all-orders");
   }
 

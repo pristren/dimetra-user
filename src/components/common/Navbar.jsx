@@ -1,6 +1,6 @@
-import DefaultAvatar from "@/assets/icons/default-avatar";
-import Logo from "@/assets/icons/logo";
-import Language from "@/components/helper-ui/language";
+import DefaultAvatar from "@/assets/icons/DefaultAvatar";
+import Logo from "@/assets/icons/Logo";
+import Language from "@/components/helper-ui/Language";
 
 import {
   DropdownMenu,
@@ -24,7 +24,7 @@ export default function Navbar() {
       `}
     >
       <Link to="/">
-      <Logo className={url === "/create-order" ? "" : "md:hidden"} />
+        <Logo className={url === "/create-order" ? "" : "md:hidden"} />
       </Link>
       <div className="flex items-center gap-3">
         <Language />

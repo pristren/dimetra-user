@@ -1,5 +1,5 @@
-import Logo from "@/assets/icons/logo";
-import Language from "@/components/helper-ui/language";
+import Logo from "@/assets/icons/Logo";
+import Language from "@/components/helper-ui/Language";
 import { Link } from "react-router-dom";
 
 export default function AuthLayout({ children, ...props }) {

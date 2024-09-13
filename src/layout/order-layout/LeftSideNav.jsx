@@ -1,5 +1,5 @@
 import { useLocation, Link } from "react-router-dom";
-import Logo from "@/assets/icons/logo";
+import Logo from "@/assets/icons/Logo";
 import { CarFront, ClipboardList, MessageCircle, Settings } from "lucide-react";
 
 const LeftSideNav = () => {

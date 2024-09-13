@@ -56,14 +56,14 @@ export function AppTable({ data, columns }) {
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      <p className="text-black">
+                      <div className="text-black">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                      </p>
+                      </div>
                     </TableHead>
                   );
                 })}

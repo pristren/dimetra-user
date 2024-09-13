@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import AuthFooter from "@/components/helper-ui/auth-footer";
+import AuthFooter from "@/components/helper-ui/AuthFooter";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
