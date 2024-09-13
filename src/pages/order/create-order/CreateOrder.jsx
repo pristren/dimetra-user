@@ -57,13 +57,13 @@ const CreateOrder = () => {
     returnFloor: "",
   });
 
-    const [billingDetailsData, setBillingDetailsData] = useState({
-      preName: "",
-      name: "",
-      street: "",
-      place: "",
-      contact: "",
-    });
+  const [billingDetailsData, setBillingDetailsData] = useState({
+    preName: "",
+    name: "",
+    street: "",
+    place: "",
+    contact: "",
+  });
 
   const handleFormChange = (step) => {
     setCurrentStep(step);
@@ -199,7 +199,7 @@ const CreateOrder = () => {
         ) : currentStep === "billingDetails" ? (
           <BillingDetails {...props} />
         ) : (
-          <PreviewDetails />
+          <PreviewDetails {...props} />
         )}
       </div>
     </div>

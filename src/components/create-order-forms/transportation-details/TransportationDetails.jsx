@@ -310,7 +310,7 @@ const TransportationDetails = ({
                 type="submit"
                 disabled={transportationProgress < 100}
                 className="mt-5 bg-secondary text-black hover:text-white px-12"
-                onClick={() => handleFormChange("patient")}
+                onClick={() => handleFormChange("patientDetails")}
               >
                 Next
               </Button>
