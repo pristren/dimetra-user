@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@/components/ui/DatePIcker";
+import { DatePicker } from "@/components/ui/DatePicker";
 import AppSelect from "@/components/common/AppSelect";
 import { calculateFormProgress } from "@/utils";
 import { timeOptions } from "@/components/create-order-forms/helpers";
@@ -297,10 +297,7 @@ const DestinationDetails = ({
                         Drop-Off Date <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker
-                          date={dropDate}
-                          setDate={setDropDate}
-                        />
+                        <DatePicker date={dropDate} setDate={setDropDate} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

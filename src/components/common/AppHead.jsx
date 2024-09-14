@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { DatePicker } from "../ui/DatePIcker";
+import { DatePicker } from "../ui/DatePicker";
 import AppSelect from "./AppSelect";
 import { Input } from "../ui/input";
 import { Search } from "lucide-react";

@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DatePicker } from "@/components/ui/DatePIcker";
+import { DatePicker } from "@/components/ui/DatePicker";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import AppSelect from "@/components/common/AppSelect";
@@ -417,10 +417,7 @@ const PreviewDetails = ({
                     <Label className="block mb-2 font-medium">
                       Date <sup className="text-[13px]">*</sup>
                     </Label>
-                    <DatePicker
-                      date={returnDate}
-                      setDate={setReturnDate}
-                    />
+                    <DatePicker date={returnDate} setDate={setReturnDate} />
                   </div>
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">Today</Label>
