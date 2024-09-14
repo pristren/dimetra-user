@@ -56,7 +56,7 @@ const CreateOrder = () => {
     returnApproxTime: "",
     returnFloor: "",
   });
-
+  console.log(destinationDetailsData);
     const [billingDetailsData, setBillingDetailsData] = useState({
       preName: "",
       name: "",
@@ -114,58 +114,6 @@ const CreateOrder = () => {
       <Navbar />
       <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
         <div className="flex items-center gap-5 mb-5">
-          {/* I will remove this code. Just put it for safety */}
-
-          {/* <Pencil
-            className={`${
-              transportationProgress === 100
-                ? "bg-[#B4DB1A] text-white"
-                : showForm?.isTransport && transportationProgress !== 100
-                ? "bg-[#FBA63C] text-white"
-                : "bg-[#DFE5ED] text-black"
-            } size-40 h-max p-3 rounded-full cursor-pointer`}
-            onClick={() => handleFormChange("transport")}
-          />
-          <Progress value={transportationProgress} />
-          <User
-            className={`${
-              patientProgress === 100 && transportationProgress === 100
-                ? "bg-[#B4DB1A] text-white"
-                : showForm?.isPatient && patientProgress !== 100
-                ? "bg-[#FBA63C] text-white"
-                : "bg-[#DFE5ED] text-black"
-            } size-40 h-max p-3 rounded-full cursor-pointer`}
-            onClick={() => handleFormChange("patient")}
-          />
-          <Progress value={patientProgress} />
-          <Truck
-            className={`${
-              patientProgress === 100 &&
-              transportationProgress === 100 &&
-              destinationProgress === 100
-                ? "bg-[#B4DB1A] text-white"
-                : showForm?.isDestination === "destination" &&
-                  destinationProgress !== 100
-                ? "bg-[#FBA63C] text-white"
-                : "bg-[#DFE5ED] text-black"
-            } size-40 h-max p-3 rounded-full cursor-pointer`}
-            onClick={() => handleFormChange("destination")}
-          />
-          <Progress value={destinationProgress} />
-          <Send
-            className={`${
-              billingProgress === 100 &&
-              transportationProgress === 100 &&
-              destinationProgress === 100 &&
-              patientProgress === 100
-                ? "bg-[#B4DB1A] text-white"
-                : showForm?.isBilling && billingProgress !== 100
-                ? "bg-[#FBA63C] text-white"
-                : "bg-[#DFE5ED] text-black"
-            } size-40 h-max p-3 rounded-full cursor-pointer`}
-            onClick={
-            () => handleFormChange("billing")}
-          /> */}
           <StepIcon
             step="transportDetails"
             icon={<Pencil />}

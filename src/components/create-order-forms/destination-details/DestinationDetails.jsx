@@ -62,9 +62,9 @@ const DestinationDetails = ({
     dropOffPhone: z.string().min(1, "Phone is required"),
 
     returnDate: z.string().min(1, "Date is required"),
-    today: z.string().min(1, "This field is required"),
-    time: z.string().min(1, "Approx. Time is required"),
-    floor: z.string().optional(),
+    returnDayLetter: z.string().min(1, "This field is required"),
+    returnApproxTime: z.string().min(1, "Approx. Time is required"),
+    returnFloor: z.string().optional(),
   });
 
   const form = useForm({
@@ -83,13 +83,13 @@ const DestinationDetails = ({
       dropOffCountry: "",
       dropOffPhone: "",
       returnDate: "",
-      today: "",
-      time: "",
-      floor: "",
+      returnDayLetter: "",
+      returnApproxTime: "",
+      returnFloor: "",
     },
   });
 
-  const { register, formState } = form;
+  const { formState } = form;
   const { errors } = formState;
 
   const handleInputChange = (e) => {
@@ -113,8 +113,6 @@ const DestinationDetails = ({
     dropOffCountry,
     dropOffPhone,
     dropDate,
-    // returnDayLetter,
-    // returnApproxTime,
     returnFloor,
     returnDate,
   ];
@@ -135,270 +133,422 @@ const DestinationDetails = ({
               <div className="pr-5">
                 <h2 className="text-xl font-semibold mb-4">Pick-Up</h2>
 
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Name / Institution <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.pickUpName ? "border-red-500" : ""
-                      }`}
-                      {...register("pickUpName")}
-                      onChange={handleInputChange}
-                      value={pickUpName}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </div>
+                {/* Pick-Up Name */}
+                <FormField
+                  control={form.control}
+                  name="pickUpName"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        Name / Institution <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={errors.pickUpName ? "border-red-500" : ""}
+                          placeholder="Type your name or institution"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Address <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.pickUpAddress ? "border-red-500" : ""
-                      }`}
-                      {...register("pickUpAddress")}
-                      onChange={handleInputChange}
-                      value={pickUpAddress}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </div>
+                {/* Pick-Up Address */}
+                <FormField
+                  control={form.control}
+                  name="pickUpAddress"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        Address <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.pickUpAddress ? "border-red-500" : ""
+                          }
+                          placeholder="Type your address"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    City <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.pickUpCity ? "border-red-500" : ""
-                      }`}
-                      {...register("pickUpCity")}
-                      onChange={handleInputChange}
-                      value={pickUpCity}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </div>
+                {/* Pick-Up City */}
+                <FormField
+                  control={form.control}
+                  name="pickUpCity"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        City <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={errors.pickUpCity ? "border-red-500" : ""}
+                          placeholder="Type your city"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Country <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.pickUpCountry ? "border-red-500" : ""
-                      }`}
-                      {...register("pickUpCountry")}
-                      onChange={handleInputChange}
-                      value={pickUpCountry}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </div>
+                {/* Pick-Up Country */}
+                <FormField
+                  control={form.control}
+                  name="pickUpCountry"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        Country <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.pickUpCountry ? "border-red-500" : ""
+                          }
+                          placeholder="Type your country"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Working Employee Name <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.pickUpEmployeeName ? "border-red-500" : ""
-                      }`}
-                      {...register("pickUpEmployeeName")}
-                      onChange={handleInputChange}
-                      value={pickUpEmployeeName}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </div>
+                {/* Pick-Up Employee Name */}
+                <FormField
+                  control={form.control}
+                  name="pickUpEmployeeName"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        Working Employee Name{" "}
+                        <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.pickUpEmployeeName ? "border-red-500" : ""
+                          }
+                          placeholder="Type the employee's name"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               <div className="pl-5">
                 <h2 className="text-xl font-semibold mb-4">Drop-Off</h2>
 
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Date <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <DatePicker date={dropDate} setDate={setDropDate} className="py-6 mt-2" />
-                  </FormControl>
-                  <FormMessage />
-                </div>
+                {/* Drop-Off Date */}
+                <FormField
+                  control={form.control}
+                  name="dropOffDate"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        Drop-Off Date <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <DatePicker
+                          date={dropDate}
+                          setDate={(date) => {
+                            field.onChange(date);
+                            setDropDate(date);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Pickup time* <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.dropOffPickUpTime ? "border-red-500" : ""
-                      }`}
-                      {...register("dropOffPickUpTime")}
-                      onChange={handleInputChange}
-                      value={dropOffPickUpTime}
+                {/* Drop-Off Pickup Time */}
+                <FormField
+                  control={form.control}
+                  name="dropOffPickUpTime"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        Pickup time <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.dropOffPickUpTime ? "border-red-500" : ""
+                          }
+                          placeholder="Type pickup time"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Drop-Off Name */}
+                <FormField
+                  control={form.control}
+                  name="dropOffName"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        Name / Institution <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={errors.dropOffName ? "border-red-500" : ""}
+                          placeholder="Type name"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Drop-Off Address */}
+                <FormField
+                  control={form.control}
+                  name="dropOffAddress"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        Address <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.dropOffAddress ? "border-red-500" : ""
+                          }
+                          placeholder="Type address"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Drop-Off City */}
+                <FormField
+                  control={form.control}
+                  name="dropOffCity"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        City <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={errors.dropOffCity ? "border-red-500" : ""}
+                          placeholder="Type city"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Drop-Off Country */}
+                <FormField
+                  control={form.control}
+                  name="dropOffCountry"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        Country <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.dropOffCountry ? "border-red-500" : ""
+                          }
+                          placeholder="Type country"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Drop-Off Phone */}
+                <FormField
+                  control={form.control}
+                  name="dropOffPhone"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">
+                        Phone <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.dropOffPhone ? "border-red-500" : ""
+                          }
+                          placeholder="Type phone"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Return Journey Section */}
+                <div className="mt-10">
+                  <h2 className="text-xl font-semibold mb-4">Return Journey</h2>
+                  <div>
+                    <FormField
+                      control={form.control}
+                      name="returnDate"
+                      render={({ field }) => (
+                        <FormItem className="mb-7">
+                          <FormLabel className="mb-2">
+                            Return Date <sup className="text-[13px]">*</sup>
+                          </FormLabel>
+                          <FormControl>
+                            <DatePicker
+                              date={returnDate}
+                              setDate={(date) => {
+                                field.onChange(date);
+                                setReturnDate(date);
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </div>
 
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Name / Institution <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.dropOffName ? "border-red-500" : ""
-                      }`}
-                      {...register("dropOffName")}
-                      onChange={handleInputChange}
-                      value={dropOffName}
+                    <FormField
+                      control={form.control}
+                      name="returnDayLetter"
+                      render={({ field }) => (
+                        <FormItem className="mb-7">
+                          <FormLabel className="mb-2">
+                            Day Letter <sup className="text-[13px]">*</sup>
+                          </FormLabel>
+                          <FormControl>
+                            <AppSelect
+                              items={[
+                                "1 day letter",
+                                "2 day letter",
+                                "3 day letter",
+                              ]}
+                              placeholder="1 day letter"
+                              onChange={handleInputChange}
+                              value={returnDayLetter}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </div>
 
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Address <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.dropOffAddress ? "border-red-500" : ""
-                      }`}
-                      {...register("dropOffAddress")}
-                      onChange={handleInputChange}
-                      value={dropOffAddress}
+                    <FormField
+                      control={form.control}
+                      name="returnApproxTime"
+                      render={({ field }) => (
+                        <FormItem className="mb-7">
+                          <FormLabel className="mb-2">
+                            Approx. Time <sup className="text-[13px]">*</sup>
+                          </FormLabel>
+                          <FormControl>
+                            <AppSelect
+                              items={timeOptions}
+                              placeholder="00:00"
+                              isTime={true}
+                              onChange={handleInputChange}
+                              value={returnApproxTime}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </div>
 
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    City <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.dropOffCity ? "border-red-500" : ""
-                      }`}
-                      {...register("dropOffCity")}
-                      onChange={handleInputChange}
-                      value={dropOffCity}
+                    <FormField
+                      control={form.control}
+                      name="returnFloor"
+                      render={({ field }) => (
+                        <FormItem className="mb-7">
+                          <FormLabel className="mb-2">
+                            Floor / Department
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Floor number (optional)"
+                              {...field}
+                              onChange={(e) => {
+                                field.onChange(e);
+                                handleInputChange(e);
+                              }}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </FormControl>
-                  <FormMessage />
-                </div>
-
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Country <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.dropOffCountry ? "border-red-500" : ""
-                      }`}
-                      {...register("dropOffCountry")}
-                      onChange={handleInputChange}
-                      value={dropOffCountry}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </div>
-
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Phone
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${
-                        errors.dropOffPhone ? "border-red-500" : ""
-                      }`}
-                      {...register("dropOffPhone")}
-                      onChange={handleInputChange}
-                      value={dropOffPhone}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </div>
-
-                <h2 className="text-xl font-semibold mt-8 mb-4">
-                  Return Journey
-                </h2>
-
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Date <sup className="text-[13px]">*</sup>
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <DatePicker date={returnDate} setDate={setReturnDate} className="py-6 mt-2" />
-                  </FormControl>
-                  <FormMessage />
-                </div>
-
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Today
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <AppSelect
-                      items={["1 day letter", "2 day letter", "3 day letter"]}
-                      placeholder="1 day letter"
-                      {...register("today")}
-                      onChange={handleInputChange}
-                      value={returnDayLetter}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </div>
-
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Approx. Time
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <AppSelect
-                      items={timeOptions}
-                      placeholder="00:00"
-                      isTime={true}
-                      {...register("time")}
-                      onChange={handleInputChange}
-                      value={returnApproxTime}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </div>
-
-                <div className="mb-7">
-                  <FormLabel className="text-[15px] tracking-wide">
-                    Floor/Department
-                  </FormLabel>
-                  <FormControl className="mt-2">
-                    <Input
-                      className={`${errors.floor ? "border-red-500" : ""}`}
-                      {...register("returnFloor")}
-                      onChange={handleInputChange}
-                      value={returnFloor}
-                    />
-                  </FormControl>
-                  <FormMessage />
+                  </div>
                 </div>
               </div>
             </div>
+
             <BackAndNextBtn
               isFillForm={true}
               handleGoPrev={() => handleFormChange("patientDetails")}

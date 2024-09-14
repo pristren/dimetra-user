@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useEffect } from "react";
 import { z } from "zod";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
