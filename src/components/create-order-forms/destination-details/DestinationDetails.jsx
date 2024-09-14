@@ -1,6 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -13,36 +15,37 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { DatePicker } from "@/components/ui/DatePIcker";
 import AppSelect from "@/components/common/AppSelect";
-import { useEffect, useState } from "react";
 import { calculateFormProgress } from "@/utils";
-import { timeOptions } from "../helpers";
+import { timeOptions } from "@/components/create-order-forms/helpers";
 
 const DestinationDetails = ({
   handleFormChange,
   setDestinationProgress,
-  destinationDetailsData,
-  setDestinationDetailsData,
+  createOrderData,
+  setCreateOrderData,
 }) => {
   const {
-    pickUpName = "",
-    pickUpAddress = "",
-    pickUpCity = "",
-    pickUpCountry = "",
-    pickUpEmployeeName = "",
-    dropOffDate = "",
-    dropOffPickUpTime = "",
-    dropOffName = "",
-    dropOffAddress = "",
-    dropOffCity = "",
-    dropOffCountry = "",
-    dropOffPhone = "",
-    returnDayLetter = "",
-    returnApproxTime = "",
-    returnFloor = "",
-  } = destinationDetailsData;
+    destinationDetailsData: {
+      pickUpName = "",
+      pickUpAddress = "",
+      pickUpCity = "",
+      pickUpCountry = "",
+      pickUpEmployeeName = "",
+      dropOffDate = "",
+      dropOffPickUpTime = "",
+      dropOffName = "",
+      dropOffAddress = "",
+      dropOffCity = "",
+      dropOffCountry = "",
+      dropOffPhone = "",
+      returnDayLetter = "",
+      returnApproxTime = "",
+      returnFloor = "",
+    } = {},
+  } = createOrderData;
+
   const [dropDate, setDropDate] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
 
@@ -70,22 +73,22 @@ const DestinationDetails = ({
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      pickUpName: "",
-      pickUpAddress: "",
-      pickUpCity: "",
-      pickUpCountry: "",
-      pickUpEmployeeName: "",
-      dropOffDate: "",
-      dropOffPickUpTime: "",
-      dropOffName: "",
-      dropOffAddress: "",
-      dropOffCity: "",
-      dropOffCountry: "",
-      dropOffPhone: "",
-      returnDate: "",
-      returnDayLetter: "",
-      returnApproxTime: "",
-      returnFloor: "",
+      pickUpName,
+      pickUpAddress,
+      pickUpCity,
+      pickUpCountry,
+      pickUpEmployeeName,
+      dropOffDate,
+      dropOffPickUpTime,
+      dropOffName,
+      dropOffAddress,
+      dropOffCity,
+      dropOffCountry,
+      dropOffPhone,
+      returnDate,
+      returnDayLetter,
+      returnApproxTime,
+      returnFloor,
     },
   });
 
@@ -94,9 +97,22 @@ const DestinationDetails = ({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setDestinationDetailsData((prev) => ({
+    setCreateOrderData((prev) => ({
       ...prev,
-      [name]: value,
+      destinationDetailsData: {
+        ...prev.destinationDetailsData,
+        [name]: value,
+      },
+    }));
+  };
+
+  const updateDestinationData = (key, value) => {
+    setCreateOrderData((prev) => ({
+      ...prev,
+      destinationDetailsData: {
+        ...prev.destinationDetailsData,
+        [key]: value,
+      },
     }));
   };
 
@@ -119,7 +135,7 @@ const DestinationDetails = ({
 
   useEffect(() => {
     setDestinationProgress(calculateFormProgress(fieldsFilled));
-  }, [fieldsFilled]);
+  }, [...fieldsFilled]);
 
   return (
     <Card className="w-[65%] px-5 py-5">
@@ -169,9 +185,7 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={
-                            errors.pickUpAddress ? "border-red-500" : ""
-                          }
+                          className={errors.pickUpAddress ? "border-red-500" : ""}
                           placeholder="Type your address"
                           {...field}
                           onChange={(e) => {
@@ -221,9 +235,7 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={
-                            errors.pickUpCountry ? "border-red-500" : ""
-                          }
+                          className={errors.pickUpCountry ? "border-red-500" : ""}
                           placeholder="Type your country"
                           {...field}
                           onChange={(e) => {
@@ -249,9 +261,7 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={
-                            errors.pickUpEmployeeName ? "border-red-500" : ""
-                          }
+                          className={errors.pickUpEmployeeName ? "border-red-500" : ""}
                           placeholder="Type the employee's name"
                           {...field}
                           onChange={(e) => {
@@ -303,9 +313,7 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={
-                            errors.dropOffPickUpTime ? "border-red-500" : ""
-                          }
+                          className={errors.dropOffPickUpTime ? "border-red-500" : ""}
                           placeholder="Type pickup time"
                           {...field}
                           onChange={(e) => {
@@ -355,9 +363,7 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={
-                            errors.dropOffAddress ? "border-red-500" : ""
-                          }
+                          className={errors.dropOffAddress ? "border-red-500" : ""}
                           placeholder="Type address"
                           {...field}
                           onChange={(e) => {
@@ -407,9 +413,7 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={
-                            errors.dropOffCountry ? "border-red-500" : ""
-                          }
+                          className={errors.dropOffCountry ? "border-red-500" : ""}
                           placeholder="Type country"
                           {...field}
                           onChange={(e) => {
@@ -434,9 +438,7 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={
-                            errors.dropOffPhone ? "border-red-500" : ""
-                          }
+                          className={errors.dropOffPhone ? "border-red-500" : ""}
                           placeholder="Type phone"
                           {...field}
                           onChange={(e) => {
@@ -491,7 +493,9 @@ const DestinationDetails = ({
                                 "3 day letter",
                               ]}
                               placeholder="1 day letter"
-                              onChange={handleInputChange}
+                              onValueChange={(value) =>
+                                updateDestinationData("returnDayLetter", value)
+                              }
                               value={returnDayLetter}
                             />
                           </FormControl>
@@ -513,7 +517,9 @@ const DestinationDetails = ({
                               items={timeOptions}
                               placeholder="00:00"
                               isTime={true}
-                              onChange={handleInputChange}
+                              onValueChange={(value) =>
+                                updateDestinationData("returnApproxTime", value)
+                              }
                               value={returnApproxTime}
                             />
                           </FormControl>

@@ -1,4 +1,7 @@
 /* eslint-disable react/prop-types */
+import { z } from "zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
@@ -8,26 +11,30 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
-import { useEffect } from "react";
 import { calculateFormProgress } from "@/utils";
 
 const BillingDetails = ({
   handleFormChange,
-  billingDetailsData,
-  setBillingDetailsData,
+  createOrderData,
+  setCreateOrderData,
   setBillingProgress,
 }) => {
-  const { preName, name, street, place, contact } = billingDetailsData;
+  const {
+    preName = "",
+    name = "",
+    street = "",
+    place = "",
+    contact = "",
+  } = createOrderData.billingDetailsData || {};
+
   const fieldsFilled = [preName, name, street, place, contact];
 
   useEffect(() => {
     setBillingProgress(calculateFormProgress(fieldsFilled));
-  }, [preName, name, street, place, contact]);
+  }, [...fieldsFilled]);
 
   const formSchema = z.object({
     preName: z.string().min(1, "Prename/Institution is required"),
@@ -40,19 +47,25 @@ const BillingDetails = ({
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      preName: billingDetailsData.preName,
-      name: billingDetailsData.name,
-      street: billingDetailsData.street,
-      place: billingDetailsData.place,
-      contact: billingDetailsData.contact,
+      preName,
+      name,
+      street,
+      place,
+      contact,
     },
   });
 
+  const { formState } = form;
+  const { errors } = formState;
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setBillingDetailsData((prev) => ({
+    setCreateOrderData((prev) => ({
       ...prev,
-      [name]: value,
+      billingDetailsData: {
+        ...prev.billingDetailsData,
+        [name]: value,
+      },
     }));
   };
 
@@ -73,9 +86,7 @@ const BillingDetails = ({
                     <FormLabel>Prename/Institution</FormLabel>
                     <FormControl>
                       <Input
-                        className={
-                          form.formState.errors.preName ? "border-red-500" : ""
-                        }
+                        className={errors.preName ? "border-red-500" : ""}
                         placeholder="Type your prename or institution"
                         {...field}
                         onChange={(e) => {
@@ -96,9 +107,7 @@ const BillingDetails = ({
                     <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input
-                        className={
-                          form.formState.errors.name ? "border-red-500" : ""
-                        }
+                        className={errors.name ? "border-red-500" : ""}
                         placeholder="Type your name"
                         {...field}
                         onChange={(e) => {
@@ -119,9 +128,7 @@ const BillingDetails = ({
                     <FormLabel>Street</FormLabel>
                     <FormControl>
                       <Input
-                        className={
-                          form.formState.errors.street ? "border-red-500" : ""
-                        }
+                        className={errors.street ? "border-red-500" : ""}
                         placeholder="Type your street"
                         {...field}
                         onChange={(e) => {
@@ -142,9 +149,7 @@ const BillingDetails = ({
                     <FormLabel>Place</FormLabel>
                     <FormControl>
                       <Input
-                        className={
-                          form.formState.errors.place ? "border-red-500" : ""
-                        }
+                        className={errors.place ? "border-red-500" : ""}
                         placeholder="Type your place"
                         {...field}
                         onChange={(e) => {
@@ -165,9 +170,7 @@ const BillingDetails = ({
                     <FormLabel>Contact</FormLabel>
                     <FormControl>
                       <Input
-                        className={
-                          form.formState.errors.contact ? "border-red-500" : ""
-                        }
+                        className={errors.contact ? "border-red-500" : ""}
                         placeholder="Type your contact number"
                         {...field}
                         onChange={(e) => {

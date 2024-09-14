@@ -16,7 +16,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import AppSelect from "@/components/common/AppSelect";
-import { DatePicker } from "@/components/ui/DatePIcker";
+import { DatePicker } from "@/components/ui/DatePicker";
 import { calculateFormProgress } from "@/utils";
 import {
   transportModesOptions,
@@ -29,10 +29,10 @@ import {
 
 const TransportationDetails = ({
   handleFormChange,
+  createOrderData,
+  setCreateOrderData,
   setTransportationProgress,
   transportationProgress,
-  setTransportationData,
-  transportationData,
   endDate,
   startDate,
   setEndDate,
@@ -40,9 +40,10 @@ const TransportationDetails = ({
   selectedWeekdays,
   setSelectedWeekdays,
 }) => {
+  const { transportationData } = createOrderData;
   const formSchema = z.object({
     typeOfTransport: z.string().min(1, "Transport type is required"),
-    transportModes: z
+    modeOfTransportation: z
       .array(z.string())
       .nonempty("At least one mode must be selected"),
     transportWith: z
@@ -51,30 +52,44 @@ const TransportationDetails = ({
     duration: z.string().min(1, "Duration is required"),
     startDate: z.date().nullable(),
     returnDate: z.date().nullable(),
+    multipleWeekDays: z
+      .array(z.string())
+      .nonempty("Select at least one weekday"),
   });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      typeOfTransport: "",
-      transportModes: [],
-      transportWith: [],
-      duration: "",
-      startDate: null,
-      returnDate: null,
+      typeOfTransport: transportationData?.typeOfTransport || "",
+      modeOfTransportation: transportationData?.modeOfTransportation || [],
+      transportWith: transportationData?.transportWith || [],
+      duration: transportationData?.ends || "",
+      startDate: startDate || null,
+      returnDate: endDate || null,
+      multipleWeekDays: transportationData?.multipleWeekDays || [],
     },
   });
 
+  const updateCreateOrderData = (key, value) => {
+    setCreateOrderData((prev) => ({
+      ...prev,
+      transportationData: {
+        ...prev.transportationData,
+        [key]: value,
+      },
+    }));
+  };
+
   const handleCheckBox = (type, value) => {
-    setTransportationData((prevData) => {
-      const newData = prevData[type].includes(value)
-        ? prevData[type].filter((mode) => mode !== value)
-        : [...prevData[type], value];
-      return {
-        ...prevData,
-        [type]: newData,
-      };
-    });
+    setCreateOrderData((prev) => ({
+      ...prev,
+      transportationData: {
+        ...prev.transportationData,
+        [type]: prev.transportationData[type].includes(value)
+          ? prev.transportationData[type].filter((item) => item !== value)
+          : [...prev.transportationData[type], value],
+      },
+    }));
   };
 
   const calculateMonthlyOccurrences = (weekdays) => {
@@ -88,33 +103,35 @@ const TransportationDetails = ({
         ? prev.filter((day) => day !== value)
         : [...prev, value]
     );
+
+    updateCreateOrderData(
+      "multipleWeekDays",
+      selectedWeekdays.includes(value)
+        ? selectedWeekdays.filter((day) => day !== value)
+        : [...selectedWeekdays, value]
+    );
   };
-  let fieldsFilled;
-  if (transportationData?.typeOfTransport === "reccurring") {
-    fieldsFilled = [
-      form.watch("typeOfTransport"),
-      form.watch("duration"),
-      transportationData?.modeOfTransportation.length > 0,
-      transportationData?.transportWith.length > 0,
-      selectedWeekdays.length > 0,
-      startDate,
-      endDate,
-    ];
-  } else {
-    fieldsFilled = [
-      transportationData?.typeOfTransport,
-      // null,
-      transportationData?.modeOfTransportation.length > 0,
-      transportationData?.transportWith.length > 0,
-      // null,
-      // null,
-      // null,
-    ];
-  }
 
   useEffect(() => {
+    const fieldsFilled =
+      transportationData?.typeOfTransport === "recurring"
+        ? [
+            form.watch("typeOfTransport"),
+            form.watch("duration"),
+            transportationData?.modeOfTransportation.length > 0,
+            transportationData?.transportWith.length > 0,
+            selectedWeekdays.length > 0,
+            startDate,
+            endDate,
+          ]
+        : [
+            transportationData?.typeOfTransport,
+            transportationData?.modeOfTransportation.length > 0,
+            transportationData?.transportWith.length > 0,
+          ];
+
     setTransportationProgress(calculateFormProgress(fieldsFilled));
-  }, [...fieldsFilled]);
+  }, [transportationData, selectedWeekdays, startDate, endDate]);
 
   return (
     <Card className="w-[65%] px-5 py-5">
@@ -137,13 +154,10 @@ const TransportationDetails = ({
                     <FormItem>
                       <FormControl>
                         <RadioGroup
-                          value={field.value}
+                          value={transportationData?.typeOfTransport}
                           onValueChange={(value) => {
                             field.onChange(value);
-                            setTransportationData((prev) => ({
-                              ...prev,
-                              typeOfTransport: value,
-                            }));
+                            updateCreateOrderData("typeOfTransport", value);
                           }}
                         >
                           {transportOptions.map((option) => (
@@ -214,12 +228,18 @@ const TransportationDetails = ({
                 ))}
               </div>
             </div>
-            {transportationData?.typeOfTransport === "reccurring" && (
+            {transportationData?.typeOfTransport === "recurring" && (
               <div>
                 <h3 className="text-lg font-medium mb-3 mt-5">
                   Select Weekdays:
                 </h3>
-                <AppSelect items={["Week", "Month"]} placeholder="Week" />
+                <AppSelect
+                  items={["Week", "Month"]}
+                  onValueChange={(value) =>
+                    updateCreateOrderData("weekDays", value)
+                  }
+                  placeholder="Week"
+                />
 
                 <h3 className="text-lg font-medium mt-10 mb-5">
                   Select Start Date and Time*:
@@ -230,6 +250,9 @@ const TransportationDetails = ({
                     items={timeOptions}
                     placeholder="00:00"
                     isTime={true}
+                    onValueChange={(value) =>
+                      updateCreateOrderData("returnApproxTime", value)
+                    }
                   />
                 </div>
 
@@ -242,6 +265,9 @@ const TransportationDetails = ({
                     items={timeOptions}
                     placeholder="00:00"
                     isTime={true}
+                    onValueChange={(value) =>
+                      updateCreateOrderData("returnTime", value)
+                    }
                   />
                 </div>
 
@@ -273,9 +299,10 @@ const TransportationDetails = ({
                       <FormControl>
                         <RadioGroup
                           value={field.value}
-                          onValueChange={(value) =>
-                            form.setValue("duration", value)
-                          }
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            updateCreateOrderData("ends", value);
+                          }}
                         >
                           {durationOptions.map((option) => (
                             <div

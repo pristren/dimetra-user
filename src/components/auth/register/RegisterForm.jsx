@@ -54,7 +54,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Card className="w-1/2 px-5 py-5 max-h-[80vh] overflow-y-auto hide-scrollbar">
+    <Card className="w-1/2 px-5 py-5">
       <CardHeader className="mb-4">
         <CardTitle className="text-center">Register</CardTitle>
       </CardHeader>

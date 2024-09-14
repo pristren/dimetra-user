@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
 import { z } from "zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,24 +15,24 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { calculateFormProgress } from "@/utils";
 import { Label } from "@/components/ui/label";
 
 const PatientDetails = ({
   handleFormChange,
   setPatientProgress,
-  transportationData,
-  patientData,
-  setPatientData,
+  createOrderData,
+  setCreateOrderData,
 }) => {
+  const { patientData } = createOrderData;
+
   const formSchema = z.object({
     name: z.string().min(1, "Name is required"),
     surname: z.string().min(1, "Surname is required"),
     dateOfBirth: z.string().min(1, "Date of Birth is required"),
     areaRoom: z.string().min(1, "Area/Room is required"),
     costCenter: z.string().min(1, "Cost center is required"),
-    howMuch: z.string().min(1, "How much is required"),
+    howMuch: z.string().optional(),
     special: z.string().optional(),
     isolation: z.boolean().optional(),
     patientAbove90kg: z.boolean().optional(),
@@ -44,9 +45,12 @@ const PatientDetails = ({
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setPatientData((prev) => ({
+    setCreateOrderData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      patientData: {
+        ...prev.patientData,
+        [name]: type === "checkbox" ? checked : value,
+      },
     }));
   };
 
@@ -77,7 +81,7 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {transportationData?.typeOfTransport === "collectionOrder"
+                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
                         ? "Name Collection"
                         : "Name"}
                       <sup className="text-[13px]">*</sup>
@@ -106,7 +110,7 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {transportationData?.typeOfTransport === "collectionOrder"
+                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
                         ? "Number Patients"
                         : "Surname"}
                       <sup className="text-[13px]">*</sup>
@@ -135,7 +139,7 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {transportationData?.typeOfTransport === "collectionOrder"
+                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
                         ? "Area/Room"
                         : "Date of Birth"}
                       <sup className="text-[13px]">*</sup>
@@ -166,7 +170,7 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {transportationData?.typeOfTransport === "collectionOrder"
+                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
                         ? "Cost Center"
                         : "Area/Room"}
                       <sup className="text-[13px]">*</sup>
@@ -195,11 +199,10 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {transportationData?.typeOfTransport === "collectionOrder"
+                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
                         ? "How much"
                         : "Cost Center"}
-                      {transportationData?.typeOfTransport !==
-                        "collectionOrder" && (
+                      {createOrderData.transportationData?.typeOfTransport !== "collectionOrder" && (
                         <sup className="text-[13px]">*</sup>
                       )}
                     </FormLabel>
@@ -223,7 +226,7 @@ const PatientDetails = ({
                 )}
               />
 
-              {transportationData?.typeOfTransport !== "collectionOrder" && (
+              {createOrderData.transportationData?.typeOfTransport !== "collectionOrder" && (
                 <FormField
                   control={form.control}
                   name="howMuch"
@@ -258,32 +261,32 @@ const PatientDetails = ({
                   <FormItem>
                     <FormLabel className="block mb-3">Isolation</FormLabel>
                     <div className="flex items-center">
-                    <FormControl>
-                      <Checkbox
-                        className={
-                          form.formState.errors.isolation
-                            ? "border-red-500"
-                            : ""
-                        }
-                        id="isolation"
-                        {...field}
-                        onCheckedChange={(checked) =>
-                          handleInputChange({
-                            target: {
-                              name: "isolation",
-                              type: "checkbox",
-                              checked,
-                            },
-                          })
-                        }
-                      />
-                    </FormControl>
-                    <Label
-                      htmlFor="isolation"
-                      className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
-                    >
-                      Yes
-                    </Label>
+                      <FormControl>
+                        <Checkbox
+                          className={
+                            form.formState.errors.isolation
+                              ? "border-red-500"
+                              : ""
+                          }
+                          id="isolation"
+                          {...field}
+                          onCheckedChange={(checked) =>
+                            handleInputChange({
+                              target: {
+                                name: "isolation",
+                                type: "checkbox",
+                                checked,
+                              },
+                            })
+                          }
+                        />
+                      </FormControl>
+                      <Label
+                        htmlFor="isolation"
+                        className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
+                      >
+                        Yes
+                      </Label>
                     </div>
                     <FormMessage />
                   </FormItem>
@@ -299,32 +302,32 @@ const PatientDetails = ({
                       Patient Above 90 kg
                     </FormLabel>
                     <div className="flex items-center">
-                    <FormControl>
-                      <Checkbox
-                        className={
-                          form.formState.errors.patientAbove90kg
-                            ? "border-red-500"
-                            : ""
-                        }
-                        id="patientAbove90kg"
-                        {...field}
-                        onCheckedChange={(checked) =>
-                          handleInputChange({
-                            target: {
-                              name: "patientAbove90kg",
-                              type: "checkbox",
-                              checked,
-                            },
-                          })
-                        }
-                      />
-                    </FormControl>
-                    <Label
-                      htmlFor="patientAbove90kg"
-                      className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
-                    >
-                      Yes
-                    </Label>
+                      <FormControl>
+                        <Checkbox
+                          className={
+                            form.formState.errors.patientAbove90kg
+                              ? "border-red-500"
+                              : ""
+                          }
+                          id="patientAbove90kg"
+                          {...field}
+                          onCheckedChange={(checked) =>
+                            handleInputChange({
+                              target: {
+                                name: "patientAbove90kg",
+                                type: "checkbox",
+                                checked,
+                              },
+                            })
+                          }
+                        />
+                      </FormControl>
+                      <Label
+                        htmlFor="patientAbove90kg"
+                        className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
+                      >
+                        Yes
+                      </Label>
                     </div>
                     <FormMessage />
                   </FormItem>

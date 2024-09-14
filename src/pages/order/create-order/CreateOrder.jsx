@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Pencil, Send, Truck, User } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import BillingDetails from "@/components/create-order-forms/billing-details/BillingDetails";
@@ -8,6 +8,7 @@ import PatientDetails from "@/components/create-order-forms/patient-details/Pati
 import TransportationDetails from "@/components/create-order-forms/transportation-details/TransportationDetails";
 import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 import Navbar from "@/components/common/Navbar";
+import { isEqual } from "lodash"; // Import lodash for deep comparison
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -18,52 +19,88 @@ const CreateOrder = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
-  const [transportationData, setTransportationData] = useState({
-    typeOfTransport: "",
-    modeOfTransportation: [],
-    transportWith: [],
-  });
 
-  const [patientData, setPatientData] = useState({
-    name: "",
-    surname: "",
-    dateOfBirth: "",
-    areaRoom: "",
-    costCenter: "",
-    howMuch: "",
-    special: "",
-    isolation: false,
-    patientAbove90kg: false,
-  });
-
-  const [destinationDetailsData, setDestinationDetailsData] = useState({
-    //pick up details
-    pickUpName: "",
-    pickUpAddress: "",
-    pickUpCity: "",
-    pickUpCountry: "",
-    pickUpEmployeeName: "",
-    // here is drop off details
-    dropOffDate: "",
-    dropOffPickUpTime: "",
-    dropOffName: "",
-    dropOffAddress: "",
-    dropOffCity: "",
-    dropOffCountry: "",
-    dropOffPhone: "",
-    // and return details
-    returnDayLetter: "",
-    returnApproxTime: "",
-    returnFloor: "",
-  });
-  console.log(destinationDetailsData);
-    const [billingDetailsData, setBillingDetailsData] = useState({
+  const [createOrderData, setCreateOrderData] = useState({
+    transportationData: {
+      typeOfTransport: "",
+      modeOfTransportation: [],
+      transportWith: [],
+      weekDays: "",
+      startTime: "",
+      returnTime: "",
+      multipleWeekDays: [],
+      ends: "",
+    },
+    patientData: {
+      name: "",
+      surname: "",
+      dateOfBirth: "",
+      areaRoom: "",
+      costCenter: "",
+      howMuch: "",
+      special: "",
+      isolation: false,
+      patientAbove90kg: false,
+    },
+    destinationDetailsData: {
+      //pick up details
+      pickUpName: "",
+      pickUpAddress: "",
+      pickUpCity: "",
+      pickUpCountry: "",
+      pickUpEmployeeName: "",
+      // here is drop off details
+      dropOffPickUpTime: "",
+      dropOffName: "",
+      dropOffAddress: "",
+      dropOffCity: "",
+      dropOffCountry: "",
+      dropOffPhone: "",
+      // and return details
+      returnDayLetter: "",
+      returnApproxTime: "",
+      returnFloor: "",
+    },
+    billingDetailsData: {
       preName: "",
       name: "",
       street: "",
       place: "",
       contact: "",
-    });
+    },
+  });
+  console.log(createOrderData?.destinationDetailsData);
+
+  const prevCreateOrderDataRef = useRef(createOrderData);
+
+  // Effect to load data from localStorage on mount
+  useEffect(() => {
+    const storedData = localStorage.getItem("createOrderData");
+    if (storedData) {
+      setCreateOrderData(JSON.parse(storedData));
+    }
+  }, []);
+
+  // Effect to save data to localStorage when createOrderData changes
+  useEffect(() => {
+    if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
+      const { transportationData } = createOrderData;
+      const { typeOfTransport, modeOfTransportation, transportWith } =
+        transportationData;
+
+      if (
+        typeOfTransport ||
+        modeOfTransportation.length ||
+        transportWith.length
+      ) {
+        localStorage.setItem(
+          "createOrderData",
+          JSON.stringify(createOrderData)
+        );
+      }
+      prevCreateOrderDataRef.current = createOrderData;
+    }
+  }, [createOrderData]);
 
   const handleFormChange = (step) => {
     setCurrentStep(step);
@@ -85,30 +122,25 @@ const CreateOrder = () => {
   );
 
   const props = {
-    transportationData,
-    patientData,
     transportationProgress,
-    destinationDetailsData,
-    billingDetailsData,
+    createOrderData,
     billingProgress,
     currentStep,
     endDate,
     startDate,
     selectedWeekdays,
     setSelectedWeekdays,
+    setCreateOrderData,
     setEndDate,
     setStartDate,
     setCurrentStep,
     setBillingProgress,
-    setBillingDetailsData,
-    setDestinationDetailsData,
     handleFormChange,
     setTransportationProgress,
     setPatientProgress,
     setDestinationProgress,
-    setTransportationData,
-    setPatientData,
   };
+
   return (
     <div>
       <Navbar />
@@ -147,7 +179,7 @@ const CreateOrder = () => {
         ) : currentStep === "billingDetails" ? (
           <BillingDetails {...props} />
         ) : (
-          <PreviewDetails />
+          <PreviewDetails {...props} />
         )}
       </div>
     </div>
