@@ -5,7 +5,7 @@ export default function AuthFooter({ page }) {
   let content;
   if (page === "register") {
     content = (
-      <Link to="/lgoin" className="block text-center mt-4 text-sm ">
+      <Link to="/login" className="block text-center mt-4 text-sm ">
         Already have an account?{" "}
         <span className="underline text-blue-600">Login Now</span>
       </Link>
