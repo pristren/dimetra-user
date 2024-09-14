@@ -17,7 +17,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useDispatch } from "react-redux";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setAccessToken, setUser } from "@/redux/slices/user/userSlice";
 
 export default function LoginForm() {
@@ -35,8 +35,8 @@ export default function LoginForm() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "test@admin.com",
+      password: "123456",
     },
   });
 
@@ -114,9 +114,12 @@ export default function LoginForm() {
                   Remember me
                 </Label>
               </div>
-              <p className="text-destructive underline text-sm cursor-pointer">
+              <Link
+                to="/forgot-password"
+                className="text-[#6F767E] font-normal tracking-wide text-destructive underline text-sm cursor-pointer"
+              >
                 Forgot your password?
-              </p>
+              </Link>
             </div>
             <Button type="submit" className="block w-2/4 mx-auto">
               Login
