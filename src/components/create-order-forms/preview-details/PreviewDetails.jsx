@@ -22,6 +22,10 @@ const PreviewDetails = ({
   setEndDate,
   setStartDate,
   selectedWeekdays,
+  returnDate,
+  setReturnDate,
+  dropDate,
+  setDropDate,
 }) => {
   const {
     transportationData,
@@ -340,7 +344,7 @@ const PreviewDetails = ({
                     <Label className="block mb-2 font-medium">
                       Date <sup className="text-[13px]">*</sup>
                     </Label>
-                    <DatePicker />
+                    <DatePicker date={dropDate} setDate={setDropDate} />
                   </div>
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">
@@ -413,7 +417,10 @@ const PreviewDetails = ({
                     <Label className="block mb-2 font-medium">
                       Date <sup className="text-[13px]">*</sup>
                     </Label>
-                    <DatePicker />
+                    <DatePicker
+                      date={returnDate}
+                      setDate={setReturnDate}
+                    />
                   </div>
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">Today</Label>
