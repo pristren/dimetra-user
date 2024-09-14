@@ -16,8 +16,10 @@ const CreateOrder = () => {
   const [destinationProgress, setDestinationProgress] = useState(0);
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [returnDate, setReturnDate] = useState(null);
+  const [dropDate, setDropDate] = useState(null);
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
 
   const [createOrderData, setCreateOrderData] = useState({
@@ -26,6 +28,8 @@ const CreateOrder = () => {
       modeOfTransportation: [],
       transportWith: [],
       weekDays: "",
+      startDate,
+      endDate,
       startTime: "",
       returnTime: "",
       multipleWeekDays: [],
@@ -69,8 +73,6 @@ const CreateOrder = () => {
       contact: "",
     },
   });
-  console.log(createOrderData?.destinationDetailsData);
-
   const prevCreateOrderDataRef = useRef(createOrderData);
 
   // Effect to load data from localStorage on mount
@@ -129,6 +131,10 @@ const CreateOrder = () => {
     endDate,
     startDate,
     selectedWeekdays,
+    returnDate,
+    dropDate,
+    setDropDate,
+    setReturnDate,
     setSelectedWeekdays,
     setCreateOrderData,
     setEndDate,

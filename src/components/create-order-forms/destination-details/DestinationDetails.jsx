@@ -25,6 +25,10 @@ const DestinationDetails = ({
   setDestinationProgress,
   createOrderData,
   setCreateOrderData,
+  returnDate,
+  setReturnDate,
+  dropDate,
+  setDropDate,
 }) => {
   const {
     destinationDetailsData: {
@@ -45,9 +49,6 @@ const DestinationDetails = ({
       returnFloor = "",
     } = {},
   } = createOrderData;
-
-  const [dropDate, setDropDate] = useState(null);
-  const [returnDate, setReturnDate] = useState(null);
 
   const formSchema = z.object({
     pickUpName: z.string().min(1, "Name is required"),
@@ -129,6 +130,7 @@ const DestinationDetails = ({
     dropOffCountry,
     dropOffPhone,
     dropDate,
+    returnDate,
     returnFloor,
     returnDate,
   ];
@@ -185,7 +187,9 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={errors.pickUpAddress ? "border-red-500" : ""}
+                          className={
+                            errors.pickUpAddress ? "border-red-500" : ""
+                          }
                           placeholder="Type your address"
                           {...field}
                           onChange={(e) => {
@@ -235,7 +239,9 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={errors.pickUpCountry ? "border-red-500" : ""}
+                          className={
+                            errors.pickUpCountry ? "border-red-500" : ""
+                          }
                           placeholder="Type your country"
                           {...field}
                           onChange={(e) => {
@@ -261,7 +267,9 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={errors.pickUpEmployeeName ? "border-red-500" : ""}
+                          className={
+                            errors.pickUpEmployeeName ? "border-red-500" : ""
+                          }
                           placeholder="Type the employee's name"
                           {...field}
                           onChange={(e) => {
@@ -291,10 +299,7 @@ const DestinationDetails = ({
                       <FormControl>
                         <DatePicker
                           date={dropDate}
-                          setDate={(date) => {
-                            field.onChange(date);
-                            setDropDate(date);
-                          }}
+                          setDate={setDropDate}
                         />
                       </FormControl>
                       <FormMessage />
@@ -313,7 +318,9 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={errors.dropOffPickUpTime ? "border-red-500" : ""}
+                          className={
+                            errors.dropOffPickUpTime ? "border-red-500" : ""
+                          }
                           placeholder="Type pickup time"
                           {...field}
                           onChange={(e) => {
@@ -363,7 +370,9 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={errors.dropOffAddress ? "border-red-500" : ""}
+                          className={
+                            errors.dropOffAddress ? "border-red-500" : ""
+                          }
                           placeholder="Type address"
                           {...field}
                           onChange={(e) => {
@@ -413,7 +422,9 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={errors.dropOffCountry ? "border-red-500" : ""}
+                          className={
+                            errors.dropOffCountry ? "border-red-500" : ""
+                          }
                           placeholder="Type country"
                           {...field}
                           onChange={(e) => {
@@ -438,7 +449,9 @@ const DestinationDetails = ({
                       </FormLabel>
                       <FormControl>
                         <Input
-                          className={errors.dropOffPhone ? "border-red-500" : ""}
+                          className={
+                            errors.dropOffPhone ? "border-red-500" : ""
+                          }
                           placeholder="Type phone"
                           {...field}
                           onChange={(e) => {
@@ -466,10 +479,7 @@ const DestinationDetails = ({
                           <FormControl>
                             <DatePicker
                               date={returnDate}
-                              setDate={(date) => {
-                                field.onChange(date);
-                                setReturnDate(date);
-                              }}
+                              setDate={setReturnDate}
                             />
                           </FormControl>
                           <FormMessage />
