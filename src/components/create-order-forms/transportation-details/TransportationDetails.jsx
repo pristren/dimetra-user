@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
 import { z } from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +16,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import AppSelect from "@/components/common/AppSelect";
 import { DatePicker } from "@/components/ui/DatePicker";
-import { calculateFormProgress } from "@/utils";
 import {
   transportModesOptions,
   transportOptions,
@@ -31,7 +29,6 @@ const TransportationDetails = ({
   handleFormChange,
   createOrderData,
   setCreateOrderData,
-  setTransportationProgress,
   transportationProgress,
   endDate,
   startDate,
@@ -112,26 +109,6 @@ const TransportationDetails = ({
     );
   };
 
-  useEffect(() => {
-    const fieldsFilled =
-      transportationData?.typeOfTransport === "recurring"
-        ? [
-            form.watch("typeOfTransport"),
-            form.watch("duration"),
-            transportationData?.modeOfTransportation.length > 0,
-            transportationData?.transportWith.length > 0,
-            selectedWeekdays.length > 0,
-            startDate,
-            endDate,
-          ]
-        : [
-            transportationData?.typeOfTransport,
-            transportationData?.modeOfTransportation.length > 0,
-            transportationData?.transportWith.length > 0,
-          ];
-
-    setTransportationProgress(calculateFormProgress(fieldsFilled));
-  }, [transportationData, selectedWeekdays, startDate, endDate]);
 
   return (
     <Card className="w-[65%] px-5 py-5">

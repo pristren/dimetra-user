@@ -9,6 +9,8 @@ import TransportationDetails from "@/components/create-order-forms/transportatio
 import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 import Navbar from "@/components/common/Navbar";
 import { isEqual } from "lodash"; // Import lodash for deep comparison
+import { Button } from "@/components/ui/button";
+import { calculateFormProgress } from "@/utils";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -73,9 +75,37 @@ const CreateOrder = () => {
       contact: "",
     },
   });
+
+  const { transportationData } = createOrderData;
+  useEffect(() => {
+    const fieldsFilled =
+      transportationData?.typeOfTransport === "recurring"
+        ? [
+            transportationData?.typeOfTransport,
+            transportationData?.ends,
+            transportationData?.modeOfTransportation.length > 0,
+            transportationData?.transportWith.length > 0,
+            selectedWeekdays.length > 0,
+            startDate,
+            endDate,
+          ]
+        : [
+            transportationData?.typeOfTransport,
+            transportationData?.modeOfTransportation.length > 0,
+            transportationData?.transportWith.length > 0,
+          ];
+
+    setTransportationProgress(calculateFormProgress(fieldsFilled));
+  }, [
+    transportationData,
+    selectedWeekdays,
+    startDate,
+    endDate,
+    setTransportationProgress,
+  ]);
+
   const prevCreateOrderDataRef = useRef(createOrderData);
 
-  // Effect to load data from localStorage on mount
   useEffect(() => {
     const storedData = localStorage.getItem("createOrderData");
     if (storedData) {
@@ -83,7 +113,6 @@ const CreateOrder = () => {
     }
   }, []);
 
-  // Effect to save data to localStorage when createOrderData changes
   useEffect(() => {
     if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
       const { transportationData } = createOrderData;
@@ -108,19 +137,20 @@ const CreateOrder = () => {
     setCurrentStep(step);
   };
 
-  const StepIcon = ({ step, icon, progressValue }) => (
-    <div
+  const StepIcon = ({ step, icon, progressValue, disabled }) => (
+    <Button
+      disabled={disabled}
       className={`${
         progressValue === 100
-          ? "bg-[#B4DB1A] text-white"
+          ? "bg-[#B4DB1A] hover:bg-[#B4DB1A] text-white"
           : currentStep === step && progressValue !== 100
-          ? "bg-[#FBA63C] text-white"
-          : "bg-[#DFE5ED] text-black"
+          ? "bg-[#FBA63C] hover:bg-[#FBA63C] text-white"
+          : "bg-[#DFE5ED] hover:bg-[#DFE5ED] text-black"
       } size-40 h-max p-3 rounded-full cursor-pointer`}
       onClick={() => handleFormChange(step)}
     >
       {icon}
-    </div>
+    </Button>
   );
 
   const props = {
@@ -161,18 +191,21 @@ const CreateOrder = () => {
           <StepIcon
             step="patientDetails"
             icon={<User />}
+            disabled={transportationProgress !== 100}
             progressValue={patientProgress}
           />
           <Progress value={patientProgress} />
           <StepIcon
             step="destinationDetails"
             icon={<Truck />}
+            disabled={patientProgress !== 100}
             progressValue={destinationProgress}
           />
           <Progress value={destinationProgress} />
           <StepIcon
             step="billingDetails"
             icon={<Send />}
+            disabled={destinationProgress !== 100}
             progressValue={billingProgress}
           />
         </div>
