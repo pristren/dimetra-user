@@ -1,4 +1,4 @@
-const Pause = () => (
+const Pause = ({ className }) => (
   <svg
     width="17"
     height="18"
@@ -6,6 +6,7 @@ const Pause = () => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
+    className={className}
   >
     <mask
       id="mask0_1410_48382"

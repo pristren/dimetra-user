@@ -11,12 +11,14 @@ import CreateOrder from "@/pages/order/create-order/CreateOrder";
 import OrderSettings from "@/pages/order/order-settings/OrderSettings";
 import SendRequest from "@/pages/order/send-request/SendRequest";
 import AllOrders from "@/pages/order/all-orders/AllOrders";
-import RecurringOrders from "./pages/order/recurring-orders/RecurringOrders";
+import RecurringOrders from "@/pages/order/recurring-orders/RecurringOrders";
+import OrderDetails from "@/pages/order/order-details/OrderDetails";
+import AddRequest from "@/pages/order/add-request/AddRequest";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/order/all-orders" />} />
+      <Route path="/" element={<Navigate to="/orders/all-orders" />} />
 
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -31,7 +33,7 @@ function App() {
         }
       />
       <Route
-        path="/order"
+        path="/orders"
         element={
           <PrivateRoute>
             <OrderLayout />
@@ -39,11 +41,13 @@ function App() {
         }
       >
         <Route index element={<Navigate to="all-orders" />} />
+        <Route path="order-details/:id" element={<OrderDetails />} />
         <Route path="history" element={<OrderHistory />} />
         <Route path="all-orders" element={<AllOrders />} />
         <Route path="recurring-orders/:id" element={<RecurringOrders />} />
         <Route path="setting" element={<OrderSettings />} />
         <Route path="send-request" element={<SendRequest />} />
+        <Route path="add-request" element={<AddRequest />} />
       </Route>
       <Route path="*" element={<WrongPath />} />
     </Routes>

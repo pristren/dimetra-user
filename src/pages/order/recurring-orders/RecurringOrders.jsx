@@ -1,35 +1,220 @@
-import AppSelect from "@/components/common/AppSelect";
-import { timeOptions } from "@/components/create-order-forms/helpers";
-import RecurringOrdersTable from "@/components/order/RecurringOrdersTable";
-import { DatePicker } from "@/components/ui/DatePIcker";
-import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
-import { useState } from "react";
+import ArrowUpDown from "@/assets/icons/ArrowUpDown";
+import Document from "@/assets/icons/Documents";
+import Pause from "@/assets/icons/Pause";
+import Pencil from "@/assets/icons/Pencil";
+import Trash from "@/assets/icons/Trash";
+import { AppTable } from "@/components/common/AppTable";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { EllipsisVertical } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const RecurringOrders = () => {
-  const [date, setDate] = useState(null);
+  const data = [
+    {
+      id: "1",
+      date: "2024-09-08",
+      pickUp: "123 Main St.",
+      destination: "456 Elm St.",
+      vehicle: "Car",
+      driver: "John Doe",
+      status: "Completed",
+      patientName: "Jane Doe",
+      orderType: "Regular",
+    },
+    {
+      id: "2",
+      date: "2024-09-08",
+      pickUp: "123 Main St.",
+      destination: "456 Elm St.",
+      vehicle: "Car",
+      driver: "John Doe",
+      status: "Rejected",
+      patientName: "Jane Doe",
+      orderType: "Something",
+    },
+    {
+      id: "3",
+      date: "2024-09-08",
+      pickUp: "123 Main St.",
+      destination: "456 Elm St.",
+      vehicle: "Car",
+      driver: "John Doe",
+      status: "Confirmed",
+      patientName: "Jane Doe",
+      orderType: "Regular",
+    },
+    {
+      id: "4",
+      date: "2024-09-08",
+      pickUp: "123 Main St.",
+      destination: "456 Elm St.",
+      vehicle: "Car",
+      driver: "John Doe",
+      status: "Paused",
+      patientName: "Jane Doe",
+      orderType: "Regular",
+    },
+  ];
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case "Completed":
+        return "#F0F8D1";
+      case "Rejected":
+        return "#F9D1D1";
+      case "Confirmed":
+        return "#D1F8D5";
+      case "Paused":
+        return "#DCF3FF";
+      default:
+        return "#FFFFFF"; // Default color if status is unknown
+    }
+  };
+
+  const columns = [
+    {
+      accessorKey: "date",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Date & Time
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "pickUp",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Pick Up
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "destination",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Destination
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "vehicle",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Vehicle
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "driver",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Driver
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "patientName",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Patient Name
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "orderType",
+      cell: () => null,
+      header: () => null,
+    },
+    {
+      accessorKey: "status",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Status
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+      cell: ({ row }) => {
+        const status = row.getValue("status");
+        const statusColor = getStatusColor(status);
+
+        return (
+          <Button
+            className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs"
+            style={{ backgroundColor: statusColor }}
+          >
+            {status}
+          </Button>
+        );
+      },
+    },
+    {
+      accessorKey: "action",
+      header: () => (
+        <div className="text-center flex items-center justify-center">
+          Actions
+          <ArrowUpDown className="h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+      cell: ({ row }) => {
+        return (
+          <div className="flex justify-center items-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisVertical className="h-4 w-4 cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="-translate-x-5 p-4 w-60">
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                  <Pencil className="size-5 text-gray-600" />
+                  <span className="text-gray-700 text-sm">Edit</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                  <Trash className="size-5" />
+
+                  <span className="text-gray-700 text-sm">Storno</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="py-2 mb-2">
+                  <Link
+                    to={`/orders/order-details/${row.original.id}   `}
+                    className="flex items-center gap-3 text-[16px]"
+                  >
+                    <Document className="size-5" />
+                    <span className="text-gray-700 text-sm">View Details</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                  <Pause className="size-5" />
+                  <span className="text-gray-700 text-sm">Pause</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      },
+    },
+  ];
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-5 w-full mb-10">
-        <div className="flex items-center gap-3">
-          <h3 className="text-2xl font-bold text-nowrap border-r-2 border-black pr-4">Recurring Orders</h3>
-          <h6 className="flex items-center gap-3">
-            Order ID: <span className="text-gray-500 text-lg">#55424</span>
-          </h6>
-        </div>
-        <div className="flex items-center gap-4">
-          <DatePicker date={date} setDate={setDate} />
-          <div className="relative">
-            <AppSelect placeholder="00:00" items={timeOptions} isTime={true} />
-          </div>
-          <div className="relative">
-            <Input placeholder="Search" className="w-60 h-10" />
-            <Search className="absolute right-2 top-1/2 -translate-y-1/2" />
-          </div>
-        </div>
-      </div>
-      <RecurringOrdersTable />
+      <AppTable
+        columns={columns}
+        data={data}
+        pageTitle={"Recurring Orders"}
+        isDateVisible={false}
+        isRecurring={true}
+        isFilterVisible={false}
+      />
     </div>
   );
 };

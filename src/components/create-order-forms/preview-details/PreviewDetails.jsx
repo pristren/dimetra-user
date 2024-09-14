@@ -63,7 +63,7 @@ const PreviewDetails = ({
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={transportationData.modeOfTransportation.includes(
+                      checked={transportationData.modeOfTransportation?.includes(
                         option.value
                       )}
                     />
