@@ -1,4 +1,4 @@
-import Logo from "@/assets/icons/Logo";
+import { Logo } from "@/assets/icons";
 import Language from "@/components/helper-ui/Language";
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";

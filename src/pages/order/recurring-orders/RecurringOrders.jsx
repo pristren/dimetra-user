@@ -1,8 +1,4 @@
-import ArrowUpDown from "@/assets/icons/ArrowUpDown";
-import Document from "@/assets/icons/Documents";
-import Pause from "@/assets/icons/Pause";
-import Pencil from "@/assets/icons/Pencil";
-import Trash from "@/assets/icons/Trash";
+import { ArrowUpDown, Document, Pause, Pencil, Trash } from "@/assets/icons";
 import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
 import {

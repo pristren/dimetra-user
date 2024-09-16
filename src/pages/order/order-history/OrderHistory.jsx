@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import ArrowUpDown from "@/assets/icons/ArrowUpDown";
+import { ArrowUpDown } from "@/assets/icons";
 
 import { EllipsisVertical } from "lucide-react";
 import { useState } from "react";
