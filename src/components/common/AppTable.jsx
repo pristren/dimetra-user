@@ -17,12 +17,26 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import AppPagination from "@/components/common/AppPagination";
+import AppHead from "@/components/common/AppHead";
 
-export function AppTable({ data, columns }) {
+export function AppTable({
+  data,
+  columns,
+  pageTitle,
+  addButton,
+  date,
+  setDate,
+  filters,
+  isDateVisible,
+  isFilterVisible,
+  isSearchVisible,
+  isRecurring = false,
+}) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
+  const [globalFilter, setGlobalFilter] = React.useState("");
 
   const table = useReactTable({
     data,
@@ -35,35 +49,51 @@ export function AppTable({ data, columns }) {
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
+      globalFilter,
     },
   });
 
   return (
     <div className="w-full">
+      <AppHead
+        pageTitle={pageTitle}
+        addButton={addButton}
+        date={date}
+        setDate={setDate}
+        filters={filters}
+        isDateVisible={isDateVisible}
+        isFilterVisible={isFilterVisible}
+        table={table}
+        globalFilter={globalFilter}
+        setGlobalFilter={setGlobalFilter}
+        isSearchVisible={isSearchVisible}
+        isRecurring={isRecurring}
+      />
       <div className="rounded-md border w-full">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow
                 key={headerGroup.id}
-                className="bg-secondary hover:bg-secondary"
+                className="bg-secondary hover:bg-secondary text-nowrap"
               >
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
-                      <p className="text-black">
+                      <div className="text-black">
                         {header.isPlaceholder
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
-                      </p>
+                      </div>
                     </TableHead>
                   );
                 })}
@@ -99,7 +129,7 @@ export function AppTable({ data, columns }) {
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center gap-5 justify-between text-nowrap px-5 mt-10 border-t py-5">
+        <div className="flex items-center gap-5 justify-between text-nowrap px-5 border-t py-5">
           <p>Showing 1 to 1 of 1 entries</p>
           <div>
             <AppPagination />

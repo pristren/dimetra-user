@@ -1,30 +1,38 @@
 /* eslint-disable react/prop-types */
 import { z } from "zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
-  FormField,
   FormItem,
   FormLabel,
   FormMessage,
+  FormField,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect } from "react";
 import { calculateFormProgress } from "@/utils";
+import { Label } from "@/components/ui/label";
 
-const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
+const PatientDetails = ({
+  handleFormChange,
+  setPatientProgress,
+  createOrderData,
+  setCreateOrderData,
+}) => {
+  const { patientData } = createOrderData;
+
   const formSchema = z.object({
     name: z.string().min(1, "Name is required"),
     surname: z.string().min(1, "Surname is required"),
     dateOfBirth: z.string().min(1, "Date of Birth is required"),
     areaRoom: z.string().min(1, "Area/Room is required"),
-    kostenstelle: z.string().min(1, "Kostenstelle is required"),
-    howMuch: z.string().min(1, "How much is required"),
+    costCenter: z.string().min(1, "Cost center is required"),
+    howMuch: z.string().optional(),
     special: z.string().optional(),
     isolation: z.boolean().optional(),
     patientAbove90kg: z.boolean().optional(),
@@ -32,34 +40,31 @@ const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      surname: "",
-      dateOfBirth: "",
-      areaRoom: "",
-      kostenstelle: "",
-      howMuch: "",
-      special: "",
-      isolation: false,
-      patientAbove90kg: false,
-    },
+    defaultValues: patientData,
   });
 
-  const fieldsFilled = [
-    form.watch("name"),
-    form.watch("surname"),
-    form.watch("dateOfBirth"),
-    form.watch("areaRoom"),
-    form.watch("kostenstelle"),
-  ];
+  const handleInputChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setCreateOrderData((prev) => ({
+      ...prev,
+      patientData: {
+        ...prev.patientData,
+        [name]: type === "checkbox" ? checked : value,
+      },
+    }));
+  };
 
   useEffect(() => {
-    setPatientProgress(calculateFormProgress(fieldsFilled));
-  }, [form.watch()]);
+    const fieldsFilled = [
+      patientData.name,
+      patientData.surname,
+      patientData.dateOfBirth,
+      patientData.areaRoom,
+      patientData.costCenter,
+    ];
 
-  const onSubmit = (data) => {
-    console.log("Submitted data:", data);
-  };
+    setPatientProgress(calculateFormProgress(fieldsFilled));
+  }, [patientData, setPatientProgress]);
 
   return (
     <Card className="w-[65%] px-5 py-5">
@@ -68,7 +73,7 @@ const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form>
             <div className="grid grid-cols-2 gap-5">
               <FormField
                 control={form.control}
@@ -76,49 +81,68 @@ const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Name <sup className="text-[13px]">*</sup>
+                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
+                        ? "Name Collection"
+                        : "Name"}
+                      <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
                       <Input
                         className={
                           form.formState.errors.name ? "border-red-500" : ""
                         }
-                        placeholder="Type your name"
+                        placeholder="Enter patient's name"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="surname"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Surname <sup className="text-[13px]">*</sup>
+                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
+                        ? "Number Patients"
+                        : "Surname"}
+                      <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
                       <Input
                         className={
                           form.formState.errors.surname ? "border-red-500" : ""
                         }
-                        placeholder="Type your surname"
+                        placeholder="Enter patient's surname"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="dateOfBirth"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Date of Birth <sup className="text-[13px]">*</sup>
+                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
+                        ? "Area/Room"
+                        : "Date of Birth"}
+                      <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -127,83 +151,115 @@ const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
                             ? "border-red-500"
                             : ""
                         }
-                        placeholder="Type your date of birth"
+                        placeholder="Enter patient's date of birth"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="areaRoom"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Area/Room <sup className="text-[13px]">*</sup>
+                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
+                        ? "Cost Center"
+                        : "Area/Room"}
+                      <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
                       <Input
                         className={
                           form.formState.errors.areaRoom ? "border-red-500" : ""
                         }
-                        placeholder="Type your area or room"
+                        placeholder="Enter patient's area/room"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
-                name="kostenstelle"
+                name="costCenter"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Kostenstelle <sup className="text-[13px]">*</sup>
+                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
+                        ? "How much"
+                        : "Cost Center"}
+                      {createOrderData.transportationData?.typeOfTransport !== "collectionOrder" && (
+                        <sup className="text-[13px]">*</sup>
+                      )}
                     </FormLabel>
                     <FormControl>
                       <Input
                         className={
-                          form.formState.errors.kostenstelle
+                          form.formState.errors.costCenter
                             ? "border-red-500"
                             : ""
                         }
-                        placeholder="Type your kostenstelle"
+                        placeholder="Enter cost center"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="howMuch"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>How Much</FormLabel>
-                    <FormControl>
-                      <Input
-                        className={
-                          form.formState.errors.howMuch ? "border-red-500" : ""
-                        }
-                        placeholder="Type how much"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
+              {createOrderData.transportationData?.typeOfTransport !== "collectionOrder" && (
+                <FormField
+                  control={form.control}
+                  name="howMuch"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>How Much</FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            form.formState.errors.howMuch
+                              ? "border-red-500"
+                              : ""
+                          }
+                          placeholder="Enter amount"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+
               <FormField
                 control={form.control}
                 name="isolation"
                 render={({ field }) => (
                   <FormItem>
-                    <p className="block mb-2 font-medium">Isolation</p>
+                    <FormLabel className="block mb-3">Isolation</FormLabel>
                     <div className="flex items-center">
                       <FormControl>
                         <Checkbox
@@ -212,26 +268,39 @@ const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
                               ? "border-red-500"
                               : ""
                           }
+                          id="isolation"
                           {...field}
+                          onCheckedChange={(checked) =>
+                            handleInputChange({
+                              target: {
+                                name: "isolation",
+                                type: "checkbox",
+                                checked,
+                              },
+                            })
+                          }
                         />
                       </FormControl>
-                      <FormLabel className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
+                      <Label
+                        htmlFor="isolation"
+                        className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
+                      >
                         Yes
-                      </FormLabel>
+                      </Label>
                     </div>
-
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="patientAbove90kg"
                 render={({ field }) => (
                   <FormItem>
-                    <p className="block mb-2 font-medium">
+                    <FormLabel className="block mb-3">
                       Patient Above 90 kg
-                    </p>
+                    </FormLabel>
                     <div className="flex items-center">
                       <FormControl>
                         <Checkbox
@@ -240,18 +309,31 @@ const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
                               ? "border-red-500"
                               : ""
                           }
+                          id="patientAbove90kg"
                           {...field}
+                          onCheckedChange={(checked) =>
+                            handleInputChange({
+                              target: {
+                                name: "patientAbove90kg",
+                                type: "checkbox",
+                                checked,
+                              },
+                            })
+                          }
                         />
                       </FormControl>
-                      <FormLabel className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
+                      <Label
+                        htmlFor="patientAbove90kg"
+                        className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
+                      >
                         Yes
-                      </FormLabel>
+                      </Label>
                     </div>
-
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="special"
@@ -263,8 +345,12 @@ const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
                         className={
                           form.formState.errors.special ? "border-red-500" : ""
                         }
-                        placeholder="Type any special requirements"
+                        placeholder="Enter special notes"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -272,11 +358,11 @@ const PatientDetails = ({ handleFormChange, setPatientProgress }) => {
                 )}
               />
             </div>
+
             <BackAndNextBtn
               isFillForm={true}
-              back="transport"
-              next="destination"
-              handleFormChange={handleFormChange}
+              handleGoPrev={() => handleFormChange("transportDetails")}
+              handleGoNext={() => handleFormChange("destinationDetails")}
             />
           </form>
         </Form>

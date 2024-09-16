@@ -1,4 +1,5 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect, useState, useRef } from "react";
 import { Pencil, Send, Truck, User } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import BillingDetails from "@/components/create-order-forms/billing-details/BillingDetails";
@@ -7,42 +8,143 @@ import PatientDetails from "@/components/create-order-forms/patient-details/Pati
 import TransportationDetails from "@/components/create-order-forms/transportation-details/TransportationDetails";
 import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 import Navbar from "@/components/common/Navbar";
+import { isEqual } from "lodash"; // Import lodash for deep comparison
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
   const [patientProgress, setPatientProgress] = useState(0);
   const [destinationProgress, setDestinationProgress] = useState(0);
-  const [showForm, setShowForm] = useState({
-    isTransport: true,
-    isPatient: false,
-    isDestination: false,
-    isBilling: false,
-  });
+  const [billingProgress, setBillingProgress] = useState(0);
+  const [currentStep, setCurrentStep] = useState("transportDetails");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [returnDate, setReturnDate] = useState(null);
+  const [dropDate, setDropDate] = useState(null);
+  const [selectedWeekdays, setSelectedWeekdays] = useState([]);
 
-  const [orderData, setOrderData] = useState({
-    typeOfTransport: "",
-    modeOfTransportation: [],
-    transportWith: [],
+  const [createOrderData, setCreateOrderData] = useState({
+    transportationData: {
+      typeOfTransport: "",
+      modeOfTransportation: [],
+      transportWith: [],
+      weekDays: "",
+      startDate,
+      endDate,
+      startTime: "",
+      returnTime: "",
+      multipleWeekDays: [],
+      ends: "",
+    },
+    patientData: {
+      name: "",
+      surname: "",
+      dateOfBirth: "",
+      areaRoom: "",
+      costCenter: "",
+      howMuch: "",
+      special: "",
+      isolation: false,
+      patientAbove90kg: false,
+    },
+    destinationDetailsData: {
+      //pick up details
+      pickUpName: "",
+      pickUpAddress: "",
+      pickUpCity: "",
+      pickUpCountry: "",
+      pickUpEmployeeName: "",
+      // here is drop off details
+      dropOffPickUpTime: "",
+      dropOffName: "",
+      dropOffAddress: "",
+      dropOffCity: "",
+      dropOffCountry: "",
+      dropOffPhone: "",
+      // and return details
+      returnDayLetter: "",
+      returnApproxTime: "",
+      returnFloor: "",
+    },
+    billingDetailsData: {
+      preName: "",
+      name: "",
+      street: "",
+      place: "",
+      contact: "",
+    },
   });
+  const prevCreateOrderDataRef = useRef(createOrderData);
 
-  const handleFormChange = (formType) => {
-    setShowForm({
-      isTransport: formType === "transport",
-      isPatient: formType === "patient",
-      isDestination: formType === "destination",
-      isBilling: formType === "billing",
-    });
+  // Effect to load data from localStorage on mount
+  useEffect(() => {
+    const storedData = localStorage.getItem("createOrderData");
+    if (storedData) {
+      setCreateOrderData(JSON.parse(storedData));
+    }
+  }, []);
+
+  // Effect to save data to localStorage when createOrderData changes
+  useEffect(() => {
+    if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
+      const { transportationData } = createOrderData;
+      const { typeOfTransport, modeOfTransportation, transportWith } =
+        transportationData;
+
+      if (
+        typeOfTransport ||
+        modeOfTransportation.length ||
+        transportWith.length
+      ) {
+        localStorage.setItem(
+          "createOrderData",
+          JSON.stringify(createOrderData)
+        );
+      }
+      prevCreateOrderDataRef.current = createOrderData;
+    }
+  }, [createOrderData]);
+
+  const handleFormChange = (step) => {
+    setCurrentStep(step);
   };
 
+  const StepIcon = ({ step, icon, progressValue }) => (
+    <div
+      className={`${
+        progressValue === 100
+          ? "bg-[#B4DB1A] text-white"
+          : currentStep === step && progressValue !== 100
+          ? "bg-[#FBA63C] text-white"
+          : "bg-[#DFE5ED] text-black"
+      } size-40 h-max p-3 rounded-full cursor-pointer`}
+      onClick={() => handleFormChange(step)}
+    >
+      {icon}
+    </div>
+  );
+
   const props = {
-    showForm,
-    orderData,
     transportationProgress,
+    createOrderData,
+    billingProgress,
+    currentStep,
+    endDate,
+    startDate,
+    selectedWeekdays,
+    returnDate,
+    dropDate,
+    setDropDate,
+    setReturnDate,
+    setSelectedWeekdays,
+    setCreateOrderData,
+    setEndDate,
+    setStartDate,
+    setCurrentStep,
+    setBillingProgress,
     handleFormChange,
     setTransportationProgress,
     setPatientProgress,
     setDestinationProgress,
-    setOrderData,
   };
 
   return (
@@ -50,36 +152,40 @@ const CreateOrder = () => {
       <Navbar />
       <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
         <div className="flex items-center gap-5 mb-5">
-          <Pencil
-            className="size-40 text-white bg-[#B4DB1A] h-max p-3 rounded-full cursor-pointer"
-            onClick={() => handleFormChange("transport")}
+          <StepIcon
+            step="transportDetails"
+            icon={<Pencil />}
+            progressValue={transportationProgress}
           />
           <Progress value={transportationProgress} />
-          <User
-            className="size-40 text-white bg-[#B4DB1A] h-max p-3 rounded-full cursor-pointer"
-            onClick={() => handleFormChange("patient")}
+          <StepIcon
+            step="patientDetails"
+            icon={<User />}
+            progressValue={patientProgress}
           />
           <Progress value={patientProgress} />
-          <Truck
-            className="size-40 text-white bg-[#B4DB1A] h-max p-3 rounded-full cursor-pointer"
-            onClick={() => handleFormChange("destination")}
+          <StepIcon
+            step="destinationDetails"
+            icon={<Truck />}
+            progressValue={destinationProgress}
           />
           <Progress value={destinationProgress} />
-          <Send
-            className="size-40 text-white bg-[#B4DB1A] h-max p-3 rounded-full cursor-pointer"
-            onClick={() => handleFormChange("billing")}
+          <StepIcon
+            step="billingDetails"
+            icon={<Send />}
+            progressValue={billingProgress}
           />
         </div>
-        {showForm.isTransport ? (
+        {currentStep === "transportDetails" ? (
           <TransportationDetails {...props} />
-        ) : showForm.isPatient ? (
+        ) : currentStep === "patientDetails" ? (
           <PatientDetails {...props} />
-        ) : showForm.isDestination ? (
+        ) : currentStep === "destinationDetails" ? (
           <DestinationDetails {...props} />
-        ) : showForm.isBilling ? (
+        ) : currentStep === "billingDetails" ? (
           <BillingDetails {...props} />
         ) : (
-          <PreviewDetails />
+          <PreviewDetails {...props} />
         )}
       </div>
     </div>

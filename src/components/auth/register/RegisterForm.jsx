@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import AuthFooter from "@/components/helper-ui/auth-footer";
+import AuthFooter from "@/components/helper-ui/AuthFooter";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -54,7 +54,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Card className="w-1/2 px-5 py-5 max-h-[80vh] overflow-y-auto hide-scrollbar">
+    <Card className="w-11/12 md:w-1/2 px-5 py-5">
       <CardHeader className="mb-4">
         <CardTitle className="text-center">Register</CardTitle>
       </CardHeader>

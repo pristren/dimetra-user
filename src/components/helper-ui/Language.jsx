@@ -6,14 +6,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { UsaLogo, GermanyLogo } from "@/assets/icons";
 export default function Language() {
   const languages = [
     {
-      icon: "🇬🇧",
+      icon: <UsaLogo />,
       name: "English",
     },
     {
-      icon: "🇩🇪",
+      icon: <GermanyLogo />,
       name: "German",
     },
   ];
@@ -36,7 +37,7 @@ export default function Language() {
         {languages.map((language, i) => (
           <SelectItem className="px-2 py-1" key={i} value={language}>
             <div className="flex items-center gap-2">
-              <p className="text-2xl"> {language.icon}</p>
+              {language.icon}
               <p> {language.name}</p>
             </div>
           </SelectItem>

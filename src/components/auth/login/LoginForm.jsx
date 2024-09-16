@@ -12,12 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import AuthFooter from "@/components/helper-ui/auth-footer";
+import AuthFooter from "@/components/helper-ui/AuthFooter";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { useDispatch } from "react-redux";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { setAccessToken, setUser } from "@/redux/slices/user/userSlice";
 
 export default function LoginForm() {
@@ -35,8 +35,8 @@ export default function LoginForm() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "test@admin.com",
+      password: "123456",
     },
   });
 
@@ -44,10 +44,10 @@ export default function LoginForm() {
     dispatch(setUser({ email: values.email }));
     dispatch(setAccessToken("123456"));
 
-    localStorage.setItem('user', JSON.stringify({ email: values.email }));
-    localStorage.setItem('accessToken', '123456');
-    
-    navigate("/order/all-orders");
+    localStorage.setItem("user", JSON.stringify({ email: values.email }));
+    localStorage.setItem("accessToken", "123456");
+
+    navigate("/orders/all-orders");
   }
 
   return (
@@ -114,9 +114,12 @@ export default function LoginForm() {
                   Remember me
                 </Label>
               </div>
-              <p className="text-destructive underline text-sm cursor-pointer">
+              <Link
+                to="/forgot-password"
+                className="text-[#6F767E] font-normal tracking-wide text-destructive underline text-sm cursor-pointer"
+              >
                 Forgot your password?
-              </p>
+              </Link>
             </div>
             <Button type="submit" className="block w-2/4 mx-auto">
               Login

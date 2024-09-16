@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { EllipsisVertical } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,72 +7,62 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AppTable } from "@/components/common/AppTable";
-import { ArrowUpDown, Pause, Document, Trash, Pencil } from "@/assets/icons";
+import { ArrowUpDown, Document, Pencil, Pause, Trash } from "@/assets/icons";
+import { Link } from "react-router-dom";
 
-const AllOrdersTable = () => {
-  const allOrdersData = [
+const RecurringOrdersTable = () => {
+  const recurringOrdersData = [
     {
-      id: "1",
-      date: "2024-09-08",
-      pickUp: "Universität Spital, 4056 Basel something something",
-      destination: "St. Clara Spital, 4058 Basel",
-      driver: "JohnDoe JohnDoe",
-      patientName: "Sedan",
-      orderType: "Recurring",
-      status: "Pending",
-    },
-    {
-      id: "2",
-      date: "2024-09-08",
-      pickUp: "Universität Spital, 4056 Basel",
-      destination: "St. Clara Spital, 4058 Basel",
-      driver: "John Doe",
-      patientName: "Sedan Elon",
-      orderType: "Verlegungsart",
-      status: "On Ride",
-    },
-    {
-      id: "3",
-      date: "2024-09-08",
-      pickUp: "123 Main St.",
-      destination: "456 Elm St. Germain",
-      driver: "John Doe",
-      patientName: "Sedan",
-      orderType: "Sammelauftrag",
-      status: "Confirmed",
-    },
-    {
-      id: "4",
       date: "2024-09-08",
       pickUp: "123 Main St.",
       destination: "456 Elm St.",
+      vehicle: "Car",
       driver: "John Doe",
-      patientName: "Sedan",
-      orderType: "Privatfahrt",
-      status: "Paused",
+      status: "Completed",
+      patientName: "Jane Doe",
+      orderType: "Regular",
     },
     {
-      id: "5",
       date: "2024-09-08",
-      pickUp: "Universität Spital, 4056 Basel",
-      destination: "St. Clara Spital, 4058 Basel",
+      pickUp: "123 Main St.",
+      destination: "456 Elm St.",
+      vehicle: "Car",
       driver: "John Doe",
-      patientName: "Sedan Elon",
-      orderType: "Verlegungsart",
-      status: "On Ride",
+      status: "Rejected",
+      patientName: "Jane Doe",
+      orderType: "Something",
+    },
+    {
+      date: "2024-09-08",
+      pickUp: "123 Main St.",
+      destination: "456 Elm St.",
+      vehicle: "Car",
+      driver: "John Doe",
+      status: "Confirmed",
+      patientName: "Jane Doe",
+      orderType: "Regular",
+    },
+    {
+      date: "2024-09-08",
+      pickUp: "123 Main St.",
+      destination: "456 Elm St.",
+      vehicle: "Car",
+      driver: "John Doe",
+      status: "Paused",
+      patientName: "Jane Doe",
+      orderType: "Regular",
     },
   ];
 
-  // Function to determine the button color based on the status
   const getStatusColor = (status) => {
     switch (status) {
-      case "On Ride":
-        return "#FEF1E0";
+      case "Completed":
+        return "#F0F8D1";
+      case "Rejected":
+        return "#F9D1D1";
       case "Confirmed":
         return "#D1F8D5";
       case "Paused":
-        return "#DCF3FF";
-      case "Pending":
         return "#DCF3FF";
       default:
         return "#FFFFFF"; // Default color if status is unknown
@@ -84,7 +73,7 @@ const AllOrdersTable = () => {
     {
       accessorKey: "date",
       header: () => (
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           Date & Time
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
@@ -93,7 +82,7 @@ const AllOrdersTable = () => {
     {
       accessorKey: "pickUp",
       header: () => (
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           Pick Up
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
@@ -102,8 +91,17 @@ const AllOrdersTable = () => {
     {
       accessorKey: "destination",
       header: () => (
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           Destination
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "vehicle",
+      header: () => (
+        <div className="flex items-center gap-2">
+          Vehicle
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -111,7 +109,7 @@ const AllOrdersTable = () => {
     {
       accessorKey: "driver",
       header: () => (
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           Driver
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
@@ -120,7 +118,7 @@ const AllOrdersTable = () => {
     {
       accessorKey: "patientName",
       header: () => (
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           Patient Name
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
@@ -128,17 +126,13 @@ const AllOrdersTable = () => {
     },
     {
       accessorKey: "orderType",
-      header: () => (
-        <div className="flex items-center">
-          Order Type
-          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
-        </div>
-      ),
+      cell: () => null,
+      header: () => null,
     },
     {
       accessorKey: "status",
       header: () => (
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           Status
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
@@ -161,12 +155,11 @@ const AllOrdersTable = () => {
       accessorKey: "action",
       header: () => (
         <div className="text-center flex items-center justify-center">
-          Action
+          Actions
           <ArrowUpDown className="h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
       cell: ({ row }) => {
-        const orderType = row.getValue("orderType");
         return (
           <div className="flex justify-center items-center">
             <DropdownMenu>
@@ -185,11 +178,7 @@ const AllOrdersTable = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem className="py-2 mb-2">
                   <Link
-                    to={`${
-                      orderType === "Recurring"
-                        ? `/orders/recurring-orders/${row.original.id}`
-                        : `/orders/order-details/${row.original.id}`
-                    }`}
+                    to={`/orders/order-details/${row.original.id}   `}
                     className="flex items-center gap-3 text-[16px]"
                   >
                     <Document className="size-5" />
@@ -208,7 +197,7 @@ const AllOrdersTable = () => {
     },
   ];
 
-  return <AppTable columns={columns} data={allOrdersData} />;
+  return <AppTable columns={columns} data={recurringOrdersData} />;
 };
 
-export default AllOrdersTable;
+export default RecurringOrdersTable;

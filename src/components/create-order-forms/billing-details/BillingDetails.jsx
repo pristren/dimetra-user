@@ -1,4 +1,7 @@
 /* eslint-disable react/prop-types */
+import { z } from "zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
@@ -8,15 +11,33 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
+import { calculateFormProgress } from "@/utils";
 
-const BillingDetails = ({ handleFormChange }) => {
+const BillingDetails = ({
+  handleFormChange,
+  createOrderData,
+  setCreateOrderData,
+  setBillingProgress,
+}) => {
+  const {
+    preName = "",
+    name = "",
+    street = "",
+    place = "",
+    contact = "",
+  } = createOrderData.billingDetailsData || {};
+
+  const fieldsFilled = [preName, name, street, place, contact];
+
+  useEffect(() => {
+    setBillingProgress(calculateFormProgress(fieldsFilled));
+  }, [...fieldsFilled]);
+
   const formSchema = z.object({
-    prenameInstitution: z.string().min(1, "Prename/Institution is required"),
+    preName: z.string().min(1, "Prename/Institution is required"),
     name: z.string().min(1, "Name is required"),
     street: z.string().min(1, "Street is required"),
     place: z.string().min(1, "Place is required"),
@@ -26,17 +47,28 @@ const BillingDetails = ({ handleFormChange }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      prenameInstitution: "",
-      name: "",
-      street: "",
-      place: "",
-      contact: "",
+      preName,
+      name,
+      street,
+      place,
+      contact,
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Submitted data:", data);
+  const { formState } = form;
+  const { errors } = formState;
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setCreateOrderData((prev) => ({
+      ...prev,
+      billingDetailsData: {
+        ...prev.billingDetailsData,
+        [name]: value,
+      },
+    }));
   };
+
   return (
     <Card className="w-[65%] px-5 py-5">
       <CardHeader>
@@ -44,23 +76,23 @@ const BillingDetails = ({ handleFormChange }) => {
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form>
             <div className="grid grid-cols-2 gap-5">
               <FormField
                 control={form.control}
-                name="prenameInstitution"
+                name="preName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Prename/Institution</FormLabel>
                     <FormControl>
                       <Input
-                        className={
-                          form.formState.errors.prenameInstitution
-                            ? "border-red-500"
-                            : ""
-                        }
+                        className={errors.preName ? "border-red-500" : ""}
                         placeholder="Type your prename or institution"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -75,11 +107,13 @@ const BillingDetails = ({ handleFormChange }) => {
                     <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input
-                        className={
-                          form.formState.errors.name ? "border-red-500" : ""
-                        }
+                        className={errors.name ? "border-red-500" : ""}
                         placeholder="Type your name"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -94,11 +128,13 @@ const BillingDetails = ({ handleFormChange }) => {
                     <FormLabel>Street</FormLabel>
                     <FormControl>
                       <Input
-                        className={
-                          form.formState.errors.street ? "border-red-500" : ""
-                        }
+                        className={errors.street ? "border-red-500" : ""}
                         placeholder="Type your street"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -113,11 +149,13 @@ const BillingDetails = ({ handleFormChange }) => {
                     <FormLabel>Place</FormLabel>
                     <FormControl>
                       <Input
-                        className={
-                          form.formState.errors.place ? "border-red-500" : ""
-                        }
+                        className={errors.place ? "border-red-500" : ""}
                         placeholder="Type your place"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -132,11 +170,13 @@ const BillingDetails = ({ handleFormChange }) => {
                     <FormLabel>Contact</FormLabel>
                     <FormControl>
                       <Input
-                        className={
-                          form.formState.errors.contact ? "border-red-500" : ""
-                        }
+                        className={errors.contact ? "border-red-500" : ""}
                         placeholder="Type your contact number"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
@@ -146,9 +186,9 @@ const BillingDetails = ({ handleFormChange }) => {
             </div>
             <BackAndNextBtn
               isFillForm={true}
-              back="destination"
-              next="preview"
-              handleFormChange={handleFormChange}
+              isLastPage={true}
+              handleGoPrev={() => handleFormChange("destinationDetails")}
+              handleGoNext={() => handleFormChange("previewDetails")}
             />
           </form>
         </Form>

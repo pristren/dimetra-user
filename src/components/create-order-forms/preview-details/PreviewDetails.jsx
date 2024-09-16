@@ -1,48 +1,41 @@
+/* eslint-disable react/prop-types */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { DatePicker } from "@/components/ui/DatePIcker";
+import { DatePicker } from "@/components/ui/DatePicker";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import AppSelect from "@/components/common/AppSelect";
+import {
+  durationOptions,
+  timeOptions,
+  transportModesOptions,
+  transportOptions,
+  transportWithOptions,
+  weekdaysOptions,
+} from "@/components/create-order-forms/helpers";
 
-const PreviewDetails = () => {
-  const transportOptions = [
-    { value: "ambulance", label: "Ambulance" },
-    { value: "helicopter", label: "Helicopter" },
-    { value: "privateCar", label: "Private Car" },
-  ];
-
-  const transportModesOptions = [
-    { value: "bus", label: "Bus" },
-    { value: "train", label: "Train" },
-    { value: "car", label: "Car" },
-    { value: "bike", label: "Bike" },
-  ];
-
-  const transportWithOptions = [
-    { value: "driver", label: "Driver" },
-    { value: "guide", label: "Guide" },
-    { value: "assistant", label: "Assistant" },
-    { value: "accompanied", label: "Accompanied" },
-  ];
-
-  const weekdaysOptions = [
-    { value: "monday", label: "Monday" },
-    { value: "tuesday", label: "Tuesday" },
-    { value: "wednesday", label: "Wednesday" },
-    { value: "thursday", label: "Thursday" },
-    { value: "friday", label: "Friday" },
-    { value: "saturday", label: "Saturday" },
-    { value: "sunday", label: "Sunday" },
-  ];
-
-  const durationOptions = [
-    { value: "1month", label: "1 Month" },
-    { value: "3months", label: "3 Months" },
-    { value: "6months", label: "6 Months" },
-    { value: "1year", label: "After 1 Year" },
-  ];
+const PreviewDetails = ({
+  createOrderData,
+  endDate,
+  startDate,
+  setEndDate,
+  setStartDate,
+  selectedWeekdays,
+  returnDate,
+  setReturnDate,
+  dropDate,
+  setDropDate,
+}) => {
+  const {
+    transportationData,
+    patientData,
+    destinationDetailsData,
+    billingDetailsData,
+  } = createOrderData;
+  const calculateMonthlyOccurrences = (weekdays) => {
+    return weekdays.length * 4;
+  };
   return (
     <div className="w-[65%] p-8">
       {/* Single Card for all details */}
@@ -53,15 +46,16 @@ const PreviewDetails = () => {
         <CardContent className="px-10">
           <div className="space-y-8">
             <div className="grid grid-cols-3 gap-5">
-              <div className="border-r pr-5">
-                <h2 className="text-lg font-medium mb-4">
-                  Transportart (einfach Auswahl)
-                </h2>
-                <RadioGroup>
+              <div className="pr-5">
+                <h6 className="mb-4">
+                  Type of transport{" "}
+                  <span className="text-[15px]">(simple selection)</span>
+                </h6>
+                <RadioGroup value={transportationData?.typeOfTransport}>
                   {transportOptions.map((option) => (
                     <div
                       key={option.value}
-                      className="flex items-center space-x-2"
+                      className="flex items-center space-x-2 mb-2"
                     >
                       <RadioGroupItem value={option.value} id={option.value} />
                       <Label htmlFor={option.value}>{option.label}</Label>
@@ -70,13 +64,19 @@ const PreviewDetails = () => {
                 </RadioGroup>
               </div>
 
-              <div className="border-r pr-5">
-                <h2 className="text-lg font-medium mb-4">
-                  Beförderungsart (mehrfach Auswahl)
-                </h2>
+              <div className="pr-5">
+                <h6 className="mb-4">
+                  Mode of transportation
+                  <span className="text-[15px]">(multiple selection)</span>
+                </h6>
                 {transportModesOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-2">
-                    <Checkbox id={option.value} />
+                  <div key={option.value} className="flex items-center mb-4">
+                    <Checkbox
+                      id={option.value}
+                      checked={transportationData.modeOfTransportation?.includes(
+                        option.value
+                      )}
+                    />
                     <Label className="ml-2" htmlFor={option.value}>
                       {option.label}
                     </Label>
@@ -85,12 +85,18 @@ const PreviewDetails = () => {
               </div>
 
               <div>
-                <h2 className="text-lg font-medium mb-4">
-                  Transport MIT (mehrfach Auswahl)
-                </h2>
+                <h6 className="mb-4">
+                  Transport with
+                  <span className="text-[15px]">(multiple selection)</span>
+                </h6>
                 {transportWithOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-2">
-                    <Checkbox id={option.value} />
+                  <div key={option.value} className="flex items-center mb-4">
+                    <Checkbox
+                      id={option.value}
+                      checked={transportationData.transportWith.includes(
+                        option.value
+                      )}
+                    />
                     <Label className="ml-2" htmlFor={option.value}>
                       {option.label}
                     </Label>
@@ -99,142 +105,168 @@ const PreviewDetails = () => {
               </div>
             </div>
 
-            <h3 className="text-lg font-medium mb-3 mt-5">Select Weekdays:</h3>
-            <AppSelect
-              items={["Week 1", "Week 2", "Week 3"]}
-              placeholder="Week 1"
-            />
+            {transportationData?.typeOfTransport === "reccurring" && (
+              <div>
+                <h3 className="text-lg font-medium mb-3 mt-5">
+                  Select Weekdays:
+                </h3>
+                <AppSelect items={["Week", "Month"]} placeholder="Week" />
 
-            <h3 className="text-lg font-medium mb-3 mt-5">
-              Select Start Date and Time:
-            </h3>
-            <div className="mb-5 flex w-max gap-4 items-center">
-              <DatePicker />
-              <Input placeholder="00:00" />
-            </div>
-
-            <h3 className="text-lg font-medium mb-3">
-              Select Weekdays (mehrfach Auswahl):
-            </h3>
-            <div className="grid grid-cols-3 gap-3 mt-2">
-              {weekdaysOptions.map((option) => (
-                <div key={option.value} className="flex items-center mb-2">
-                  <Checkbox id={option.value} />
-                  <Label className="ml-2" htmlFor={option.value}>
-                    {option.label}
-                  </Label>
+                <h3 className="text-lg font-medium mt-10 mb-5">
+                  Select Start Date and Time*:
+                </h3>
+                <div className="mb-5 flex w-max gap-4 items-center">
+                  <DatePicker date={startDate} setDate={setStartDate} />
+                  <AppSelect
+                    items={timeOptions}
+                    placeholder="00:00"
+                    isTime={true}
+                  />
                 </div>
-              ))}
-            </div>
 
-            <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
-            <RadioGroup>
-              {durationOptions.map((option) => (
-                <div
-                  key={option.value}
-                  className="flex items-center space-x-2 mb-2"
-                >
-                  <RadioGroupItem value={option.value} id={option.value} />
-                  <Label htmlFor={option.value}>{option.label}</Label>
+                <h3 className="text-lg font-medium mt-10 mb-5">
+                  Select Return Time* :
+                </h3>
+                <div className="mb-5 flex w-max gap-4 items-center">
+                  <DatePicker date={endDate} setDate={setEndDate} />
+                  <AppSelect
+                    items={timeOptions}
+                    placeholder="00:00"
+                    isTime={true}
+                  />
                 </div>
-              ))}
-            </RadioGroup>
-            <h2 className="text-lg font-semibold mt-5">
-              Summary: Monthly on day 4
-            </h2>
+
+                <h3 className="text-lg font-medium mb-3 mt-5">
+                  Select Weekdays{" "}
+                  <span className="text-[15px]">(multiple selection)</span>:
+                </h3>
+                <div className="grid grid-cols-3 gap-3 mt-2">
+                  {weekdaysOptions.map((option) => (
+                    <div key={option.value} className="flex items-center mb-2">
+                      <Checkbox
+                        id={option.value}
+                        checked={selectedWeekdays.includes(option.value)}
+                      />
+                      <Label className="ml-2" htmlFor={option.value}>
+                        {option.label}
+                      </Label>
+                    </div>
+                  ))}
+                </div>
+
+                <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
+                {durationOptions.map((option) => (
+                  <div
+                    key={option.value}
+                    className="flex items-center space-x-2 mb-2"
+                  >
+                    <RadioGroupItem value={option.value} id={option.value} />
+                    <Label htmlFor={option.value}>{option.label}</Label>
+                  </div>
+                ))}
+
+                <h2 className="text-lg font-semibold mt-5">
+                  Summary: Monthly on day{" "}
+                  {calculateMonthlyOccurrences(selectedWeekdays)}
+                </h2>
+              </div>
+            )}
             <div>
               <h2 className="text-2xl font-semibold mb-4">Patient Details</h2>
               <div className="grid grid-cols-2 gap-5">
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">
+                  <Label className="block mb-2 font-medium">
                     Name <sup className="text-[13px]">*</sup>
-                  </label>
+                  </Label>
                   <Input
                     readOnly
-                    value="John"
+                    value={patientData?.name}
                     placeholder="Type your name"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">
+                  <Label className="block mb-2 font-medium">
                     Surname <sup className="text-[13px]">*</sup>
-                  </label>
+                  </Label>
                   <Input
                     readOnly
-                    value="Doe"
+                    value={patientData?.surname}
                     placeholder="Type your surname"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">
+                  <Label className="block mb-2 font-medium">
                     Date of Birth <sup className="text-[13px]">*</sup>
-                  </label>
+                  </Label>
                   <Input
                     readOnly
-                    value="01/01/1990"
+                    value={patientData?.dateOfBirth}
                     placeholder="Type your date of birth"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">
+                  <Label className="block mb-2 font-medium">
                     Area/Room <sup className="text-[13px]">*</sup>
-                  </label>
+                  </Label>
                   <Input
                     readOnly
-                    value="Room 101"
+                    value={patientData?.areaRoom}
                     placeholder="Type your area or room"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">
+                  <Label className="block mb-2 font-medium">
                     Kostenstelle <sup className="text-[13px]">*</sup>
-                  </label>
+                  </Label>
                   <Input
                     readOnly
-                    value="12345"
+                    value={patientData?.costCenter}
                     placeholder="Type your kostenstelle"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">How Much</label>
+                  <Label className="block mb-2 font-medium">How Much</Label>
                   <Input
                     readOnly
-                    value="50"
+                    value={patientData?.howMuch}
                     placeholder="Type how much"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">Isolation</label>
+                  <Label className="block mb-2 font-medium">Isolation</Label>
                   <div className="flex items-center">
-                    <Checkbox checked={true} readOnly />
-                    <label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
+                    <Checkbox checked={patientData?.isolation} readOnly />
+                    <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
                       Yes
-                    </label>
+                    </Label>
                   </div>
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">
+                  <Label className="block mb-2 font-medium">
                     Patient Above 90 kg
-                  </label>
+                  </Label>
                   <div className="flex items-center">
-                    <Checkbox checked={false} readOnly />
-                    <label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
+                    <Checkbox
+                      checked={patientData?.patientAbove90kg}
+                      readOnly
+                    />
+                    <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
                       No
-                    </label>
+                    </Label>
                   </div>
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">Special</label>
+                  <Label className="block mb-2 font-medium">Special</Label>
                   <Input
                     readOnly
-                    value="Requires special attention"
-                    placeholder="Type any special requirements"
+                    value={patientData?.special}
+                    placeholder="Requires special attention"
                     className="border-gray-300"
                   />
                 </div>
@@ -250,56 +282,56 @@ const PreviewDetails = () => {
                 <div className="pr-5">
                   <h3 className="text-xl font-semibold mb-4">Pick-Up</h3>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       Name / Institution <sup className="text-[13px]">*</sup>
-                    </label>
+                    </Label>
                     <Input
                       readOnly
-                      value="Hospital A"
+                      value={destinationDetailsData?.pickUpName}
                       placeholder="Pre filled"
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       Address <sup className="text-[13px]">*</sup>
-                    </label>
+                    </Label>
                     <Input
                       readOnly
-                      value="123 Main St"
+                      value={destinationDetailsData?.pickUpAddress}
                       placeholder="Pre filled"
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       City <sup className="text-[13px]">*</sup>
-                    </label>
+                    </Label>
                     <Input
                       readOnly
-                      value="New York"
+                      value={destinationDetailsData?.pickUpCity}
                       placeholder="Enter City Name"
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       Country <sup className="text-[13px]">*</sup>
-                    </label>
+                    </Label>
                     <Input
                       readOnly
-                      value="USA"
+                      value={destinationDetailsData?.pickUpCountry}
                       placeholder="Enter Country "
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       Working Employee Name <sup className="text-[13px]">*</sup>
-                    </label>
+                    </Label>
                     <Input
                       readOnly
-                      value="John Smith"
+                      value={destinationDetailsData?.pickUpEmployeeName}
                       placeholder="Type the working employee's name"
                       className="border-gray-300"
                     />
@@ -309,107 +341,109 @@ const PreviewDetails = () => {
                 <div className="pl-5">
                   <h3 className="text-xl font-semibold mb-4">Drop-Off</h3>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       Date <sup className="text-[13px]">*</sup>
-                    </label>
-                    <DatePicker selected={new Date()} readOnly />
+                    </Label>
+                    <DatePicker date={dropDate} setDate={setDropDate} />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
-                      Abholzeit <sup className="text-[13px]">*</sup>
-                    </label>
+                    <Label className="block mb-2 font-medium">
+                      Pickup time <sup className="text-[13px]">*</sup>
+                    </Label>
                     <Input
                       readOnly
-                      value="14:30"
+                      value={destinationDetailsData?.dropOffPickUpTime}
                       placeholder="Pick-Up Time"
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       Name / Institution <sup className="text-[13px]">*</sup>
-                    </label>
+                    </Label>
                     <Input
                       readOnly
-                      value="Clinic B"
+                      value={destinationDetailsData?.dropOffName}
                       placeholder="Enter Name"
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       Address <sup className="text-[13px]">*</sup>
-                    </label>
+                    </Label>
                     <Input
                       readOnly
-                      value="456 Elm St"
+                      value={destinationDetailsData?.dropOffAddress}
                       placeholder="Enter Address"
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       City <sup className="text-[13px]">*</sup>
-                    </label>
+                    </Label>
                     <Input
                       readOnly
-                      value="Los Angeles"
+                      value={destinationDetailsData?.dropOffCity}
                       placeholder="Enter City Name"
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       Country <sup className="text-[13px]">*</sup>
-                    </label>
+                    </Label>
                     <Input
                       readOnly
-                      value="USA"
+                      value={destinationDetailsData?.dropOffCountry}
                       placeholder="Enter Country"
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">Phone</label>
+                    <Label className="block mb-2 font-medium">Phone</Label>
                     <Input
                       readOnly
-                      value="123-456-7890"
+                      value={destinationDetailsData?.dropOffPhone}
                       placeholder="Type the phone number"
                       className="border-gray-300"
                     />
                   </div>
-                  <h3 className="text-xl font-semibold mt-8 mb-4">Rückfahrt</h3>
+                  <h3 className="text-xl font-semibold mt-8 mb-4">
+                    Return journey
+                  </h3>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
+                    <Label className="block mb-2 font-medium">
                       Date <sup className="text-[13px]">*</sup>
-                    </label>
-                    <DatePicker selected={new Date()} readOnly />
+                    </Label>
+                    <DatePicker date={returnDate} setDate={setReturnDate} />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">Today</label>
+                    <Label className="block mb-2 font-medium">Today</Label>
                     <Input
                       readOnly
-                      value="1 day later"
+                      value={destinationDetailsData?.returnDayLetter}
                       placeholder="1 day later"
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">Time</label>
+                    <Label className="block mb-2 font-medium">Time</Label>
                     <Input
                       readOnly
-                      value="20:54"
+                      value={destinationDetailsData?.returnApproxTime}
                       placeholder="Enter Time"
                       className="border-gray-300"
                     />
                   </div>
                   <div className="mb-5">
-                    <label className="block mb-2 font-medium">
-                      Stock / Abteilung
-                    </label>
+                    <Label className="block mb-2 font-medium">
+                      Floor/Department
+                    </Label>
                     <Input
                       readOnly
-                      value="Inventory"
+                      value={destinationDetailsData?.returnFloor}
                       placeholder="Type the stock or department"
                       className="border-gray-300"
                     />
@@ -423,48 +457,48 @@ const PreviewDetails = () => {
               <h2 className="text-2xl font-semibold mb-4">Billing Address</h2>
               <div className="grid grid-cols-2 gap-5">
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">
+                  <Label className="block mb-2 font-medium">
                     Prename/Institution
-                  </label>
+                  </Label>
                   <Input
                     readOnly
-                    value="ABC Hospital"
+                    value={billingDetailsData?.preName}
                     placeholder="Type your prename or institution"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">Name</label>
+                  <Label className="block mb-2 font-medium">Name</Label>
                   <Input
                     readOnly
-                    value="John Doe"
+                    value={billingDetailsData?.name}
                     placeholder="Type your name"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">Street</label>
+                  <Label className="block mb-2 font-medium">Street</Label>
                   <Input
                     readOnly
-                    value="789 Oak St"
+                    value={billingDetailsData?.street}
                     placeholder="Type your street"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">Place</label>
+                  <Label className="block mb-2 font-medium">Place</Label>
                   <Input
                     readOnly
-                    value="Chicago"
+                    value={billingDetailsData?.place}
                     placeholder="Type your place"
                     className="border-gray-300"
                   />
                 </div>
                 <div className="mb-5">
-                  <label className="block mb-2 font-medium">Contact</label>
+                  <Label className="block mb-2 font-medium">Contact</Label>
                   <Input
                     readOnly
-                    value="987-654-3210"
+                    value={billingDetailsData?.contact}
                     placeholder="Type your contact number"
                     className="border-gray-300"
                   />
