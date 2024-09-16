@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
-import { DatePicker } from "../ui/DatePicker";
-import AppSelect from "./AppSelect";
-import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Button } from "../ui/button";
+import { DatePicker } from "@/components/ui/DatePicker";
+import AppSelect from "@/components/common/AppSelect";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function AppHead({
   pageTitle,
@@ -16,7 +16,9 @@ export default function AppHead({
   filters,
   isDateVisible,
   isFilterVisible,
-  table,
+  table = {
+    setGlobalFilter: () => {},
+  },
   globalFilter,
   setGlobalFilter,
   isSearchVisible = true,
@@ -49,9 +51,9 @@ export default function AppHead({
             className="max-w-sm"
             onValueChange={(event) => {
               if (event === "All Order") {
-                table.setGlobalFilter("");
+                table?.setGlobalFilter("");
               } else {
-                table.setGlobalFilter(event);
+                table?.setGlobalFilter(event);
               }
             }}
           />
@@ -68,7 +70,6 @@ export default function AppHead({
             <Search className="absolute right-2 top-1/2 -translate-y-1/2" />
           </div>
         )}
-        {console.log(addButton.url)}
         {addButton.visibility && (
           <Link to={`${addButton.url}`}>
             <Button>{addButton.name}</Button>

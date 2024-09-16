@@ -17,7 +17,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import AppPagination from "@/components/common/AppPagination";
-import AppHead from "./AppHead";
+import AppHead from "@/components/common/AppHead";
 
 export function AppTable({
   data,
