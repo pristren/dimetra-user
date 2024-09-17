@@ -31,6 +31,7 @@ export function AppTable({
   isFilterVisible,
   isSearchVisible,
   isRecurring = false,
+  showModal
 }) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -65,6 +66,7 @@ export function AppTable({
         pageTitle={pageTitle}
         addButton={addButton}
         date={date}
+        showModal={showModal}
         setDate={setDate}
         filters={filters}
         isDateVisible={isDateVisible}

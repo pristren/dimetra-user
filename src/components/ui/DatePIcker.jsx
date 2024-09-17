@@ -22,7 +22,7 @@ export function DatePicker({ className, date, setDate }) {
           )}
         >
           {date ? (
-            format(date, "MMMM yyyy")
+            format(date, "dd MMMM yyyy")
           ) : (
             <span className="text-black">Pick a date</span>
           )}

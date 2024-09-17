@@ -105,7 +105,7 @@ const PreviewDetails = ({
               </div>
             </div>
 
-            {transportationData?.typeOfTransport === "reccurring" && (
+            {transportationData?.typeOfTransport === "recurring" && (
               <div>
                 <h3 className="text-lg font-medium mb-3 mt-5">
                   Select Weekdays:
@@ -155,15 +155,17 @@ const PreviewDetails = ({
                 </div>
 
                 <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
-                {durationOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-2 mb-2"
-                  >
-                    <RadioGroupItem value={option.value} id={option.value} />
-                    <Label htmlFor={option.value}>{option.label}</Label>
-                  </div>
-                ))}
+                <RadioGroup value={transportationData?.ends}>
+                  {durationOptions.map((option) => (
+                    <div
+                      key={option.value}
+                      className="flex items-center space-x-2 mb-2"
+                    >
+                      <RadioGroupItem value={option.value} id={option.value} />
+                      <Label htmlFor={option.value}>{option.label}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
 
                 <h2 className="text-lg font-semibold mt-5">
                   Summary: Monthly on day{" "}
@@ -417,10 +419,7 @@ const PreviewDetails = ({
                     <Label className="block mb-2 font-medium">
                       Date <sup className="text-[13px]">*</sup>
                     </Label>
-                    <DatePicker
-                      date={returnDate}
-                      setDate={setReturnDate}
-                    />
+                    <DatePicker date={returnDate} setDate={setReturnDate} />
                   </div>
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">Today</Label>

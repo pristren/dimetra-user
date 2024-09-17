@@ -13,7 +13,8 @@ import SendRequest from "@/pages/order/send-request/SendRequest";
 import AllOrders from "@/pages/order/all-orders/AllOrders";
 import RecurringOrders from "@/pages/order/recurring-orders/RecurringOrders";
 import OrderDetails from "@/pages/order/order-details/OrderDetails";
-import AddRequest from "@/pages/order/add-request/AddRequest";
+import AddRequest from "./pages/order/send-request/AddRequest";
+import Message from "./pages/order/send-request/Message";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
         <Route path="setting" element={<OrderSettings />} />
         <Route path="send-request" element={<SendRequest />} />
         <Route path="add-request" element={<AddRequest />} />
+        <Route path="message" element={<Message />} />
       </Route>
       <Route path="*" element={<WrongPath />} />
     </Routes>

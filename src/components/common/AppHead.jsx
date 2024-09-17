@@ -5,9 +5,19 @@ import { Input } from "../ui/input";
 import { Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import AddRequest from "@/pages/order/send-request/AddRequest";
 
 export default function AppHead({
   pageTitle,
+  showModal,
   addButton = {
     visibility: false,
   },
@@ -73,6 +83,21 @@ export default function AppHead({
           <Link to={`${addButton.url}`}>
             <Button>{addButton.name}</Button>
           </Link>
+        )}
+        {showModal.name && (
+          <Dialog>
+            <DialogTrigger>
+              <Button className="flex gap-2">{showModal?.icon && showModal?.icon} {showModal.name}</Button>
+            </DialogTrigger>
+            <DialogContent className="w-[90%] max-w-2xl">
+              <DialogHeader>
+                <DialogTitle className="mb-10">Request</DialogTitle>
+                <DialogDescription>
+                  <AddRequest />
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
     </div>

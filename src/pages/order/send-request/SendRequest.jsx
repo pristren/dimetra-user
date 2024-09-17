@@ -1,6 +1,7 @@
 import ArrowUpDown from "@/assets/icons/ArrowUpDown";
 import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 const SendRequest = () => {
   const data = [
@@ -72,10 +73,9 @@ const SendRequest = () => {
     <div>
       <AppTable
         pageTitle={"Send Request"}
-        addButton={{
-          visibility: true,
+        showModal={{
           name: "Add Request",
-          url: "/orders/add-request",
+          icon: <Plus />
         }}
         columns={columns}
         data={data}
