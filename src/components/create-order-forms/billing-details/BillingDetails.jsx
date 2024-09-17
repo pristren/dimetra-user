@@ -23,14 +23,14 @@ const BillingDetails = ({
   setBillingProgress,
 }) => {
   const {
-    preName = "",
+    pre_name = "",
     name = "",
     street = "",
     place = "",
     contact = "",
   } = createOrderData.billingDetailsData || {};
 
-  const fieldsFilled = [preName, name, street, place, contact];
+  const fieldsFilled = [pre_name, name, street, place, contact];
 
   useEffect(() => {
     setBillingProgress(calculateFormProgress(fieldsFilled));
@@ -47,7 +47,7 @@ const BillingDetails = ({
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      preName,
+      pre_name,
       name,
       street,
       place,
@@ -80,7 +80,7 @@ const BillingDetails = ({
             <div className="grid grid-cols-2 gap-5">
               <FormField
                 control={form.control}
-                name="preName"
+                name="pre_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Prename/Institution</FormLabel>

@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
 import { z } from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +16,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import AppSelect from "@/components/common/AppSelect";
 import { DatePicker } from "@/components/ui/DatePicker";
-import { calculateFormProgress } from "@/utils";
 import {
   transportModesOptions,
   transportOptions,
@@ -31,7 +29,6 @@ const TransportationDetails = ({
   handleFormChange,
   createOrderData,
   setCreateOrderData,
-  setTransportationProgress,
   transportationProgress,
   endDate,
   startDate,
@@ -41,7 +38,7 @@ const TransportationDetails = ({
   setSelectedWeekdays,
 }) => {
   const { transportationData } = createOrderData;
-  const formSchema = z.object({
+  const form_schema = z.object({
     type_of_transport: z.string().min(1, "Transport type is required"),
     mode_of_transportation: z
       .array(z.string())
@@ -52,13 +49,13 @@ const TransportationDetails = ({
     duration: z.string().min(1, "Duration is required"),
     start_date: z.date().nullable(),
     return_date: z.date().nullable(),
-    multiple_weekdays: z
+    multiple_week_days: z
       .array(z.string())
       .nonempty("Select at least one weekday"),
   });
 
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(form_schema),
     defaultValues: {
       type_of_transport: transportationData?.type_of_transport || "",
       mode_of_transportation: transportationData?.mode_of_transportation || [],
@@ -66,7 +63,7 @@ const TransportationDetails = ({
       duration: transportationData?.ends || "",
       start_date: startDate || null,
       return_date: endDate || null,
-      multiple_weekdays: transportationData?.multiple_weekdays || [],
+      multiple_week_days: transportationData?.multiple_week_days || [],
     },
   });
 
@@ -85,12 +82,13 @@ const TransportationDetails = ({
       ...prev,
       transportationData: {
         ...prev.transportationData,
-        [type]: prev.transportationData[type].includes(value)
+        [type]: prev.transportationData?.[type]?.includes(value)
           ? prev.transportationData[type].filter((item) => item !== value)
-          : [...prev.transportationData[type], value],
+          : [...(prev.transportationData?.[type] || []), value],
       },
     }));
   };
+  
 
   const calculateMonthlyOccurrences = (weekdays) => {
     return weekdays.length * 4;
@@ -105,33 +103,12 @@ const TransportationDetails = ({
     );
 
     updateCreateOrderData(
-      "multiple_weekdays",
+      "multiple_week_days",
       selectedWeekdays.includes(value)
         ? selectedWeekdays.filter((day) => day !== value)
         : [...selectedWeekdays, value]
     );
   };
-
-  useEffect(() => {
-    const fieldsFilled =
-      transportationData?.type_of_transport === "recurring"
-        ? [
-            form.watch("type_of_transport"),
-            form.watch("duration"),
-            transportationData?.mode_of_transportation.length > 0,
-            transportationData?.transport_with.length > 0,
-            selectedWeekdays.length > 0,
-            startDate,
-            endDate,
-          ]
-        : [
-            transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation.length > 0,
-            transportationData?.transport_with.length > 0,
-          ];
-
-    setTransportationProgress(calculateFormProgress(fieldsFilled));
-  }, [transportationData, selectedWeekdays, startDate, endDate]);
 
   return (
     <Card className="w-[65%] px-5 py-5">
@@ -184,14 +161,14 @@ const TransportationDetails = ({
 
               <div className="pr-5">
                 <h6 className="mb-4">
-                  Mode of transportation
+                  Mode of transportation{" "}
                   <span className="text-[15px]">(multiple selection)</span>
                 </h6>
                 {transportModesOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={transportationData.mode_of_transportation.includes(
+                      checked={transportationData.mode_of_transportation?.includes(
                         option.value
                       )}
                       onClick={() =>
@@ -207,14 +184,14 @@ const TransportationDetails = ({
 
               <div>
                 <h6 className="mb-4">
-                  Transport with
+                  Transport with{" "}
                   <span className="text-[15px]">(multiple selection)</span>
                 </h6>
                 {transportWithOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={transportationData.transport_with.includes(
+                      checked={transportationData.transport_with?.includes(
                         option.value
                       )}
                       onClick={() =>
@@ -228,7 +205,6 @@ const TransportationDetails = ({
                 ))}
               </div>
             </div>
-
             {transportationData?.type_of_transport === "recurring" && (
               <div>
                 <h3 className="text-lg font-medium mb-3 mt-5">
@@ -281,7 +257,7 @@ const TransportationDetails = ({
                     <div key={option.value} className="flex items-center mb-2">
                       <Checkbox
                         id={option.value}
-                        checked={selectedWeekdays.includes(option.value)}
+                        checked={selectedWeekdays?.includes(option.value)}
                         onClick={() => handleWeekdayChange(option)}
                       />
                       <Label className="ml-2" htmlFor={option.value}>
@@ -290,12 +266,57 @@ const TransportationDetails = ({
                     </div>
                   ))}
                 </div>
+
+                <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
+                <FormField
+                  control={form.control}
+                  name="duration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroup
+                          value={field.value}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            updateCreateOrderData("ends", value);
+                          }}
+                        >
+                          {durationOptions.map((option) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center space-x-2 mb-2"
+                            >
+                              <RadioGroupItem
+                                value={option.value}
+                                id={option.value}
+                              />
+                              <Label htmlFor={option.value}>
+                                {option.label}
+                              </Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <h2 className="text-lg font-semibold mt-5">
+                  Summary: Monthly on day{" "}
+                  {calculateMonthlyOccurrences(selectedWeekdays)}
+                </h2>
               </div>
             )}
 
-            <div className="mt-5">
-              <Button type="submit" onClick={form.handleSubmit(handleFormChange)}>
-                Save
+            <div className="flex items-center justify-center w-full">
+              <Button
+                type="submit"
+                // disabled={transportationProgress < 100}
+                className="mt-5 bg-secondary text-black hover:text-white px-12"
+                onClick={() => handleFormChange("patientDetails")}
+              >
+                Next
               </Button>
             </div>
           </form>
