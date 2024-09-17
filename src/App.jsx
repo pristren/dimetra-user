@@ -49,7 +49,7 @@ function App() {
         <Route path="setting" element={<OrderSettings />} />
         <Route path="all-chats" element={<AllChats />} />
         <Route path="add-request" element={<AddRequest />} />
-        <Route path="message" element={<Message />} />
+        <Route path="message/:id" element={<Message />} />
       </Route>
       <Route path="*" element={<WrongPath />} />
     </Routes>
