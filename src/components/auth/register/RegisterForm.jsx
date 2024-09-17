@@ -24,11 +24,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { registerAnUser } from "../apis/register";
 import { useNavigate } from "react-router-dom";
+import { Loading } from "@/assets/icons";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const form = useForm({
     defaultValues: {
@@ -53,11 +55,19 @@ const RegisterForm = () => {
   };
 
   const onSubmit = async (data) => {
-    await registerAnUser(data).then((res) => {
-      if (res?.data?.token) {
-        navigate("/login");
-      }
-    });
+    setLoading(true);
+    await registerAnUser(data)
+      .then((res) => {
+        if (res?.data?.token) {
+          navigate("/login");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -355,7 +365,11 @@ const RegisterForm = () => {
               />
             </div>
             <Button type="submit" className="block w-2/4 mx-auto mt-10">
-              Register
+              {loading ? (
+                <Loading className="w-6 h-6 mx-auto text-white" />
+              ) : (
+                "Register"
+              )}
             </Button>
             <AuthFooter page={"register"} />
           </form>
