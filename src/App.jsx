@@ -12,9 +12,8 @@ import OrderSettings from "@/pages/order/order-settings/OrderSettings";
 import AllOrders from "@/pages/order/all-orders/AllOrders";
 import RecurringOrders from "@/pages/order/recurring-orders/RecurringOrders";
 import OrderDetails from "@/pages/order/order-details/OrderDetails";
-import AddRequest from "./pages/order/send-request/AddRequest";
 import Message from "./pages/order/send-request/Message";
-import AllChats from "@/pages/order/send-request/AllChats";
+import AllMessages from "@/pages/order/send-request/AllMessages";
 
 function App() {
   return (
@@ -47,8 +46,7 @@ function App() {
         <Route path="all-orders" element={<AllOrders />} />
         <Route path="recurring-orders/:id" element={<RecurringOrders />} />
         <Route path="setting" element={<OrderSettings />} />
-        <Route path="all-chats" element={<AllChats />} />
-        <Route path="add-request" element={<AddRequest />} />
+        <Route path="all-messages" element={<AllMessages />} />
         <Route path="message/:id" element={<Message />} />
       </Route>
       <Route path="*" element={<WrongPath />} />

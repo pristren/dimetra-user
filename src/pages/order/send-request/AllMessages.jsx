@@ -3,7 +3,7 @@ import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-const AllChats = () => {
+const AllMessages = () => {
   const data = [
     {
       id: "1",
@@ -72,10 +72,11 @@ const AllChats = () => {
   return (
     <div>
       <AppTable
+        link="/orders/message/:id"
         pageTitle={"Send Request"}
         showModal={{
           name: "Add Request",
-          icon: <Plus />
+          icon: <Plus />,
         }}
         columns={columns}
         data={data}
@@ -88,4 +89,4 @@ const AllChats = () => {
   );
 };
 
-export default AllChats;
+export default AllMessages;

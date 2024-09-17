@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/table";
 import AppPagination from "@/components/common/AppPagination";
 import AppHead from "@/components/common/AppHead";
+import { useNavigate } from "react-router-dom";
 
 export function AppTable({
   data,
@@ -31,13 +32,16 @@ export function AppTable({
   isFilterVisible,
   isSearchVisible,
   isRecurring = false,
-  showModal
+  showModal,
+  link,
 }) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
   const [globalFilter, setGlobalFilter] = React.useState("");
+
+  const navigate = useNavigate();
 
   const table = useReactTable({
     data,
@@ -59,6 +63,12 @@ export function AppTable({
       globalFilter,
     },
   });
+
+  const handleRowClick = (link) => {
+    if (link) {
+      navigate(link);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -85,20 +95,18 @@ export function AppTable({
                 key={headerGroup.id}
                 className="bg-secondary hover:bg-secondary text-nowrap"
               >
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      <div className="text-black">
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </div>
-                    </TableHead>
-                  );
-                })}
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    <div className="text-black">
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </div>
+                  </TableHead>
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -108,6 +116,8 @@ export function AppTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
+                  onClick={() => handleRowClick(link)}
+                  className="hover:bg-gray-100 cursor-pointer"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

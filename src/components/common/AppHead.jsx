@@ -85,7 +85,7 @@ export default function AppHead({
             <Button>{addButton.name}</Button>
           </Link>
         )}
-        {showModal.name && (
+        {showModal?.name && (
           <Dialog>
             <DialogTrigger>
               <Button className="flex gap-2">{showModal?.icon && showModal?.icon} {showModal.name}</Button>
