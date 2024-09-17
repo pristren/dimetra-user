@@ -7,11 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AppTable } from "@/components/common/AppTable";
-import Pencil from "@/assets/icons/Pencil";
-import Trash from "@/assets/icons/Trash";
-import Document from "@/assets/icons/Documents";
-import ArrowUpDown from "@/assets/icons/ArrowUpDown";
-import Pause from "@/assets/icons/Pause";
+import { ArrowUpDown, Document, Pencil, Pause, Trash } from "@/assets/icons";
 import { Link } from "react-router-dom";
 
 const RecurringOrdersTable = () => {

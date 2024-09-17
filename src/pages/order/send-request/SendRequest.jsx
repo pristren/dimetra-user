@@ -1,4 +1,4 @@
-import ArrowUpDown from "@/assets/icons/ArrowUpDown";
+import { ArrowUpDown } from "@/assets/icons";
 import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";

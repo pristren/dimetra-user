@@ -6,8 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import UsaLogo from "@/assets/icons/UsaLogo";
-import GermanyLogo from "@/assets/icons/GermanyLogo";
+import { UsaLogo, GermanyLogo } from "@/assets/icons";
 export default function Language() {
   const languages = [
     {

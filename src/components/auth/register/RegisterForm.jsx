@@ -54,7 +54,7 @@ const RegisterForm = () => {
   };
 
   return (
-    <Card className="w-1/2 px-5 py-5">
+    <Card className="w-11/12 md:w-1/2 px-5 py-5">
       <CardHeader className="mb-4">
         <CardTitle className="text-center">Register</CardTitle>
       </CardHeader>

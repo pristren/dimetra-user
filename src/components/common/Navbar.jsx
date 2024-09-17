@@ -1,5 +1,4 @@
-import DefaultAvatar from "@/assets/icons/DefaultAvatar";
-import Logo from "@/assets/icons/Logo";
+import { DefaultAvatar, Logo } from "@/assets/icons";
 import Language from "@/components/helper-ui/Language";
 
 import {

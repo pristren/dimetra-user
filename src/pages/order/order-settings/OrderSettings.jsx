@@ -1,4 +1,4 @@
-import Security from "@/assets/icons/Securty";
+import { Security } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 
 const OrderSettings = () => {
