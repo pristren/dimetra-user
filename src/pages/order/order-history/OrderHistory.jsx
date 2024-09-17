@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,9 +8,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ArrowUpDown } from "@/assets/icons";
-
 import { EllipsisVertical } from "lucide-react";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const OrderHistory = () => {
   const [date, setDate] = useState(null);
@@ -47,7 +47,7 @@ const OrderHistory = () => {
       rateToDriver: "Rate the driver",
       orderType: "Sammelauftrag",
     },
-    
+
     {
       date: "2024-09-08",
       time: "14:30",
@@ -84,7 +84,6 @@ const OrderHistory = () => {
       rateToDriver: "Rate the driver",
       orderType: "Sammelauftrag",
     },
-    
   ];
   const getStatusColor = (status) => {
     switch (status) {
@@ -209,12 +208,14 @@ const OrderHistory = () => {
       cell: ({ row }) => {
         if (row.getValue("status") === "Completed") {
           return (
-            <Button
-              className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs"
-              style={{ backgroundColor: "#D0EF0F" }}
-            >
-              Rate the driver
-            </Button>
+            <Link to="/orders/review/:id">
+              <Button
+                className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs"
+                style={{ backgroundColor: "#D0EF0F" }}
+              >
+                Rate the driver
+              </Button>
+            </Link>
           );
         }
       },

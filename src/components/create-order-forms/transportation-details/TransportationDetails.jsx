@@ -42,17 +42,17 @@ const TransportationDetails = ({
 }) => {
   const { transportationData } = createOrderData;
   const formSchema = z.object({
-    typeOfTransport: z.string().min(1, "Transport type is required"),
-    modeOfTransportation: z
+    type_of_transport: z.string().min(1, "Transport type is required"),
+    mode_of_transportation: z
       .array(z.string())
       .nonempty("At least one mode must be selected"),
-    transportWith: z
+    transport_with: z
       .array(z.string())
       .nonempty("At least one transport with option must be selected"),
     duration: z.string().min(1, "Duration is required"),
-    startDate: z.date().nullable(),
-    returnDate: z.date().nullable(),
-    multipleWeekDays: z
+    start_date: z.date().nullable(),
+    return_date: z.date().nullable(),
+    multiple_weekdays: z
       .array(z.string())
       .nonempty("Select at least one weekday"),
   });
@@ -60,13 +60,13 @@ const TransportationDetails = ({
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      typeOfTransport: transportationData?.typeOfTransport || "",
-      modeOfTransportation: transportationData?.modeOfTransportation || [],
-      transportWith: transportationData?.transportWith || [],
+      type_of_transport: transportationData?.type_of_transport || "",
+      mode_of_transportation: transportationData?.mode_of_transportation || [],
+      transport_with: transportationData?.transport_with || [],
       duration: transportationData?.ends || "",
-      startDate: startDate || null,
-      returnDate: endDate || null,
-      multipleWeekDays: transportationData?.multipleWeekDays || [],
+      start_date: startDate || null,
+      return_date: endDate || null,
+      multiple_weekdays: transportationData?.multiple_weekdays || [],
     },
   });
 
@@ -105,7 +105,7 @@ const TransportationDetails = ({
     );
 
     updateCreateOrderData(
-      "multipleWeekDays",
+      "multiple_weekdays",
       selectedWeekdays.includes(value)
         ? selectedWeekdays.filter((day) => day !== value)
         : [...selectedWeekdays, value]
@@ -114,20 +114,20 @@ const TransportationDetails = ({
 
   useEffect(() => {
     const fieldsFilled =
-      transportationData?.typeOfTransport === "recurring"
+      transportationData?.type_of_transport === "recurring"
         ? [
-            form.watch("typeOfTransport"),
+            form.watch("type_of_transport"),
             form.watch("duration"),
-            transportationData?.modeOfTransportation.length > 0,
-            transportationData?.transportWith.length > 0,
+            transportationData?.mode_of_transportation.length > 0,
+            transportationData?.transport_with.length > 0,
             selectedWeekdays.length > 0,
             startDate,
             endDate,
           ]
         : [
-            transportationData?.typeOfTransport,
-            transportationData?.modeOfTransportation.length > 0,
-            transportationData?.transportWith.length > 0,
+            transportationData?.type_of_transport,
+            transportationData?.mode_of_transportation.length > 0,
+            transportationData?.transport_with.length > 0,
           ];
 
     setTransportationProgress(calculateFormProgress(fieldsFilled));
@@ -149,15 +149,15 @@ const TransportationDetails = ({
                 </h6>
                 <FormField
                   control={form.control}
-                  name="typeOfTransport"
+                  name="type_of_transport"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <RadioGroup
-                          value={transportationData?.typeOfTransport}
+                          value={transportationData?.type_of_transport}
                           onValueChange={(value) => {
                             field.onChange(value);
-                            updateCreateOrderData("typeOfTransport", value);
+                            updateCreateOrderData("type_of_transport", value);
                           }}
                         >
                           {transportOptions.map((option) => (
@@ -191,11 +191,11 @@ const TransportationDetails = ({
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={transportationData.modeOfTransportation.includes(
+                      checked={transportationData.mode_of_transportation.includes(
                         option.value
                       )}
                       onClick={() =>
-                        handleCheckBox("modeOfTransportation", option.value)
+                        handleCheckBox("mode_of_transportation", option.value)
                       }
                     />
                     <Label className="ml-2" htmlFor={option.value}>
@@ -214,11 +214,11 @@ const TransportationDetails = ({
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={transportationData.transportWith.includes(
+                      checked={transportationData.transport_with.includes(
                         option.value
                       )}
                       onClick={() =>
-                        handleCheckBox("transportWith", option.value)
+                        handleCheckBox("transport_with", option.value)
                       }
                     />
                     <Label className="ml-2" htmlFor={option.value}>
@@ -228,7 +228,8 @@ const TransportationDetails = ({
                 ))}
               </div>
             </div>
-            {transportationData?.typeOfTransport === "recurring" && (
+
+            {transportationData?.type_of_transport === "recurring" && (
               <div>
                 <h3 className="text-lg font-medium mb-3 mt-5">
                   Select Weekdays:
@@ -236,7 +237,7 @@ const TransportationDetails = ({
                 <AppSelect
                   items={["Week", "Month"]}
                   onValueChange={(value) =>
-                    updateCreateOrderData("weekDays", value)
+                    updateCreateOrderData("week_days", value)
                   }
                   placeholder="Week"
                 />
@@ -251,7 +252,7 @@ const TransportationDetails = ({
                     placeholder="00:00"
                     isTime={true}
                     onValueChange={(value) =>
-                      updateCreateOrderData("returnApproxTime", value)
+                      updateCreateOrderData("return_approx_time", value)
                     }
                   />
                 </div>
@@ -266,7 +267,7 @@ const TransportationDetails = ({
                     placeholder="00:00"
                     isTime={true}
                     onValueChange={(value) =>
-                      updateCreateOrderData("returnTime", value)
+                      updateCreateOrderData("return_time", value)
                     }
                   />
                 </div>
@@ -289,57 +290,12 @@ const TransportationDetails = ({
                     </div>
                   ))}
                 </div>
-
-                <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
-                <FormField
-                  control={form.control}
-                  name="duration"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormControl>
-                        <RadioGroup
-                          value={field.value}
-                          onValueChange={(value) => {
-                            field.onChange(value);
-                            updateCreateOrderData("ends", value);
-                          }}
-                        >
-                          {durationOptions.map((option) => (
-                            <div
-                              key={option.value}
-                              className="flex items-center space-x-2 mb-2"
-                            >
-                              <RadioGroupItem
-                                value={option.value}
-                                id={option.value}
-                              />
-                              <Label htmlFor={option.value}>
-                                {option.label}
-                              </Label>
-                            </div>
-                          ))}
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <h2 className="text-lg font-semibold mt-5">
-                  Summary: Monthly on day{" "}
-                  {calculateMonthlyOccurrences(selectedWeekdays)}
-                </h2>
               </div>
             )}
 
-            <div className="flex items-center justify-center w-full">
-              <Button
-                type="submit"
-                disabled={transportationProgress < 100}
-                className="mt-5 bg-secondary text-black hover:text-white px-12"
-                onClick={() => handleFormChange("patientDetails")}
-              >
-                Next
+            <div className="mt-5">
+              <Button type="submit" onClick={form.handleSubmit(handleFormChange)}>
+                Save
               </Button>
             </div>
           </form>

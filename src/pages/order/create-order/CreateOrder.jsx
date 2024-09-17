@@ -8,7 +8,7 @@ import PatientDetails from "@/components/create-order-forms/patient-details/Pati
 import TransportationDetails from "@/components/create-order-forms/transportation-details/TransportationDetails";
 import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 import Navbar from "@/components/common/Navbar";
-import { isEqual } from "lodash"; // Import lodash for deep comparison
+import { isEqual } from "lodash";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -53,14 +53,14 @@ const CreateOrder = () => {
       pickUpCity: "",
       pickUpCountry: "",
       pickUpEmployeeName: "",
-      // here is drop off details
+
       dropOffPickUpTime: "",
       dropOffName: "",
       dropOffAddress: "",
       dropOffCity: "",
       dropOffCountry: "",
       dropOffPhone: "",
-      // and return details
+
       returnDayLetter: "",
       returnApproxTime: "",
       returnFloor: "",
@@ -73,9 +73,10 @@ const CreateOrder = () => {
       contact: "",
     },
   });
+
+  console.log(createOrderData?.typeOfTransport);
   const prevCreateOrderDataRef = useRef(createOrderData);
 
-  // Effect to load data from localStorage on mount
   useEffect(() => {
     const storedData = localStorage.getItem("createOrderData");
     if (storedData) {
@@ -83,7 +84,6 @@ const CreateOrder = () => {
     }
   }, []);
 
-  // Effect to save data to localStorage when createOrderData changes
   useEffect(() => {
     if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
       const { transportationData } = createOrderData;

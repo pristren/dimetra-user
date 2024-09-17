@@ -11,6 +11,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
+import PasswordChangeForm from "./PasswordChangeForm";
 
 const OrderSettings = () => {
   const form = useForm({
@@ -25,18 +26,29 @@ const OrderSettings = () => {
       internal_cost_center: "",
     },
   });
-  const onSubmit = async (data) => {
+
+  const onSubmitUserDetails = async (data) => {
     console.log(data);
   };
+
+  const onSubmitPasswordChange = async (data) => {
+    console.log(data);
+  };
+
   return (
     <div>
       <div className="flex items-center justify-between gap-5">
         <h5>My Profile</h5>
-        <AppDialog />
-        <div className="flex justify-center items-center gap-2">
-          <Security />
-          <p className="highlight">Update Password</p>
-        </div>
+        <AppDialog
+          trigger={
+            <div className="flex justify-end items-center gap-2">
+              <Security />
+              <p className="highlight text-nowrap">Update Password</p>
+            </div>
+          }
+          title="Change Password"
+          content={<PasswordChangeForm onSubmit={onSubmitPasswordChange} />}
+        />
       </div>
       <div className="bg-white border border-gray-300 rounded-lg mt-8">
         <div className="flex items-center justify-between p-8">
@@ -61,7 +73,7 @@ const OrderSettings = () => {
               <DialogHeader>
                 <DialogTitle>Edit Profile</DialogTitle>
                 <DialogDescription className="text-black">
-                  <AppUserDetails form={form} onSubmit={onSubmit}/>
+                  <AppUserDetails form={form} onSubmit={onSubmitUserDetails} />
                 </DialogDescription>
               </DialogHeader>
             </DialogContent>

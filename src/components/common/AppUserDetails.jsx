@@ -329,7 +329,11 @@ const AppUserDetails = ({ onSubmit, form, isRegister }) => {
           {!isRegister && (
             <AppDialog
               className="w-[20%]"
-              trigger={<Button className="mt-10 px-12">Save</Button>}
+              trigger={
+                <div className="w-full flex items-center justify-center">
+                  <Button className="mt-10 px-12 w-max mx-auto">Save</Button>
+                </div>
+              }
               title="Sure you want to Save changes?"
               content={
                 <div>
