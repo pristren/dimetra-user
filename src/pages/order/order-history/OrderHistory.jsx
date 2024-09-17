@@ -43,9 +43,22 @@ const OrderHistory = () => {
       vehicle: "Sedan",
       driver: "John Doe",
       dispatcher: "Jane Smith",
-      status: "Rejected",
+      status: "Completed",
       rateToDriver: "Rate the driver",
-      orderType: "Verlegungsart",
+      orderType: "Sammelauftrag",
+    },
+    
+    {
+      date: "2024-09-08",
+      time: "14:30",
+      pickUp: "123 Main St.",
+      destination: "456 Elm St.",
+      vehicle: "Sedan",
+      driver: "John Doe",
+      dispatcher: "Jane Smith",
+      status: "Completed",
+      rateToDriver: "Rate the driver",
+      orderType: "Sammelauftrag",
     },
     {
       date: "2024-09-08",
@@ -67,10 +80,11 @@ const OrderHistory = () => {
       vehicle: "Sedan",
       driver: "John Doe",
       dispatcher: "Jane Smith",
-      status: "Rejected",
+      status: "Completed",
       rateToDriver: "Rate the driver",
-      orderType: "Privatfahrt",
+      orderType: "Sammelauftrag",
     },
+    
   ];
   const getStatusColor = (status) => {
     switch (status) {
@@ -197,7 +211,7 @@ const OrderHistory = () => {
           return (
             <Button
               className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs"
-              style={{ backgroundColor: "#D1F8D5" }}
+              style={{ backgroundColor: "#D0EF0F" }}
             >
               Rate the driver
             </Button>

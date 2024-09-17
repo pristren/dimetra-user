@@ -41,9 +41,9 @@ const LeftSideNav = () => {
         <p>Settings</p>
       </Link>
       <Link
-        to="/orders/send-request"
+        to="/orders/all-chats"
         className={`flex items-center gap-2 mb-4 px-2 py-2 cursor-pointer ${
-          isActive("/orders/send-request")
+          isActive("/orders/all-chats")
             ? "bg-primary text-white  rounded-md"
             : ""
         }`}
