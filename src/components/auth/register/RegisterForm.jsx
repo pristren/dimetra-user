@@ -22,21 +22,24 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { registerAnUser } from "../apis/register";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
   const form = useForm({
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      first_name: "",
+      last_name: "",
       email: "",
       phone: "",
       address: "",
-      billingAddress: "",
+      billing_address: "",
       code: "",
-      internalCostCenter: "",
+      internal_cost_center: "",
       password: "",
       confirmPassword: "",
     },
@@ -49,8 +52,12 @@ const RegisterForm = () => {
     }
   };
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    await registerAnUser(data).then((res) => {
+      if (res?.data?.token) {
+        navigate("/login");
+      }
+    });
   };
 
   return (
@@ -130,7 +137,7 @@ const RegisterForm = () => {
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
-                name="firstName"
+                name="first_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
@@ -139,7 +146,7 @@ const RegisterForm = () => {
                     <FormControl>
                       <Input
                         className={
-                          form.formState.errors.firstName
+                          form.formState.errors.first_name
                             ? "border-red-500"
                             : ""
                         }
@@ -153,7 +160,7 @@ const RegisterForm = () => {
               />
               <FormField
                 control={form.control}
-                name="lastName"
+                name="last_name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
@@ -162,7 +169,9 @@ const RegisterForm = () => {
                     <FormControl>
                       <Input
                         className={
-                          form.formState.errors.lastName ? "border-red-500" : ""
+                          form.formState.errors.last_name
+                            ? "border-red-500"
+                            : ""
                         }
                         placeholder="Doe"
                         {...field}
@@ -237,14 +246,14 @@ const RegisterForm = () => {
               />
               <FormField
                 control={form.control}
-                name="billingAddress"
+                name="billing_address"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Billing Address</FormLabel>
                     <FormControl>
                       <Input
                         className={
-                          form.formState.errors.billingAddress
+                          form.formState.errors.billing_address
                             ? "border-red-500"
                             : ""
                         }
@@ -279,14 +288,14 @@ const RegisterForm = () => {
               />
               <FormField
                 control={form.control}
-                name="internalCostCenter"
+                name="internal_cost_center"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Internal Cost Center</FormLabel>
                     <FormControl>
                       <Input
                         className={
-                          form.formState.errors.internalCostCenter
+                          form.formState.errors.internal_cost_center
                             ? "border-red-500"
                             : ""
                         }

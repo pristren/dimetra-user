@@ -19,6 +19,7 @@ import { useDispatch } from "react-redux";
 
 import { Link, useNavigate } from "react-router-dom";
 import { setAccessToken, setUser } from "@/redux/slices/user/userSlice";
+import { loginAnUser } from "../apis/login";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -40,15 +41,16 @@ export default function LoginForm() {
     },
   });
 
-  function onSubmit(values) {
-    dispatch(setUser({ email: values.email }));
-    dispatch(setAccessToken("123456"));
-
-    localStorage.setItem("user", JSON.stringify({ email: values.email }));
-    localStorage.setItem("accessToken", "123456");
-
-    navigate("/orders/all-orders");
-  }
+  const onSubmit = async (values) => {
+    await loginAnUser(values).then((res) => {
+      if (res?.data?.token) {
+        dispatch(setUser(res?.data?.user));
+        dispatch(setAccessToken(res?.data?.token));
+        localStorage.setItem("access_token", res?.data?.token);
+        navigate("/orders/all-orders");
+      }
+    });
+  };
 
   return (
     <Card className="w-[480px] px-5 py-5">

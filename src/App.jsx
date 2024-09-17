@@ -1,3 +1,4 @@
+import axios from "axios";
 import WrongPath from "@/pages/wrong-path";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "@/pages/authentication/login";
@@ -16,6 +17,7 @@ import OrderDetails from "@/pages/order/order-details/OrderDetails";
 import AddRequest from "@/pages/order/add-request/AddRequest";
 
 function App() {
+  axios.defaults.baseURL = `${import.meta.env.VITE_SERVER_LINK}`;
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/orders/all-orders" />} />

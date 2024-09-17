@@ -12,8 +12,7 @@ import { Link } from "react-router-dom";
 export default function Navbar() {
   const url = window.location.pathname;
   const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("accessToken");
+    localStorage.removeItem("access_token");
   };
   return (
     <nav
