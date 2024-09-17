@@ -9,12 +9,12 @@ import OrderLayout from "./layout/order-layout";
 import PrivateRoute from "./layout/PrivateRoute";
 import CreateOrder from "@/pages/order/create-order/CreateOrder";
 import OrderSettings from "@/pages/order/order-settings/OrderSettings";
-import SendRequest from "@/pages/order/send-request/SendRequest";
 import AllOrders from "@/pages/order/all-orders/AllOrders";
 import RecurringOrders from "@/pages/order/recurring-orders/RecurringOrders";
 import OrderDetails from "@/pages/order/order-details/OrderDetails";
 import AddRequest from "./pages/order/send-request/AddRequest";
 import Message from "./pages/order/send-request/Message";
+import AllChats from "@/pages/order/send-request/AllChats";
 
 function App() {
   return (
@@ -47,7 +47,7 @@ function App() {
         <Route path="all-orders" element={<AllOrders />} />
         <Route path="recurring-orders/:id" element={<RecurringOrders />} />
         <Route path="setting" element={<OrderSettings />} />
-        <Route path="send-request" element={<SendRequest />} />
+        <Route path="all-chats" element={<AllChats />} />
         <Route path="add-request" element={<AddRequest />} />
         <Route path="message" element={<Message />} />
       </Route>
