@@ -73,8 +73,6 @@ const CreateOrder = () => {
   },
 });
 
-
-  console.log(createOrderData?.billingDetailsData);
   const prevCreateOrderDataRef = useRef(createOrderData);
 
   useEffect(() => {

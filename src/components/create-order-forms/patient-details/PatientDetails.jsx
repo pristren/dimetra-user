@@ -23,6 +23,7 @@ const PatientDetails = ({
   setPatientProgress,
   createOrderData,
   setCreateOrderData,
+  patientProgress
 }) => {
   const { patientData } = createOrderData;
 
@@ -58,9 +59,9 @@ const PatientDetails = ({
     const fieldsFilled = [
       patientData.name,
       patientData.surname,
-      patientData.dateOfBirth,
-      patientData.areaRoom,
-      patientData.costCenter,
+      patientData.date_of_birth,
+      patientData.area_room,
+      patientData.cost_center,
     ];
 
     setPatientProgress(calculateFormProgress(fieldsFilled));
@@ -369,7 +370,7 @@ const PatientDetails = ({
             </div>
 
             <BackAndNextBtn
-              isFillForm={true}
+              isFillForm={true}disabled={patientProgress < 100}
               handleGoPrev={() => handleFormChange("transportDetails")}
               handleGoNext={() => handleFormChange("destinationDetails")}
             />

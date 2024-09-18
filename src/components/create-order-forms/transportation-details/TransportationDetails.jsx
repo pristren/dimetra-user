@@ -24,20 +24,25 @@ import {
   durationOptions,
   timeOptions,
 } from "@/components/create-order-forms/helpers";
+import { useEffect } from "react";
+import { calculateFormProgress } from "@/utils";
 
 const TransportationDetails = ({
   handleFormChange,
   createOrderData,
   setCreateOrderData,
-  transportationProgress,
+  setTransportationProgress,
   endDate,
   startDate,
   setEndDate,
   setStartDate,
   selectedWeekdays,
   setSelectedWeekdays,
+  transportationProgress,
 }) => {
+
   const { transportationData } = createOrderData;
+
   const form_schema = z.object({
     type_of_transport: z.string().min(1, "Transport type is required"),
     mode_of_transportation: z
@@ -109,6 +114,28 @@ const TransportationDetails = ({
         : [...selectedWeekdays, value]
     );
   };
+
+
+  useEffect(() => {
+    const fieldsFilled =
+      transportationData?.type_of_transport === "recurring"
+        ? [
+            form.watch("type_of_transport"),
+            form.watch("duration"),
+            transportationData?.mode_of_transportation.length > 0,
+            transportationData?.transport_with.length > 0,
+            selectedWeekdays.length > 0,
+            startDate,
+            endDate,
+          ]
+        : [
+            transportationData?.type_of_transport,
+            transportationData?.mode_of_transportation.length > 0,
+            transportationData?.transport_with.length > 0,
+          ];
+
+    setTransportationProgress(calculateFormProgress(fieldsFilled));
+  }, [transportationData, selectedWeekdays, startDate, endDate]);
 
   return (
     <Card className="w-[65%] px-5 py-5">
@@ -312,7 +339,7 @@ const TransportationDetails = ({
             <div className="flex items-center justify-center w-full">
               <Button
                 type="submit"
-                // disabled={transportationProgress < 100}
+                disabled={transportationProgress < 100}
                 className="mt-5 bg-secondary text-black hover:text-white px-12"
                 onClick={() => handleFormChange("patientDetails")}
               >

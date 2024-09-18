@@ -14,6 +14,7 @@ import {
   transportWithOptions,
   weekdaysOptions,
 } from "@/components/create-order-forms/helpers";
+import { Button } from "@/components/ui/button";
 
 const PreviewDetails = ({
   createOrderData,
@@ -507,6 +508,9 @@ const PreviewDetails = ({
                 </div>
               </div>
             </div>
+          </div>
+          <div className="flex items-center justify-center">
+            <Button className="px-14 mt-5">Submit</Button>
           </div>
         </CardContent>
       </Card>

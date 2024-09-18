@@ -1,13 +1,15 @@
 import { useLocation, Link } from "react-router-dom";
-import { Logo } from "@/assets/icons";
+import { Logo, Logout } from "@/assets/icons";
 import { CarFront, ClipboardList, MessageCircle, Settings } from "lucide-react";
 
 const LeftSideNav = () => {
   const location = useLocation();
   const isActive = (path) => location.pathname === path;
-
+  const handleLogout = () => {
+    localStorage.removeItem("access_token");
+  };
   return (
-    <div className="w-60 h-screen border-r text-gray-500 p-4 pt-8 sticky top-0">
+    <div className="w-60 relative h-screen border-r text-gray-500 p-4 pt-8 sticky top-0">
       <Link to="/">
         <Logo className="mx-auto" />
       </Link>
@@ -51,6 +53,9 @@ const LeftSideNav = () => {
         <MessageCircle />
         <p>Chat</p>
       </Link>
+      <div onClick={handleLogout} className="flex justify-center text-lg items-center gap-2 absolute bottom-5 cursor-pointer">
+        <Logout />
+        Logout</div>
     </div>
   );
 };
