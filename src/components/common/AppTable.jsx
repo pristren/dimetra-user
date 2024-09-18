@@ -33,7 +33,7 @@ export function AppTable({
   isSearchVisible,
   isRecurring = false,
   showModal,
-  link,
+  rowClickable = false,
 }) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -64,10 +64,8 @@ export function AppTable({
     },
   });
 
-  const handleRowClick = (link) => {
-    if (link) {
-      navigate(link);
-    }
+  const handleRowClick = (id) => {
+    navigate(`/orders/message/${id}`);
   };
 
   return (
@@ -116,7 +114,11 @@ export function AppTable({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  onClick={() => handleRowClick(link)}
+                  onClick={() => {
+                    if (rowClickable) {
+                      handleRowClick(row.original.id);
+                    }
+                  }}
                   className="hover:bg-gray-100 cursor-pointer"
                 >
                   {row.getVisibleCells().map((cell) => (

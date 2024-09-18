@@ -72,7 +72,7 @@ const AllMessages = () => {
   return (
     <div>
       <AppTable
-        link="/orders/message/:id"
+        rowClickable={true}
         pageTitle={"Send Request"}
         showModal={{
           name: "Add Request",

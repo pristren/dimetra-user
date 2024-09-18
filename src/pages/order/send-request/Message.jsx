@@ -1,8 +1,10 @@
-import { Attach, Send } from "@/assets/icons";
+import { Attach, DefaultAvatar, Send } from "@/assets/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+// import { useParams } from "react-router-dom";
 
 const Message = () => {
+  //   const { id } = useParams();
   const userId = 1;
   const message = [
     {
@@ -10,25 +12,65 @@ const Message = () => {
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rami",
-      id: 2,
+      userId: 2,
       photoURL:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqGK3diR3Zi-mnOXEaj-3ewmFyRYVxGzVzZw&s",
+        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     },
     {
       text: "another message",
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rami",
-      id: 2,
+      userId: 2,
       photoURL:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqGK3diR3Zi-mnOXEaj-3ewmFyRYVxGzVzZw&s",
+        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     },
     {
       text: "nothing",
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
-      id: 1,
+      userId: 1,
+      photoURL: "",
+    },
+    {
+      text: "next message",
+      image:
+        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      displayName: "rafi",
+      userId: 1,
+      photoURL: "",
+    },
+    {
+      text: "next message",
+      image:
+        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      displayName: "rafi",
+      userId: 1,
+      photoURL: "",
+    },
+    {
+      text: "next message",
+      image:
+        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      displayName: "rafi",
+      userId: 1,
+      photoURL: "",
+    },
+    {
+      text: "next message",
+      image:
+        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      displayName: "rafi",
+      userId: 1,
+      photoURL: "",
+    },
+    {
+      text: "next message",
+      image:
+        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      displayName: "rafi",
+      userId: 2,
       photoURL:
         "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     },
@@ -37,7 +79,7 @@ const Message = () => {
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
-      id: 1,
+      userId: 2,
       photoURL:
         "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     },
@@ -46,90 +88,40 @@ const Message = () => {
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
-      id: 2,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
+      userId: 1,
+      photoURL: "",
     },
     {
       text: "next message",
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
-      id: 1,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
+      userId: 1,
+      photoURL: "",
     },
     {
       text: "next message",
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
-      id: 2,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
+      userId: 1,
+      photoURL: "",
     },
     {
       text: "next message",
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
-      id: 2,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
+      userId: 1,
+      photoURL: "",
     },
     {
       text: "next message",
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
-      id: 2,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
-    },
-    {
-      text: "next message",
-      image:
-        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-      displayName: "rafi",
-      id: 1,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
-    },
-    {
-      text: "next message",
-      image:
-        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-      displayName: "rafi",
-      id: 2,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
-    },
-    {
-      text: "next message",
-      image:
-        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-      displayName: "rafi",
-      id: 2,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
-    },
-    {
-      text: "next message",
-      image:
-        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-      displayName: "rafi",
-      id: 2,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
-    },
-    {
-      text: "next message",
-      image:
-        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-      displayName: "rafi",
-      id: 1,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
+      userId: 1,
+      photoURL: "",
     },
   ];
 
@@ -137,19 +129,21 @@ const Message = () => {
     return message.map((msg, index) => {
       const previousMessage = message[index - 1];
       const isFirstMessageFromUser =
-        !previousMessage || previousMessage.id !== msg.id;
+        !previousMessage || previousMessage.userId !== msg.userId;
 
       return (
         <div key={index}>
-          {msg.id === userId ? (
+          {msg.userId === userId ? (
             <div className="flex flex-row-reverse items-center justify-start gap-2 my-2">
-              {isFirstMessageFromUser && (
+              {isFirstMessageFromUser && msg.photoURL ? (
                 <img
                   src={msg.photoURL}
                   className="w-10 h-10 rounded-full"
                   alt={msg.displayName}
                 />
-              )}
+              ) : isFirstMessageFromUser ? (
+                <DefaultAvatar className="w-10 h-10 rounded-full" />
+              ) : null}
               <p
                 className={`bg-[#6B93A7] text-white px-3 py-1 rounded-xl ${
                   !isFirstMessageFromUser && "mr-12"
@@ -200,7 +194,9 @@ const Message = () => {
           </div>
         </div>
 
-        <div className="px-4 py-4 h-[57vh] overflow-y-auto hide-scrollbar">{renderMessages()}</div>
+        <div className="px-4 py-4 h-[57vh] overflow-y-auto hide-scrollbar">
+          {renderMessages()}
+        </div>
 
         <div className="flex items-center justify-center gap-3 w-full px-4 mt-auto bottom-3 absolute bg-white">
           <div>

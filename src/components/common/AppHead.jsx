@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import AddRequest from "@/pages/order/send-request/AddRequest";
+import AddRequest from "@/components/order/AddRequest";
 import { DatePicker } from "@/components/ui/DatePicker";
 import AppSelect from "@/components/common/AppSelect";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,10 @@ import { Button } from "@/components/ui/button";
 
 export default function AppHead({
   pageTitle,
-  showModal,
+  showModal = {
+    name: "",
+    icon: null,
+  },
   addButton = {
     visibility: false,
   },
@@ -88,7 +91,9 @@ export default function AppHead({
         {showModal?.name && (
           <Dialog>
             <DialogTrigger>
-              <Button className="flex gap-2">{showModal?.icon && showModal?.icon} {showModal.name}</Button>
+              <Button className="flex gap-2">
+                {showModal?.icon && showModal?.icon} {showModal.name}
+              </Button>
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-2xl">
               <DialogHeader>
