@@ -8,7 +8,7 @@ import PatientDetails from "@/components/create-order-forms/patient-details/Pati
 import TransportationDetails from "@/components/create-order-forms/transportation-details/TransportationDetails";
 import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 import Navbar from "@/components/common/Navbar";
-import { isEqual } from "lodash"; // Import lodash for deep comparison
+import { isEqual } from "lodash";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -21,61 +21,62 @@ const CreateOrder = () => {
   const [returnDate, setReturnDate] = useState(null);
   const [dropDate, setDropDate] = useState(null);
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
-
   const [createOrderData, setCreateOrderData] = useState({
-    transportationData: {
-      typeOfTransport: "",
-      modeOfTransportation: [],
-      transportWith: [],
-      weekDays: "",
-      startDate,
-      endDate,
-      startTime: "",
-      returnTime: "",
-      multipleWeekDays: [],
-      ends: "",
-    },
-    patientData: {
-      name: "",
-      surname: "",
-      dateOfBirth: "",
-      areaRoom: "",
-      costCenter: "",
-      howMuch: "",
-      special: "",
-      isolation: false,
-      patientAbove90kg: false,
-    },
-    destinationDetailsData: {
-      //pick up details
-      pickUpName: "",
-      pickUpAddress: "",
-      pickUpCity: "",
-      pickUpCountry: "",
-      pickUpEmployeeName: "",
-      // here is drop off details
-      dropOffPickUpTime: "",
-      dropOffName: "",
-      dropOffAddress: "",
-      dropOffCity: "",
-      dropOffCountry: "",
-      dropOffPhone: "",
-      // and return details
-      returnDayLetter: "",
-      returnApproxTime: "",
-      returnFloor: "",
-    },
-    billingDetailsData: {
-      preName: "",
-      name: "",
-      street: "",
-      place: "",
-      contact: "",
-    },
-  });
+  transportationData: {
+    type_of_transport: "",
+    mode_of_transportation: [],
+    transport_with: [],
+    week_days: "",
+    start_date: startDate,
+    end_date: endDate,
+    start_time: "",
+    return_time: "",
+    multiple_weekdays: [],
+    ends: "",
+  },
+  patientData: {
+    name: "",
+    surname: "",
+    date_of_birth: "",
+    area_room: "",
+    cost_center: "",
+    how_much: "",
+    special: "",
+    isolation: false,
+    patient_above_90kg: false,
+  },
+  destinationDetailsData: {
+    // pick up details
+    pick_up_name: "",
+    pick_up_address: "",
+    pick_up_city: "",
+    pick_up_country: "",
+    pick_up_employee_name: "",
+
+    drop_off_pick_up_time: "",
+    drop_off_name: "",
+    drop_off_address: "",
+    drop_off_city: "",
+    drop_off_country: "",
+    drop_off_phone: "",
+
+    return_day_letter: "",
+    return_approx_time: "",
+    return_floor: "",
+  },
+  billingDetailsData: {
+    pre_name: "",
+    name: "",
+    street: "",
+    place: "",
+    contact: "",
+  },
+});
+
+
+  console.log(createOrderData?.billingDetailsData);
   const prevCreateOrderDataRef = useRef(createOrderData);
 
-  // Effect to load data from localStorage on mount
   useEffect(() => {
     const storedData = localStorage.getItem("createOrderData");
     if (storedData) {
@@ -83,7 +84,6 @@ const CreateOrder = () => {
     }
   }, []);
 
-  // Effect to save data to localStorage when createOrderData changes
   useEffect(() => {
     if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
       const { transportationData } = createOrderData;
@@ -92,8 +92,8 @@ const CreateOrder = () => {
 
       if (
         typeOfTransport ||
-        modeOfTransportation.length ||
-        transportWith.length
+        modeOfTransportation?.length ||
+        transportWith?.length
       ) {
         localStorage.setItem(
           "createOrderData",

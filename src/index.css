@@ -97,6 +97,12 @@ h6 {
   font-weight: 500;
 }
 
+.review-star .rr--off .rr--svg {
+  fill: #F6F5F1;
+}
+
+
+
 @layer base {
   * {
     @apply border-border;
