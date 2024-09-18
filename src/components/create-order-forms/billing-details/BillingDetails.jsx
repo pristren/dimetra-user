@@ -188,7 +188,7 @@ const BillingDetails = ({
             <BackAndNextBtn
               isFillForm={true}
               isLastPage={true}
-              disabled={billingProgress < 100}
+              isDisabled={billingProgress < 100}
               handleGoPrev={() => handleFormChange("destinationDetails")}
               handleGoNext={() => handleFormChange("previewDetails")}
             />

@@ -17,13 +17,16 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { calculateFormProgress } from "@/utils";
 import { Label } from "@/components/ui/label";
+import { DatePicker } from "@/components/ui/DatePicker";
 
 const PatientDetails = ({
   handleFormChange,
   setPatientProgress,
   createOrderData,
   setCreateOrderData,
-  patientProgress
+  patientProgress,
+  dateOfBirth,
+  setDateOfBirth,
 }) => {
   const { patientData } = createOrderData;
 
@@ -43,6 +46,16 @@ const PatientDetails = ({
     resolver: zodResolver(formSchema),
     defaultValues: patientData,
   });
+
+  useEffect(() => {
+    setCreateOrderData((prev) => ({
+      ...prev,
+      patientData: {
+        ...prev.patientData,
+        date_of_birth: dateOfBirth,
+      },
+    }));
+  }, [dateOfBirth]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -140,28 +153,15 @@ const PatientDetails = ({
                 control={form.control}
                 name="date_of_birth"
                 render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
+                  <FormItem className="mb-7">
+                    <FormLabel className="mb-2">
                       {createOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
                         ? "Area/Room"
                         : "Date of Birth"}
-                      <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        className={
-                          form.formState.errors.date_of_birth
-                            ? "border-red-500"
-                            : ""
-                        }
-                        placeholder="Enter patient's date of birth"
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          handleInputChange(e);
-                        }}
-                      />
+                      <DatePicker date={dateOfBirth} setDate={setDateOfBirth} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -370,7 +370,8 @@ const PatientDetails = ({
             </div>
 
             <BackAndNextBtn
-              isFillForm={true}disabled={patientProgress < 100}
+              isFillForm={true}
+              isDisabled={patientProgress < 100}
               handleGoPrev={() => handleFormChange("transportDetails")}
               handleGoNext={() => handleFormChange("destinationDetails")}
             />

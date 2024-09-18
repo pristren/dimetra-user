@@ -20,7 +20,9 @@ const CreateOrder = () => {
   const [endDate, setEndDate] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
   const [dropDate, setDropDate] = useState(null);
+  const [dateOfBirth, setDateOfBirth] = useState(null);
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
+
   const [createOrderData, setCreateOrderData] = useState({
     transportationData: {
       type_of_transport: "",
@@ -37,7 +39,7 @@ const CreateOrder = () => {
     patientData: {
       name: "",
       surname: "",
-      date_of_birth: "",
+      date_of_birth: dateOfBirth,
       area_room: "",
       cost_center: "",
       how_much: "",
@@ -83,20 +85,8 @@ const CreateOrder = () => {
 
   useEffect(() => {
     if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
-      const { transportationData } = createOrderData;
-      const { typeOfTransport, modeOfTransportation, transportWith } =
-        transportationData;
+      localStorage.setItem("createOrderData", JSON.stringify(createOrderData));
 
-      if (
-        typeOfTransport ||
-        modeOfTransportation?.length ||
-        transportWith?.length
-      ) {
-        localStorage.setItem(
-          "createOrderData",
-          JSON.stringify(createOrderData)
-        );
-      }
       prevCreateOrderDataRef.current = createOrderData;
     }
   }, [createOrderData]);
@@ -105,24 +95,29 @@ const CreateOrder = () => {
     setCurrentStep(step);
   };
 
-  const StepIcon = ({ step, icon, progressValue, isDisabled }) => (
+  const StepIcon = ({ step, icon, progressValue, isDisabled, text }) => (
     <div
-      className={`${
-        progressValue === 100
-          ? "bg-[#B4DB1A] text-white"
-          : currentStep === step && progressValue !== 100
-          ? "bg-[#FBA63C] text-white"
-          : "bg-[#DFE5ED] text-black"
-      } size-40 h-max p-3 rounded-full ${
+      className={`flex items-center justify-center flex-col size-40 h-max ${
         isDisabled ? "cursor-not-allowed" : "cursor-pointer"
       }`}
-      onClick={() => {
-        if (!isDisabled) {
-          handleFormChange(step);
-        }
-      }}
     >
-      {icon}
+      <div
+        className={`${
+          progressValue === 100
+            ? "bg-[#B4DB1A] text-white"
+            : currentStep === step && progressValue !== 100
+            ? "bg-[#FBA63C] text-white"
+            : "bg-[#DFE5ED] text-black"
+        } p-3 rounded-full w-max border border-gray-400`}
+        onClick={() => {
+          if (!isDisabled) {
+            handleFormChange(step);
+          }
+        }}
+      >
+        {icon}
+      </div>
+      {text}
     </div>
   );
 
@@ -136,6 +131,10 @@ const CreateOrder = () => {
     selectedWeekdays,
     returnDate,
     dropDate,
+    dateOfBirth,
+    patientProgress,
+    destinationProgress,
+    setDateOfBirth,
     setDropDate,
     setReturnDate,
     setSelectedWeekdays,
@@ -149,43 +148,45 @@ const CreateOrder = () => {
     setPatientProgress,
     setDestinationProgress,
   };
-
   return (
     <div>
       <Navbar />
       <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
-        <div className="flex items-center gap-5 mb-5">
+        <div className="flex  gap-5 mb-5">
           <StepIcon
             step="transportDetails"
+            text="Transport"
             icon={<Pencil />}
             progressValue={transportationProgress}
             isDisabled={false}
           />
-          <Progress value={transportationProgress} />
+          <Progress value={transportationProgress} className="mt-5" />
 
           <StepIcon
             step="patientDetails"
+            text="Patient"
             icon={<User />}
             progressValue={patientProgress}
             isDisabled={transportationProgress < 100}
           />
-          <Progress value={patientProgress} />
+          <Progress value={patientProgress} className="mt-5" />
 
           <StepIcon
             step="destinationDetails"
+            text="Destination"
             icon={<Truck />}
             progressValue={destinationProgress}
             isDisabled={patientProgress < 100}
           />
-          <Progress value={destinationProgress} />
+          <Progress value={destinationProgress} className="mt-5" />
 
           <StepIcon
             step="billingDetails"
+            text="Billing"
             icon={<Send />}
             progressValue={billingProgress}
             isDisabled={destinationProgress < 100}
           />
-          <Progress value={billingProgress} />
         </div>
 
         {currentStep === "transportDetails" ? (

@@ -53,6 +53,7 @@ function App() {
         <Route path="setting" element={<OrderSettings />} />
         <Route path="all-chats" element={<AllChats />} />
         <Route path="add-request" element={<AddRequest />} />
+        <Route path="details" element={<OrderDetails />} />
       </Route>
       <Route path="*" element={<WrongPath />} />
     </Routes>
