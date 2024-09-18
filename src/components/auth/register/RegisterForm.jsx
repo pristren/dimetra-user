@@ -8,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AppUserDetails from "@/components/common/AppUserDetails";
 import { registerAnUser } from "../apis/register";
 import { useNavigate } from "react-router-dom";
-import AppUserDetails from "@/components/common/AppUserDetails";
 
 const validateEmail = (email) => {
   return String(email)
