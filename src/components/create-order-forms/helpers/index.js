@@ -1,28 +1,29 @@
 export const transportOptions = [
-  { value: "transferTrip", label: "Transfer trip" },
-  { value: "investigationTrip", label: "Investigation trip" },
-  { value: "privateTrips", label: "Private trips" },
-  { value: "collectionOrder", label: "Collection order" },
+  { value: "transfer_trip", label: "Transfer trip" },
+  { value: "investigation_trip", label: "Investigation trip" },
+  { value: "private_trips", label: "Private trips" },
+  { value: "collection_order", label: "Collection order" },
   { value: "recurring", label: "Recurring" },
 ];
 
 export const transportModesOptions = [
   { value: "relocation", label: "Relocation" },
-  { value: "wheelchairMts", label: "Wheelchair (MTS)" },
-  { value: "ownWheelchair", label: "In Own Wheelchair" },
-  { value: "lyingDown", label: "Lying Down" },
+  { value: "wheelchair_mts", label: "Wheelchair (MTS)" },
+  { value: "own_wheelchair", label: "In Own Wheelchair" },
+  { value: "lying_down", label: "Lying Down" },
   { value: "pedestrian", label: "Pedestrian" },
-  { value: "secondTransportHelper", label: "Second Transport Helper" },
-  { value: "carryingChair", label: "Carrying Chair" },
+  { value: "second_transport_helper", label: "Second Transport Helper" },
+  { value: "carrying_chair", label: "Carrying Chair" },
 ];
 
 export const transportWithOptions = [
-  { value: "noneOfThat", label: "None of That" },
+  { value: "none_of_that", label: "None of That" },
   { value: "infusion", label: "Infusion" },
   { value: "infusomat", label: "Infusomat" },
-  { value: "accompanyingReason", label: "Accompanying Reason" },
-  { value: "oxygenLitersPerMin", label: "Oxygen (Liters/Min)" },
+  { value: "accompanying_reason", label: "Accompanying Reason" },
+  { value: "oxygen_liters_per_min", label: "Oxygen (Liters/Min)" },
 ];
+
 
 export const weekdaysOptions = [
   { value: "monday", label: "Monday" },

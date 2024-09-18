@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AppUserDetails from "@/components/common/AppUserDetails";
 import { registerAnUser } from "../apis/register";
 import { useNavigate } from "react-router-dom";
+import AppUserDetails from "@/components/common/AppUserDetails";
 
 const validateEmail = (email) => {
   return String(email)
@@ -44,7 +45,6 @@ const formSchema = z
 const RegisterForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {

@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-import { useEffect } from "react";
 import { z } from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +16,6 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import AppSelect from "@/components/common/AppSelect";
 import { DatePicker } from "@/components/ui/DatePicker";
-import { calculateFormProgress } from "@/utils";
 import {
   transportModesOptions,
   transportOptions,
@@ -31,7 +29,6 @@ const TransportationDetails = ({
   handleFormChange,
   createOrderData,
   setCreateOrderData,
-  setTransportationProgress,
   transportationProgress,
   endDate,
   startDate,
@@ -41,32 +38,32 @@ const TransportationDetails = ({
   setSelectedWeekdays,
 }) => {
   const { transportationData } = createOrderData;
-  const formSchema = z.object({
-    typeOfTransport: z.string().min(1, "Transport type is required"),
-    modeOfTransportation: z
+  const form_schema = z.object({
+    type_of_transport: z.string().min(1, "Transport type is required"),
+    mode_of_transportation: z
       .array(z.string())
       .nonempty("At least one mode must be selected"),
-    transportWith: z
+    transport_with: z
       .array(z.string())
       .nonempty("At least one transport with option must be selected"),
     duration: z.string().min(1, "Duration is required"),
-    startDate: z.date().nullable(),
-    returnDate: z.date().nullable(),
-    multipleWeekDays: z
+    start_date: z.date().nullable(),
+    return_date: z.date().nullable(),
+    multiple_week_days: z
       .array(z.string())
       .nonempty("Select at least one weekday"),
   });
 
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(form_schema),
     defaultValues: {
-      typeOfTransport: transportationData?.typeOfTransport || "",
-      modeOfTransportation: transportationData?.modeOfTransportation || [],
-      transportWith: transportationData?.transportWith || [],
+      type_of_transport: transportationData?.type_of_transport || "",
+      mode_of_transportation: transportationData?.mode_of_transportation || [],
+      transport_with: transportationData?.transport_with || [],
       duration: transportationData?.ends || "",
-      startDate: startDate || null,
-      returnDate: endDate || null,
-      multipleWeekDays: transportationData?.multipleWeekDays || [],
+      start_date: startDate || null,
+      return_date: endDate || null,
+      multiple_week_days: transportationData?.multiple_week_days || [],
     },
   });
 
@@ -85,12 +82,13 @@ const TransportationDetails = ({
       ...prev,
       transportationData: {
         ...prev.transportationData,
-        [type]: prev.transportationData[type].includes(value)
+        [type]: prev.transportationData?.[type]?.includes(value)
           ? prev.transportationData[type].filter((item) => item !== value)
-          : [...prev.transportationData[type], value],
+          : [...(prev.transportationData?.[type] || []), value],
       },
     }));
   };
+  
 
   const calculateMonthlyOccurrences = (weekdays) => {
     return weekdays.length * 4;
@@ -105,33 +103,12 @@ const TransportationDetails = ({
     );
 
     updateCreateOrderData(
-      "multipleWeekDays",
+      "multiple_week_days",
       selectedWeekdays.includes(value)
         ? selectedWeekdays.filter((day) => day !== value)
         : [...selectedWeekdays, value]
     );
   };
-
-  useEffect(() => {
-    const fieldsFilled =
-      transportationData?.typeOfTransport === "recurring"
-        ? [
-            form.watch("typeOfTransport"),
-            form.watch("duration"),
-            transportationData?.modeOfTransportation.length > 0,
-            transportationData?.transportWith.length > 0,
-            selectedWeekdays.length > 0,
-            startDate,
-            endDate,
-          ]
-        : [
-            transportationData?.typeOfTransport,
-            transportationData?.modeOfTransportation.length > 0,
-            transportationData?.transportWith.length > 0,
-          ];
-
-    setTransportationProgress(calculateFormProgress(fieldsFilled));
-  }, [transportationData, selectedWeekdays, startDate, endDate]);
 
   return (
     <Card className="w-[65%] px-5 py-5">
@@ -149,15 +126,15 @@ const TransportationDetails = ({
                 </h6>
                 <FormField
                   control={form.control}
-                  name="typeOfTransport"
+                  name="type_of_transport"
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
                         <RadioGroup
-                          value={transportationData?.typeOfTransport}
+                          value={transportationData?.type_of_transport}
                           onValueChange={(value) => {
                             field.onChange(value);
-                            updateCreateOrderData("typeOfTransport", value);
+                            updateCreateOrderData("type_of_transport", value);
                           }}
                         >
                           {transportOptions.map((option) => (
@@ -184,18 +161,18 @@ const TransportationDetails = ({
 
               <div className="pr-5">
                 <h6 className="mb-4">
-                  Mode of transportation
+                  Mode of transportation{" "}
                   <span className="text-[15px]">(multiple selection)</span>
                 </h6>
                 {transportModesOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={transportationData.modeOfTransportation.includes(
+                      checked={transportationData.mode_of_transportation?.includes(
                         option.value
                       )}
                       onClick={() =>
-                        handleCheckBox("modeOfTransportation", option.value)
+                        handleCheckBox("mode_of_transportation", option.value)
                       }
                     />
                     <Label className="ml-2" htmlFor={option.value}>
@@ -207,18 +184,18 @@ const TransportationDetails = ({
 
               <div>
                 <h6 className="mb-4">
-                  Transport with
+                  Transport with{" "}
                   <span className="text-[15px]">(multiple selection)</span>
                 </h6>
                 {transportWithOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={transportationData.transportWith.includes(
+                      checked={transportationData.transport_with?.includes(
                         option.value
                       )}
                       onClick={() =>
-                        handleCheckBox("transportWith", option.value)
+                        handleCheckBox("transport_with", option.value)
                       }
                     />
                     <Label className="ml-2" htmlFor={option.value}>
@@ -228,7 +205,7 @@ const TransportationDetails = ({
                 ))}
               </div>
             </div>
-            {transportationData?.typeOfTransport === "recurring" && (
+            {transportationData?.type_of_transport === "recurring" && (
               <div>
                 <h3 className="text-lg font-medium mb-3 mt-5">
                   Select Weekdays:
@@ -236,7 +213,7 @@ const TransportationDetails = ({
                 <AppSelect
                   items={["Week", "Month"]}
                   onValueChange={(value) =>
-                    updateCreateOrderData("weekDays", value)
+                    updateCreateOrderData("week_days", value)
                   }
                   placeholder="Week"
                 />
@@ -251,7 +228,7 @@ const TransportationDetails = ({
                     placeholder="00:00"
                     isTime={true}
                     onValueChange={(value) =>
-                      updateCreateOrderData("returnApproxTime", value)
+                      updateCreateOrderData("return_approx_time", value)
                     }
                   />
                 </div>
@@ -266,7 +243,7 @@ const TransportationDetails = ({
                     placeholder="00:00"
                     isTime={true}
                     onValueChange={(value) =>
-                      updateCreateOrderData("returnTime", value)
+                      updateCreateOrderData("return_time", value)
                     }
                   />
                 </div>
@@ -280,7 +257,7 @@ const TransportationDetails = ({
                     <div key={option.value} className="flex items-center mb-2">
                       <Checkbox
                         id={option.value}
-                        checked={selectedWeekdays.includes(option.value)}
+                        checked={selectedWeekdays?.includes(option.value)}
                         onClick={() => handleWeekdayChange(option)}
                       />
                       <Label className="ml-2" htmlFor={option.value}>
@@ -335,7 +312,7 @@ const TransportationDetails = ({
             <div className="flex items-center justify-center w-full">
               <Button
                 type="submit"
-                disabled={transportationProgress < 100}
+                // disabled={transportationProgress < 100}
                 className="mt-5 bg-secondary text-black hover:text-white px-12"
                 onClick={() => handleFormChange("patientDetails")}
               >
