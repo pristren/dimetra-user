@@ -30,6 +30,7 @@ const DestinationDetails = ({
   setReturnDate,
   dropDate,
   setDropDate,
+  destinationProgress
 }) => {
   const {
     destinationDetailsData: {
@@ -131,9 +132,8 @@ const DestinationDetails = ({
     drop_off_city,
     drop_off_country,
     drop_off_phone,
-    drop,
+    dropDate,
     returnDate,
-    return_floor,
   ];
 
   useEffect(() => {
@@ -550,6 +550,7 @@ const DestinationDetails = ({
 
             <BackAndNextBtn
               isFillForm={true}
+              disabled={destinationProgress < 100}
               handleGoPrev={() => handleFormChange("patientDetails")}
               handleGoNext={() => handleFormChange("billingDetails")}
             />
