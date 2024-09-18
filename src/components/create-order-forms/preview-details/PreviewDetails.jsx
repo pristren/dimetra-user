@@ -47,7 +47,7 @@ const PreviewDetails = ({
           inputData: createOrderData,
         },
       });
-
+      console.log(data);
       if (data?.createAnOrder?.id) {
         //do whatever you want
         alert("Order created successfully");

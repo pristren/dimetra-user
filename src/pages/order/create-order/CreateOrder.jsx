@@ -9,6 +9,7 @@ import TransportationDetails from "@/components/create-order-forms/transportatio
 import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 import Navbar from "@/components/common/Navbar";
 import { isEqual } from "lodash";
+import { Logo } from "@/assets/icons";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -22,7 +23,7 @@ const CreateOrder = () => {
   const [dropDate, setDropDate] = useState(null);
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
-
+  console.log(startDate);
   const [createOrderData, setCreateOrderData] = useState({
     transportationData: {
       type_of_transport: "",
@@ -149,7 +150,7 @@ const CreateOrder = () => {
     setDestinationProgress,
   };
   return (
-    <div>
+    <div className="relative">
       <Navbar />
       <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
         <div className="flex  gap-5 mb-5">
@@ -203,6 +204,10 @@ const CreateOrder = () => {
         ) : (
           <PreviewDetails {...props} />
         )}
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
+        <p className="text-lg mb-5 text-center">Powered by</p>
+        <Logo />
+      </div>
       </div>
     </div>
   );

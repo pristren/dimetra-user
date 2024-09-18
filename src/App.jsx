@@ -53,6 +53,7 @@ function App() {
         <Route path="setting" element={<OrderSettings />} />
         <Route path="all-messages" element={<AllMessages />} />
         <Route path="message/:id" element={<Message />} />
+        <Route path="details/:id" element={<OrderDetails />} />
       </Route>
       <Route path="*" element={<WrongPath />} />
     </Routes>
