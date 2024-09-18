@@ -6,7 +6,7 @@ export const getNewWSLink = () =>
   new GraphQLWsLink(
     createClient({
       connectionParams: {
-        Authorization: getAccessToken(),
+        Authorization: `Bearer ${getAccessToken()}`,
       },
       url: `${getApiBaseUrl()?.replace("http", "ws")}/graphql`,
     })

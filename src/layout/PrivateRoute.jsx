@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
+import { getAccessToken } from "@/utils";
 import { Navigate, useLocation } from "react-router-dom";
 
 const PrivateRoute = ({ children }) => {
   const location = useLocation();
-  const access_token = localStorage.getItem("access_token");
-  return !access_token ? (
+  return !getAccessToken() ? (
     <Navigate to={`/login`} state={{ from: location }} />
   ) : (
     children
