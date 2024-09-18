@@ -27,14 +27,24 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
   const formSchema = z.object({
-    email: z.string().email({
-      message: "Please enter a valid email address",
-    }),
-    password: z.string().min(6, {
-      message: "Password must be at least 6 characters",
-    }),
+    email: z
+      .string()
+      .refine((value) => validateEmail(value), {
+        message: "Please enter a valid email address",
+      }),
+    password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
   });
+
 
   const form = useForm({
     resolver: zodResolver(formSchema),
