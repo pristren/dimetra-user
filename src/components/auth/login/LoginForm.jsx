@@ -20,18 +20,32 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { setAccessToken, setUser } from "@/redux/slices/user/userSlice";
 import { loginAnUser } from "../apis/login";
+import { Loading } from "@/assets/icons";
+import { useState } from "react";
 
 export default function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
+  
+
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
+
   const formSchema = z.object({
-    email: z.string().email({
-      message: "Please enter a valid email address",
-    }),
-    password: z.string().min(6, {
-      message: "Password must be at least 6 characters",
-    }),
+    email: z
+      .string()
+      .refine((value) => validateEmail(value), {
+        message: "Please enter a valid email address",
+      }),
+    password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
   });
+
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -42,14 +56,20 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (values) => {
-    await loginAnUser(values).then((res) => {
-      if (res?.data?.token) {
-        dispatch(setUser(res?.data?.user));
-        dispatch(setAccessToken(res?.data?.token));
-        localStorage.setItem("access_token", res?.data?.token);
-        navigate("/orders/all-orders");
-      }
-    });
+    setLoading(true);
+    await loginAnUser(values)
+      .then((res) => {
+        if (res?.data?.token) {
+          dispatch(setUser(res?.data?.user));
+          dispatch(setAccessToken(res?.data?.token));
+          localStorage.setItem("access_token", res?.data?.token);
+          navigate("/orders/all-orders");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -124,7 +144,11 @@ export default function LoginForm() {
               </Link>
             </div>
             <Button type="submit" className="block w-2/4 mx-auto">
-              Login
+              {loading ? (
+                <Loading className="w-6 h-6 mx-auto text-white" />
+              ) : (
+                "Login"
+              )}
             </Button>
             <AuthFooter page={"login"} />
           </form>
