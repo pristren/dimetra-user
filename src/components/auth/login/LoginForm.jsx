@@ -27,8 +27,6 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
-  
-
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -37,19 +35,16 @@ export default function LoginForm() {
       );
   };
   const formSchema = z.object({
-    email: z
-      .string()
-      .refine((value) => validateEmail(value), {
-        message: "Please enter a valid email address",
-      }),
-    password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
+    email: z.string().refine((value) => validateEmail(value), {
+      message: "Please enter a valid email address",
+    }),
+    password: z.string().min(1, { message: "Password cannot be empty" }),
   });
-
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "test@admin.com",
+      email: "a@b.com",
       password: "123456",
     },
   });
@@ -83,7 +78,6 @@ export default function LoginForm() {
               <FormField
                 control={form.control}
                 name="email"
-                type="email"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Email</FormLabel>
@@ -95,6 +89,7 @@ export default function LoginForm() {
                             : ""
                         }
                         placeholder="your@email.com"
+                        type="email"
                         {...field}
                       />
                     </FormControl>
@@ -105,7 +100,6 @@ export default function LoginForm() {
               <FormField
                 control={form.control}
                 name="password"
-                type="password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Password</FormLabel>
@@ -117,6 +111,7 @@ export default function LoginForm() {
                             : ""
                         }
                         placeholder="Type your password"
+                        type="password"
                         {...field}
                       />
                     </FormControl>

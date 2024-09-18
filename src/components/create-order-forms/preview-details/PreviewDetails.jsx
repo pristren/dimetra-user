@@ -15,6 +15,8 @@ import {
   weekdaysOptions,
 } from "@/components/create-order-forms/helpers";
 import { Button } from "@/components/ui/button";
+import { useMutation } from "@apollo/client";
+import { CREATE_AN_ORDER } from "@/pages/order/create-order/graphql/mutations/createAnOrder.gql";
 
 const PreviewDetails = ({
   createOrderData,
@@ -37,6 +39,25 @@ const PreviewDetails = ({
   const calculateMonthlyOccurrences = (weekdays) => {
     return weekdays.length * 4;
   };
+  const [createAnOrder] = useMutation(CREATE_AN_ORDER);
+  const handleCreateAnOrder = async () => {
+    try {
+      const { data } = await createAnOrder({
+        variables: {
+          inputData: createOrderData,
+        },
+      });
+
+      if (data?.createAnOrder?.id) {
+        //do whatever you want
+        alert("Order created successfully");
+      }
+    } catch (error) {
+      const { message, response } = error;
+      console.log(message, response);
+    }
+  };
+
   return (
     <div className="w-[65%] p-8">
       {/* Single Card for all details */}
@@ -510,7 +531,9 @@ const PreviewDetails = ({
             </div>
           </div>
           <div className="flex items-center justify-center">
-            <Button className="px-14 mt-5">Submit</Button>
+            <Button onClick={handleCreateAnOrder} className="px-14 mt-5">
+              Submit
+            </Button>
           </div>
         </CardContent>
       </Card>
