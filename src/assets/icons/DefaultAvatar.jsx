@@ -1,4 +1,4 @@
-const DefaultAvatar = () => (
+const DefaultAvatar = ({ className }) => (
   <svg
     width="30"
     height="31"
@@ -6,6 +6,7 @@ const DefaultAvatar = () => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     xmlnsXlink="http://www.w3.org/1999/xlink"
+    className={className}
   >
     <mask
       id="mask0_1185_1519"

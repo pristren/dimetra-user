@@ -9,7 +9,7 @@ import TransportationDetails from "@/components/create-order-forms/transportatio
 import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 import Navbar from "@/components/common/Navbar";
 import { isEqual } from "lodash";
-
+import { Button } from "@/components/ui/button";
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
   const [patientProgress, setPatientProgress] = useState(0);
@@ -108,19 +108,20 @@ const CreateOrder = () => {
     setCurrentStep(step);
   };
 
-  const StepIcon = ({ step, icon, progressValue }) => (
-    <div
+  const StepIcon = ({ step, icon, progressValue, disabled }) => (
+    <Button
+      disabled={disabled}
       className={`${
         progressValue === 100
-          ? "bg-[#B4DB1A] text-white"
+          ? "bg-[#B4DB1A] hover:bg-[#B4DB1A] text-white"
           : currentStep === step && progressValue !== 100
-          ? "bg-[#FBA63C] text-white"
-          : "bg-[#DFE5ED] text-black"
+          ? "bg-[#FBA63C] hover:bg-[#FBA63C] text-white"
+          : "bg-[#DFE5ED] hover:bg-[#DFE5ED] text-black"
       } size-40 h-max p-3 rounded-full cursor-pointer`}
       onClick={() => handleFormChange(step)}
     >
       {icon}
-    </div>
+    </Button>
   );
 
   const props = {
@@ -161,18 +162,21 @@ const CreateOrder = () => {
           <StepIcon
             step="patientDetails"
             icon={<User />}
+            disabled={transportationProgress !== 100}
             progressValue={patientProgress}
           />
           <Progress value={patientProgress} />
           <StepIcon
             step="destinationDetails"
             icon={<Truck />}
+            disabled={patientProgress !== 100}
             progressValue={destinationProgress}
           />
           <Progress value={destinationProgress} />
           <StepIcon
             step="billingDetails"
             icon={<Send />}
+            disabled={destinationProgress !== 100}
             progressValue={billingProgress}
           />
         </div>

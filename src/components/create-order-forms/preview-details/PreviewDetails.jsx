@@ -155,15 +155,17 @@ const PreviewDetails = ({
                 </div>
 
                 <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
-                {durationOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-2 mb-2"
-                  >
-                    <RadioGroupItem value={option.value} id={option.value} />
-                    <Label htmlFor={option.value}>{option.label}</Label>
-                  </div>
-                ))}
+                <RadioGroup value={transportationData?.ends}>
+                  {durationOptions.map((option) => (
+                    <div
+                      key={option.value}
+                      className="flex items-center space-x-2 mb-2"
+                    >
+                      <RadioGroupItem value={option.value} id={option.value} />
+                      <Label htmlFor={option.value}>{option.label}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
 
                 <h2 className="text-lg font-semibold mt-5">
                   Summary: Monthly on day{" "}
