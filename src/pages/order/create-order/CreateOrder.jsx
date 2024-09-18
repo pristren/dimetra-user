@@ -23,7 +23,6 @@ const CreateOrder = () => {
   const [dropDate, setDropDate] = useState(null);
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
-  console.log(startDate);
   const [createOrderData, setCreateOrderData] = useState({
     transportationData: {
       type_of_transport: "",
