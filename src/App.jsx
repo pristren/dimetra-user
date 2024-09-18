@@ -10,11 +10,12 @@ import OrderLayout from "./layout/order-layout";
 import PrivateRoute from "./layout/PrivateRoute";
 import CreateOrder from "@/pages/order/create-order/CreateOrder";
 import OrderSettings from "@/pages/order/order-settings/OrderSettings";
-import SendRequest from "@/pages/order/send-request/SendRequest";
 import AllOrders from "@/pages/order/all-orders/AllOrders";
 import RecurringOrders from "@/pages/order/recurring-orders/RecurringOrders";
 import OrderDetails from "@/pages/order/order-details/OrderDetails";
 import AddRequest from "@/pages/order/add-request/AddRequest";
+import AllChats from "@/pages/order/send-request/AllChats";
+import RateTheDriver from "@/pages/order/order-history/RateTheDriver";
 
 function App() {
   axios.defaults.baseURL = `${import.meta.env.VITE_SERVER_LINK}`;
@@ -38,6 +39,7 @@ function App() {
         path="/orders"
         element={
           <PrivateRoute>
+            
             <OrderLayout />
           </PrivateRoute>
         }
@@ -45,10 +47,11 @@ function App() {
         <Route index element={<Navigate to="all-orders" />} />
         <Route path="order-details/:id" element={<OrderDetails />} />
         <Route path="history" element={<OrderHistory />} />
+        <Route path="review/:id" element={<RateTheDriver />} />
         <Route path="all-orders" element={<AllOrders />} />
         <Route path="recurring-orders/:id" element={<RecurringOrders />} />
         <Route path="setting" element={<OrderSettings />} />
-        <Route path="send-request" element={<SendRequest />} />
+        <Route path="all-chats" element={<AllChats />} />
         <Route path="add-request" element={<AddRequest />} />
       </Route>
       <Route path="*" element={<WrongPath />} />
