@@ -51,7 +51,7 @@ const PreviewDetails = ({
                   Type of transport{" "}
                   <span className="text-[15px]">(simple selection)</span>
                 </h6>
-                <RadioGroup value={transportationData?.typeOfTransport}>
+                <RadioGroup value={transportationData?.type_of_transport}>
                   {transportOptions.map((option) => (
                     <div
                       key={option.value}
@@ -73,7 +73,7 @@ const PreviewDetails = ({
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={transportationData.modeOfTransportation?.includes(
+                      checked={transportationData.mode_of_transportation?.includes(
                         option.value
                       )}
                     />
@@ -93,7 +93,7 @@ const PreviewDetails = ({
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
                       id={option.value}
-                      checked={transportationData.transportWith.includes(
+                      checked={transportationData.transport_with?.includes(
                         option.value
                       )}
                     />
@@ -105,7 +105,7 @@ const PreviewDetails = ({
               </div>
             </div>
 
-            {transportationData?.typeOfTransport === "recurring" && (
+            {transportationData?.type_of_transport === "recurring" && (
               <div>
                 <h3 className="text-lg font-medium mb-3 mt-5">
                   Select Weekdays:
@@ -204,7 +204,7 @@ const PreviewDetails = ({
                   </Label>
                   <Input
                     readOnly
-                    value={patientData?.dateOfBirth}
+                    value={patientData?.date_of_birth}
                     placeholder="Type your date of birth"
                     className="border-gray-300"
                   />
@@ -215,7 +215,7 @@ const PreviewDetails = ({
                   </Label>
                   <Input
                     readOnly
-                    value={patientData?.areaRoom}
+                    value={patientData?.area_room}
                     placeholder="Type your area or room"
                     className="border-gray-300"
                   />
@@ -226,7 +226,7 @@ const PreviewDetails = ({
                   </Label>
                   <Input
                     readOnly
-                    value={patientData?.costCenter}
+                    value={patientData?.cost_center}
                     placeholder="Type your kostenstelle"
                     className="border-gray-300"
                   />
@@ -235,7 +235,7 @@ const PreviewDetails = ({
                   <Label className="block mb-2 font-medium">How Much</Label>
                   <Input
                     readOnly
-                    value={patientData?.howMuch}
+                    value={patientData?.how_much}
                     placeholder="Type how much"
                     className="border-gray-300"
                   />
@@ -255,7 +255,7 @@ const PreviewDetails = ({
                   </Label>
                   <div className="flex items-center">
                     <Checkbox
-                      checked={patientData?.patientAbove90kg}
+                      checked={patientData?.patient_above_90kg}
                       readOnly
                     />
                     <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
@@ -289,7 +289,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.pickUpName}
+                      value={destinationDetailsData?.pick_up_name}
                       placeholder="Pre filled"
                       className="border-gray-300"
                     />
@@ -300,7 +300,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.pickUpAddress}
+                      value={destinationDetailsData?.pick_up_address}
                       placeholder="Pre filled"
                       className="border-gray-300"
                     />
@@ -311,7 +311,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.pickUpCity}
+                      value={destinationDetailsData?.pick_up_city}
                       placeholder="Enter City Name"
                       className="border-gray-300"
                     />
@@ -322,8 +322,8 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.pickUpCountry}
-                      placeholder="Enter Country "
+                      value={destinationDetailsData?.pick_up_country}
+                      placeholder="Enter Country"
                       className="border-gray-300"
                     />
                   </div>
@@ -333,7 +333,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.pickUpEmployeeName}
+                      value={destinationDetailsData?.pick_up_employee_name}
                       placeholder="Type the working employee's name"
                       className="border-gray-300"
                     />
@@ -354,7 +354,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.dropOffPickUpTime}
+                      value={destinationDetailsData?.drop_off_pick_up_time}
                       placeholder="Pick-Up Time"
                       className="border-gray-300"
                     />
@@ -365,7 +365,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.dropOffName}
+                      value={destinationDetailsData?.drop_off_name}
                       placeholder="Enter Name"
                       className="border-gray-300"
                     />
@@ -376,7 +376,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.dropOffAddress}
+                      value={destinationDetailsData?.drop_off_address}
                       placeholder="Enter Address"
                       className="border-gray-300"
                     />
@@ -387,7 +387,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.dropOffCity}
+                      value={destinationDetailsData?.drop_off_city}
                       placeholder="Enter City Name"
                       className="border-gray-300"
                     />
@@ -398,7 +398,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.dropOffCountry}
+                      value={destinationDetailsData?.drop_off_country}
                       placeholder="Enter Country"
                       className="border-gray-300"
                     />
@@ -407,7 +407,7 @@ const PreviewDetails = ({
                     <Label className="block mb-2 font-medium">Phone</Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.dropOffPhone}
+                      value={destinationDetailsData?.drop_off_phone}
                       placeholder="Type the phone number"
                       className="border-gray-300"
                     />
@@ -425,7 +425,7 @@ const PreviewDetails = ({
                     <Label className="block mb-2 font-medium">Today</Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.returnDayLetter}
+                      value={destinationDetailsData?.return_day_letter}
                       placeholder="1 day later"
                       className="border-gray-300"
                     />
@@ -434,7 +434,7 @@ const PreviewDetails = ({
                     <Label className="block mb-2 font-medium">Time</Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.returnApproxTime}
+                      value={destinationDetailsData?.return_approx_time}
                       placeholder="Enter Time"
                       className="border-gray-300"
                     />
@@ -445,7 +445,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.returnFloor}
+                      value={destinationDetailsData?.return_floor}
                       placeholder="Type the stock or department"
                       className="border-gray-300"
                     />
@@ -464,7 +464,7 @@ const PreviewDetails = ({
                   </Label>
                   <Input
                     readOnly
-                    value={billingDetailsData?.preName}
+                    value={billingDetailsData?.pre_name}
                     placeholder="Type your prename or institution"
                     className="border-gray-300"
                   />

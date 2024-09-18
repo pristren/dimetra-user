@@ -11,3 +11,4 @@ export { default as Pencil } from "./Pencil.jsx";
 export { default as Security } from "./Security.jsx";
 export { default as Trash } from "./Trash.jsx";
 export { default as UsaLogo } from "./UsaLogo.jsx";
+export { default as Loading } from "./Loading.jsx";

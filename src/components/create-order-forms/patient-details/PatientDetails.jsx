@@ -29,13 +29,13 @@ const PatientDetails = ({
   const formSchema = z.object({
     name: z.string().min(1, "Name is required"),
     surname: z.string().min(1, "Surname is required"),
-    dateOfBirth: z.string().min(1, "Date of Birth is required"),
-    areaRoom: z.string().min(1, "Area/Room is required"),
-    costCenter: z.string().min(1, "Cost center is required"),
-    howMuch: z.string().optional(),
+    date_of_birth: z.string().min(1, "Date of Birth is required"),
+    area_room: z.string().min(1, "Area/Room is required"),
+    cost_center: z.string().min(1, "Cost center is required"),
+    how_much: z.string().optional(),
     special: z.string().optional(),
     isolation: z.boolean().optional(),
-    patientAbove90kg: z.boolean().optional(),
+    patient_above_90kg: z.boolean().optional(),
   });
 
   const form = useForm({
@@ -81,7 +81,8 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
+                      {createOrderData.transportationData?.type_of_transport ===
+                      "collectionOrder"
                         ? "Name Collection"
                         : "Name"}
                       <sup className="text-[13px]">*</sup>
@@ -110,7 +111,8 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
+                      {createOrderData.transportationData?.type_of_transport ===
+                      "collectionOrder"
                         ? "Number Patients"
                         : "Surname"}
                       <sup className="text-[13px]">*</sup>
@@ -135,11 +137,12 @@ const PatientDetails = ({
 
               <FormField
                 control={form.control}
-                name="dateOfBirth"
+                name="date_of_birth"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
+                      {createOrderData.transportationData?.type_of_transport ===
+                      "collectionOrder"
                         ? "Area/Room"
                         : "Date of Birth"}
                       <sup className="text-[13px]">*</sup>
@@ -147,7 +150,7 @@ const PatientDetails = ({
                     <FormControl>
                       <Input
                         className={
-                          form.formState.errors.dateOfBirth
+                          form.formState.errors.date_of_birth
                             ? "border-red-500"
                             : ""
                         }
@@ -166,11 +169,12 @@ const PatientDetails = ({
 
               <FormField
                 control={form.control}
-                name="areaRoom"
+                name="area_room"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
+                      {createOrderData.transportationData?.type_of_transport ===
+                      "collectionOrder"
                         ? "Cost Center"
                         : "Area/Room"}
                       <sup className="text-[13px]">*</sup>
@@ -178,7 +182,9 @@ const PatientDetails = ({
                     <FormControl>
                       <Input
                         className={
-                          form.formState.errors.areaRoom ? "border-red-500" : ""
+                          form.formState.errors.area_room
+                            ? "border-red-500"
+                            : ""
                         }
                         placeholder="Enter patient's area/room"
                         {...field}
@@ -195,21 +201,23 @@ const PatientDetails = ({
 
               <FormField
                 control={form.control}
-                name="costCenter"
+                name="cost_center"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {createOrderData.transportationData?.typeOfTransport === "collectionOrder"
+                      {createOrderData.transportationData?.type_of_transport ===
+                      "collectionOrder"
                         ? "How much"
                         : "Cost Center"}
-                      {createOrderData.transportationData?.typeOfTransport !== "collectionOrder" && (
+                      {createOrderData.transportationData?.type_of_transport !==
+                        "collectionOrder" && (
                         <sup className="text-[13px]">*</sup>
                       )}
                     </FormLabel>
                     <FormControl>
                       <Input
                         className={
-                          form.formState.errors.costCenter
+                          form.formState.errors.cost_center
                             ? "border-red-500"
                             : ""
                         }
@@ -226,17 +234,18 @@ const PatientDetails = ({
                 )}
               />
 
-              {createOrderData.transportationData?.typeOfTransport !== "collectionOrder" && (
+              {createOrderData.transportationData?.type_of_transport !==
+                "collectionOrder" && (
                 <FormField
                   control={form.control}
-                  name="howMuch"
+                  name="how_much"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>How Much</FormLabel>
                       <FormControl>
                         <Input
                           className={
-                            form.formState.errors.howMuch
+                            form.formState.errors.how_much
                               ? "border-red-500"
                               : ""
                           }
@@ -295,7 +304,7 @@ const PatientDetails = ({
 
               <FormField
                 control={form.control}
-                name="patientAbove90kg"
+                name="patient_above_90kg"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="block mb-3">
@@ -305,16 +314,16 @@ const PatientDetails = ({
                       <FormControl>
                         <Checkbox
                           className={
-                            form.formState.errors.patientAbove90kg
+                            form.formState.errors.patient_above_90kg
                               ? "border-red-500"
                               : ""
                           }
-                          id="patientAbove90kg"
+                          id="patient_above_90kg"
                           {...field}
                           onCheckedChange={(checked) =>
                             handleInputChange({
                               target: {
-                                name: "patientAbove90kg",
+                                name: "patient_above_90kg",
                                 type: "checkbox",
                                 checked,
                               },
@@ -323,7 +332,7 @@ const PatientDetails = ({
                         />
                       </FormControl>
                       <Label
-                        htmlFor="patientAbove90kg"
+                        htmlFor="patient_above_90kg"
                         className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
                       >
                         Yes

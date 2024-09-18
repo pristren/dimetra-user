@@ -1,3 +1,4 @@
+import axios from "axios";
 import WrongPath from "@/pages/wrong-path";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "@/pages/authentication/login";
@@ -14,8 +15,10 @@ import RecurringOrders from "@/pages/order/recurring-orders/RecurringOrders";
 import OrderDetails from "@/pages/order/order-details/OrderDetails";
 import Message from "./pages/order/send-request/Message";
 import AllMessages from "@/pages/order/send-request/AllMessages";
+import RateTheDriver from "@/pages/order/order-history/RateTheDriver";
 
 function App() {
+  axios.defaults.baseURL = `${import.meta.env.VITE_SERVER_LINK}`;
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/orders/all-orders" />} />
@@ -36,6 +39,7 @@ function App() {
         path="/orders"
         element={
           <PrivateRoute>
+            
             <OrderLayout />
           </PrivateRoute>
         }
@@ -43,6 +47,7 @@ function App() {
         <Route index element={<Navigate to="all-orders" />} />
         <Route path="order-details/:id" element={<OrderDetails />} />
         <Route path="history" element={<OrderHistory />} />
+        <Route path="review/:id" element={<RateTheDriver />} />
         <Route path="all-orders" element={<AllOrders />} />
         <Route path="recurring-orders/:id" element={<RecurringOrders />} />
         <Route path="setting" element={<OrderSettings />} />
