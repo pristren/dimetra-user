@@ -15,6 +15,8 @@ import {
   weekdaysOptions,
 } from "@/components/create-order-forms/helpers";
 import { Button } from "@/components/ui/button";
+import { useMutation } from "@apollo/client";
+import { CREATE_AN_ORDER } from "@/pages/order/create-order/graphql/mutations/createAnOrder.gql";
 
 const PreviewDetails = ({
   createOrderData,
@@ -37,6 +39,25 @@ const PreviewDetails = ({
   const calculateMonthlyOccurrences = (weekdays) => {
     return weekdays.length * 4;
   };
+  const [createAnOrder] = useMutation(CREATE_AN_ORDER);
+  const handleCreateAnOrder = async () => {
+    try {
+      const { data } = await createAnOrder({
+        variables: {
+          inputData: createOrderData,
+        },
+      });
+
+      if (data?.createAnOrder?.id) {
+        //do whatever you want
+        alert("Order created successfully");
+      }
+    } catch (error) {
+      const { message, response } = error;
+      console.log(message, response);
+    }
+  };
+
   return (
     <div className="w-9/12 p-8">
       {/* Single Card for all details */}
@@ -156,15 +177,17 @@ const PreviewDetails = ({
                 </div>
 
                 <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
-                {durationOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-2 mb-2"
-                  >
-                    <RadioGroupItem value={option.value} id={option.value} />
-                    <Label htmlFor={option.value}>{option.label}</Label>
-                  </div>
-                ))}
+                <RadioGroup value={transportationData?.ends}>
+                  {durationOptions.map((option) => (
+                    <div
+                      key={option.value}
+                      className="flex items-center space-x-2 mb-2"
+                    >
+                      <RadioGroupItem value={option.value} id={option.value} />
+                      <Label htmlFor={option.value}>{option.label}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
 
                 <h2 className="text-lg font-semibold mt-5">
                   Summary: Monthly on day{" "}
@@ -511,7 +534,9 @@ const PreviewDetails = ({
             </div>
           </div>
           <div className="flex items-center justify-center">
-            <Button className="px-14 mt-5">Submit</Button>
+            <Button onClick={handleCreateAnOrder} className="px-14 mt-5">
+              Submit
+            </Button>
           </div>
         </CardContent>
       </Card>

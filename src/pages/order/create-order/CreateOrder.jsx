@@ -166,6 +166,7 @@ const CreateOrder = () => {
             step="patientDetails"
             text="Patient"
             icon={<User />}
+            disabled={transportationProgress !== 100}
             progressValue={patientProgress}
             isDisabled={transportationProgress < 100}
           />
@@ -175,6 +176,7 @@ const CreateOrder = () => {
             step="destinationDetails"
             text="Destination"
             icon={<Truck />}
+            disabled={patientProgress !== 100}
             progressValue={destinationProgress}
             isDisabled={patientProgress < 100}
           />
@@ -184,6 +186,7 @@ const CreateOrder = () => {
             step="billingDetails"
             text="Billing"
             icon={<Send />}
+            disabled={destinationProgress !== 100}
             progressValue={billingProgress}
             isDisabled={destinationProgress < 100}
           />

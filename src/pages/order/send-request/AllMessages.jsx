@@ -1,8 +1,9 @@
 import { ArrowUpDown } from "@/assets/icons";
 import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
-const AllChats = () => {
+const AllMessages = () => {
   const data = [
     {
       id: "1",
@@ -71,11 +72,11 @@ const AllChats = () => {
   return (
     <div>
       <AppTable
+        rowClickable={true}
         pageTitle={"Send Request"}
-        addButton={{
-          visibility: true,
+        showModal={{
           name: "Add Request",
-          url: "/orders/add-request",
+          icon: <Plus />,
         }}
         columns={columns}
         data={data}
@@ -88,4 +89,4 @@ const AllChats = () => {
   );
 };
 
-export default AllChats;
+export default AllMessages;

@@ -4,7 +4,7 @@ import { getAccessToken } from "@/utils";
 const authLink = setContext((_, { headers }) => ({
   headers: {
     ...headers,
-    Authorization: getAccessToken(),
+    Authorization: `Bearer ${getAccessToken()}`,
   },
 }));
 

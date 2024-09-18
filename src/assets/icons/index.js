@@ -1,3 +1,6 @@
+export { default as Upload } from "./Upload.jsx";
+export { default as Attach } from "./Attach.jsx";
+export { default as Send } from "./Send.jsx";
 export { default as ArrowUpDown } from "./ArrowUpDown.jsx";
 export { default as DefaultAvatar } from "./DefaultAvatar.jsx";
 export { default as Document } from "./Document.jsx";
