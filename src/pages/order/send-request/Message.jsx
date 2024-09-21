@@ -194,11 +194,11 @@ const Message = () => {
     const newMessage = {
       text,
       userId: userId,
-      image: selectedImage ? URL.createObjectURL(selectedImage) : null, // Use URL.createObjectURL to create a local URL
+      image: selectedImage ? URL.createObjectURL(selectedImage) : null,
     };
 
     setMessages((prevMessages) => [...prevMessages, newMessage]);
-    setSelectedImage(null); // Clear the selected image after sending
+    setSelectedImage(null); 
   };
 
   const handleImageChange = (event) => {
