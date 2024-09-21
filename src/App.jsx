@@ -13,9 +13,9 @@ import OrderSettings from "@/pages/order/order-settings/OrderSettings";
 import AllOrders from "@/pages/order/all-orders/AllOrders";
 import RecurringOrders from "@/pages/order/recurring-orders/RecurringOrders";
 import OrderDetails from "@/pages/order/order-details/OrderDetails";
-import Message from "./pages/order/send-request/Message";
-import AllMessages from "@/pages/order/send-request/AllMessages";
+import Message from "@/pages/order/send-request/Message";
 import RateTheDriver from "@/pages/order/order-history/RateTheDriver";
+import SentRequests from "@/pages/order/send-request/SentRequests";
 
 function App() {
   axios.defaults.baseURL = `${import.meta.env.VITE_SERVER_LINK}`;
@@ -51,7 +51,7 @@ function App() {
         <Route path="review/:id" element={<RateTheDriver />} />
         <Route path="recurring-orders/:id" element={<RecurringOrders />} />
         <Route path="setting" element={<OrderSettings />} />
-        <Route path="all-messages" element={<AllMessages />} />
+        <Route path="sent-requests" element={<SentRequests />} />
         <Route path="message/:id" element={<Message />} />
         <Route path="details/:id" element={<OrderDetails />} />
       </Route>
