@@ -46,9 +46,9 @@ function App() {
       >
         <Route index element={<Navigate to="all-orders" />} />
         <Route path="order-details/:id" element={<OrderDetails />} />
+        <Route path="all-orders" element={<AllOrders />} />
         <Route path="history" element={<OrderHistory />} />
         <Route path="review/:id" element={<RateTheDriver />} />
-        <Route path="all-orders" element={<AllOrders />} />
         <Route path="recurring-orders/:id" element={<RecurringOrders />} />
         <Route path="setting" element={<OrderSettings />} />
         <Route path="all-messages" element={<AllMessages />} />

@@ -38,7 +38,7 @@ const OrderSettings = () => {
   return (
     <div>
       <div className="flex items-center justify-between gap-5">
-        <h5>My Profile</h5>
+        <h5 className="text-nowrap">My Profile</h5>
         <AppDialog
           trigger={
             <div className="flex justify-end items-center gap-2">
