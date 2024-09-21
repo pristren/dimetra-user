@@ -10,6 +10,12 @@ import PreviewDetails from "@/components/create-order-forms/preview-details/Prev
 import Navbar from "@/components/common/Navbar";
 import { isEqual } from "lodash";
 import { Logo } from "@/assets/icons";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+} from "@/components/ui/dialog";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -22,6 +28,7 @@ const CreateOrder = () => {
   const [returnDate, setReturnDate] = useState(null);
   const [dropDate, setDropDate] = useState(null);
   const [dateOfBirth, setDateOfBirth] = useState(null);
+  const [showPreview, setShowPreview] = useState(false);
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
   const [createOrderData, setCreateOrderData] = useState({
     transportationData: {
@@ -39,7 +46,7 @@ const CreateOrder = () => {
     patientData: {
       name: "",
       surname: "",
-      date_of_birth: dateOfBirth,
+      date_of_birth: null,
       area_room: "",
       cost_center: "",
       how_much: "",
@@ -54,6 +61,7 @@ const CreateOrder = () => {
       pick_up_country: "",
       pick_up_employee_name: "",
 
+      drop_off_pick_up_date: null,
       drop_off_pick_up_time: "",
       drop_off_name: "",
       drop_off_address: "",
@@ -61,7 +69,7 @@ const CreateOrder = () => {
       drop_off_country: "",
       drop_off_phone: "",
 
-      return_day_letter: "",
+      return_date: null,
       return_approx_time: "",
       return_floor: "",
     },
@@ -77,19 +85,44 @@ const CreateOrder = () => {
   const prevCreateOrderDataRef = useRef(createOrderData);
 
   useEffect(() => {
+    if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
+      localStorage.setItem("createOrderData", JSON.stringify(createOrderData));
+      prevCreateOrderDataRef.current = createOrderData;
+    }
+  }, [createOrderData]);
+
+  useEffect(() => {
     const storedData = localStorage.getItem("createOrderData");
     if (storedData) {
-      setCreateOrderData(JSON.parse(storedData));
+      const parsedData = JSON.parse(storedData);
+      setCreateOrderData(parsedData);
+
+      if (parsedData.patientData?.date_of_birth) {
+        setDateOfBirth(parsedData.patientData.date_of_birth);
+      }
+      if (parsedData.destinationDetailsData?.drop_off_pick_up_date) {
+        setDropDate(parsedData.destinationDetailsData.drop_off_pick_up_date);
+      }
+      if (parsedData.destinationDetailsData?.return_date) {
+        setReturnDate(parsedData.destinationDetailsData.return_date);
+      }
     }
   }, []);
 
   useEffect(() => {
-    if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
-      localStorage.setItem("createOrderData", JSON.stringify(createOrderData));
-
-      prevCreateOrderDataRef.current = createOrderData;
-    }
-  }, [createOrderData]);
+    setCreateOrderData((prev) => ({
+      ...prev,
+      patientData: {
+        ...prev.patientData,
+        date_of_birth: dateOfBirth,
+      },
+      destinationDetailsData: {
+        ...prev.destinationDetailsData,
+        drop_off_pick_up_date: dropDate,
+        return_date: returnDate,
+      },
+    }));
+  }, [dateOfBirth, dropDate, returnDate]);
 
   const handleFormChange = (step) => {
     setCurrentStep(step);
@@ -134,6 +167,8 @@ const CreateOrder = () => {
     dateOfBirth,
     patientProgress,
     destinationProgress,
+    showPreview,
+    setShowPreview,
     setDateOfBirth,
     setDropDate,
     setReturnDate,
@@ -149,7 +184,7 @@ const CreateOrder = () => {
     setDestinationProgress,
   };
   return (
-    <div className="relative">
+    <div className="relative overflow-y-auto">
       <Navbar />
       <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
         <div className="flex  gap-5 mb-5">
@@ -198,15 +233,22 @@ const CreateOrder = () => {
           <PatientDetails {...props} />
         ) : currentStep === "destinationDetails" ? (
           <DestinationDetails {...props} />
-        ) : currentStep === "billingDetails" ? (
-          <BillingDetails {...props} />
         ) : (
-          <PreviewDetails {...props} />
+          currentStep === "billingDetails" && <BillingDetails {...props} />
         )}
-      <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
-        <p className="text-lg mb-5 text-center">Powered by</p>
-        <Logo />
-      </div>
+        <Dialog open={showPreview} onOpenChange={setShowPreview}>
+          <DialogContent className="w-[90%] max-w-[60rem] px-0 border-none max-h-[98vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogDescription>
+                <PreviewDetails {...props} />
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
+        <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
+          <p className="text-lg mb-5 text-center">Powered by</p>
+          <Logo />
+        </div>
       </div>
     </div>
   );

@@ -133,7 +133,6 @@ const DestinationDetails = ({
     drop_off_country,
     drop_off_phone,
     dropDate,
-    returnDate,
   ];
 
   useEffect(() => {
@@ -481,7 +480,7 @@ const DestinationDetails = ({
                       render={({ field }) => (
                         <FormItem className="mb-7">
                           <FormLabel className="mb-2">
-                            Return Date <sup className="text-[13px]">*</sup>
+                            Return Date
                           </FormLabel>
                           <FormControl>
                             <DatePicker
@@ -496,41 +495,11 @@ const DestinationDetails = ({
 
                     <FormField
                       control={form.control}
-                      name="return_day_letter"
-                      render={({ field }) => (
-                        <FormItem className="mb-7">
-                          <FormLabel className="mb-2">
-                            Day Letter <sup className="text-[13px]">*</sup>
-                          </FormLabel>
-                          <FormControl>
-                            <AppSelect
-                              items={[
-                                "1 day letter",
-                                "2 day letter",
-                                "3 day letter",
-                              ]}
-                              placeholder="1 day letter"
-                              onValueChange={(value) =>
-                                updateDestinationData(
-                                  "return_day_letter",
-                                  value
-                                )
-                              }
-                              value={return_day_letter}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
                       name="return_approx_time"
                       render={({ field }) => (
                         <FormItem className="mb-7">
                           <FormLabel className="mb-2">
-                            Approx. Time <sup className="text-[13px]">*</sup>
+                            Approx. Time
                           </FormLabel>
                           <FormControl>
                             <AppSelect

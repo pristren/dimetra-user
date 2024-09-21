@@ -59,7 +59,7 @@ const PreviewDetails = ({
   };
 
   return (
-    <div className="w-9/12 p-8">
+    <div className="p-8">
       {/* Single Card for all details */}
       <Card className="w-full px-5 py-5">
         <CardHeader>
@@ -437,23 +437,10 @@ const PreviewDetails = ({
                   </div>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-4">
-                    Return journey
-                  </h3>
+                  <h3 className="text-xl font-semibold mb-4">Return journey</h3>
                   <div className="mb-5">
-                    <Label className="block mb-2 font-medium">
-                      Date <sup className="text-[13px]">*</sup>
-                    </Label>
+                    <Label className="block mb-2 font-medium">Date</Label>
                     <DatePicker date={returnDate} setDate={setReturnDate} />
-                  </div>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">Today</Label>
-                    <Input
-                      readOnly
-                      value={destinationDetailsData?.return_day_letter}
-                      placeholder="1 day later"
-                      className="border-gray-300"
-                    />
                   </div>
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">Time</Label>
