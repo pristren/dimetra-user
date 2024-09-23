@@ -20,6 +20,10 @@ export default function AuthLayout({ children, childContainer, ...props }) {
       >
         {children}
       </div>
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
+        <p className="text-lg mb-5 text-center">Powered by</p>
+        <Logo />
+      </div>
     </div>
   );
 }

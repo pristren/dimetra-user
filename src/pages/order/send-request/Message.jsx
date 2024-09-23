@@ -1,12 +1,11 @@
+import { useState } from "react";
 import { Attach, DefaultAvatar, Send } from "@/assets/icons";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-// import { useParams } from "react-router-dom";
 
 const Message = () => {
-  //   const { id } = useParams();
   const userId = 1;
-  const message = [
+  const [messages, setMessages] = useState([
     {
       text: "nothing new",
       image:
@@ -69,14 +68,7 @@ const Message = () => {
       text: "next message",
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-      displayName: "rafi",
-      userId: 2,
-      photoURL:
-        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
-    },
-    {
-      text: "next message",
-      image:
+      file:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
       userId: 2,
@@ -88,12 +80,24 @@ const Message = () => {
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
-      userId: 1,
-      photoURL: "",
+      userId: 2,
+      photoURL:
+        "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     },
     {
       text: "next message",
       image:
+        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      file:
+        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      displayName: "rafi",
+      userId: 1,
+      photoURL: "",
+    },
+    {
+      image:
+        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      file:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
       userId: 1,
@@ -123,11 +127,20 @@ const Message = () => {
       userId: 1,
       photoURL: "",
     },
-  ];
+    {
+      text: "next message",
+      image:
+        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      displayName: "rafi",
+      userId: 1,
+      photoURL: "",
+    },
+  ]);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const renderMessages = () => {
-    return message.map((msg, index) => {
-      const previousMessage = message[index - 1];
+    return messages.map((msg, index) => {
+      const previousMessage = messages[index - 1];
       const isFirstMessageFromUser =
         !previousMessage || previousMessage.userId !== msg.userId;
 
@@ -150,6 +163,7 @@ const Message = () => {
                 }`}
               >
                 {msg.text}
+                {msg.file && <img src={msg.image} alt="attachment" className="w-24 h-24 object-cover" />}
               </p>
             </div>
           ) : (
@@ -167,12 +181,31 @@ const Message = () => {
                 }`}
               >
                 {msg.text}
+                {msg.file && <img src={msg.image} alt="attachment" className="mt-2 w-24 h-24 object-cover" />}
               </p>
             </div>
           )}
         </div>
       );
     });
+  };
+
+  const handleSendMessage = (text) => {
+    const newMessage = {
+      text,
+      userId: userId,
+      image: selectedImage ? URL.createObjectURL(selectedImage) : null,
+    };
+
+    setMessages((prevMessages) => [...prevMessages, newMessage]);
+    setSelectedImage(null); 
+  };
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+    }
   };
 
   return (
@@ -197,18 +230,29 @@ const Message = () => {
         <div className="px-4 py-4 h-[57vh] overflow-y-auto hide-scrollbar">
           {renderMessages()}
         </div>
-
-        <div className="flex items-center justify-center gap-3 w-full px-4 mt-auto bottom-3 absolute bg-white">
+        {selectedImage && (
+            <div className="mb-4 ml-5">
+              <img src={URL.createObjectURL(selectedImage)} alt="preview" className="w-24 h-24 object-cover" />
+            </div>
+          )}
+        <div className="flex items-center justify-center gap-3 w-full px-4 mt-auto bg-white mb-5">
           <div>
-            <Label htmlFor="image">
+            <Label htmlFor="image" className="cursor-pointer">
               <Attach />
             </Label>
-            <Input type="file" id="image" className="hidden" />
+            <Input type="file" id="image" className="hidden" onChange={handleImageChange} />
           </div>
+         
           <div className="relative w-full border border-gray-200 rounded-md">
             <Input
               className="w-[95%] border-none"
               placeholder="Type a message"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSendMessage(e.target.value);
+                  e.target.value = "";
+                }
+              }}
             />
             <Send className="absolute right-3 top-1/2 -translate-y-1/2" />
           </div>

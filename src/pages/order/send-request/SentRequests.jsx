@@ -3,7 +3,7 @@ import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
-const AllMessages = () => {
+const SentRequests = () => {
   const data = [
     {
       id: "1",
@@ -89,4 +89,4 @@ const AllMessages = () => {
   );
 };
 
-export default AllMessages;
+export default SentRequests;

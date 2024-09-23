@@ -53,7 +53,6 @@ const AllOrders = () => {
   }, []);
 
   useEffect(() => {
-    // wait for 2 seconds before setting the data
     setTimeout(() => {
       setData([
         {
@@ -121,9 +120,22 @@ const AllOrders = () => {
       case "Pending":
         return "#DCF3FF";
       default:
-        return "#FFFFFF"; // Default color if status is unknown
+        return "#FFFFFF";
     }
   };
+
+  const handlePauseOrder = (orderId) => {
+    setData((prevData) =>
+      prevData.map((order) =>
+        order.id === orderId ? { ...order, status: "Paused" } : order
+      )
+    );
+  };
+
+  const handleDeleteOrder = (orderId) => {
+    setData((prevData) => prevData.filter((order) => order.id !== orderId));
+  };
+  
 
   const columns = [
     {
@@ -232,31 +244,35 @@ const AllOrders = () => {
         </div>
       ),
       cell: ({ row }) => {
+        const orderId = row.original.id;
         const orderType = row.getValue("orderType");
         return (
           <div className="flex justify-center items-center">
             <DropdownMenu>
               <DropdownMenuTrigger>
-                {row.original.id && (
+                {orderId && (
                   <EllipsisVertical className="h-4 w-4 cursor-pointer" />
                 )}
               </DropdownMenuTrigger>
               <DropdownMenuContent className="-translate-x-5 p-4 w-60">
-                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer">
                   <Pencil className="size-5 text-gray-600" />
                   <span className="text-gray-700 text-sm">Edit</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                <DropdownMenuItem
+                  className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
+                  onClick={() => handleDeleteOrder(orderId)}
+                >
                   <Trash className="size-5" />
-
                   <span className="text-gray-700 text-sm">Storno</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="py-2 mb-2">
+
+                <DropdownMenuItem className="py-2 mb-2 cursor-pointer">
                   <Link
                     to={`${
                       orderType === "Recurring"
-                        ? `/orders/recurring-orders/${row.original.id}`
-                        : `/orders/order-details/${row.original.id}`
+                        ? `/orders/recurring-orders/${orderId}`
+                        : `/orders/order-details/${orderId}`
                     }`}
                     className="flex items-center gap-3 text-[16px]"
                   >
@@ -264,7 +280,10 @@ const AllOrders = () => {
                     <span className="text-gray-700 text-sm">View Details</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                <DropdownMenuItem
+                  className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
+                  onClick={() => handlePauseOrder(orderId)}
+                >
                   <Pause className="size-5" />
                   <span className="text-gray-700 text-sm">Pause</span>
                 </DropdownMenuItem>

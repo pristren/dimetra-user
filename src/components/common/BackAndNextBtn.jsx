@@ -21,7 +21,6 @@ const BackAndNextBtn = ({
       <Button
         disabled={isDisabled}
         onClick={handleGoNext}
-        type="submit"
         className={`${
           isFillForm
             ? "bg-primary text-white"
