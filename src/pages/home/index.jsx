@@ -7,7 +7,9 @@ import { GET_CATEGORISE } from "./graphql/queries/getCategories.gql";
 
 export default function Home() {
   const [getCategories] = useLazyQuery(GET_CATEGORISE, {
-    variables: {},
+    variables: {queryData:{
+      id: 
+    }},
     errorPolicy: "all",
     fetchPolicy: "no-cache",
     onCompleted: (data) => {
