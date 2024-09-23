@@ -3,8 +3,29 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
+import { useLazyQuery } from "@apollo/client";
+import { GET_AN_ORDER } from "./graphql/queries/getAnOrder.gql";
+import { useEffect } from "react";
 
-const OrderDetails = () => {
+function OrderDetails() {
+
+  const [getAnOrder] = useLazyQuery(GET_AN_ORDER, {
+    variables: {queryData:{
+      id: "66eaffa95fee990676e7a5aa"
+    }},
+    errorPolicy: "all",
+    fetchPolicy: "no-cache",
+    onCompleted: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log({ error });
+    },
+  });
+  useEffect(() => {
+    getAnOrder();
+  }, []);
+  
   return (
     <div>
       <h5>Order Details</h5>

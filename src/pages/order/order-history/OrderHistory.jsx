@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useRef } from "react";
 import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,9 +10,14 @@ import {
 import { ArrowUpDown } from "@/assets/icons";
 import { EllipsisVertical } from "lucide-react";
 import { Link } from "react-router-dom";
+import ReactToPrint from "react-to-print";
 
 const OrderHistory = () => {
   const [date, setDate] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const printRef = useRef();
+  const reactToPrintTriggerRef = useRef();
+
   const filters = [
     "All Order",
     "Recurring",
@@ -47,44 +52,8 @@ const OrderHistory = () => {
       rateToDriver: "Rate the driver",
       orderType: "Sammelauftrag",
     },
-
-    {
-      date: "2024-09-08",
-      time: "14:30",
-      pickUp: "123 Main St.",
-      destination: "456 Elm St.",
-      vehicle: "Sedan",
-      driver: "John Doe",
-      dispatcher: "Jane Smith",
-      status: "Completed",
-      rateToDriver: "Rate the driver",
-      orderType: "Sammelauftrag",
-    },
-    {
-      date: "2024-09-08",
-      time: "14:30",
-      pickUp: "123 Main St.",
-      destination: "456 Elm St.",
-      vehicle: "Sedan",
-      driver: "John Doe",
-      dispatcher: "Jane Smith",
-      status: "Paused",
-      rateToDriver: "Rate the driver",
-      orderType: "Sammelauftrag",
-    },
-    {
-      date: "2024-09-08",
-      time: "14:30",
-      pickUp: "123 Main St.",
-      destination: "456 Elm St.",
-      vehicle: "Sedan",
-      driver: "John Doe",
-      dispatcher: "Jane Smith",
-      status: "Completed",
-      rateToDriver: "Rate the driver",
-      orderType: "Sammelauftrag",
-    },
   ];
+
   const getStatusColor = (status) => {
     switch (status) {
       case "Rejected":
@@ -94,6 +63,13 @@ const OrderHistory = () => {
       default:
         return "#FFFFFF";
     }
+  };
+
+  const handlePrintOrder = (order) => {
+    setSelectedOrder(order);
+    setTimeout(() => {
+      reactToPrintTriggerRef.current.click();
+    }, 100);
   };
 
   const columns = [
@@ -229,7 +205,7 @@ const OrderHistory = () => {
           />
         </p>
       ),
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex items-center justify-center">
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -239,8 +215,10 @@ const OrderHistory = () => {
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+              <DropdownMenuItem onClick={() => handlePrintOrder(row.original)}>
+                Print Order
+              </DropdownMenuItem>
               <DropdownMenuItem>View Details</DropdownMenuItem>
-              <DropdownMenuItem>Print Order</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -252,6 +230,7 @@ const OrderHistory = () => {
       cell: () => null,
     },
   ];
+
   return (
     <div className="w-full">
       <AppTable
@@ -269,8 +248,50 @@ const OrderHistory = () => {
         isSearchVisible={true}
         isRecurring={false}
       />
+
+      <ReactToPrint
+        trigger={() => (
+          <button ref={reactToPrintTriggerRef} style={{ display: "none" }}>
+            Print
+          </button>
+        )}
+        content={() => printRef.current}
+      />
+      {selectedOrder && (
+        <div style={{ display: "none" }}>
+          <OrderPrint ref={printRef} order={selectedOrder} />
+        </div>
+      )}
     </div>
   );
 };
+
+const OrderPrint = React.forwardRef(({ order }, ref) => (
+  <div className="px-2" ref={ref}>
+    <h4 className="text-center mt-5 mb-10">Order History</h4>
+    <table className="w-full mx-auto">
+      <tr className="border gap-4 p-2">
+        <th className="border text-center">Date</th>
+        <th className="border text-center">Time</th>
+        <th className="border text-center">Pick Up</th>
+        <th className="border text-center">Destination</th>
+        <th className="border text-center">Vehicle</th>
+        <th className="border text-center">Driver</th>
+        <th className="border text-center">Dispatcher</th>
+        <th className="border text-center">Status</th>
+      </tr>
+      <tr className="border gap-4 p-10">
+        <td className="border text-center">{order.date}</td>
+        <td className="border text-center">{order.time}</td>
+        <td className="border text-center">{order.pickUp}</td>
+        <td className="border text-center">{order.destination}</td>
+        <td className="border text-center">{order.vehicle}</td>
+        <td className="border text-center">{order.driver}</td>
+        <td className="border text-center">{order.dispatcher}</td>
+        <td className="border text-center">{order.status}</td>
+      </tr>
+    </table>
+  </div>
+));
 
 export default OrderHistory;

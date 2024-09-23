@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AppTable } from "@/components/common/AppTable";
 import { ArrowUpDown, Document, Pause, Pencil, Trash } from "@/assets/icons";
+import { useLazyQuery } from "@apollo/client";
+import { GET_ALL_ORDERS } from "../order-details/graphql/queries/getAllOrders.gql";
 
 const AllOrders = () => {
   const [date, setDate] = useState(null);
@@ -33,6 +35,22 @@ const AllOrders = () => {
       status: "",
     },
   ]);
+
+  
+  const [getAnOrder] = useLazyQuery(GET_ALL_ORDERS, {
+    variables: {},
+    errorPolicy: "all",
+    fetchPolicy: "no-cache",
+    onCompleted: (data) => {
+      console.log(data);
+    },
+    onError: (error) => {
+      console.log({ error });
+    },
+  });
+  useEffect(() => {
+    getAnOrder();
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
