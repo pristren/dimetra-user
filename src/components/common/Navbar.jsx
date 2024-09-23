@@ -1,9 +1,11 @@
 import { DefaultAvatar, Logo } from "@/assets/icons";
 import Language from "@/components/helper-ui/Language";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export default function Navbar() {
   const url = window.location.pathname;
+  const { userInfo } = useSelector((state) => state.user);
   return (
     <nav
       className={`
@@ -18,7 +20,7 @@ export default function Navbar() {
         <Language />
         <div className="flex items-center gap-3">
           <DefaultAvatar />
-          <p className="text-sm">Mahmud</p>
+          <p className="text-sm">{userInfo?.first_name}</p>
         </div>
       </div>
     </nav>

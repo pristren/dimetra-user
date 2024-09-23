@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { useDispatch } from "react-redux";
 
 import { Link, useNavigate } from "react-router-dom";
-import { setAccessToken, setUser } from "@/redux/slices/user/userSlice";
+import { setAccessToken, setUserInfo } from "@/redux/slices/user/userSlice";
 import { loginAnUser } from "../apis/login";
 import { Loading } from "@/assets/icons";
 import { useState } from "react";
@@ -54,7 +54,12 @@ export default function LoginForm() {
     await loginAnUser(values)
       .then((res) => {
         if (res?.data?.token) {
-          dispatch(setUser(res?.data?.user));
+          dispatch(
+            setUserInfo({
+              ...res?.data?.user,
+              id: res?.data?.user?._id,
+            })
+          );
           dispatch(setAccessToken(res?.data?.token));
           localStorage.setItem("access_token", res?.data?.token);
           navigate("/orders/all-orders");
