@@ -17,6 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@apollo/client";
 import { CREATE_AN_ORDER } from "@/pages/order/create-order/graphql/mutations/createAnOrder.gql";
+import { useNavigate } from "react-router-dom";
 
 const PreviewDetails = ({
   createOrderData,
@@ -29,6 +30,7 @@ const PreviewDetails = ({
   setReturnDate,
   dropDate,
   setDropDate,
+  setShowPreview,
 }) => {
   const {
     transportationData,
@@ -40,6 +42,7 @@ const PreviewDetails = ({
     return weekdays.length * 4;
   };
   const [createAnOrder] = useMutation(CREATE_AN_ORDER);
+  const navigate = useNavigate();
   const handleCreateAnOrder = async () => {
     try {
       const { data } = await createAnOrder({
@@ -50,7 +53,9 @@ const PreviewDetails = ({
       console.log(data);
       if (data?.createAnOrder?.id) {
         //do whatever you want
-        alert("Order created successfully");
+        // alert("Order created successfully");
+        navigate("/orders/all-orders");
+        setShowPreview(false);
       }
     } catch (error) {
       const { message, response } = error;
@@ -59,9 +64,9 @@ const PreviewDetails = ({
   };
 
   return (
-    <div className="p-8">
+    <div className="p-2">
       {/* Single Card for all details */}
-      <Card className="w-full px-5 py-5">
+      <Card className="w-full px-5 py-5 border-none shadow-none">
         <CardHeader>
           <CardTitle>Preview Details</CardTitle>
         </CardHeader>

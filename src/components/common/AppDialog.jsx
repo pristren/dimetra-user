@@ -11,7 +11,7 @@ import {
 const AppDialog = ({ trigger, title, content, className }) => {
   return (
     <Dialog>
-      <DialogTrigger className="w-full">{trigger}</DialogTrigger>
+      <DialogTrigger className="">{trigger}</DialogTrigger>
       <DialogContent className={className}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
