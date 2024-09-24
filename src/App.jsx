@@ -36,6 +36,14 @@ function App() {
         }
       />
       <Route
+        path="/edit-order/:id"
+        element={
+          <PrivateRoute>
+            <CreateOrder />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/orders"
         element={
           <PrivateRoute>
