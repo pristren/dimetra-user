@@ -12,9 +12,12 @@ import {
 } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
 import PasswordChangeForm from "./PasswordChangeForm";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import useInitializeUser from "@/hooks/useInitializeUser";
+import { UPDATE_AN_USER } from "./graphql/mutations/updateAnUser.qgl";
+import { useMutation } from "@apollo/client";
+import { setUserInfo } from "@/redux/slices/user/userSlice";
 
 const OrderSettings = () => {
   const { userInfo } = useSelector((state) => state.user);
@@ -36,15 +39,40 @@ const OrderSettings = () => {
       code: "",
       internal_cost_center: "",
     },
+    values: {
+      first_name: userInfo?.first_name,
+      last_name: userInfo?.last_name,
+      email: userInfo?.email,
+      phone: userInfo?.phone,
+      address: userInfo?.address,
+      billing_address: userInfo?.billing_address,
+      code: userInfo?.code,
+      internal_cost_center: userInfo?.internal_cost_center,
+    },
   });
+  const dispatch = useDispatch();
 
-  const onSubmitUserDetails = async (data) => {
-    console.log(data);
+  const [updateAnUser] = useMutation(UPDATE_AN_USER);
+  const onSubmitUserDetails = async (value) => {
+    const { data } = await updateAnUser({
+      variables: {
+        inputData: {
+          ...value,
+        },
+      },
+    });
+
+    if (data) {
+      dispatch(setUserInfo(data.updateAnUser));
+      setEditModalOpen(false);
+    }
   };
 
   const onSubmitPasswordChange = async (data) => {
     console.log(data);
   };
+
+  const [editModalOpen, setEditModalOpen] = useState(false);
 
   return (
     <div>
@@ -76,7 +104,7 @@ const OrderSettings = () => {
               <p>{userInfo?.phone}</p>
             </div>
           </div>
-          <Dialog>
+          <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
             <DialogTrigger>
               <Button className="bg-gray-100 hover:bg-gray-200 shadow-xl rounded-full py-2 px-5 text-blue-500">
                 Edit

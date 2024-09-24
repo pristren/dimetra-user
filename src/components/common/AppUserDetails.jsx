@@ -326,32 +326,49 @@ const AppUserDetails = ({ onSubmit, form, isRegister }) => {
               Register
             </Button>
           )}
-          {!isRegister && (
-            <AppDialog
-              className="w-[25%] px-6 pb-6 pt-10"
-              trigger={
-                <div className="w-full flex items-center justify-center">
-                  <Button className="mt-10 px-12 w-max mx-auto">Save</Button>
-                </div>
-              }
-              title="Sure you want to Save changes?"
-              content={
-                <div>
-                  <p className="my-2">Are you sure you want to accept this?</p>
-                  <div className="flex items-center justify-start gap-2 my-5">
-                    <Checkbox id="doNotShow" />
-                    <Label htmlFor="doNotShow">Don’t show this again</Label>
+          {/* this will have to recheck  */}
+
+          {/* <div className=" flex justify-center">
+            {!isRegister && (
+              <AppDialog
+                className="w-[90%] lg:w-[25%] px-6 pb-6 pt-10"
+                trigger={
+                  <Button type="button" className="mt-10 px-12 w-max mx-auto">
+                    Save
+                  </Button>
+                }
+                title="Sure you want to Save changes?"
+                content={
+                  <div>
+                    <p className="my-2">
+                      Are you sure you want to accept this?
+                    </p>
+                    <div className="flex items-center justify-start gap-2 my-5">
+                      <Checkbox id="doNotShow" />
+                      <Label htmlFor="doNotShow">Don’t show this again</Label>
+                    </div>
+                    <div className="flex items-center justify-center w-full gap-3 mt-5">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                      >
+                        No, Cancel
+                      </Button>
+                      <Button type="submit" className="w-full">
+                        Yes, Confirm
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-center w-full gap-3 mt-5">
-                    <Button variant="outline" className="w-full">
-                      No, Cancel
-                    </Button>
-                    <Button className="w-full">Yes, Confirm</Button>
-                  </div>
-                </div>
-              }
-            />
-          )}
+                }
+              />
+            )}
+          </div> */}
+          <div className="flex justify-center">
+            <Button type="submit" className="mt-10 px-12 w-max mx-auto">
+              Save
+            </Button>
+          </div>
           {isRegister && <AuthFooter page={"register"} />}
         </form>
       </Form>
