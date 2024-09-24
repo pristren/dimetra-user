@@ -18,7 +18,7 @@ import RateTheDriver from "@/pages/order/order-history/RateTheDriver";
 import SentRequests from "@/pages/order/send-request/SentRequests";
 
 function App() {
-  axios.defaults.baseURL = `${import.meta.env.VITE_SERVER_LINK}`;
+  axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/orders/all-orders" />} />
@@ -39,7 +39,6 @@ function App() {
         path="/orders"
         element={
           <PrivateRoute>
-            
             <OrderLayout />
           </PrivateRoute>
         }

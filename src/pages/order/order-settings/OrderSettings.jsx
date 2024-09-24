@@ -12,8 +12,19 @@ import {
 } from "@/components/ui/dialog";
 import { useForm } from "react-hook-form";
 import PasswordChangeForm from "./PasswordChangeForm";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import useInitializeUser from "@/hooks/useInitializeUser";
 
 const OrderSettings = () => {
+  const { userInfo } = useSelector((state) => state.user);
+
+  const { getAnUser } = useInitializeUser();
+
+  useEffect(() => {
+    getAnUser();
+  }, []);
+
   const form = useForm({
     defaultValues: {
       first_name: "",
@@ -59,8 +70,10 @@ const OrderSettings = () => {
               alt=""
             />
             <div>
-              <h6 className="mb-2">Manoj Tiwari</h6>
-              <p>+91 83673783738</p>
+              <h6 className="mb-2">
+                {userInfo?.first_name} {userInfo?.last_name}
+              </h6>
+              <p>{userInfo?.phone}</p>
             </div>
           </div>
           <Dialog>
@@ -79,28 +92,30 @@ const OrderSettings = () => {
             </DialogContent>
           </Dialog>
         </div>
-        <div className="mt-28">
-          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5">
+        <div className="mt-20 ">
+          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className="highlight ml-3 text-gray-500 w-40">Email</p>
-            <p className="highlight">Manoj@gmail.com</p>
+            <p className="highlight">{userInfo?.email}</p>
           </div>
-          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5">
+          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className="highlight ml-3 text-gray-500 w-40">Address</p>
-            <p className="highlight">Address</p>
+            <p className="highlight">{userInfo?.address}</p>
           </div>
-          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5">
+          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className="highlight ml-3 text-gray-500 w-40">Billing address</p>
-            <p className="highlight">Lorem huhsbe mjnsyue </p>
+            <p className="highlight">{userInfo?.billing_address}</p>
           </div>
-          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5">
+          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className="highlight ml-3 text-gray-500 w-40">Code</p>
-            <p className="highlight">2322123</p>
+            <p className="highlight">{userInfo?.code}</p>
           </div>
-          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5">
+          <div className="flex items-center gap-20 pb-5 px-5">
             <p className="highlight ml-3 text-gray-500 w-40">
               Internal Koststelle
             </p>
-            <p className="highlight">Management System</p>
+            <p className="highlight">
+              {userInfo?.internal_cost_center || "Not available"}
+            </p>
           </div>
         </div>
       </div>
