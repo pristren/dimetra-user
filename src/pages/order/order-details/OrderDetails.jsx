@@ -5,72 +5,65 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useLazyQuery } from "@apollo/client";
 import { GET_AN_ORDER } from "./graphql/queries/getAnOrder.gql";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 function OrderDetails() {
-
+  const [data, setData] = useState({});
+  const { id } = useParams();
   const [getAnOrder] = useLazyQuery(GET_AN_ORDER, {
-    variables: {queryData:{
-      id: "66eaffa95fee990676e7a5aa"
-    }},
+    variables: { queryData: { id: id } },
     errorPolicy: "all",
     fetchPolicy: "no-cache",
-    onCompleted: (data) => {
-      console.log(data);
+    onCompleted: (response) => {
+      setData(response.getAnOrder);
     },
     onError: (error) => {
       console.log({ error });
     },
   });
+
   useEffect(() => {
     getAnOrder();
-  }, []);
-  
+  }, [getAnOrder]);
+
   return (
     <div>
       <h5>Order Details</h5>
       <div className="my-14 bg-white p-5">
-        <h5>Transportation details</h5>
-        <div className="grid grid-cols-3 mt-10">
+        <h5>Transportation Details</h5>
+        <div className="grid grid-cols-3 mt-10 mb-20">
           <div>
-            <p className="highlight mb-4">Type of transport</p>
-            <p>Private trips</p>
+            <p className="highlight mb-4">Type of Transport</p>
+            <p>{data?.transportationData?.type_of_transport}</p>
           </div>
           <div>
-            <p className="highlight mb-4">Mode of transportation</p>
-            <p>Lying down</p>
-            <p>Second transport helper</p>
+            <p className="highlight mb-4">Mode of Transportation</p>
+            {data?.transportationData?.mode_of_transportation?.map(
+              (mode, index) => (
+                <p key={index}>{mode}</p>
+              )
+            )}
           </div>
           <div>
-            <p className="highlight mb-4">Transport with</p>
-            <p>Infusion</p>
-            <p>Oxygen (liters/min)</p>
+            <p className="highlight mb-4">Transport With</p>
+            {data?.transportationData?.transport_with?.map((person, index) => (
+              <p key={index}>{person}</p>
+            ))}
           </div>
         </div>
+
         <Separator />
+
         <div className="my-14">
-          <h5>Selected Weekdays and Months</h5>
+          <h5>Selected Weekdays</h5>
           <div className="w-[60%] grid grid-cols-3 gap-6 mt-10 mb-10">
-            <div className="flex items-center gap-2">
-              <Checkbox checked />
-              <Label>Tuesday</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox checked />
-              <Label>Tuesday</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox checked />
-              <Label>Tuesday</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox checked />
-              <Label>Tuesday</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <Checkbox checked />
-              <Label>Tuesday</Label>
-            </div>
+            {data?.transportationData?.multiple_weekdays?.map((day, index) => (
+              <div className="flex items-center gap-2" key={index}>
+                <Checkbox checked />
+                <Label>{day}</Label>
+              </div>
+            ))}
           </div>
           <RadioGroup value="1 month">
             <div className="flex items-center space-x-2 mb-2">
@@ -79,153 +72,100 @@ function OrderDetails() {
             </div>
           </RadioGroup>
         </div>
+
         <Separator />
+
         <div className="my-14 w-[60%]">
-          <h5>Patient details</h5>
+          <h5>Patient Details</h5>
           <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
             <div className="flex items-center gap-10">
               <p>First Name: </p>
-              <p>Sandeep</p>
+              <p>{data?.patientData?.name}</p>
             </div>
             <div className="flex items-center gap-10">
-              <p>Dispatcher: </p>
-              <p>Kenneth Allen</p>
+              <p>Surname: </p>
+              <p>{data?.patientData?.surname}</p>
             </div>
             <div className="flex items-center gap-10">
-              <p>Pick up: </p>
-              <p>Universität Spital, 4056 Basel</p>
+              <p>Date of Birth: </p>
+              <p>
+                {new Date(
+                  Number(data?.patientData?.date_of_birth)
+                ).toLocaleDateString()}
+              </p>
             </div>
             <div className="flex items-center gap-10">
-              <p>Order Type:</p>
-              <p>Reccuring</p>
+              <p>Area Room: </p>
+              <p>{data?.patientData?.area_room}</p>
             </div>
             <div className="flex items-center gap-10">
-              <p>Destination :</p>
-              <p>St. Clara Spital, 4058 Basel</p>
-            </div>
-            <div className="flex items-center gap-10">
-              <p>Date & time :</p>
-              <p>Select Date and time</p>
-            </div>
-            <div className="flex items-center gap-10">
-              <p>Vehicle:</p>
-              <p>Car</p>
+              <p>Special: </p>
+              <p>{data?.patientData?.special}</p>
             </div>
           </div>
         </div>
+
         <Separator />
+
         <div className="my-14">
-          <h5>Destination details</h5>
+          <h5>Destination Details</h5>
           <div className="grid grid-cols-3 gap-6 text-nowrap mt-10">
             <div>
               <p className="highlight mb-5">Pick up</p>
               <div className="flex items-center gap-10 mb-8">
-                <p>Name / Institution : </p>
-                <p>Sandeep</p>
+                <p>Name / Institution: </p>
+                <p>{data?.destinationDetailsData?.pick_up_name}</p>
               </div>
               <div className="flex items-center gap-10 mb-8">
-                <p>Address : </p>
-                <p>Universität Spital, 4056 Basel</p>
-              </div>
-              <div className="flex items-center gap-10 mb-8">
-                <p>City :</p>
-                <p>St. Clara Spital, 4058 Basel</p>
-              </div>
-              <div className="flex items-center gap-10 mb-8">
-                <p>Country :</p>
-                <p>Car</p>
-              </div>
-              <div className="flex items-center gap-10 mb-8">
-                <p>Working Employee Name :</p>
-                <p>Employee Name</p>
+                <p>Address: </p>
+                <p>{data?.destinationDetailsData?.pick_up_address}</p>
               </div>
             </div>
             <div>
               <p className="highlight mb-5">Drop-Off</p>
               <div className="flex items-center gap-10 mb-8">
-                <p>Date :</p>
-                <p>Select Date</p>
+                <p>Name / Institution: </p>
+                <p>{data?.destinationDetailsData?.drop_off_name}</p>
               </div>
               <div className="flex items-center gap-10 mb-8">
-                <p>Pickup time :</p>
-                <p>Sep 21, 2024</p>
-              </div>
-              <div className="flex items-center gap-10 mb-8">
-                <p>Name/ Institution :</p>
-                <p>Adresse Email</p>
-              </div>
-              <div className="flex items-center gap-10 mb-8">
-                <p>Address :</p>
-                <p>Adresse Email</p>
-              </div>
-              <div className="flex items-center gap-10 mb-8">
-                <p>city :</p>
-                <p>Enter City Name</p>
-              </div>
-              <div className="flex items-center gap-10 mb-8">
-                <p>Country :</p>
-                <p>Enter Country </p>
-              </div>
-              <div className="flex items-center gap-10 mb-8">
-                <p>Phone :</p>
-                <p>+91 6658774637</p>
+                <p>Address: </p>
+                <p>{data?.destinationDetailsData?.drop_off_address}</p>
               </div>
             </div>
             <div>
-              <p className="highlight mb-5">Return journey</p>
+              <p className="highlight mb-5">Return Journey</p>
               <div className="flex items-center gap-10 mb-8">
-                <p>Date :</p>
-                <p>Sep 21, 2024</p>
-              </div>
-              <div className="flex items-center gap-10 mb-8">
-                <p>Time :</p>
-                <p>12:07</p>
-              </div>
-              <div className="flex items-center gap-10 mb-8">
-                <p>Floor/Department :</p>
-                <p>Here Stock</p>
+                <p>Date: </p>
+                <p>{data?.destinationDetailsData?.return_day_letter}</p>
               </div>
             </div>
           </div>
         </div>
+
         <Separator />
+
         <div className="my-14 w-[60%]">
-          <h5>Billing details</h5>
+          <h5>Billing Details</h5>
           <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
             <div className="flex items-center gap-10">
-              <p>Prename / Institution : </p>
-              <p>Add Prename / Institution</p>
+              <p>Prename / Institution: </p>
+              <p>{data?.billingDetailsData?.pre_name}</p>
             </div>
             <div className="flex items-center gap-10">
-              <p>Dispatcher:</p>
-              <p>Kenneth Allen</p>
+              <p>Street: </p>
+              <p>{data?.billingDetailsData?.street}</p>
             </div>
             <div className="flex items-center gap-10">
-              <p>Name :</p>
-              <p>Here Is Name</p>
+              <p>Place: </p>
+              <p>{data?.billingDetailsData?.place}</p>
             </div>
             <div className="flex items-center gap-10">
-              <p>Order Type:</p>
-              <p>Reccuring</p>
-            </div>
-            <div className="flex items-center gap-10">
-              <p>Street :</p>
-              <p>Here Street</p>
-            </div>
-            <div className="flex items-center gap-10">
-              <p>Date & time :</p>
-              <p>Select Date and time</p>
-            </div>
-            <div className="flex items-center gap-10">
-              <p>Place :</p>
-              <p>Here Place</p>
-            </div>
-            <div className="flex items-center gap-10">
-              <p>Contact :</p>
-              <p>+91 986754534</p>
+              <p>Contact: </p>
+              <p>{data?.billingDetailsData?.contact}</p>
             </div>
           </div>
         </div>
+
         <Separator />
         <div className="my-14">
           <h5>MTS Detail</h5>
@@ -246,6 +186,7 @@ function OrderDetails() {
             <p>17</p>
           </div>
         </div>
+
         <div className="flex items-center justify-center gap-6">
           <Button className="bg-secondary text-black px-14">Back</Button>
           <Button className="px-14">Edit</Button>
@@ -253,6 +194,6 @@ function OrderDetails() {
       </div>
     </div>
   );
-};
+}
 
 export default OrderDetails;

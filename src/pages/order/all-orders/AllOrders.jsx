@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -10,8 +11,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AppTable } from "@/components/common/AppTable";
 import { ArrowUpDown, Document, Pause, Pencil, Trash } from "@/assets/icons";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_ALL_ORDERS } from "../order-details/graphql/queries/getAllOrders.gql";
+import { DELETE_AN_ORDER } from "./graphql/mutations/deleteOrder.gql";
 
 const AllOrders = () => {
   const [date, setDate] = useState(null);
@@ -23,101 +25,42 @@ const AllOrders = () => {
     "Privatfahrt",
   ];
 
-  const [data, setData] = useState([
-    {
-      id: "",
-      date: "",
-      pickUp: "",
-      destination: "",
-      driver: "",
-      patientName: "",
-      orderType: "",
-      status: "",
-    },
-  ]);
+  const [data, setData] = useState([]);
 
-  
-  const [getAnOrder] = useLazyQuery(GET_ALL_ORDERS, {
+  const [getAllOrders] = useLazyQuery(GET_ALL_ORDERS, {
     variables: {},
     errorPolicy: "all",
     fetchPolicy: "no-cache",
-    onCompleted: (data) => {
-      console.log(data);
+    onCompleted: (response) => {
+      setData(response.getAllOrders);
     },
     onError: (error) => {
-      console.log({ error });
+      console.error({ error });
     },
   });
   useEffect(() => {
-    getAnOrder();
-  }, []);
+    getAllOrders();
+  }, [getAllOrders]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setData([
-        {
-          id: "1",
-          date: "2024-10-08",
-          pickUp: "Universität Spital, 4056 Basel something something",
-          destination: "St. Clara Spital, 4058 Basel",
-          driver: "JohnDoe JohnDoe",
-          patientName: "Sedan",
-          orderType: "Recurring",
-          status: "Pending",
-        },
-        {
-          id: "2",
-          date: "2024-12-08",
-          pickUp: "Universität Spital, 4056 Basel",
-          destination: "St. Clara Spital, 4058 Basel",
-          driver: "John Doe",
-          patientName: "Sedan Elon",
-          orderType: "Verlegungsart",
-          status: "On Ride",
-        },
-        {
-          id: "3",
-          date: "2024-06-08",
-          pickUp: "123 Main St.",
-          destination: "456 Elm St. Germain",
-          driver: "John Doe",
-          patientName: "Sedan",
-          orderType: "Sammelauftrag",
-          status: "Confirmed",
-        },
-        {
-          id: "4",
-          date: "2024-07-08",
-          pickUp: "123 Main St.",
-          destination: "456 Elm St.",
-          driver: "John Doe",
-          patientName: "Sedan",
-          orderType: "Privatfahrt",
-          status: "Paused",
-        },
-        {
-          id: "5",
-          date: "2024-09-08",
-          pickUp: "Universität Spital, 4056 Basel",
-          destination: "St. Clara Spital, 4058 Basel",
-          driver: "John Doe",
-          patientName: "Sedan Elon",
-          orderType: "Verlegungsart",
-          status: "On Ride",
-        },
-      ]);
-    }, 1000);
-  }, []);
+  const [deleteAnOrder] = useMutation(DELETE_AN_ORDER, {
+    onCompleted: (data) => {
+      console.log("Order deleted:", data);
+      getAllOrders();
+    },
+    onError: (err) => {
+      console.error("Error deleting order:", err);
+    },
+  });
 
   const getStatusColor = (status) => {
     switch (status) {
       case "On Ride":
         return "#FEF1E0";
-      case "Confirmed":
+      case "confirmed":
         return "#D1F8D5";
-      case "Paused":
+      case "paused":
         return "#DCF3FF";
-      case "Pending":
+      case "pending":
         return "#DCF3FF";
       default:
         return "#FFFFFF";
@@ -133,13 +76,14 @@ const AllOrders = () => {
   };
 
   const handleDeleteOrder = (orderId) => {
-    setData((prevData) => prevData.filter((order) => order.id !== orderId));
+    deleteAnOrder({
+      variables: { queryData: { id: orderId } },
+    });
   };
-  
 
   const columns = [
     {
-      accessorKey: "date",
+      accessorKey: "createdAt",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -151,7 +95,7 @@ const AllOrders = () => {
       ),
     },
     {
-      accessorKey: "pickUp",
+      accessorKey: "destinationDetailsData.pick_up_address",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -163,7 +107,7 @@ const AllOrders = () => {
       ),
     },
     {
-      accessorKey: "destination",
+      accessorKey: "destinationDetailsData.drop_off_address",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -175,7 +119,7 @@ const AllOrders = () => {
       ),
     },
     {
-      accessorKey: "driver",
+      accessorKey: `user.first_name`,
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -187,7 +131,7 @@ const AllOrders = () => {
       ),
     },
     {
-      accessorKey: "patientName",
+      accessorKey: "patientData.name",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -199,7 +143,7 @@ const AllOrders = () => {
       ),
     },
     {
-      accessorKey: "orderType",
+      accessorKey: "transportationData.type_of_transport",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -245,7 +189,6 @@ const AllOrders = () => {
       ),
       cell: ({ row }) => {
         const orderId = row.original.id;
-        const orderType = row.getValue("orderType");
         return (
           <div className="flex justify-center items-center">
             <DropdownMenu>
@@ -266,14 +209,9 @@ const AllOrders = () => {
                   <Trash className="size-5" />
                   <span className="text-gray-700 text-sm">Storno</span>
                 </DropdownMenuItem>
-
                 <DropdownMenuItem className="py-2 mb-2 cursor-pointer">
                   <Link
-                    to={`${
-                      orderType === "Recurring"
-                        ? `/orders/recurring-orders/${orderId}`
-                        : `/orders/order-details/${orderId}`
-                    }`}
+                    to={`/orders/order-details/${orderId}`}
                     className="flex items-center gap-3 text-[16px]"
                   >
                     <Document className="size-5" />
