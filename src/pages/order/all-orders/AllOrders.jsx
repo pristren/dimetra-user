@@ -199,7 +199,7 @@ const AllOrders = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="-translate-x-5 p-4 w-60">
                 <DropdownMenuItem >
-                  <Link to={`/edit-order/${orderId}`} className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer">
+                  <Link to={`/orders/edit-order/${orderId}`} className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer">
                   <Pencil className="size-5 text-gray-600" />
                   <span className="text-gray-700 text-sm">Edit</span>
                   </Link>

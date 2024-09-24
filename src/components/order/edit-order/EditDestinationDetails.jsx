@@ -1,10 +1,8 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
-import { z } from "zod";
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import BackAndNextBtn from "@/components/common/BackAndNextBtn";
+import AppSelect from "@/components/common/AppSelect";
+import { timeOptions } from "@/components/create-order-forms/helpers";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DatePicker } from "@/components/ui/DatePicker";
 import {
   Form,
   FormControl,
@@ -15,21 +13,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { DatePicker } from "@/components/ui/DatePicker";
-import AppSelect from "@/components/common/AppSelect";
-import { calculateFormProgress } from "@/utils";
-import { timeOptions } from "@/components/create-order-forms/helpers";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-const DestinationDetails = ({
-  handleFormChange,
-  setDestinationProgress,
-  createOrderData,
-  setCreateOrderData,
-  returnDate,
-  setReturnDate,
+const EditDestinationDetails = ({
+  editOrderData,
+  setEditOrderData,
   dropDate,
   setDropDate,
-  destinationProgress,
+  returnDate,
+  setReturnDate,
 }) => {
   const {
     destinationDetailsData: {
@@ -48,8 +42,7 @@ const DestinationDetails = ({
       return_approx_time = "",
       return_floor = "",
     } = {},
-  } = createOrderData;
-
+  } = editOrderData;
   const form_schema = z.object({
     pick_up_name: z.string().min(1, "Name is required"),
     pick_up_address: z.string().min(1, "Address is required"),
@@ -94,13 +87,11 @@ const DestinationDetails = ({
       return_floor,
     },
   });
-
   const { formState } = form;
   const { errors } = formState;
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setCreateOrderData((prev) => ({
+    setEditOrderData((prev) => ({
       ...prev,
       destinationDetailsData: {
         ...prev.destinationDetailsData,
@@ -108,9 +99,11 @@ const DestinationDetails = ({
       },
     }));
   };
-
+  useEffect(() => {
+    form.reset(editOrderData.destinationDetailsData);
+  }, [editOrderData.destinationDetailsData, form]);
   const updateDestinationData = (key, value) => {
-    setCreateOrderData((prev) => ({
+    setEditOrderData((prev) => ({
       ...prev,
       destinationDetailsData: {
         ...prev.destinationDetailsData,
@@ -118,35 +111,15 @@ const DestinationDetails = ({
       },
     }));
   };
-
-  const fieldsFilled = [
-    pick_up_name,
-    pick_up_address,
-    pick_up_city,
-    pick_up_country,
-    pick_up_employee_name,
-    drop_off_pick_up_time,
-    drop_off_name,
-    drop_off_address,
-    drop_off_city,
-    drop_off_country,
-    drop_off_phone,
-    dropDate,
-  ];
-
-  useEffect(() => {
-    setDestinationProgress(calculateFormProgress(fieldsFilled));
-  }, [...fieldsFilled]);
-
   return (
-    <Card className="w-[65%] px-5 py-5">
+    <Card className="px-5 py-5  border-none rounded-none">
       <CardHeader>
         <CardTitle>Destination Details</CardTitle>
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
           <form>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-3 gap-5">
               <div className="pr-5">
                 <h2 className="text-xl font-semibold mb-4">Pick-Up</h2>
 
@@ -287,14 +260,14 @@ const DestinationDetails = ({
                 />
               </div>
 
-              <div className="pl-5">
+              <div className="pr-5">
                 <h2 className="text-xl font-semibold mb-4">Drop-Off</h2>
 
                 {/* Drop-Off Date */}
                 <FormField
                   control={form.control}
                   name="drop_off_date"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
                         Drop-Off Date <sup className="text-[13px]">*</sup>
@@ -311,7 +284,7 @@ const DestinationDetails = ({
                 <FormField
                   control={form.control}
                   name="drop_off_pick_up_time"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
                         Pickup Time <sup className="text-[13px]">*</sup>
@@ -468,90 +441,74 @@ const DestinationDetails = ({
                     </FormItem>
                   )}
                 />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold mb-4">Return Journey</h2>
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="return_date"
+                    render={() => (
+                      <FormItem className="mb-7">
+                        <FormLabel className="mb-2">Return Date</FormLabel>
+                        <FormControl>
+                          <DatePicker
+                            date={returnDate}
+                            setDate={setReturnDate}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                {/* Return Journey Section */}
-                <div className="mt-10">
-                  <h2 className="text-xl font-semibold mb-4">Return Journey</h2>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name="return_date"
-                      render={({ field }) => (
-                        <FormItem className="mb-7">
-                          <FormLabel className="mb-2">
-                            Return Date
-                          </FormLabel>
-                          <FormControl>
-                            <DatePicker
-                              date={returnDate}
-                              setDate={setReturnDate}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                  <FormField
+                    control={form.control}
+                    name="return_approx_time"
+                    render={() => (
+                      <FormItem className="mb-7">
+                        <FormLabel className="mb-2">Approx. Time</FormLabel>
+                        <FormControl>
+                          <AppSelect
+                            items={timeOptions}
+                            placeholder="00:00"
+                            isTime={true}
+                            onValueChange={(value) =>
+                              updateDestinationData("return_approx_time", value)
+                            }
+                            value={return_approx_time}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-                    <FormField
-                      control={form.control}
-                      name="return_approx_time"
-                      render={({ field }) => (
-                        <FormItem className="mb-7">
-                          <FormLabel className="mb-2">
-                            Approx. Time
-                          </FormLabel>
-                          <FormControl>
-                            <AppSelect
-                              items={timeOptions}
-                              placeholder="00:00"
-                              isTime={true}
-                              onValueChange={(value) =>
-                                updateDestinationData(
-                                  "return_approx_time",
-                                  value
-                                )
-                              }
-                              value={return_approx_time}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="return_floor"
-                      render={({ field }) => (
-                        <FormItem className="mb-7">
-                          <FormLabel className="mb-2">
-                            Floor / Department
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Floor number (optional)"
-                              {...field}
-                              onChange={(e) => {
-                                field.onChange(e);
-                                handleInputChange(e);
-                              }}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <FormField
+                    control={form.control}
+                    name="return_floor"
+                    render={({ field }) => (
+                      <FormItem className="mb-7">
+                        <FormLabel className="mb-2">
+                          Floor / Department
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Floor number (optional)"
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              handleInputChange(e);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </div>
             </div>
-
-            <BackAndNextBtn
-              isFillForm={true}
-              isDisabled={destinationProgress < 100}
-              handleGoPrev={() => handleFormChange("patientDetails")}
-              handleGoNext={() => handleFormChange("billingDetails")}
-            />
           </form>
         </Form>
       </CardContent>
@@ -559,4 +516,4 @@ const DestinationDetails = ({
   );
 };
 
-export default DestinationDetails;
+export default EditDestinationDetails;

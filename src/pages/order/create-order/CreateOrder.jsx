@@ -13,12 +13,9 @@ import { Logo } from "@/assets/icons";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { useParams } from "react-router-dom";
-import { useLazyQuery } from "@apollo/client";
-import { GET_AN_ORDER } from "../order-details/graphql/queries/getAnOrder.gql";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -33,7 +30,6 @@ const CreateOrder = () => {
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
-  const { id } = useParams();
   const [createOrderData, setCreateOrderData] = useState({
     transportationData: {
       type_of_transport: "",
@@ -86,27 +82,10 @@ const CreateOrder = () => {
     },
   });
 
-  const [getAnOrder] = useLazyQuery(GET_AN_ORDER, {
-    variables: { queryData: { id: id } },
-    errorPolicy: "all",
-    fetchPolicy: "no-cache",
-    onCompleted: (response) => {
-      setCreateOrderData(response.getAnOrder);
-    },
-    onError: (error) => {
-      console.log({ error });
-    },
-  });
-
-  useEffect(() => {
-    if (id) {
-      getAnOrder();
-    }
-  }, [getAnOrder, id]);
   const prevCreateOrderDataRef = useRef(createOrderData);
 
   useEffect(() => {
-    if (!isEqual(prevCreateOrderDataRef.current, createOrderData) && !id) {
+    if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
       localStorage.setItem("createOrderData", JSON.stringify(createOrderData));
       prevCreateOrderDataRef.current = createOrderData;
     }
@@ -204,7 +183,6 @@ const CreateOrder = () => {
     setPatientProgress,
     setDestinationProgress,
   };
-  console.log(createOrderData);
   return (
     <div className="relative overflow-y-auto">
       <Navbar />
@@ -261,9 +239,10 @@ const CreateOrder = () => {
         <Dialog open={showPreview} onOpenChange={setShowPreview}>
           <DialogContent className="w-[90%] max-w-[60rem] px-0 border-none max-h-[98vh] overflow-y-auto">
             <DialogHeader>
-              <DialogDescription>
+              <DialogTitle /> 
+              <div>
                 <PreviewDetails {...props} />
-              </DialogDescription>
+              </div>
             </DialogHeader>
           </DialogContent>
         </Dialog>

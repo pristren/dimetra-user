@@ -255,7 +255,7 @@ function OrderDetails() {
 
         <div className="flex items-center justify-center gap-6">
           <Button className="bg-secondary text-black px-14">Back</Button>
-          <Link to={`/edit-order/${id}`}>
+          <Link to={`/orders/edit-order/${id}`}>
             <Button className="px-14">Edit</Button>
           </Link>
         </div>
