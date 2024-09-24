@@ -30,7 +30,7 @@ const AppUserDetails = ({ onSubmit, form, isRegister }) => {
     }
   };
   return (
-    <CardContent className="px-10 max-h-[80vh] overflow-y-auto hide-scrollbar">
+    <CardContent className="px-10 max-h-[90vh] overflow-y-auto hide-scrollbar">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
           <div
@@ -328,7 +328,7 @@ const AppUserDetails = ({ onSubmit, form, isRegister }) => {
           )}
           {!isRegister && (
             <AppDialog
-              className="w-[20%]"
+              className="w-[25%] px-6 pb-6 pt-10"
               trigger={
                 <div className="w-full flex items-center justify-center">
                   <Button className="mt-10 px-12 w-max mx-auto">Save</Button>
@@ -343,7 +343,9 @@ const AppUserDetails = ({ onSubmit, form, isRegister }) => {
                     <Label htmlFor="doNotShow">Don’t show this again</Label>
                   </div>
                   <div className="flex items-center justify-center w-full gap-3 mt-5">
-                    <Button variant="outline" className="w-full">No, Cancel</Button>
+                    <Button variant="outline" className="w-full">
+                      No, Cancel
+                    </Button>
                     <Button className="w-full">Yes, Confirm</Button>
                   </div>
                 </div>
