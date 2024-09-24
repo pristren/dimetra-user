@@ -21,7 +21,8 @@ const BillingDetails = ({
   createOrderData,
   setCreateOrderData,
   setBillingProgress,
-  billingProgress
+  billingProgress,
+  setShowPreview,
 }) => {
   const {
     pre_name = "",
@@ -188,9 +189,12 @@ const BillingDetails = ({
             <BackAndNextBtn
               isFillForm={true}
               isLastPage={true}
-              disabled={billingProgress < 100}
+              isDisabled={billingProgress < 100}
               handleGoPrev={() => handleFormChange("destinationDetails")}
-              handleGoNext={() => handleFormChange("previewDetails")}
+              handleGoNext={(e) => {
+                e.preventDefault();
+                setShowPreview(true)
+              }}
             />
           </form>
         </Form>

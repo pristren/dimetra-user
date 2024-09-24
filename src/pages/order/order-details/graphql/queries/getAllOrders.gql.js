@@ -7,6 +7,19 @@ export const GET_ALL_ORDERS = gql`
         first_name
         last_name
       }
+      id
+      status
+      transportationData {
+        type_of_transport
+      }
+      patientData {
+        name
+      }
+      destinationDetailsData {
+        pick_up_address
+        drop_off_address
+      }
+      createdAt
     }
   }
 `;

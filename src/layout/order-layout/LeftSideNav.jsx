@@ -45,15 +45,15 @@ const LeftSideNav = () => {
         <p>Settings</p>
       </Link>
       <Link
-        to="/orders/all-messages"
+        to="/orders/sent-requests"
         className={`flex items-center gap-2 mb-4 px-2 py-2 cursor-pointer ${
-          isActive("/orders/all-messages")
+          isActive("/orders/sent-requests")
             ? "bg-primary text-white  rounded-md"
             : ""
         }`}
       >
         <MessageCircle />
-        <p>Chat</p>
+        <p>Sent Request</p>
       </Link>
       <div
         onClick={handleLogout}

@@ -48,7 +48,7 @@ const OrderHistory = () => {
       vehicle: "Sedan",
       driver: "John Doe",
       dispatcher: "Jane Smith",
-      status: "Completed",
+      status: "Paused",
       rateToDriver: "Rate the driver",
       orderType: "Sammelauftrag",
     },
@@ -182,18 +182,16 @@ const OrderHistory = () => {
         </div>
       ),
       cell: ({ row }) => {
-        if (row.getValue("status") === "Completed") {
-          return (
-            <Link to="/orders/review/:id">
-              <Button
-                className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs"
-                style={{ backgroundColor: "#D0EF0F" }}
-              >
-                Rate the driver
-              </Button>
-            </Link>
-          );
-        }
+        return (
+          <Link to="/orders/review/:id">
+            <Button
+              disabled={row.getValue("status") === "Paused"}
+              className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs bg-[#D0EF0F]"
+            >
+              Rate the driver
+            </Button>
+          </Link>
+        );
       },
     },
     {

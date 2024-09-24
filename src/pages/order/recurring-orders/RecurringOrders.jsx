@@ -9,9 +9,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const RecurringOrders = () => {
-  const data = [
+  const [data, setData] = useState([
     {
       id: "1",
       date: "2024-09-08",
@@ -56,7 +57,7 @@ const RecurringOrders = () => {
       patientName: "Jane Doe",
       orderType: "Regular",
     },
-  ];
+  ]);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -69,8 +70,19 @@ const RecurringOrders = () => {
       case "Paused":
         return "#DCF3FF";
       default:
-        return "#FFFFFF"; // Default color if status is unknown
+        return "#FFFFFF";
     }
+  };
+
+  const handlePause = (id) => {
+    setData((prevData) =>
+      prevData.map((order) =>
+        order.id === id ? { ...order, status: "Paused" } : order
+      )
+    );
+  };
+  const handleDeleteOrder = (orderId) => {
+    setData((prevData) => prevData.filter((order) => order.id !== orderId));
   };
 
   const columns = [
@@ -175,21 +187,27 @@ const RecurringOrders = () => {
                   <Pencil className="size-5 text-gray-600" />
                   <span className="text-gray-700 text-sm">Edit</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                <DropdownMenuItem
+                  className="flex items-center gap-3 text-[16px] mb-2 py-2"
+                  onClick={() => handleDeleteOrder(row.original.id)}
+                >
                   <Trash className="size-5" />
-
                   <span className="text-gray-700 text-sm">Storno</span>
                 </DropdownMenuItem>
+
                 <DropdownMenuItem className="py-2 mb-2">
                   <Link
-                    to={`/orders/order-details/${row.original.id}   `}
+                    to={`/orders/order-details/${row.original.id}`}
                     className="flex items-center gap-3 text-[16px]"
                   >
                     <Document className="size-5" />
                     <span className="text-gray-700 text-sm">View Details</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                <DropdownMenuItem
+                  className="flex items-center gap-3 text-[16px] mb-2 py-2"
+                  onClick={() => handlePause(row.original.id)}
+                >
                   <Pause className="size-5" />
                   <span className="text-gray-700 text-sm">Pause</span>
                 </DropdownMenuItem>

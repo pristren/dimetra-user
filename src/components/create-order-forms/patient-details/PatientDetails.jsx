@@ -17,13 +17,16 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { calculateFormProgress } from "@/utils";
 import { Label } from "@/components/ui/label";
+import { DatePicker } from "@/components/ui/DatePicker";
 
 const PatientDetails = ({
   handleFormChange,
   setPatientProgress,
   createOrderData,
   setCreateOrderData,
-  patientProgress
+  patientProgress,
+  dateOfBirth,
+  setDateOfBirth,
 }) => {
   const { patientData } = createOrderData;
 
@@ -43,6 +46,16 @@ const PatientDetails = ({
     resolver: zodResolver(formSchema),
     defaultValues: patientData,
   });
+
+  useEffect(() => {
+    setCreateOrderData((prev) => ({
+      ...prev,
+      patientData: {
+        ...prev.patientData,
+        date_of_birth: dateOfBirth,
+      },
+    }));
+  }, [patientData.date_of_birth, dateOfBirth, setCreateOrderData]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -83,7 +96,7 @@ const PatientDetails = ({
                   <FormItem>
                     <FormLabel>
                       {createOrderData.transportationData?.type_of_transport ===
-                      "collectionOrder"
+                      "collection_order"
                         ? "Name Collection"
                         : "Name"}
                       <sup className="text-[13px]">*</sup>
@@ -135,38 +148,25 @@ const PatientDetails = ({
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="date_of_birth"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>
-                      {createOrderData.transportationData?.type_of_transport ===
-                      "collectionOrder"
-                        ? "Area/Room"
-                        : "Date of Birth"}
-                      <sup className="text-[13px]">*</sup>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className={
-                          form.formState.errors.date_of_birth
-                            ? "border-red-500"
-                            : ""
-                        }
-                        placeholder="Enter patient's date of birth"
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          handleInputChange(e);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {createOrderData.transportationData?.type_of_transport !==
+                "collection_order" && (
+                <FormField
+                  control={form.control}
+                  name="date_of_birth"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2">Date of Birth</FormLabel>
+                      <FormControl>
+                        <DatePicker
+                          date={dateOfBirth}
+                          setDate={setDateOfBirth}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
 
               <FormField
                 control={form.control}
@@ -235,35 +235,29 @@ const PatientDetails = ({
                 )}
               />
 
-              {createOrderData.transportationData?.type_of_transport !==
-                "collectionOrder" && (
-                <FormField
-                  control={form.control}
-                  name="how_much"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>How Much</FormLabel>
-                      <FormControl>
-                        <Input
-                          className={
-                            form.formState.errors.how_much
-                              ? "border-red-500"
-                              : ""
-                          }
-                          placeholder="Enter amount"
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            handleInputChange(e);
-                          }}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-
+              <FormField
+                control={form.control}
+                name="how_much"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>How Much</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={
+                          form.formState.errors.how_much ? "border-red-500" : ""
+                        }
+                        placeholder="Enter amount"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="isolation"
@@ -348,13 +342,18 @@ const PatientDetails = ({
                 control={form.control}
                 name="special"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem
+                    className={`${
+                      createOrderData.transportationData?.type_of_transport ===
+                        "collection_order" && "col-span-2"
+                    }`}
+                  >
                     <FormLabel>Special</FormLabel>
                     <FormControl>
                       <Input
-                        className={
+                        className={`${
                           form.formState.errors.special ? "border-red-500" : ""
-                        }
+                        }`}
                         placeholder="Enter special notes"
                         {...field}
                         onChange={(e) => {
@@ -370,7 +369,8 @@ const PatientDetails = ({
             </div>
 
             <BackAndNextBtn
-              isFillForm={true}disabled={patientProgress < 100}
+              isFillForm={true}
+              isDisabled={patientProgress < 100}
               handleGoPrev={() => handleFormChange("transportDetails")}
               handleGoNext={() => handleFormChange("destinationDetails")}
             />
