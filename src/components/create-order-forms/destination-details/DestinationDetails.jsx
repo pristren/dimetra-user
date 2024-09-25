@@ -19,6 +19,8 @@ import { DatePicker } from "@/components/ui/DatePicker";
 import AppSelect from "@/components/common/AppSelect";
 import { calculateFormProgress } from "@/utils";
 import { timeOptions } from "@/components/create-order-forms/helpers";
+import toast from "react-hot-toast";
+import moment from "moment";
 
 const DestinationDetails = ({
   handleFormChange,
@@ -44,11 +46,37 @@ const DestinationDetails = ({
       drop_off_city = "",
       drop_off_country = "",
       drop_off_phone = "",
-      return_day_letter = "",
       return_approx_time = "",
       return_floor = "",
     } = {},
   } = createOrderData;
+
+  function timeStringToMinutes(timeString) {
+    const [hours, minutes] = timeString.split(":").map(Number);
+    return hours * 60 + minutes;
+  }
+
+  const handleNext = (e) => {
+    e.preventDefault();
+    const dropDateFormatted = moment(dropDate).format("YYYY-MM-DD");
+    const returnDateFormatted = moment(returnDate).format("YYYY-MM-DD");
+    if (dropDateFormatted === returnDateFormatted) {
+      const dropOffMinutes = timeStringToMinutes(drop_off_pick_up_time);
+      const returnMinutes = timeStringToMinutes(return_approx_time);
+
+      if (returnMinutes <= dropOffMinutes) {
+        toast(
+          "Return time must be greater than drop-off time if the date is the same.",
+          {
+            icon: "⚠️",
+          }
+        );
+        return;
+      }
+    }
+
+    handleFormChange("billingDetails");
+  };
 
   const form_schema = z.object({
     pick_up_name: z.string().min(1, "Name is required"),
@@ -89,7 +117,6 @@ const DestinationDetails = ({
       drop_off_country,
       drop_off_phone,
       returnDate,
-      return_day_letter,
       return_approx_time,
       return_floor,
     },
@@ -326,7 +353,7 @@ const DestinationDetails = ({
                               value
                             )
                           }
-                          value={return_day_letter}
+                          value={drop_off_pick_up_time}
                         />
                       </FormControl>
                       <FormMessage />
@@ -478,9 +505,7 @@ const DestinationDetails = ({
                       name="return_date"
                       render={({ field }) => (
                         <FormItem className="mb-7">
-                          <FormLabel className="mb-2">
-                            Return Date
-                          </FormLabel>
+                          <FormLabel className="mb-2">Return Date</FormLabel>
                           <FormControl>
                             <DatePicker
                               date={returnDate}
@@ -497,9 +522,7 @@ const DestinationDetails = ({
                       name="return_approx_time"
                       render={({ field }) => (
                         <FormItem className="mb-7">
-                          <FormLabel className="mb-2">
-                            Approx. Time
-                          </FormLabel>
+                          <FormLabel className="mb-2">Approx. Time</FormLabel>
                           <FormControl>
                             <AppSelect
                               items={timeOptions}
@@ -545,12 +568,11 @@ const DestinationDetails = ({
                 </div>
               </div>
             </div>
-
             <BackAndNextBtn
               isFillForm={true}
               isDisabled={destinationProgress < 100}
               handleGoPrev={() => handleFormChange("patientDetails")}
-              handleGoNext={() => handleFormChange("billingDetails")}
+              handleGoNext={handleNext}
             />
           </form>
         </Form>
