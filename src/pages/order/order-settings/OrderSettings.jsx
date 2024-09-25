@@ -109,9 +109,7 @@ const OrderSettings = () => {
             <DialogContent className="w-[90%] max-w-3xl">
               <DialogHeader>
                 <DialogTitle>Edit Profile</DialogTitle>
-                <div className="text-black">
-                  <AppUserDetails form={form} onSubmit={onSubmitUserDetails} />
-                </div>
+                <AppUserDetails form={form} onSubmit={onSubmitUserDetails} />
               </DialogHeader>
             </DialogContent>
           </Dialog>

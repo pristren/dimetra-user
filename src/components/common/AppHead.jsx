@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -96,9 +95,7 @@ export default function AppHead({
             <DialogContent className="w-[90%] max-w-2xl">
               <DialogHeader>
                 <DialogTitle className="mb-10">Request</DialogTitle>
-                <div>
-                  <AddRequest />
-                </div>
+                <AddRequest />
               </DialogHeader>
             </DialogContent>
           </Dialog>
