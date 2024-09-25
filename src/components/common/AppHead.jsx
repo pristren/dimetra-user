@@ -90,17 +90,15 @@ export default function AppHead({
         )}
         {showModal?.name && (
           <Dialog>
-            <DialogTrigger>
-              <Button className="flex gap-2">
-                {showModal?.icon && showModal?.icon} {showModal.name}
-              </Button>
+            <DialogTrigger className="bg-primary flex gap-2 text-white py-2 px-5 rounded-md">
+              {showModal?.icon && showModal?.icon} {showModal.name}
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-2xl">
               <DialogHeader>
                 <DialogTitle className="mb-10">Request</DialogTitle>
-                <DialogDescription>
+                <div>
                   <AddRequest />
-                </DialogDescription>
+                </div>
               </DialogHeader>
             </DialogContent>
           </Dialog>
