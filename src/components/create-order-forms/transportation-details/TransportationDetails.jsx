@@ -40,7 +40,6 @@ const TransportationDetails = ({
   setSelectedWeekdays,
   transportationProgress,
 }) => {
-
   const { transportationData } = createOrderData;
 
   const form_schema = z.object({
@@ -93,7 +92,6 @@ const TransportationDetails = ({
       },
     }));
   };
-  
 
   const calculateMonthlyOccurrences = (weekdays) => {
     return weekdays.length * 4;
@@ -114,7 +112,6 @@ const TransportationDetails = ({
         : [...selectedWeekdays, value]
     );
   };
-
 
   useEffect(() => {
     const fieldsFilled =
@@ -138,18 +135,18 @@ const TransportationDetails = ({
   }, [transportationData, selectedWeekdays, startDate, endDate]);
 
   return (
-    <Card className="w-[65%] px-5 py-5">
+    <Card className="w-[70%] px-5 py-5">
       <CardHeader>
-        <CardTitle>Transportation</CardTitle>
+        <CardTitle className="title">Transportation details</CardTitle>
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
           <form>
             <div className="grid grid-cols-3 gap-5">
               <div className="pr-5">
-                <h6 className="mb-4">
-                  Type of transport{" "}
-                  <span className="text-[15px]">(simple selection)</span>
+                <h6 className="mb-6">
+                  Type of transport
+                  <span className="highlight">(simple selection)</span>
                 </h6>
                 <FormField
                   control={form.control}
@@ -173,7 +170,7 @@ const TransportationDetails = ({
                                 value={option.value}
                                 id={option.value}
                               />
-                              <Label htmlFor={option.value}>
+                              <Label htmlFor={option.value} className="font-normal text-[16px]">
                                 {option.label}
                               </Label>
                             </div>
@@ -187,9 +184,9 @@ const TransportationDetails = ({
               </div>
 
               <div className="pr-5">
-                <h6 className="mb-4">
+                <h6 className="mb-6">
                   Mode of transportation{" "}
-                  <span className="text-[15px]">(multiple selection)</span>
+                  <span  className="highlight">(multiple selection)</span>
                 </h6>
                 {transportModesOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
@@ -202,7 +199,7 @@ const TransportationDetails = ({
                         handleCheckBox("mode_of_transportation", option.value)
                       }
                     />
-                    <Label className="ml-2" htmlFor={option.value}>
+                    <Label className="font-normal text-[16px] ml-2" htmlFor={option.value}>
                       {option.label}
                     </Label>
                   </div>
@@ -210,9 +207,9 @@ const TransportationDetails = ({
               </div>
 
               <div>
-                <h6 className="mb-4">
+                <h6 className="mb-6">
                   Transport with{" "}
-                  <span className="text-[15px]">(multiple selection)</span>
+                  <span  className="highlight">(multiple selection)</span>
                 </h6>
                 {transportWithOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
@@ -225,7 +222,7 @@ const TransportationDetails = ({
                         handleCheckBox("transport_with", option.value)
                       }
                     />
-                    <Label className="ml-2" htmlFor={option.value}>
+                    <Label className="font-normal text-[16px] ml-2" htmlFor={option.value}>
                       {option.label}
                     </Label>
                   </div>
@@ -277,7 +274,7 @@ const TransportationDetails = ({
 
                 <h3 className="text-lg font-medium mb-3 mt-5">
                   Select Weekdays{" "}
-                  <span className="text-[15px]">(multiple selection)</span>:
+                  <span  className="highlight">(multiple selection)</span>:
                 </h3>
                 <div className="grid grid-cols-3 gap-3 mt-2">
                   {weekdaysOptions.map((option) => (

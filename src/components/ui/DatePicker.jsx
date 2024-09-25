@@ -27,7 +27,7 @@ export function DatePicker({ className, date, setDate }) {
             <span className="text-black">Pick a date</span>
           )}
           <div className="w-6 h-6 rounded-full p-1  flex justify-center items-center bg-primary text-white">
-            <CalendarIcon className="w-4 h-4   " />
+            <CalendarIcon className="w-4 h-4" />
           </div>
         </Button>
       </PopoverTrigger>

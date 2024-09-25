@@ -46,7 +46,7 @@ const PatientDetails = ({
     resolver: zodResolver(formSchema),
     defaultValues: patientData,
   });
-  
+
   useEffect(() => {
     setCreateOrderData((prev) => ({
       ...prev,
@@ -81,9 +81,9 @@ const PatientDetails = ({
   }, [patientData, setPatientProgress]);
 
   return (
-    <Card className="w-[65%] px-5 py-5">
+    <Card className="w-[70%] px-5 py-5">
       <CardHeader>
-        <CardTitle>Patient Details</CardTitle>
+        <CardTitle className="title">Patient Details</CardTitle>
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
@@ -94,7 +94,7 @@ const PatientDetails = ({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="font-normal">
                       {createOrderData.transportationData?.type_of_transport ===
                       "collection_order"
                         ? "Name Collection"
@@ -124,7 +124,7 @@ const PatientDetails = ({
                 name="surname"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="font-normal">
                       {createOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
                         ? "Number Patients"
@@ -154,7 +154,7 @@ const PatientDetails = ({
                   control={form.control}
                   name="date_of_birth"
                   render={({ field }) => (
-                    <FormItem className="mb-7">
+                    <FormItem>
                       <FormLabel className="mb-2">
                         Date of Birth<sup className="text-[13px]">*</sup>
                       </FormLabel>
@@ -162,6 +162,7 @@ const PatientDetails = ({
                         <DatePicker
                           date={dateOfBirth}
                           setDate={setDateOfBirth}
+                          className="py-6"
                         />
                       </FormControl>
                       <FormMessage />
@@ -175,7 +176,7 @@ const PatientDetails = ({
                 name="area_room"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="font-normal">
                       {createOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
                         ? "Cost Center"
@@ -207,7 +208,7 @@ const PatientDetails = ({
                 name="cost_center"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
+                    <FormLabel className="font-normal">
                       {createOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
                         ? "How much"
@@ -242,7 +243,7 @@ const PatientDetails = ({
                 name="how_much"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>How Much</FormLabel>
+                    <FormLabel className="font-normal">How Much</FormLabel>
                     <FormControl>
                       <Input
                         className={
@@ -265,7 +266,7 @@ const PatientDetails = ({
                 name="isolation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="block mb-3">Isolation</FormLabel>
+                    <FormLabel className="block mb-5 font-normal">Isolation</FormLabel>
                     <div className="flex items-center">
                       <FormControl>
                         <Checkbox
@@ -304,7 +305,7 @@ const PatientDetails = ({
                 name="patient_above_90kg"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="block mb-3">
+                    <FormLabel className="block mb-5 font-normal">
                       Patient Above 90 kg
                     </FormLabel>
                     <div className="flex items-center">
@@ -345,12 +346,9 @@ const PatientDetails = ({
                 name="special"
                 render={({ field }) => (
                   <FormItem
-                    className={`${
-                      createOrderData.transportationData?.type_of_transport ===
-                        "collection_order" && "col-span-2"
-                    }`}
+                    className="col-span-2"
                   >
-                    <FormLabel>Special</FormLabel>
+                    <FormLabel className="font-normal">Special</FormLabel>
                     <FormControl>
                       <Input
                         className={`${

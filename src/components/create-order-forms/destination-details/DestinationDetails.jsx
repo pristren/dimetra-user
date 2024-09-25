@@ -36,13 +36,15 @@ const DestinationDetails = ({
   const {
     destinationDetailsData: {
       pick_up_name = "",
-      pick_up_address = "",
+      pick_up_street = "",
+      pick_up_postal_code = 0,
       pick_up_city = "",
       pick_up_country = "",
       pick_up_employee_name = "",
       drop_off_pick_up_time = "",
       drop_off_name = "",
-      drop_off_address = "",
+      drop_off_street,
+      drop_off_postal_code = 0,
       drop_off_city = "",
       drop_off_country = "",
       drop_off_phone = "",
@@ -80,7 +82,8 @@ const DestinationDetails = ({
 
   const form_schema = z.object({
     pick_up_name: z.string().min(1, "Name is required"),
-    pick_up_address: z.string().min(1, "Address is required"),
+    pick_up_street: z.string().min(1, "Street is required"),
+    pick_up_postal_code: z.number().min(1, "Postal is required"),
     pick_up_city: z.string().min(1, "City is required"),
     pick_up_country: z.string().min(1, "Country is required"),
     pick_up_employee_name: z
@@ -90,7 +93,8 @@ const DestinationDetails = ({
     drop_off_date: z.string().min(1, "Date is required"),
     drop_off_pick_up_time: z.string().min(1, "Pick-Up Time is required"),
     drop_off_name: z.string().min(1, "Name is required"),
-    drop_off_address: z.string().min(1, "Address is required"),
+    drop_off_street: z.string().min(1, "Drop of street is required"),
+    drop_off_postal_code: z.number().min(1, "Drop of postal code is required"),
     drop_off_city: z.string().min(1, "City is required"),
     drop_off_country: z.string().min(1, "Country is required"),
     drop_off_phone: z.string().min(1, "Phone is required"),
@@ -105,14 +109,16 @@ const DestinationDetails = ({
     resolver: zodResolver(form_schema),
     defaultValues: {
       pick_up_name,
-      pick_up_address,
+      pick_up_street,
+      pick_up_postal_code,
       pick_up_city,
       pick_up_country,
       pick_up_employee_name,
       dropDate,
       drop_off_pick_up_time,
       drop_off_name,
-      drop_off_address,
+      drop_off_street,
+      drop_off_postal_code,
       drop_off_city,
       drop_off_country,
       drop_off_phone,
@@ -131,7 +137,7 @@ const DestinationDetails = ({
       ...prev,
       destinationDetailsData: {
         ...prev.destinationDetailsData,
-        [name]: value,
+        [name]: name.includes("postal_code") ? Number(value) : value,
       },
     }));
   };
@@ -148,13 +154,15 @@ const DestinationDetails = ({
 
   const fieldsFilled = [
     pick_up_name,
-    pick_up_address,
+    pick_up_street,
+    pick_up_postal_code,
     pick_up_city,
     pick_up_country,
     pick_up_employee_name,
     drop_off_pick_up_time,
     drop_off_name,
-    drop_off_address,
+    drop_off_street,
+    drop_off_postal_code,
     drop_off_city,
     drop_off_country,
     drop_off_phone,
@@ -166,16 +174,16 @@ const DestinationDetails = ({
   }, [...fieldsFilled]);
 
   return (
-    <Card className="w-[65%] px-5 py-5">
+    <Card className="w-[70%] px-5 py-5">
       <CardHeader>
-        <CardTitle>Destination Details</CardTitle>
+        <CardTitle className="title">Destination Details</CardTitle>
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
           <form>
             <div className="grid grid-cols-2 gap-5">
               <div className="pr-5">
-                <h2 className="text-xl font-semibold mb-4">Pick-Up</h2>
+                <h6 className="text-xl font-semibold mb-4">Pick-Up</h6>
 
                 {/* Pick-Up Name */}
                 <FormField
@@ -183,7 +191,7 @@ const DestinationDetails = ({
                   name="pick_up_name"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
+                      <FormLabel className="mb-2 font-normal">
                         Name / Institution <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
@@ -204,21 +212,47 @@ const DestinationDetails = ({
                   )}
                 />
 
-                {/* Pick-Up Address */}
+                {/* Pick-Up Street */}
                 <FormField
                   control={form.control}
-                  name="pick_up_address"
+                  name="pick_up_street"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
-                        Address <sup className="text-[13px]">*</sup>
+                      <FormLabel className="mb-2 font-normal">
+                        Street <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
-                            errors.pick_up_address ? "border-red-500" : ""
+                            errors.pick_up_street ? "border-red-500" : ""
                           }
-                          placeholder="Type your address"
+                          placeholder="Type your street"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Pick-Up Postal Code */}
+                <FormField
+                  control={form.control}
+                  name="pick_up_postal_code"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2 font-normal">
+                        Postal Code <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.pick_up_postal_code ? "border-red-500" : ""
+                          }
+                          placeholder="Type your postal code"
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -237,7 +271,7 @@ const DestinationDetails = ({
                   name="pick_up_city"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
+                      <FormLabel className="mb-2 font-normal">
                         City <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
@@ -264,7 +298,7 @@ const DestinationDetails = ({
                   name="pick_up_country"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
+                      <FormLabel className="mb-2 font-normal">
                         Country <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
@@ -291,7 +325,7 @@ const DestinationDetails = ({
                   name="pick_up_employee_name"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
+                      <FormLabel className="mb-2 font-normal">
                         Working Employee Name{" "}
                         <sup className="text-[13px]">*</sup>
                       </FormLabel>
@@ -315,7 +349,7 @@ const DestinationDetails = ({
               </div>
 
               <div className="pl-5">
-                <h2 className="text-xl font-semibold mb-4">Drop-Off</h2>
+                <h6 className="text-xl font-semibold mb-4">Drop-Off</h6>
 
                 {/* Drop-Off Date */}
                 <FormField
@@ -323,7 +357,7 @@ const DestinationDetails = ({
                   name="drop_off_date"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
+                      <FormLabel className="mb-2 font-normal">
                         Drop-Off Date <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
@@ -340,7 +374,7 @@ const DestinationDetails = ({
                   name="drop_off_pick_up_time"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
+                      <FormLabel className="mb-2 font-normal">
                         Pickup Time <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
@@ -367,7 +401,7 @@ const DestinationDetails = ({
                   name="drop_off_name"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
+                      <FormLabel className="mb-2 font-normal">
                         Name / Institution <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
@@ -388,21 +422,48 @@ const DestinationDetails = ({
                   )}
                 />
 
-                {/* Drop-Off Address */}
+                {/* Drop-Off street */}
                 <FormField
                   control={form.control}
-                  name="drop_off_address"
+                  name="drop_off_street"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
-                        Address <sup className="text-[13px]">*</sup>
+                      <FormLabel className="mb-2 font-normal">
+                        Street <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
-                            errors.drop_off_address ? "border-red-500" : ""
+                            errors.drop_off_street ? "border-red-500" : ""
                           }
-                          placeholder="Type address"
+                          placeholder="Type Street"
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* drop off Postal Code */}
+                <FormField
+                  control={form.control}
+                  name="drop_off_postal_code"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2 font-normal">
+                        Postal Code <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.pick_up_postal_code ? "border-red-500" : ""
+                          }
+                          placeholder="Type your postal code"
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -421,7 +482,7 @@ const DestinationDetails = ({
                   name="drop_off_city"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
+                      <FormLabel className="mb-2 font-normal">
                         City <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
@@ -448,7 +509,7 @@ const DestinationDetails = ({
                   name="drop_off_country"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
+                      <FormLabel className="mb-2 font-normal">
                         Country <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
@@ -475,7 +536,7 @@ const DestinationDetails = ({
                   name="drop_off_phone"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
+                      <FormLabel className="mb-2 font-normal">
                         Phone <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
@@ -498,14 +559,14 @@ const DestinationDetails = ({
 
                 {/* Return Journey Section */}
                 <div className="mt-10">
-                  <h2 className="text-xl font-semibold mb-4">Return Journey</h2>
+                  <h6 className="text-xl font-semibold mb-4">Return Journey</h6>
                   <div>
                     <FormField
                       control={form.control}
                       name="return_date"
                       render={({ field }) => (
                         <FormItem className="mb-7">
-                          <FormLabel className="mb-2">Return Date</FormLabel>
+                          <FormLabel className="mb-2 font-normal">Return Date</FormLabel>
                           <FormControl>
                             <DatePicker
                               date={returnDate}
@@ -522,7 +583,7 @@ const DestinationDetails = ({
                       name="return_approx_time"
                       render={({ field }) => (
                         <FormItem className="mb-7">
-                          <FormLabel className="mb-2">Approx. Time</FormLabel>
+                          <FormLabel className="mb-2 font-normal">Approx. Time</FormLabel>
                           <FormControl>
                             <AppSelect
                               items={timeOptions}
@@ -547,7 +608,7 @@ const DestinationDetails = ({
                       name="return_floor"
                       render={({ field }) => (
                         <FormItem className="mb-7">
-                          <FormLabel className="mb-2">
+                          <FormLabel className="mb-2 font-normal">
                             Floor / Department
                           </FormLabel>
                           <FormControl>

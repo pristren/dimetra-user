@@ -1,7 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { useLazyQuery } from "@apollo/client";
 import { GET_AN_ORDER } from "./graphql/queries/getAnOrder.gql";
@@ -55,26 +52,6 @@ function OrderDetails() {
 
         <Separator />
 
-        <div className="my-14">
-          <h5>Selected Weekdays</h5>
-          <div className="w-[60%] grid grid-cols-3 gap-6 mt-10 mb-10">
-            {data?.transportationData?.multiple_weekdays?.map((day, index) => (
-              <div className="flex items-center gap-2" key={index}>
-                <Checkbox checked />
-                <Label>{day}</Label>
-              </div>
-            ))}
-          </div>
-          <RadioGroup value="1 month">
-            <div className="flex items-center space-x-2 mb-2">
-              <RadioGroupItem value="1 month" id="1 month" />
-              <Label htmlFor="1 month">1 month</Label>
-            </div>
-          </RadioGroup>
-        </div>
-
-        <Separator />
-
         <div className="my-14 w-[60%]">
           <h5>Patient Details</h5>
           <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
@@ -90,7 +67,7 @@ function OrderDetails() {
             )}
             <div className="flex items-center gap-6">
               <p>Pick up: </p>
-              <p>{data?.destinationDetailsData?.pick_up_address}</p>
+              <p>{data?.destinationDetailsData?.pick_up_street}</p>
             </div>
             <div className="flex items-center gap-6">
               <p>Order Type: </p>
@@ -98,7 +75,7 @@ function OrderDetails() {
             </div>
             <div className="flex items-center gap-6">
               <p>Destination : </p>
-              <p>{data?.destinationDetailsData?.drop_off_address}</p>
+              <p>{data?.destinationDetailsData?.drop_off_street}</p>
             </div>
             {data?.transportationData?.start_date && (
               <div className="flex items-center gap-6">
@@ -125,8 +102,8 @@ function OrderDetails() {
                 <p>{data?.destinationDetailsData?.pick_up_name}</p>
               </div>
               <div className="flex items-center gap-6 mb-8">
-                <p>Address: </p>
-                <p>{data?.destinationDetailsData?.pick_up_address}</p>
+                <p>Street: </p>
+                <p>{data?.destinationDetailsData?.pick_up_street}</p>
               </div>
               <div className="flex items-center gap-6 mb-8">
                 <p>City :</p>
@@ -156,8 +133,8 @@ function OrderDetails() {
                 <p>{data?.destinationDetailsData?.pick_up_name}</p>
               </div>
               <div className="flex items-center gap-6 mb-8">
-                <p>Address :</p>
-                <p>{data?.destinationDetailsData?.pick_up_address}</p>
+                <p>Street :</p>
+                <p>{data?.destinationDetailsData?.pick_up_street}</p>
               </div>
               <div className="flex items-center gap-6 mb-8">
                 <p>city :</p>
