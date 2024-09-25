@@ -1,35 +1,29 @@
 /* eslint-disable react/prop-types */
 import { z } from "zod";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import BackAndNextBtn from "@/components/common/BackAndNextBtn";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DatePicker } from "@/components/ui/DatePicker";
 import {
   Form,
   FormControl,
+  FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormField,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { calculateFormProgress } from "@/utils";
 import { Label } from "@/components/ui/label";
-import { DatePicker } from "@/components/ui/DatePicker";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 
-const PatientDetails = ({
-  handleFormChange,
-  setPatientProgress,
-  createOrderData,
-  setCreateOrderData,
-  patientProgress,
+const EditPatientDetails = ({
+  editOrderData,
+  setEditOrderData,
   dateOfBirth,
   setDateOfBirth,
 }) => {
-  const { patientData } = createOrderData;
-
+  const { patientData } = editOrderData;
   const formSchema = z.object({
     name: z.string().min(1, "Name is required"),
     surname: z.string().min(1, "Surname is required"),
@@ -46,20 +40,12 @@ const PatientDetails = ({
     resolver: zodResolver(formSchema),
     defaultValues: patientData,
   });
-  
   useEffect(() => {
-    setCreateOrderData((prev) => ({
-      ...prev,
-      patientData: {
-        ...prev.patientData,
-        date_of_birth: dateOfBirth,
-      },
-    }));
-  }, [patientData.date_of_birth, dateOfBirth, setCreateOrderData]);
-
+    form.reset(patientData);
+  }, [patientData, form]);
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setCreateOrderData((prev) => ({
+    setEditOrderData((prev) => ({
       ...prev,
       patientData: {
         ...prev.patientData,
@@ -67,35 +53,22 @@ const PatientDetails = ({
       },
     }));
   };
-
-  useEffect(() => {
-    const fieldsFilled = [
-      patientData.name,
-      patientData.surname,
-      patientData.date_of_birth,
-      patientData.area_room,
-      patientData.cost_center,
-    ];
-
-    setPatientProgress(calculateFormProgress(fieldsFilled));
-  }, [patientData, setPatientProgress]);
-
   return (
-    <Card className="w-[65%] px-5 py-5">
+    <Card className="px-5 py-5 border-none rounded-none">
       <CardHeader>
         <CardTitle>Patient Details</CardTitle>
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
           <form>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-3 gap-5">
               <FormField
                 control={form.control}
                 name="name"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {createOrderData.transportationData?.type_of_transport ===
+                      {editOrderData.transportationData?.type_of_transport ===
                       "collection_order"
                         ? "Name Collection"
                         : "Name"}
@@ -125,7 +98,7 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {createOrderData.transportationData?.type_of_transport ===
+                      {editOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
                         ? "Number Patients"
                         : "Surname"}
@@ -148,12 +121,13 @@ const PatientDetails = ({
                   </FormItem>
                 )}
               />
-              {createOrderData.transportationData?.type_of_transport !==
+              <div></div>
+              {editOrderData.transportationData?.type_of_transport !==
                 "collection_order" && (
                 <FormField
                   control={form.control}
                   name="date_of_birth"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
                         Date of Birth<sup className="text-[13px]">*</sup>
@@ -176,7 +150,7 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {createOrderData.transportationData?.type_of_transport ===
+                      {editOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
                         ? "Cost Center"
                         : "Area/Room"}
@@ -208,11 +182,11 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {createOrderData.transportationData?.type_of_transport ===
+                      {editOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
                         ? "How much"
                         : "Cost Center"}
-                      {createOrderData.transportationData?.type_of_transport !==
+                      {editOrderData.transportationData?.type_of_transport !==
                         "collectionOrder" && (
                         <sup className="text-[13px]">*</sup>
                       )}
@@ -276,6 +250,7 @@ const PatientDetails = ({
                           }
                           id="isolation"
                           {...field}
+                          checked={patientData?.isolation}
                           onCheckedChange={(checked) =>
                             handleInputChange({
                               target: {
@@ -316,6 +291,7 @@ const PatientDetails = ({
                               : ""
                           }
                           id="patient_above_90kg"
+                          checked={patientData?.patient_above_90kg}
                           {...field}
                           onCheckedChange={(checked) =>
                             handleInputChange({
@@ -345,10 +321,7 @@ const PatientDetails = ({
                 name="special"
                 render={({ field }) => (
                   <FormItem
-                    className={`${
-                      createOrderData.transportationData?.type_of_transport ===
-                        "collection_order" && "col-span-2"
-                    }`}
+                    className={"col-span-3"}
                   >
                     <FormLabel>Special</FormLabel>
                     <FormControl>
@@ -369,13 +342,6 @@ const PatientDetails = ({
                 )}
               />
             </div>
-
-            <BackAndNextBtn
-              isFillForm={true}
-              isDisabled={patientProgress < 100}
-              handleGoPrev={() => handleFormChange("transportDetails")}
-              handleGoNext={() => handleFormChange("destinationDetails")}
-            />
           </form>
         </Form>
       </CardContent>
@@ -383,4 +349,4 @@ const PatientDetails = ({
   );
 };
 
-export default PatientDetails;
+export default EditPatientDetails;

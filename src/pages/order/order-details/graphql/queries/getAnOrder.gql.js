@@ -53,7 +53,7 @@ export const GET_AN_ORDER = gql`
         drop_off_city
         drop_off_country
         drop_off_phone
-        return_day_letter
+        return_date
         return_approx_time
         return_floor
       }

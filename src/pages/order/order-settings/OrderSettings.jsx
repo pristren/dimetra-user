@@ -1,11 +1,9 @@
 import { Security } from "@/assets/icons";
 import AppDialog from "@/components/common/AppDialog";
 import AppUserDetails from "@/components/common/AppUserDetails";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -105,17 +103,13 @@ const OrderSettings = () => {
             </div>
           </div>
           <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
-            <DialogTrigger>
-              <Button className="bg-gray-100 hover:bg-gray-200 shadow-xl rounded-full py-2 px-5 text-blue-500">
-                Edit
-              </Button>
+            <DialogTrigger className="bg-gray-100 hover:bg-gray-200 shadow-xl rounded-full py-2 px-5 text-blue-500">
+            Edit
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-3xl">
               <DialogHeader>
                 <DialogTitle>Edit Profile</DialogTitle>
-                <DialogDescription className="text-black">
-                  <AppUserDetails form={form} onSubmit={onSubmitUserDetails} />
-                </DialogDescription>
+                <AppUserDetails form={form} onSubmit={onSubmitUserDetails} />
               </DialogHeader>
             </DialogContent>
           </Dialog>
