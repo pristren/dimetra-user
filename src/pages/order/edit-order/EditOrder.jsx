@@ -81,10 +81,8 @@ const EditOrder = () => {
   });
 
   useEffect(() => {
-    if (id) {
-      getAnOrder();
-    }
-  }, [getAnOrder, id]);
+    getAnOrder();
+  }, [getAnOrder]);
 
   const handleUpdate = () => {
     console.log(editOrderData);

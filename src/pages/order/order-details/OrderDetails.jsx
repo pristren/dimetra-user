@@ -90,11 +90,7 @@ function OrderDetails() {
             )}
             <div className="flex items-center gap-6">
               <p>Pick up: </p>
-              <p>
-                {new Date(
-                  Number(data?.destinationDetailsData?.pick_up_address)
-                ).toLocaleDateString()}
-              </p>
+              <p>{data?.destinationDetailsData?.pick_up_address}</p>
             </div>
             <div className="flex items-center gap-6">
               <p>Order Type: </p>
