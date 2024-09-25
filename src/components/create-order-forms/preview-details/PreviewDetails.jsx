@@ -52,7 +52,7 @@ const PreviewDetails = ({
       });
       console.log(data);
       if (data?.createAnOrder?.id) {
-        localStorage.removeItem("createOrderData")
+        localStorage.removeItem("createOrderData");
         navigate("/orders/all-orders");
         setShowPreview(false);
       }
@@ -67,15 +67,15 @@ const PreviewDetails = ({
       {/* Single Card for all details */}
       <Card className="w-full px-5 py-5 border-none shadow-none">
         <CardHeader>
-          <CardTitle>Preview Details</CardTitle>
+          <CardTitle className="title">Preview Details</CardTitle>
         </CardHeader>
         <CardContent className="px-10">
           <div className="space-y-8">
             <div className="grid grid-cols-3 gap-5">
               <div className="pr-5">
                 <h6 className="mb-4">
-                  Type of transport{" "}
-                  <span className="text-[15px]">(simple selection)</span>
+                  Type of transport
+                  <span className="highlight">(simple selection)</span>
                 </h6>
                 <RadioGroup value={transportationData?.type_of_transport}>
                   {transportOptions.map((option) => (
@@ -84,7 +84,12 @@ const PreviewDetails = ({
                       className="flex items-center space-x-2 mb-2"
                     >
                       <RadioGroupItem value={option.value} id={option.value} />
-                      <Label htmlFor={option.value}>{option.label}</Label>
+                      <Label
+                        htmlFor={option.value}
+                        className="font-normal text-[16px]"
+                      >
+                        {option.label}
+                      </Label>
                     </div>
                   ))}
                 </RadioGroup>
@@ -93,7 +98,7 @@ const PreviewDetails = ({
               <div className="pr-5">
                 <h6 className="mb-4">
                   Mode of transportation
-                  <span className="text-[15px]">(multiple selection)</span>
+                  <span className="highlight">(multiple selection)</span>
                 </h6>
                 {transportModesOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
@@ -103,7 +108,10 @@ const PreviewDetails = ({
                         option.value
                       )}
                     />
-                    <Label className="ml-2" htmlFor={option.value}>
+                    <Label
+                      className="font-normal text-[16px] ml-2"
+                      htmlFor={option.value}
+                    >
                       {option.label}
                     </Label>
                   </div>
@@ -113,7 +121,7 @@ const PreviewDetails = ({
               <div>
                 <h6 className="mb-4">
                   Transport with
-                  <span className="text-[15px]">(multiple selection)</span>
+                  <span className="highlight">(multiple selection)</span>
                 </h6>
                 {transportWithOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
@@ -123,7 +131,10 @@ const PreviewDetails = ({
                         option.value
                       )}
                     />
-                    <Label className="ml-2" htmlFor={option.value}>
+                    <Label
+                      className="font-normal text-[16px] ml-2"
+                      htmlFor={option.value}
+                    >
                       {option.label}
                     </Label>
                   </div>
@@ -163,8 +174,8 @@ const PreviewDetails = ({
                 </div>
 
                 <h3 className="text-lg font-medium mb-3 mt-5">
-                  Select Weekdays{" "}
-                  <span className="text-[15px]">(multiple selection)</span>:
+                  Select Weekdays
+                  <span className="highlight">(multiple selection)</span>:
                 </h3>
                 <div className="grid grid-cols-3 gap-3 mt-2">
                   {weekdaysOptions.map((option) => (
@@ -193,14 +204,14 @@ const PreviewDetails = ({
                   ))}
                 </RadioGroup>
 
-                <h2 className="text-lg font-semibold mt-5">
-                  Summary: Monthly on day{" "}
+                <h6 className="text-lg font-semibold mt-5">
+                  Summary: Monthly on day
                   {calculateMonthlyOccurrences(selectedWeekdays)}
-                </h2>
+                </h6>
               </div>
             )}
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Patient Details</h2>
+              <h6 className="title mb-10">Patient Details</h6>
               <div className="grid grid-cols-3 gap-5">
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
@@ -304,12 +315,10 @@ const PreviewDetails = ({
 
             {/* Destination Details */}
             <div>
-              <h2 className="text-2xl font-semibold mb-4">
-                Destination Details
-              </h2>
-              <div className="grid grid-cols-3 gap-5">
+              <h6 className="title mb-10">Destination Details</h6>
+              <div className="grid grid-cols-2 gap-5">
                 <div className="pr-5">
-                  <h3 className="text-xl font-semibold mb-4">Pick-Up</h3>
+                  <h6 className="mb-8">Pick-Up</h6>
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">
                       Name / Institution <sup className="text-[13px]">*</sup>
@@ -323,12 +332,21 @@ const PreviewDetails = ({
                   </div>
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">
-                      Address <sup className="text-[13px]">*</sup>
+                      Street <sup className="text-[13px]">*</sup>
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.pick_up_address}
-                      placeholder="Pre filled"
+                      value={destinationDetailsData?.pick_up_street}
+                      className="border-gray-300"
+                    />
+                  </div>
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      Postal Code <sup className="text-[13px]">*</sup>
+                    </Label>
+                    <Input
+                      readOnly
+                      value={destinationDetailsData?.pick_up_postal_code}
                       className="border-gray-300"
                     />
                   </div>
@@ -367,104 +385,121 @@ const PreviewDetails = ({
                   </div>
                 </div>
 
-                <div className="pl-5">
-                  <h3 className="text-xl font-semibold mb-4">Drop-Off</h3>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">
-                      Date <sup className="text-[13px]">*</sup>
-                    </Label>
-                    <DatePicker date={dropDate} setDate={setDropDate} />
-                  </div>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">
-                      Pickup time <sup className="text-[13px]">*</sup>
-                    </Label>
-                    <Input
-                      readOnly
-                      value={destinationDetailsData?.drop_off_pick_up_time}
-                      placeholder="Pick-Up Time"
-                      className="border-gray-300"
-                    />
-                  </div>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">
-                      Name / Institution <sup className="text-[13px]">*</sup>
-                    </Label>
-                    <Input
-                      readOnly
-                      value={destinationDetailsData?.drop_off_name}
-                      placeholder="Enter Name"
-                      className="border-gray-300"
-                    />
-                  </div>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">
-                      Address <sup className="text-[13px]">*</sup>
-                    </Label>
-                    <Input
-                      readOnly
-                      value={destinationDetailsData?.drop_off_address}
-                      placeholder="Enter Address"
-                      className="border-gray-300"
-                    />
-                  </div>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">
-                      City <sup className="text-[13px]">*</sup>
-                    </Label>
-                    <Input
-                      readOnly
-                      value={destinationDetailsData?.drop_off_city}
-                      placeholder="Enter City Name"
-                      className="border-gray-300"
-                    />
-                  </div>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">
-                      Country <sup className="text-[13px]">*</sup>
-                    </Label>
-                    <Input
-                      readOnly
-                      value={destinationDetailsData?.drop_off_country}
-                      placeholder="Enter Country"
-                      className="border-gray-300"
-                    />
-                  </div>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">Phone</Label>
-                    <Input
-                      readOnly
-                      value={destinationDetailsData?.drop_off_phone}
-                      placeholder="Type the phone number"
-                      className="border-gray-300"
-                    />
-                  </div>
-                </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-4">Return journey</h3>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">Date</Label>
-                    <DatePicker date={returnDate} setDate={setReturnDate} />
+                  <div>
+                    <h6 className="mb-8">Drop-Off</h6>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">
+                        Date <sup className="text-[13px]">*</sup>
+                      </Label>
+                      <DatePicker
+                        date={dropDate}
+                        setDate={setDropDate}
+                        className="py-6"
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">
+                        Pickup time <sup className="text-[13px]">*</sup>
+                      </Label>
+                      <Input
+                        readOnly
+                        value={destinationDetailsData?.drop_off_pick_up_time}
+                        placeholder="Pick-Up Time"
+                        className="border-gray-300"
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">
+                        Name / Institution <sup className="text-[13px]">*</sup>
+                      </Label>
+                      <Input
+                        readOnly
+                        value={destinationDetailsData?.drop_off_name}
+                        placeholder="Enter Name"
+                        className="border-gray-300"
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">
+                        Street <sup className="text-[13px]">*</sup>
+                      </Label>
+                      <Input
+                        readOnly
+                        value={destinationDetailsData?.drop_off_street}
+                        placeholder="Enter Street"
+                        className="border-gray-300"
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">
+                        Postal Code <sup className="text-[13px]">*</sup>
+                      </Label>
+                      <Input
+                        readOnly
+                        value={destinationDetailsData?.drop_off_postal_code}
+                        placeholder="Enter Street"
+                        className="border-gray-300"
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">
+                        City <sup className="text-[13px]">*</sup>
+                      </Label>
+                      <Input
+                        readOnly
+                        value={destinationDetailsData?.drop_off_city}
+                        placeholder="Enter City Name"
+                        className="border-gray-300"
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">
+                        Country <sup className="text-[13px]">*</sup>
+                      </Label>
+                      <Input
+                        readOnly
+                        value={destinationDetailsData?.drop_off_country}
+                        placeholder="Enter Country"
+                        className="border-gray-300"
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">Phone</Label>
+                      <Input
+                        readOnly
+                        value={destinationDetailsData?.drop_off_phone}
+                        placeholder="Type the phone number"
+                        className="border-gray-300"
+                      />
+                    </div>
                   </div>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">Time</Label>
-                    <Input
-                      readOnly
-                      value={destinationDetailsData?.return_approx_time}
-                      placeholder="Enter Time"
-                      className="border-gray-300"
-                    />
-                  </div>
-                  <div className="mb-5">
-                    <Label className="block mb-2 font-medium">
-                      Floor/Department
-                    </Label>
-                    <Input
-                      readOnly
-                      value={destinationDetailsData?.return_floor}
-                      placeholder="Type the stock or department"
-                      className="border-gray-300"
-                    />
+                  <div>
+                    <h6 className="mb-8 mt-14">Return journey</h6>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">Date</Label>
+                      <DatePicker date={returnDate} setDate={setReturnDate} />
+                    </div>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">Time</Label>
+                      <Input
+                        readOnly
+                        value={destinationDetailsData?.return_approx_time}
+                        placeholder="Enter Time"
+                        className="border-gray-300"
+                      />
+                    </div>
+                    <div className="mb-5">
+                      <Label className="block mb-2 font-medium">
+                        Floor/Department
+                      </Label>
+                      <Input
+                        readOnly
+                        value={destinationDetailsData?.return_floor}
+                        placeholder="Type the stock or department"
+                        className="border-gray-300"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -472,7 +507,7 @@ const PreviewDetails = ({
 
             {/* Billing Details */}
             <div>
-              <h2 className="text-2xl font-semibold mb-4">Billing Address</h2>
+              <h6 className="title mb-10">Billing Address</h6>
               <div className="grid grid-cols-3 gap-5">
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">

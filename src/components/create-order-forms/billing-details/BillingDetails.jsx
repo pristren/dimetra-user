@@ -72,9 +72,9 @@ const BillingDetails = ({
   };
 
   return (
-    <Card className="w-[65%] px-5 py-5">
+    <Card className="w-[70%] px-5 py-5">
       <CardHeader>
-        <CardTitle>Billing Address</CardTitle>
+        <CardTitle className="title">Billing Address</CardTitle>
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
@@ -85,7 +85,7 @@ const BillingDetails = ({
                 name="pre_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Prename/Institution</FormLabel>
+                    <FormLabel className="font-normal">Prename/Institution</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.preName ? "border-red-500" : ""}
@@ -106,7 +106,7 @@ const BillingDetails = ({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel className="font-normal">Name</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.name ? "border-red-500" : ""}
@@ -127,7 +127,7 @@ const BillingDetails = ({
                 name="street"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Street</FormLabel>
+                    <FormLabel className="font-normal">Street</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.street ? "border-red-500" : ""}
@@ -148,7 +148,7 @@ const BillingDetails = ({
                 name="place"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Place</FormLabel>
+                    <FormLabel className="font-normal">Place</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.place ? "border-red-500" : ""}
@@ -169,7 +169,7 @@ const BillingDetails = ({
                 name="contact"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Contact</FormLabel>
+                    <FormLabel className="font-normal">Contact</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.contact ? "border-red-500" : ""}
@@ -193,7 +193,7 @@ const BillingDetails = ({
               handleGoPrev={() => handleFormChange("destinationDetails")}
               handleGoNext={(e) => {
                 e.preventDefault();
-                setShowPreview(true)
+                setShowPreview(true);
               }}
             />
           </form>
