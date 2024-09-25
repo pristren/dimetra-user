@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -90,17 +89,13 @@ export default function AppHead({
         )}
         {showModal?.name && (
           <Dialog>
-            <DialogTrigger>
-              <Button className="flex gap-2">
-                {showModal?.icon && showModal?.icon} {showModal.name}
-              </Button>
+            <DialogTrigger className="bg-primary flex gap-2 text-white py-2 px-5 rounded-md">
+              {showModal?.icon && showModal?.icon} {showModal.name}
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-2xl">
               <DialogHeader>
                 <DialogTitle className="mb-10">Request</DialogTitle>
-                <DialogDescription>
-                  <AddRequest />
-                </DialogDescription>
+                <AddRequest />
               </DialogHeader>
             </DialogContent>
           </Dialog>
