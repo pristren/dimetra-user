@@ -21,9 +21,9 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    #- run: npm install
+    - run: npm install
    # - run: npm run build --if-present
     - run: |
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
-    #- run: pm2 restart dimetra-frontend
+    - run: pm2 restart dimetra-frontend
