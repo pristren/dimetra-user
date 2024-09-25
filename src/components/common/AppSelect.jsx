@@ -13,9 +13,15 @@ const AppSelect = ({
   isTime = false,
   className,
   onValueChange,
+  defaultValue,
+  disabled = false,
 }) => {
   return (
-    <Select onValueChange={onValueChange}>
+    <Select
+      disabled={disabled}
+      onValueChange={onValueChange}
+      defaultValue={defaultValue}
+    >
       <SelectTrigger isTime={isTime} className={className}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
