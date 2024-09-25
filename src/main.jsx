@@ -7,6 +7,7 @@ import "./index.css";
 import { store } from "./redux/store.js";
 import { ApolloProvider } from "@apollo/client";
 import client from "@/lib/apollo-client";
+import { Toaster } from "react-hot-toast";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -14,6 +15,7 @@ createRoot(document.getElementById("root")).render(
       <Provider store={store}>
         <BrowserRouter>
           <App />
+          <Toaster position="top-right" reverseOrder={false} />
         </BrowserRouter>
       </Provider>
     </ApolloProvider>

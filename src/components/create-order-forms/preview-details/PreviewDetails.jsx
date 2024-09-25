@@ -52,8 +52,7 @@ const PreviewDetails = ({
       });
       console.log(data);
       if (data?.createAnOrder?.id) {
-        //do whatever you want
-        // alert("Order created successfully");
+        localStorage.removeItem("createOrderData")
         navigate("/orders/all-orders");
         setShowPreview(false);
       }

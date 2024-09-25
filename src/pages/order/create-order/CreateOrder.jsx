@@ -13,8 +13,8 @@ import { Logo } from "@/assets/icons";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
+  DialogTitle,
 } from "@/components/ui/dialog";
 
 const CreateOrder = () => {
@@ -239,13 +239,14 @@ const CreateOrder = () => {
         <Dialog open={showPreview} onOpenChange={setShowPreview}>
           <DialogContent className="w-[90%] max-w-[60rem] px-0 border-none max-h-[98vh] overflow-y-auto">
             <DialogHeader>
-              <DialogDescription>
+              <DialogTitle /> 
+              <div>
                 <PreviewDetails {...props} />
-              </DialogDescription>
+              </div>
             </DialogHeader>
           </DialogContent>
         </Dialog>
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2">
+        <div className="mt-20">
           <p className="text-lg mb-5 text-center">Powered by</p>
           <Logo />
         </div>
