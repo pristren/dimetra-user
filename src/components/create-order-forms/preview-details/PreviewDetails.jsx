@@ -368,8 +368,8 @@ const PreviewDetails = ({
                   <Label className="block mb-2 font-medium">Special</Label>
                   <Input
                     readOnly
-                    value={patientData?.special}
-                    placeholder="Requires special attention"
+                    value={patientData?.special_note}
+                    placeholder="Requires special_note attention"
                     className="border-gray-300"
                   />
                 </div>

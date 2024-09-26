@@ -23,7 +23,7 @@ const EditOrder = () => {
       transport_with: [],
       week_days: "",
       start_date: startDate,
-      end_date: endDate,
+      return_date: endDate,
       start_time: "",
       return_time: "",
       multiple_weekdays: [],
@@ -36,7 +36,7 @@ const EditOrder = () => {
       area_room: "",
       cost_center: "",
       how_much: "",
-      special: "",
+      special_note: "",
       isolation: false,
       patient_above_90kg: false,
     },
@@ -97,7 +97,7 @@ const EditOrder = () => {
     setDateOfBirth,
     setReturnDate,
     setDropDate,
-    handleUpdate
+    handleUpdate,
   };
   return (
     <div>

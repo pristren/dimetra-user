@@ -31,7 +31,7 @@ const EditPatientDetails = ({
     area_room: z.string().min(1, "Area/Room is required"),
     cost_center: z.string().min(1, "Cost center is required"),
     how_much: z.string().optional(),
-    special: z.string().optional(),
+    special_note: z.string().optional(),
     isolation: z.boolean().optional(),
     patient_above_90kg: z.boolean().optional(),
   });
@@ -318,16 +318,16 @@ const EditPatientDetails = ({
 
               <FormField
                 control={form.control}
-                name="special"
+                name="special_note"
                 render={({ field }) => (
-                  <FormItem
-                    className={"col-span-3"}
-                  >
+                  <FormItem className={"col-span-3"}>
                     <FormLabel>Special</FormLabel>
                     <FormControl>
                       <Input
                         className={`${
-                          form.formState.errors.special ? "border-red-500" : ""
+                          form.formState.errors.special_note
+                            ? "border-red-500"
+                            : ""
                         }`}
                         placeholder="Enter special notes"
                         {...field}

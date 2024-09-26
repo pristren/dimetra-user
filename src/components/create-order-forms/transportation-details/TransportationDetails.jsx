@@ -122,8 +122,8 @@ const TransportationDetails = ({
         ? [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation.length > 0,
-            transportationData?.transport_with.length > 0,
-            transportationData?.multiple_week_days.length > 0,
+            transportationData?.transport_with?.length > 0,
+            transportationData?.multiple_week_days?.length > 0,
             transportationData?.start_date,
             transportationData?.ends,
           ]
@@ -131,13 +131,13 @@ const TransportationDetails = ({
           transportationData?.recurring_type === "Free"
         ? [
             transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation.length > 0,
-            transportationData?.transport_with.length > 0,
+            transportationData?.mode_of_transportation?.length > 0,
+            transportationData?.transport_with?.length > 0,
             transportationData?.free_dates?.length > 0,
           ]
         : [
             transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation.length > 0,
+            transportationData?.mode_of_transportation?.length > 0,
             transportationData?.transport_with.length > 0,
           ];
     setTransportationProgress(calculateFormProgress(fieldsFilled));
@@ -149,7 +149,7 @@ const TransportationDetails = ({
       transportationData: {
         ...prev.transportationData,
         start_date: startDate,
-        end_date: endDate,
+        return_date: endDate,
         free_dates: freeDates,
       },
     }));
@@ -279,7 +279,11 @@ const TransportationDetails = ({
                       Select Start Date and Time*:
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker date={startDate} setDate={setStartDate} />
+                      <DatePicker
+                        date={startDate}
+                        setDate={setStartDate}
+                        startMonth={new Date()}
+                      />
                       <AppSelect
                         items={timeOptions}
                         placeholder="00:00"

@@ -37,7 +37,7 @@ const PatientDetails = ({
     area_room: z.string().min(1, "Area/Room is required"),
     cost_center: z.string().min(1, "Cost center is required"),
     how_much: z.string().optional(),
-    special: z.string().optional(),
+    special_note: z.string().optional(),
     isolation: z.boolean().optional(),
     patient_above_90kg: z.boolean().optional(),
   });
@@ -266,7 +266,9 @@ const PatientDetails = ({
                 name="isolation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="block mb-5 font-normal">Isolation</FormLabel>
+                    <FormLabel className="block mb-5 font-normal">
+                      Isolation
+                    </FormLabel>
                     <div className="flex items-center">
                       <FormControl>
                         <Checkbox
@@ -343,16 +345,16 @@ const PatientDetails = ({
 
               <FormField
                 control={form.control}
-                name="special"
+                name="special_note"
                 render={({ field }) => (
-                  <FormItem
-                    className="col-span-2"
-                  >
+                  <FormItem className="col-span-2">
                     <FormLabel className="font-normal">Special</FormLabel>
                     <FormControl>
                       <Input
                         className={`${
-                          form.formState.errors.special ? "border-red-500" : ""
+                          form.formState.errors.special_note
+                            ? "border-red-500"
+                            : ""
                         }`}
                         placeholder="Enter special notes"
                         {...field}

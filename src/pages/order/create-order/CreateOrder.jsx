@@ -38,7 +38,7 @@ const CreateOrder = () => {
       transport_with: [],
       recurring_type: "",
       start_date: startDate,
-      end_date: endDate,
+      return_date: endDate,
       start_time: "",
       return_time: "",
       multiple_week_days: [],
@@ -54,7 +54,7 @@ const CreateOrder = () => {
       area_room: "",
       cost_center: "",
       how_much: "",
-      special: "",
+      special_note: "",
       isolation: false,
       patient_above_90kg: false,
     },
@@ -103,12 +103,12 @@ const CreateOrder = () => {
       const parsedData = JSON.parse(storedData);
       if (
         (parsedData.transportationData.start_date ||
-          parsedData.transportationData.end_date ||
+          parsedData.transportationData.return_date ||
           parsedData.transportationData.multiple_week_days) &&
         parsedData.transportationData.type_of_transport === "recurring"
       ) {
         setStartDate(parsedData.transportationData.start_date);
-        setEndDate(parsedData.transportationData.end_date);
+        setEndDate(parsedData.transportationData.return_date);
         setSelectedWeekdays(parsedData.transportationData.multiple_week_days);
       } else if (
         parsedData.transportationData.recurring_type &&
@@ -174,7 +174,7 @@ const CreateOrder = () => {
             ...prev.transportationData,
             multiple_week_days: [],
             start_date: null,
-            end_date: null,
+            return_date: null,
             start_time: "",
             return_time: "",
             ends: "",
@@ -192,7 +192,7 @@ const CreateOrder = () => {
           multiple_week_days: [],
           recurring_type: "",
           start_date: null,
-          end_date: null,
+          return_date: null,
           start_time: "",
           return_time: "",
           ends: "",

@@ -488,7 +488,7 @@ const DestinationDetails = ({
                       <FormControl>
                         <Input
                           className={
-                            errors.pick_up_postal_code ? "border-red-500" : ""
+                            errors.drop_off_postal_code ? "border-red-500" : ""
                           }
                           type="number"
                           placeholder="Type your postal code"

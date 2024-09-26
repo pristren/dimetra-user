@@ -24,7 +24,7 @@ export const GET_AN_ORDER = gql`
         transport_with
         week_days
         start_date
-        end_date
+        return_date
         start_time
         return_time
         multiple_weekdays
@@ -37,7 +37,7 @@ export const GET_AN_ORDER = gql`
         area_room
         cost_center
         how_much
-        special
+        special_note
         isolation
         patient_above_90kg
       }
