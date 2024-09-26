@@ -68,8 +68,7 @@ const Message = () => {
       text: "next message",
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-      file:
-        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      file: "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
       userId: 2,
       photoURL:
@@ -85,11 +84,10 @@ const Message = () => {
         "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     },
     {
-      text: "next message",
+      text: "next message. Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, voluptatibus?",
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-      file:
-        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      file: "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
       userId: 1,
       photoURL: "",
@@ -97,8 +95,7 @@ const Message = () => {
     {
       image:
         "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
-      file:
-        "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
+      file: "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       displayName: "rafi",
       userId: 1,
       photoURL: "",
@@ -147,7 +144,7 @@ const Message = () => {
       return (
         <div key={index}>
           {msg.userId === userId ? (
-            <div className="flex flex-row-reverse items-center justify-start gap-2 my-2">
+            <div className="flex flex-row-reverse items-start justify-start gap-2 my-2">
               {isFirstMessageFromUser && msg.photoURL ? (
                 <img
                   src={msg.photoURL}
@@ -157,17 +154,23 @@ const Message = () => {
               ) : isFirstMessageFromUser ? (
                 <DefaultAvatar className="w-10 h-10 rounded-full" />
               ) : null}
-              <p
-                className={`bg-[#6B93A7] text-white px-3 py-1 rounded-xl ${
-                  !isFirstMessageFromUser && "mr-12"
-                }`}
+              <div
+                className={`bg-[#6B93A7] text-white ${
+                  msg.file ? "p-3 max-w-52" : "px-3 py-1"
+                } rounded-xl ${!isFirstMessageFromUser && "mr-12"}`}
               >
-                {msg.text}
-                {msg.file && <img src={msg.image} alt="attachment" className="w-24 h-24 object-cover" />}
-              </p>
+                {msg.file && (
+                  <img
+                    src={msg.image}
+                    alt="attachment"
+                    className="w-full rounded-md max-w-44 h-full object-cover"
+                  />
+                )}
+                <p className={`${msg.file && "mt-4"}`}>{msg.text}</p>
+              </div>
             </div>
           ) : (
-            <div className="flex items-center justify-start gap-2 my-2">
+            <div className="flex items-start justify-start gap-2 my-2">
               {isFirstMessageFromUser && (
                 <img
                   src={msg.photoURL}
@@ -175,14 +178,20 @@ const Message = () => {
                   alt={msg.displayName}
                 />
               )}
-              <p
-                className={`bg-[#F9FCFF] text-black px-3 py-1 rounded-xl ${
-                  !isFirstMessageFromUser && "ml-12"
-                }`}
+              <div
+                className={`bg-secondary text-black ${
+                  msg.file ? "p-3 max-w-52" : "px-3 py-1"
+                } rounded-xl ${!isFirstMessageFromUser && "ml-12"}`}
               >
-                {msg.text}
-                {msg.file && <img src={msg.image} alt="attachment" className="mt-2 w-24 h-24 object-cover" />}
-              </p>
+                {msg.file && (
+                  <img
+                    src={msg.image}
+                    alt="attachment"
+                    className="w-full rounded-md max-w-44 h-full object-cover"
+                  />
+                )}
+                <p className={`${msg.file && "mt-4"}`}>{msg.text}</p>
+              </div>
             </div>
           )}
         </div>
@@ -198,7 +207,7 @@ const Message = () => {
     };
 
     setMessages((prevMessages) => [...prevMessages, newMessage]);
-    setSelectedImage(null); 
+    setSelectedImage(null);
   };
 
   const handleImageChange = (event) => {
@@ -231,18 +240,27 @@ const Message = () => {
           {renderMessages()}
         </div>
         {selectedImage && (
-            <div className="mb-4 ml-5">
-              <img src={URL.createObjectURL(selectedImage)} alt="preview" className="w-24 h-24 object-cover" />
-            </div>
-          )}
+          <div className="mb-4 ml-5">
+            <img
+              src={URL.createObjectURL(selectedImage)}
+              alt="preview"
+              className="w-24 h-24 object-cover"
+            />
+          </div>
+        )}
         <div className="flex items-center justify-center gap-3 w-full px-4 mt-auto bg-white mb-5">
           <div>
             <Label htmlFor="image" className="cursor-pointer">
               <Attach />
             </Label>
-            <Input type="file" id="image" className="hidden" onChange={handleImageChange} />
+            <Input
+              type="file"
+              id="image"
+              className="hidden"
+              onChange={handleImageChange}
+            />
           </div>
-         
+
           <div className="relative w-full border border-gray-200 rounded-md">
             <Input
               className="w-[95%] border-none"
