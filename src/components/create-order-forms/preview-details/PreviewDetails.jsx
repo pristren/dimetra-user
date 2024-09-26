@@ -38,6 +38,7 @@ const PreviewDetails = ({
     destinationDetailsData,
     billingDetailsData,
   } = createOrderData;
+
   const calculateMonthlyOccurrences = (weekdays) => {
     return weekdays.length * 4;
   };
@@ -45,17 +46,17 @@ const PreviewDetails = ({
   const navigate = useNavigate();
   const handleCreateAnOrder = async () => {
     try {
-      const { data } = await createAnOrder({
-        variables: {
-          inputData: createOrderData,
-        },
-      });
-      console.log(data);
-      if (data?.createAnOrder?.id) {
-        localStorage.removeItem("createOrderData");
-        navigate("/orders/all-orders");
-        setShowPreview(false);
-      }
+      //   const { data } = await createAnOrder({
+      //     variables: {
+      //       inputData: createOrderData,
+      //     },
+      //   });
+      console.log(createOrderData);
+      //   if (data?.createAnOrder?.id) {
+      //     localStorage.removeItem("createOrderData");
+      //     navigate("/orders/all-orders");
+      //     setShowPreview(false);
+      //   }
     } catch (error) {
       const { message, response } = error;
       console.log(message, response);
@@ -145,69 +146,131 @@ const PreviewDetails = ({
             {transportationData?.type_of_transport === "recurring" && (
               <div>
                 <h3 className="text-lg font-medium mb-3 mt-5">
-                  Select Weekdays:
+                  Select Recurring Type:
                 </h3>
-                <AppSelect items={["Week", "Month"]} placeholder="Week" />
+                <AppSelect
+                  items={["Week", "Free"]}
+                  placeholder="Week"
+                  defaultValue={transportationData.recurring_type}
+                  disabled
+                />
 
-                <h3 className="text-lg font-medium mt-10 mb-5">
-                  Select Start Date and Time*:
-                </h3>
-                <div className="mb-5 flex w-max gap-4 items-center">
-                  <DatePicker date={startDate} setDate={setStartDate} />
-                  <AppSelect
-                    items={timeOptions}
-                    placeholder="00:00"
-                    isTime={true}
-                  />
-                </div>
-
-                <h3 className="text-lg font-medium mt-10 mb-5">
-                  Select Return Time* :
-                </h3>
-                <div className="mb-5 flex w-max gap-4 items-center">
-                  <DatePicker date={endDate} setDate={setEndDate} />
-                  <AppSelect
-                    items={timeOptions}
-                    placeholder="00:00"
-                    isTime={true}
-                  />
-                </div>
-
-                <h3 className="text-lg font-medium mb-3 mt-5">
-                  Select Weekdays
-                  <span className="highlight">(multiple selection)</span>:
-                </h3>
-                <div className="grid grid-cols-3 gap-3 mt-2">
-                  {weekdaysOptions.map((option) => (
-                    <div key={option.value} className="flex items-center mb-2">
-                      <Checkbox
-                        id={option.value}
-                        checked={selectedWeekdays.includes(option.value)}
+                {transportationData.recurring_type === "Week" ? (
+                  <div className="">
+                    <h3 className="text-lg font-medium mt-10 mb-5">
+                      Select Start Date and Time*:
+                    </h3>
+                    <div className="mb-5 flex w-max gap-4 items-center">
+                      <DatePicker date={startDate} setDate={setStartDate} />
+                      <AppSelect
+                        items={timeOptions}
+                        placeholder="00:00"
+                        isTime={true}
                       />
-                      <Label className="ml-2" htmlFor={option.value}>
-                        {option.label}
-                      </Label>
                     </div>
-                  ))}
-                </div>
 
-                <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
-                <RadioGroup value={transportationData?.ends}>
-                  {durationOptions.map((option) => (
-                    <div
-                      key={option.value}
-                      className="flex items-center space-x-2 mb-2"
-                    >
-                      <RadioGroupItem value={option.value} id={option.value} />
-                      <Label htmlFor={option.value}>{option.label}</Label>
+                    <h3 className="text-lg font-medium mt-10 mb-5">
+                      Select Return Time* :
+                    </h3>
+                    <div className="mb-5 flex w-max gap-4 items-center">
+                      <DatePicker date={endDate} setDate={setEndDate} />
+                      <AppSelect
+                        items={timeOptions}
+                        placeholder="00:00"
+                        isTime={true}
+                      />
                     </div>
-                  ))}
-                </RadioGroup>
 
-                <h6 className="text-lg font-semibold mt-5">
-                  Summary: Monthly on day
-                  {calculateMonthlyOccurrences(selectedWeekdays)}
-                </h6>
+                    <h3 className="text-lg font-medium mb-3 mt-5">
+                      Select Weekdays
+                      <span className="highlight">(multiple selection)</span>:
+                    </h3>
+                    <div className="grid grid-cols-3 gap-3 mt-2">
+                      {weekdaysOptions.map((option) => (
+                        <div
+                          key={option.value}
+                          className="flex items-center mb-2"
+                        >
+                          <Checkbox
+                            id={option.value}
+                            checked={selectedWeekdays.includes(option.value)}
+                          />
+                          <Label className="ml-2" htmlFor={option.value}>
+                            {option.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+
+                    <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
+                    <RadioGroup value={transportationData?.ends}>
+                      {durationOptions.map((option) => (
+                        <div
+                          key={option.value}
+                          className="flex items-center space-x-2 mb-2"
+                        >
+                          <RadioGroupItem
+                            value={option.value}
+                            id={option.value}
+                          />
+                          <Label htmlFor={option.value}>{option.label}</Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+
+                    <h6 className="text-lg font-semibold mt-5">
+                      Summary: Monthly on day
+                      {calculateMonthlyOccurrences(selectedWeekdays)}
+                    </h6>
+                  </div>
+                ) : transportationData.recurring_type === "Free" ? (
+                  <div className="">
+                    <div className="mt-5 mb-5 ">
+                      <h3 className="text-lg font-medium mt-10 mb-5">
+                        Select Start Date and Time* (max 60):
+                      </h3>
+                      <div className="flex w-max gap-4 items-center">
+                        <DatePicker
+                          mode="multiple"
+                          date={transportationData.free_dates}
+                          disabled
+                        />
+
+                        <AppSelect
+                          items={timeOptions}
+                          placeholder="Select a time"
+                          isTime={true}
+                          disabled
+                          defaultValue={
+                            transportationData.free_dates_start_time
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className="mt-5 mb-5 ">
+                      <h3 className="text-lg font-medium mt-10 mb-5">
+                        Select Return Date and Time:
+                      </h3>
+                      <div className="flex w-max gap-4 items-center">
+                        <DatePicker
+                          mode="multiple"
+                          date={transportationData.free_dates}
+                          disabled
+                        />
+
+                        <AppSelect
+                          items={timeOptions}
+                          placeholder="No time selected"
+                          isTime={true}
+                          disabled
+                          defaultValue={
+                            transportationData.free_dates_return_time
+                          }
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
               </div>
             )}
             <div>
@@ -388,27 +451,33 @@ const PreviewDetails = ({
                 <div>
                   <div>
                     <h6 className="mb-8">Drop-Off</h6>
-                    <div className="mb-5">
-                      <Label className="block mb-2 font-medium">
-                        Date <sup className="text-[13px]">*</sup>
-                      </Label>
-                      <DatePicker
-                        date={dropDate}
-                        setDate={setDropDate}
-                        className="py-6"
-                      />
-                    </div>
-                    <div className="mb-5">
-                      <Label className="block mb-2 font-medium">
-                        Pickup time <sup className="text-[13px]">*</sup>
-                      </Label>
-                      <Input
-                        readOnly
-                        value={destinationDetailsData?.drop_off_pick_up_time}
-                        placeholder="Pick-Up Time"
-                        className="border-gray-300"
-                      />
-                    </div>
+                    {createOrderData?.transportationData?.type_of_transport !==
+                      "recurring" && (
+                      <div className="mb-5">
+                        <Label className="block mb-2 font-medium">
+                          Date <sup className="text-[13px]">*</sup>
+                        </Label>
+                        <DatePicker
+                          date={dropDate}
+                          setDate={setDropDate}
+                          className="py-6"
+                        />
+                      </div>
+                    )}
+                    {createOrderData?.transportationData?.type_of_transport !==
+                      "recurring" && (
+                      <div className="mb-5">
+                        <Label className="block mb-2 font-medium">
+                          Pickup time <sup className="text-[13px]">*</sup>
+                        </Label>
+                        <Input
+                          readOnly
+                          value={destinationDetailsData?.drop_off_pick_up_time}
+                          placeholder="Pick-Up Time"
+                          className="border-gray-300"
+                        />
+                      </div>
+                    )}
                     <div className="mb-5">
                       <Label className="block mb-2 font-medium">
                         Name / Institution <sup className="text-[13px]">*</sup>
@@ -474,33 +543,36 @@ const PreviewDetails = ({
                       />
                     </div>
                   </div>
-                  <div>
-                    <h6 className="mb-8 mt-14">Return journey</h6>
-                    <div className="mb-5">
-                      <Label className="block mb-2 font-medium">Date</Label>
-                      <DatePicker date={returnDate} setDate={setReturnDate} />
+                  {createOrderData?.transportationData?.type_of_transport !==
+                    "recurring" && (
+                    <div>
+                      <h6 className="mb-8 mt-14">Return journey</h6>
+                      <div className="mb-5">
+                        <Label className="block mb-2 font-medium">Date</Label>
+                        <DatePicker date={returnDate} setDate={setReturnDate} />
+                      </div>
+                      <div className="mb-5">
+                        <Label className="block mb-2 font-medium">Time</Label>
+                        <Input
+                          readOnly
+                          value={destinationDetailsData?.return_approx_time}
+                          placeholder="Enter Time"
+                          className="border-gray-300"
+                        />
+                      </div>
+                      <div className="mb-5">
+                        <Label className="block mb-2 font-medium">
+                          Floor/Department
+                        </Label>
+                        <Input
+                          readOnly
+                          value={destinationDetailsData?.return_floor}
+                          placeholder="Type the stock or department"
+                          className="border-gray-300"
+                        />
+                      </div>
                     </div>
-                    <div className="mb-5">
-                      <Label className="block mb-2 font-medium">Time</Label>
-                      <Input
-                        readOnly
-                        value={destinationDetailsData?.return_approx_time}
-                        placeholder="Enter Time"
-                        className="border-gray-300"
-                      />
-                    </div>
-                    <div className="mb-5">
-                      <Label className="block mb-2 font-medium">
-                        Floor/Department
-                      </Label>
-                      <Input
-                        readOnly
-                        value={destinationDetailsData?.return_floor}
-                        placeholder="Type the stock or department"
-                        className="border-gray-300"
-                      />
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>

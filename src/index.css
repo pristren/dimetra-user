@@ -105,10 +105,8 @@ h6 {
 }
 
 .review-star .rr--off .rr--svg {
-  fill: #F6F5F1;
+  fill: #f6f5f1;
 }
-
-
 
 @layer base {
   * {
@@ -117,4 +115,16 @@ h6 {
   body {
     @apply bg-background text-foreground font-poppins my-0 mx-auto p-0;
   }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
 }

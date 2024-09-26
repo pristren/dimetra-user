@@ -37,14 +37,14 @@ const DestinationDetails = ({
     destinationDetailsData: {
       pick_up_name = "",
       pick_up_street = "",
-      pick_up_postal_code = 0,
+      pick_up_postal_code,
       pick_up_city = "",
       pick_up_country = "",
       pick_up_employee_name = "",
       drop_off_pick_up_time = "",
       drop_off_name = "",
       drop_off_street,
-      drop_off_postal_code = 0,
+      drop_off_postal_code,
       drop_off_city = "",
       drop_off_country = "",
       drop_off_phone = "",
@@ -169,8 +169,28 @@ const DestinationDetails = ({
     dropDate,
   ];
 
+  const fieldsFilledRecurring = [
+    pick_up_name,
+    pick_up_street,
+    pick_up_postal_code,
+    pick_up_city,
+    pick_up_country,
+    pick_up_employee_name,
+    drop_off_name,
+    drop_off_street,
+    drop_off_postal_code,
+    drop_off_city,
+    drop_off_country,
+    drop_off_phone,
+  ];
   useEffect(() => {
-    setDestinationProgress(calculateFormProgress(fieldsFilled));
+    if (
+      createOrderData?.transportationData?.type_of_transport !== "recurring"
+    ) {
+      setDestinationProgress(calculateFormProgress(fieldsFilled));
+    } else {
+      setDestinationProgress(calculateFormProgress(fieldsFilledRecurring));
+    }
   }, [...fieldsFilled]);
 
   return (
@@ -254,6 +274,7 @@ const DestinationDetails = ({
                           }
                           placeholder="Type your postal code"
                           {...field}
+                          type="number"
                           onChange={(e) => {
                             field.onChange(e);
                             handleInputChange(e);
@@ -352,48 +373,54 @@ const DestinationDetails = ({
                 <h6 className="text-xl font-semibold mb-4">Drop-Off</h6>
 
                 {/* Drop-Off Date */}
-                <FormField
-                  control={form.control}
-                  name="drop_off_date"
-                  render={({ field }) => (
-                    <FormItem className="mb-7">
-                      <FormLabel className="mb-2 font-normal">
-                        Drop-Off Date <sup className="text-[13px]">*</sup>
-                      </FormLabel>
-                      <FormControl>
-                        <DatePicker date={dropDate} setDate={setDropDate} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {createOrderData?.transportationData?.type_of_transport !==
+                  "recurring" && (
+                  <FormField
+                    control={form.control}
+                    name="drop_off_date"
+                    render={({ field }) => (
+                      <FormItem className="mb-7">
+                        <FormLabel className="mb-2 font-normal">
+                          Drop-Off Date <sup className="text-[13px]">*</sup>
+                        </FormLabel>
+                        <FormControl>
+                          <DatePicker date={dropDate} setDate={setDropDate} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 {/* Drop-Off Pickup Time */}
-                <FormField
-                  control={form.control}
-                  name="drop_off_pick_up_time"
-                  render={({ field }) => (
-                    <FormItem className="mb-7">
-                      <FormLabel className="mb-2 font-normal">
-                        Pickup Time <sup className="text-[13px]">*</sup>
-                      </FormLabel>
-                      <FormControl>
-                        <AppSelect
-                          items={timeOptions}
-                          placeholder="00:00"
-                          onValueChange={(value) =>
-                            updateDestinationData(
-                              "drop_off_pick_up_time",
-                              value
-                            )
-                          }
-                          value={drop_off_pick_up_time}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                {createOrderData?.transportationData?.type_of_transport !==
+                  "recurring" && (
+                  <FormField
+                    control={form.control}
+                    name="drop_off_pick_up_time"
+                    render={({ field }) => (
+                      <FormItem className="mb-7">
+                        <FormLabel className="mb-2 font-normal">
+                          Pickup Time <sup className="text-[13px]">*</sup>
+                        </FormLabel>
+                        <FormControl>
+                          <AppSelect
+                            items={timeOptions}
+                            placeholder="00:00"
+                            onValueChange={(value) =>
+                              updateDestinationData(
+                                "drop_off_pick_up_time",
+                                value
+                              )
+                            }
+                            value={drop_off_pick_up_time}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
 
                 {/* Drop-Off Name */}
                 <FormField
@@ -463,6 +490,7 @@ const DestinationDetails = ({
                           className={
                             errors.pick_up_postal_code ? "border-red-500" : ""
                           }
+                          type="number"
                           placeholder="Type your postal code"
                           {...field}
                           onChange={(e) => {
@@ -544,6 +572,7 @@ const DestinationDetails = ({
                           className={
                             errors.drop_off_phone ? "border-red-500" : ""
                           }
+                          type="number"
                           placeholder="Type phone"
                           {...field}
                           onChange={(e) => {
@@ -558,75 +587,84 @@ const DestinationDetails = ({
                 />
 
                 {/* Return Journey Section */}
-                <div className="mt-10">
-                  <h6 className="text-xl font-semibold mb-4">Return Journey</h6>
-                  <div>
-                    <FormField
-                      control={form.control}
-                      name="return_date"
-                      render={({ field }) => (
-                        <FormItem className="mb-7">
-                          <FormLabel className="mb-2 font-normal">Return Date</FormLabel>
-                          <FormControl>
-                            <DatePicker
-                              date={returnDate}
-                              setDate={setReturnDate}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                {createOrderData?.transportationData?.type_of_transport !==
+                  "recurring" && (
+                  <div className="mt-10">
+                    <h6 className="text-xl font-semibold mb-4">
+                      Return Journey
+                    </h6>
+                    <div>
+                      <FormField
+                        control={form.control}
+                        name="return_date"
+                        render={({ field }) => (
+                          <FormItem className="mb-7">
+                            <FormLabel className="mb-2 font-normal">
+                              Return Date
+                            </FormLabel>
+                            <FormControl>
+                              <DatePicker
+                                date={returnDate}
+                                setDate={setReturnDate}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name="return_approx_time"
-                      render={({ field }) => (
-                        <FormItem className="mb-7">
-                          <FormLabel className="mb-2 font-normal">Approx. Time</FormLabel>
-                          <FormControl>
-                            <AppSelect
-                              items={timeOptions}
-                              placeholder="00:00"
-                              isTime={true}
-                              onValueChange={(value) =>
-                                updateDestinationData(
-                                  "return_approx_time",
-                                  value
-                                )
-                              }
-                              value={return_approx_time}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <FormField
+                        control={form.control}
+                        name="return_approx_time"
+                        render={({ field }) => (
+                          <FormItem className="mb-7">
+                            <FormLabel className="mb-2 font-normal">
+                              Approx. Time
+                            </FormLabel>
+                            <FormControl>
+                              <AppSelect
+                                items={timeOptions}
+                                placeholder="00:00"
+                                isTime={true}
+                                onValueChange={(value) =>
+                                  updateDestinationData(
+                                    "return_approx_time",
+                                    value
+                                  )
+                                }
+                                value={return_approx_time}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name="return_floor"
-                      render={({ field }) => (
-                        <FormItem className="mb-7">
-                          <FormLabel className="mb-2 font-normal">
-                            Floor / Department
-                          </FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Floor number (optional)"
-                              {...field}
-                              onChange={(e) => {
-                                field.onChange(e);
-                                handleInputChange(e);
-                              }}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <FormField
+                        control={form.control}
+                        name="return_floor"
+                        render={({ field }) => (
+                          <FormItem className="mb-7">
+                            <FormLabel className="mb-2 font-normal">
+                              Floor / Department
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Floor number (optional)"
+                                {...field}
+                                onChange={(e) => {
+                                  field.onChange(e);
+                                  handleInputChange(e);
+                                }}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
             <BackAndNextBtn

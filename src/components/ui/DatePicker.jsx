@@ -9,7 +9,13 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 
-export function DatePicker({ className, date, setDate }) {
+export function DatePicker({
+  className,
+  date,
+  setDate,
+  mode = "single",
+  ...props
+}) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -21,7 +27,17 @@ export function DatePicker({ className, date, setDate }) {
             className
           )}
         >
-          {date ? (
+          {date?.length > 0 ? (
+            <span>
+              {format(date[0], "dd MMMM yyyy")}
+              {date.length - 1 !== 0
+                ? ` and ${date.length - 1}
+              ${
+                date.length === 2 ? "other" : date.length > 2 ? "others" : null
+              }`
+                : null}
+            </span>
+          ) : date ? (
             format(date, "dd MMMM yyyy")
           ) : (
             <span className="text-black">Pick a date</span>
@@ -33,10 +49,11 @@ export function DatePicker({ className, date, setDate }) {
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0" align="left">
         <Calendar
-          mode="single"
+          mode={mode}
           selected={date}
           onSelect={setDate}
           initialFocus
+          {...props}
         />
       </PopoverContent>
     </Popover>

@@ -30,18 +30,22 @@ const CreateOrder = () => {
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
+  const [freeDates, setFreeDates] = useState();
   const [createOrderData, setCreateOrderData] = useState({
     transportationData: {
       type_of_transport: "",
       mode_of_transportation: [],
       transport_with: [],
-      week_days: "",
+      recurring_type: "",
       start_date: startDate,
       end_date: endDate,
       start_time: "",
       return_time: "",
-      multiple_weekdays: [],
+      multiple_week_days: [],
       ends: "",
+      free_dates: [],
+      free_dates_start_time: "",
+      free_dates_return_time: "",
     },
     patientData: {
       name: "",
@@ -57,7 +61,7 @@ const CreateOrder = () => {
     destinationDetailsData: {
       pick_up_name: "",
       pick_up_street: "",
-      pick_up_postal_code: 0,
+      pick_up_postal_code: "",
       pick_up_city: "",
       pick_up_country: "",
       pick_up_employee_name: "",
@@ -66,7 +70,7 @@ const CreateOrder = () => {
       drop_off_pick_up_time: "",
       drop_off_name: "",
       drop_off_street: "",
-      drop_off_postal_code: 0,
+      drop_off_postal_code: "",
       drop_off_city: "",
       drop_off_country: "",
       drop_off_phone: "",
@@ -97,6 +101,28 @@ const CreateOrder = () => {
     const storedData = localStorage.getItem("createOrderData");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
+      if (
+        (parsedData.transportationData.start_date ||
+          parsedData.transportationData.end_date ||
+          parsedData.transportationData.multiple_week_days) &&
+        parsedData.transportationData.type_of_transport === "recurring"
+      ) {
+        setStartDate(parsedData.transportationData.start_date);
+        setEndDate(parsedData.transportationData.end_date);
+        setSelectedWeekdays(parsedData.transportationData.multiple_week_days);
+      } else if (
+        parsedData.transportationData.recurring_type &&
+        parsedData.transportationData.type_of_transport === "recurring"
+      ) {
+        setCreateOrderData((prev) => ({
+          ...prev,
+          transportationData: {
+            ...prev.transportationData,
+            recurring_type: parsedData.transportationData.recurring_type,
+          },
+        }));
+      }
+
       setCreateOrderData(parsedData);
 
       if (parsedData.patientData?.date_of_birth) {
@@ -127,6 +153,53 @@ const CreateOrder = () => {
   }, [dateOfBirth, dropDate, returnDate]);
 
   const handleFormChange = (step) => {
+    if (
+      step === "patientDetails" &&
+      createOrderData.transportationData.type_of_transport === "recurring"
+    ) {
+      if (createOrderData.transportationData.recurring_type === "Week") {
+        setCreateOrderData((prev) => ({
+          ...prev,
+          transportationData: {
+            ...prev.transportationData,
+            free_dates: [],
+            free_dates_start_time: "",
+            free_dates_return_time: "",
+          },
+        }));
+      } else {
+        setCreateOrderData((prev) => ({
+          ...prev,
+          transportationData: {
+            ...prev.transportationData,
+            multiple_week_days: [],
+            start_date: null,
+            end_date: null,
+            start_time: "",
+            return_time: "",
+            ends: "",
+          },
+        }));
+      }
+    } else if (
+      step === "patientDetails" &&
+      createOrderData.transportationData.type_of_transport !== "recurring"
+    ) {
+      setCreateOrderData((prev) => ({
+        ...prev,
+        transportationData: {
+          ...prev.transportationData,
+          multiple_week_days: [],
+          recurring_type: "",
+          start_date: null,
+          end_date: null,
+          start_time: "",
+          return_time: "",
+          ends: "",
+          free_dates: [],
+        },
+      }));
+    }
     setCurrentStep(step);
   };
 
@@ -184,6 +257,8 @@ const CreateOrder = () => {
     setTransportationProgress,
     setPatientProgress,
     setDestinationProgress,
+    freeDates,
+    setFreeDates,
   };
   return (
     <div className="relative overflow-y-auto">
@@ -241,7 +316,7 @@ const CreateOrder = () => {
         <Dialog open={showPreview} onOpenChange={setShowPreview}>
           <DialogContent className="w-[90%] max-w-[60rem] px-0 border-none max-h-[98vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle /> 
+              <DialogTitle />
               <div>
                 <PreviewDetails {...props} />
               </div>
