@@ -16,7 +16,8 @@ import OrderDetails from "@/pages/order/order-details/OrderDetails";
 import Message from "@/pages/order/send-request/Message";
 import RateTheDriver from "@/pages/order/order-history/RateTheDriver";
 import SentRequests from "@/pages/order/send-request/SentRequests";
-import EditOrder from "./pages/order/edit-order/EditOrder";
+import EditOrder from "@/pages/order/edit-order/EditOrder";
+import VerifyEmail from "@/pages/authentication/verify-email/VerifyEmail";
 
 function App() {
   axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
@@ -28,6 +29,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
       <Route
         path="/create-order"
         element={

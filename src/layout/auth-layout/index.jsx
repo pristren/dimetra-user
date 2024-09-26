@@ -15,7 +15,7 @@ export default function AuthLayout({ children, childContainer, ...props }) {
       </nav>
       <div
         className={cn(
-          "bg-authBackground w-full bg-cover  bg-no-repeat h-[calc(100vh-4rem)] flex flex-col justify-center items-center",
+          "bg-authBackground w-full bg-cover bg-no-repeat h-[calc(100vh-4rem)] flex flex-col justify-center items-center",
           childContainer
         )}
       >

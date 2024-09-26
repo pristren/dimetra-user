@@ -364,11 +364,13 @@ const AppUserDetails = ({ onSubmit, form, isRegister }) => {
               />
             )}
           </div> */}
-          <div className="flex justify-center">
-            <Button type="submit" className="mt-10 px-12 w-max mx-auto">
-              Save
-            </Button>
-          </div>
+          {!isRegister && (
+            <div className="flex justify-center">
+              <Button type="submit" className="mt-10 px-12 w-max mx-auto">
+                Save
+              </Button>
+            </div>
+          )}
           {isRegister && <AuthFooter page={"register"} />}
         </form>
       </Form>
