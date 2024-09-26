@@ -13,3 +13,4 @@ export { default as Trash } from "./Trash.jsx";
 export { default as UsaLogo } from "./UsaLogo.jsx";
 export { default as Loading } from "./Loading.jsx";
 export { default as Logout } from "./Logout.jsx";
+export { default as Email } from "./Email.jsx";
