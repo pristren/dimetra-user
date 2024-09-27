@@ -2,23 +2,27 @@
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-const AppDialog = ({ trigger, title, content, className }) => {
+const AppDialog = ({
+  trigger,
+  title,
+  content,
+  className,
+  open,
+  onOpenChange,
+}) => {
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger className="">{trigger}</DialogTrigger>
       <DialogContent className={className}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription className="text-black">
-            {content}
-          </DialogDescription>
         </DialogHeader>
+        <div className="text-black">{content}</div>
       </DialogContent>
     </Dialog>
   );

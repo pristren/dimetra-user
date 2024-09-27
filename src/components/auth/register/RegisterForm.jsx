@@ -1,6 +1,6 @@
-
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
+import axios from "axios";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -19,15 +19,15 @@ const validateEmail = (email) => {
 
 const formSchema = z
   .object({
-    first_name: z.string().nonempty({ message: "First name is required" }),
-    last_name: z.string().nonempty({ message: "Last name is required" }),
+    first_name: z.string().min(1, { message: "First name is required" }),
+    last_name: z.string().min(1, { message: "Last name is required" }),
     email: z.string().refine((value) => validateEmail(value), {
       message: "Please enter a valid email address",
     }),
-    phone: z.string().nonempty({ message: "Phone is required" }),
-    address: z.string().nonempty({ message: "Address is required" }),
+    phone: z.string().min(1, { message: "Phone is required" }),
+    address: z.string().min(1, { message: "Address is required" }),
     billing_address: z.string().optional(),
-    code: z.string().nonempty({ message: "Code is required" }),
+    code: z.string().min(1, { message: "Code is required" }),
     internal_cost_center: z.string().optional(),
     password: z
       .string()
@@ -60,11 +60,39 @@ const RegisterForm = () => {
     },
   });
 
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleUpload = async () => {
+    if (selectedFile) {
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+      try {
+        const response = await axios.post("/upload/file", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        return response.data.fileUrl;
+      } catch (error) {
+        console.error(
+          `Error: ${
+            error.response ? error.response.data.message : error.message
+          }`
+        );
+      }
+    }
+  };
+
   const onSubmit = async (data) => {
     setLoading(true);
 
     const { confirmPassword, ...submitData } = data;
-    await registerAnUser(submitData)
+
+    const profile_image = await handleUpload();
+    await registerAnUser({
+      ...submitData,
+      profile_image,
+    })
       .then((res) => {
         if (res?.data?.token) {
           navigate("/login");
@@ -83,7 +111,15 @@ const RegisterForm = () => {
       <CardHeader className="mb-4">
         <CardTitle className="text-center">Register</CardTitle>
       </CardHeader>
-      <AppUserDetails form={form} onSubmit={onSubmit} isRegister={true} />
+      <AppUserDetails
+        form={form}
+        onSubmit={onSubmit}
+        isRegister={true}
+        customClass={"min-h-min"}
+        selectedFile={selectedFile}
+        setSelectedFile={setSelectedFile}
+        loading={loading}
+      />
     </Card>
   );
 };

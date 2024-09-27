@@ -13,38 +13,38 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Loading } from "@/assets/icons";
 
-const PasswordChangeForm = ({ onSubmit }) => {
-  const formSchema = z.object({
-    currentPassword: z.string().min(1, "Current password is required"),
-    newPassword: z.string().min(1, "New password is required"),
-    confirmPassword: z
-      .string()
-      .min(1, "Confirm password is required")
-      .refine((val, ctx) => val === ctx.parent.newPassword, {
-        message: "Passwords do not match",
-        path: ["confirmPassword"],
-      }),
-  });
+const PasswordChangeForm = ({ onSubmit, loading }) => {
+  const formSchema = z
+    .object({
+      current_password: z.string().min(1, "Current password is required"),
+      new_password: z.string().min(1, "New password is required"),
+      confirm_password: z.string().min(1, "Confirm password is required"),
+    })
+    .refine((data) => data.new_password === data.confirm_password, {
+      message: "Passwords do not match",
+      path: ["confirm_password"],
+    });
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
+      current_password: "",
+      new_password: "",
+      confirm_password: "",
     },
   });
 
   return (
-    <Card className="border-none px-0 mt-10">
-      <CardContent>
+    <Card className="border-none shadow-none mt-2 ">
+      <CardContent className="px-2 pb-2">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div className="grid grid-cols-1 gap-5">
               <FormField
                 control={form.control}
-                name="currentPassword"
+                name="current_password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
@@ -55,7 +55,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
                         type="password"
                         placeholder="Enter your current password"
                         className={
-                          form.formState.errors.currentPassword
+                          form.formState.errors.current_password
                             ? "border-red-500"
                             : ""
                         }
@@ -63,7 +63,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
                       />
                     </FormControl>
                     <FormMessage>
-                      {form.formState.errors.currentPassword?.message}
+                      {form.formState.errors.current_password?.message}
                     </FormMessage>
                   </FormItem>
                 )}
@@ -71,7 +71,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
 
               <FormField
                 control={form.control}
-                name="newPassword"
+                name="new_password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
@@ -82,7 +82,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
                         type="password"
                         placeholder="Enter your new password"
                         className={
-                          form.formState.errors.newPassword
+                          form.formState.errors.new_password
                             ? "border-red-500"
                             : ""
                         }
@@ -90,7 +90,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
                       />
                     </FormControl>
                     <FormMessage>
-                      {form.formState.errors.newPassword?.message}
+                      {form.formState.errors.new_password?.message}
                     </FormMessage>
                   </FormItem>
                 )}
@@ -98,7 +98,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
 
               <FormField
                 control={form.control}
-                name="confirmPassword"
+                name="confirm_password"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
@@ -109,7 +109,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
                         type="password"
                         placeholder="Confirm your new password"
                         className={
-                          form.formState.errors.confirmPassword
+                          form.formState.errors.confirm_password
                             ? "border-red-500"
                             : ""
                         }
@@ -117,7 +117,7 @@ const PasswordChangeForm = ({ onSubmit }) => {
                       />
                     </FormControl>
                     <FormMessage>
-                      {form.formState.errors.confirmPassword?.message}
+                      {form.formState.errors.confirm_password?.message}
                     </FormMessage>
                   </FormItem>
                 )}
@@ -128,7 +128,11 @@ const PasswordChangeForm = ({ onSubmit }) => {
                   Cancel
                 </Button>
                 <Button className="w-full" type="submit">
-                  Save
+                  {loading ? (
+                    <Loading className="w-6 h-6 mx-auto text-white" />
+                  ) : (
+                    "Update Password"
+                  )}
                 </Button>
               </div>
             </div>

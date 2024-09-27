@@ -12,6 +12,7 @@ export const GET_AN_USER = gql`
       address
       billing_address
       internal_cost_center
+      profile_image
     }
   }
 `;

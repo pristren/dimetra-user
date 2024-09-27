@@ -4,6 +4,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   userInfo: null,
   accessToken: null,
+  profileImageLoaded: false,
 };
 
 const userSlice = createSlice({
@@ -16,9 +17,13 @@ const userSlice = createSlice({
     setAccessToken: (state, action) => {
       state.accessToken = action.payload;
     },
+    setProfileImageLoaded: (state, action) => {
+      state.profileImageLoaded = action.payload;
+    },
   },
 });
 
-export const { setUserInfo, setAccessToken } = userSlice.actions;
+export const { setUserInfo, setAccessToken, setProfileImageLoaded } =
+  userSlice.actions;
 
 export default userSlice.reducer;

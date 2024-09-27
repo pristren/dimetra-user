@@ -16,21 +16,31 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AuthFooter from "@/components/helper-ui/AuthFooter";
-import AppDialog from "./AppDialog";
-import { Checkbox } from "../ui/checkbox";
+import { cn } from "@/lib/utils";
+import { Loading } from "@/assets/icons";
 
-const AppUserDetails = ({ onSubmit, form, isRegister }) => {
+const AppUserDetails = ({
+  onSubmit,
+  form,
+  isRegister = false,
+  customClass = "",
+  selectedFile,
+  setSelectedFile,
+  loading,
+}) => {
   const [hover, setHover] = useState(false);
-  const [profileLoading, setProfileLoading] = useState(false);
-  const [profileImage, setProfileImage] = useState(null);
   const handleFileInputChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setProfileImage(URL.createObjectURL(file));
-    }
+    setSelectedFile(event.target.files[0]);
   };
   return (
-    <CardContent className="px-10 max-h-[90vh] overflow-y-auto hide-scrollbar">
+    <CardContent
+      className={cn(
+        `px-10 max-h-[90vh] overflow-y-auto hide-scrollbar ${
+          !isRegister && "pb-0"
+        }`,
+        customClass
+      )}
+    >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="">
           <div
@@ -40,55 +50,46 @@ const AppUserDetails = ({ onSubmit, form, isRegister }) => {
           >
             <Avatar
               className={`w-[150px] h-[150px] relative transition-all duration-300 ${
-                hover && !profileLoading
-                  ? "filter brightness-50 cursor-pointer"
-                  : ""
+                hover ? "filter brightness-50 cursor-pointer" : ""
               }`}
             >
-              {profileLoading ? (
-                <div className="flex justify-center items-center mx-auto">
-                  <l-line-spinner
-                    size="20"
-                    stroke="3"
-                    speed="1"
-                    color="white"
-                  ></l-line-spinner>
-                </div>
+              {selectedFile ? (
+                <img
+                  src={URL.createObjectURL(selectedFile)}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              ) : form.getValues()?.profile_image ? (
+                <img
+                  loading="lazy"
+                  src={form.getValues()?.profile_image}
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
               ) : (
-                <>
-                  {profileImage ? (
-                    <img
-                      src={profileImage}
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <CircleUserRound className="w-[150px] h-[150px] mx-auto text-primary" />
-                  )}
-                </>
+                <CircleUserRound className="w-[150px] h-[150px] mx-auto text-primary" />
               )}
             </Avatar>
 
-            {!profileLoading && (
-              <>
-                <Label
-                  htmlFor="profileImage"
-                  className={`cursor-pointer absolute inset-0 flex items-center justify-center ${
-                    hover ? "z-30" : "hidden"
-                  }`}
-                >
-                  <Camera className="text-white" />
-                </Label>
-                <Label
-                  htmlFor="profileImage"
-                  className={`cursor-pointer absolute -right-1 p-2 bg-primary rounded-full bottom-3 ${
-                    hover ? "hidden" : "z-30"
-                  }`}
-                >
-                  <Plus className="text-white" />
-                </Label>
-              </>
-            )}
+            <>
+              <Label
+                htmlFor="profileImage"
+                className={`cursor-pointer absolute inset-0 flex items-center justify-center ${
+                  hover ? "z-30" : "hidden"
+                }`}
+              >
+                <Camera className="text-white" />
+              </Label>
+              <Label
+                htmlFor="profileImage"
+                className={`cursor-pointer absolute -right-1 p-2 bg-primary rounded-full bottom-3 ${
+                  hover ? "hidden" : "z-30"
+                }`}
+              >
+                <Plus className="text-white" />
+              </Label>
+            </>
+
             <Input
               type="file"
               onChange={handleFileInputChange}
@@ -96,7 +97,6 @@ const AppUserDetails = ({ onSubmit, form, isRegister }) => {
               name="profileImage"
               accept="image/*"
               id="profileImage"
-              disabled={profileLoading}
             />
           </div>
           <div className="grid grid-cols-2 gap-4">
@@ -323,7 +323,11 @@ const AppUserDetails = ({ onSubmit, form, isRegister }) => {
           </div>
           {isRegister && (
             <Button type="submit" className="block w-2/4 mx-auto mt-10">
-              Register
+              {loading ? (
+                <Loading className="w-6 h-6 mx-auto text-white" />
+              ) : (
+                "Register"
+              )}
             </Button>
           )}
           {/* this will have to recheck  */}
@@ -367,7 +371,11 @@ const AppUserDetails = ({ onSubmit, form, isRegister }) => {
           {!isRegister && (
             <div className="flex justify-center">
               <Button type="submit" className="mt-10 px-12 w-max mx-auto">
-                Save
+                {loading ? (
+                  <Loading className="w-6 h-6 mx-auto text-white" />
+                ) : (
+                  "Save"
+                )}
               </Button>
             </div>
           )}

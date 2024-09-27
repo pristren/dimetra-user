@@ -13,7 +13,7 @@ const PrivateRoute = ({ children }) => {
     }
   }, []);
   if (loading) {
-    return <div>Loading...</div>;
+    return;
   }
 
   return !getAccessToken() ? (
