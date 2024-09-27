@@ -228,10 +228,10 @@ const Message = () => {
             alt="profile"
           />
           <div>
-            <p className="highlight">Mohammad Rafi</p>
+            <p className="">Mohammad Rafi</p>
             <div className="flex items-center justify-start gap-2">
               <p className="bg-green-600 w-2 h-2 rounded-full"></p>
-              <p>Online</p>
+              <p className="text-sm">Online</p>
             </div>
           </div>
         </div>

@@ -15,7 +15,7 @@ const AppPagination = () => {
         <PaginationItem>
           <PaginationPrevious href="#" />
         </PaginationItem>
-        <PaginationItem>
+        <PaginationItem className="bg-white border rounded-lg">
           <PaginationLink href="#">1</PaginationLink>
         </PaginationItem>
         <PaginationItem>
