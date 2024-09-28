@@ -4,6 +4,7 @@ import { useLazyQuery } from "@apollo/client";
 import { GET_AN_ORDER } from "./graphql/queries/getAnOrder.gql";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { Card } from "@/components/ui/card";
 
 function OrderDetails() {
   const [data, setData] = useState({});
@@ -27,7 +28,7 @@ function OrderDetails() {
   return (
     <div>
       <h5>Order Details</h5>
-      <div className="my-14 bg-white p-5">
+      <Card className="mt-6 bg-white p-6 border-opacity-50 ">
         <h5>Transportation Details</h5>
         <div className="grid grid-cols-3 mt-10 mb-20">
           <div>
@@ -52,9 +53,9 @@ function OrderDetails() {
 
         <Separator />
 
-        <div className="my-14 w-[60%]">
+        <div className="my-14">
           <h5>Patient Details</h5>
-          <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
+          <div className="grid grid-cols-2 gap-6 mt-10">
             <div className="flex items-center gap-6">
               <p>First Name: </p>
               <p>{data?.patientData?.name}</p>
@@ -171,7 +172,7 @@ function OrderDetails() {
 
         <Separator />
 
-        <div className="my-14 w-[60%]">
+        <div className="my-14 ">
           <h5>Billing Details</h5>
           <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
             <div className="flex items-center gap-10">
@@ -232,7 +233,7 @@ function OrderDetails() {
             <Button className="px-14">Edit</Button>
           </Link>
         </div>
-      </div>
+      </Card>
     </div>
   );
 }
