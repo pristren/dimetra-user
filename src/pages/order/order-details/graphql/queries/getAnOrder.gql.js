@@ -22,7 +22,6 @@ export const GET_AN_ORDER = gql`
         type_of_transport
         mode_of_transportation
         transport_with
-        week_days
         start_date
         return_date
         start_time
