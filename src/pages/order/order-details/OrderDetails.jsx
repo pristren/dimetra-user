@@ -67,7 +67,7 @@ function OrderDetails() {
             )}
             <div className="flex items-center gap-6">
               <p>Pick up: </p>
-              <p>{data?.destinationDetailsData?.pick_up_street}</p>
+              <p>{data?.destinationDetailsData?.pick_up_address}</p>
             </div>
             <div className="flex items-center gap-6">
               <p>Order Type: </p>
@@ -75,7 +75,7 @@ function OrderDetails() {
             </div>
             <div className="flex items-center gap-6">
               <p>Destination : </p>
-              <p>{data?.destinationDetailsData?.drop_off_street}</p>
+              <p>{data?.destinationDetailsData?.drop_off_address}</p>
             </div>
             {data?.transportationData?.start_date && (
               <div className="flex items-center gap-6">
@@ -103,7 +103,7 @@ function OrderDetails() {
               </div>
               <div className="flex items-center gap-6 mb-8">
                 <p>Street: </p>
-                <p>{data?.destinationDetailsData?.pick_up_street}</p>
+                <p>{data?.destinationDetailsData?.pick_up_address}</p>
               </div>
               <div className="flex items-center gap-6 mb-8">
                 <p>City :</p>
@@ -134,7 +134,7 @@ function OrderDetails() {
               </div>
               <div className="flex items-center gap-6 mb-8">
                 <p>Street :</p>
-                <p>{data?.destinationDetailsData?.pick_up_street}</p>
+                <p>{data?.destinationDetailsData?.pick_up_address}</p>
               </div>
               <div className="flex items-center gap-6 mb-8">
                 <p>city :</p>

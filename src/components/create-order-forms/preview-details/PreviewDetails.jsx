@@ -399,7 +399,7 @@ const PreviewDetails = ({
                     </Label>
                     <Input
                       readOnly
-                      value={destinationDetailsData?.pick_up_street}
+                      value={destinationDetailsData?.pick_up_address}
                       className="border-gray-300"
                     />
                   </div>
@@ -495,7 +495,7 @@ const PreviewDetails = ({
                       </Label>
                       <Input
                         readOnly
-                        value={destinationDetailsData?.drop_off_street}
+                        value={destinationDetailsData?.drop_off_address}
                         placeholder="Enter Street"
                         className="border-gray-300"
                       />

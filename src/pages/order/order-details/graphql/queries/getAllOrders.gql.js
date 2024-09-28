@@ -16,8 +16,8 @@ export const GET_ALL_ORDERS = gql`
         name
       }
       destinationDetailsData {
-        pick_up_street
-        drop_off_street
+        pick_up_address
+        drop_off_address
       }
       createdAt
     }

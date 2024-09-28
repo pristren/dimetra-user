@@ -36,14 +36,14 @@ const DestinationDetails = ({
   const {
     destinationDetailsData: {
       pick_up_name = "",
-      pick_up_street = "",
+      pick_up_address = "",
       pick_up_postal_code,
       pick_up_city = "",
       pick_up_country = "",
       pick_up_employee_name = "",
       drop_off_pick_up_time = "",
       drop_off_name = "",
-      drop_off_street,
+      drop_off_address,
       drop_off_postal_code,
       drop_off_city = "",
       drop_off_country = "",
@@ -82,7 +82,7 @@ const DestinationDetails = ({
 
   const form_schema = z.object({
     pick_up_name: z.string().min(1, "Name is required"),
-    pick_up_street: z.string().min(1, "Street is required"),
+    pick_up_address: z.string().min(1, "Street is required"),
     pick_up_postal_code: z.number().min(1, "Postal is required"),
     pick_up_city: z.string().min(1, "City is required"),
     pick_up_country: z.string().min(1, "Country is required"),
@@ -93,7 +93,7 @@ const DestinationDetails = ({
     drop_off_date: z.string().min(1, "Date is required"),
     drop_off_pick_up_time: z.string().min(1, "Pick-Up Time is required"),
     drop_off_name: z.string().min(1, "Name is required"),
-    drop_off_street: z.string().min(1, "Drop of street is required"),
+    drop_off_address: z.string().min(1, "Drop of street is required"),
     drop_off_postal_code: z.number().min(1, "Drop of postal code is required"),
     drop_off_city: z.string().min(1, "City is required"),
     drop_off_country: z.string().min(1, "Country is required"),
@@ -109,7 +109,7 @@ const DestinationDetails = ({
     resolver: zodResolver(form_schema),
     defaultValues: {
       pick_up_name,
-      pick_up_street,
+      pick_up_address,
       pick_up_postal_code,
       pick_up_city,
       pick_up_country,
@@ -117,7 +117,7 @@ const DestinationDetails = ({
       dropDate,
       drop_off_pick_up_time,
       drop_off_name,
-      drop_off_street,
+      drop_off_address,
       drop_off_postal_code,
       drop_off_city,
       drop_off_country,
@@ -154,14 +154,14 @@ const DestinationDetails = ({
 
   const fieldsFilled = [
     pick_up_name,
-    pick_up_street,
+    pick_up_address,
     pick_up_postal_code,
     pick_up_city,
     pick_up_country,
     pick_up_employee_name,
     drop_off_pick_up_time,
     drop_off_name,
-    drop_off_street,
+    drop_off_address,
     drop_off_postal_code,
     drop_off_city,
     drop_off_country,
@@ -171,13 +171,13 @@ const DestinationDetails = ({
 
   const fieldsFilledRecurring = [
     pick_up_name,
-    pick_up_street,
+    pick_up_address,
     pick_up_postal_code,
     pick_up_city,
     pick_up_country,
     pick_up_employee_name,
     drop_off_name,
-    drop_off_street,
+    drop_off_address,
     drop_off_postal_code,
     drop_off_city,
     drop_off_country,
@@ -235,7 +235,7 @@ const DestinationDetails = ({
                 {/* Pick-Up Street */}
                 <FormField
                   control={form.control}
-                  name="pick_up_street"
+                  name="pick_up_address"
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
@@ -244,7 +244,7 @@ const DestinationDetails = ({
                       <FormControl>
                         <Input
                           className={
-                            errors.pick_up_street ? "border-red-500" : ""
+                            errors.pick_up_address ? "border-red-500" : ""
                           }
                           placeholder="Type your street"
                           {...field}
@@ -452,7 +452,7 @@ const DestinationDetails = ({
                 {/* Drop-Off street */}
                 <FormField
                   control={form.control}
-                  name="drop_off_street"
+                  name="drop_off_address"
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
@@ -461,7 +461,7 @@ const DestinationDetails = ({
                       <FormControl>
                         <Input
                           className={
-                            errors.drop_off_street ? "border-red-500" : ""
+                            errors.drop_off_address ? "border-red-500" : ""
                           }
                           placeholder="Type Street"
                           {...field}

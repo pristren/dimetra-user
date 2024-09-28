@@ -95,7 +95,7 @@ const AllOrders = () => {
       ),
     },
     {
-      accessorKey: "destinationDetailsData.pick_up_street",
+      accessorKey: "destinationDetailsData.pick_up_address",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -107,7 +107,7 @@ const AllOrders = () => {
       ),
     },
     {
-      accessorKey: "destinationDetailsData.drop_off_street",
+      accessorKey: "destinationDetailsData.drop_off_address",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}

@@ -43,13 +43,13 @@ export const GET_AN_ORDER = gql`
       }
       destinationDetailsData {
         pick_up_name
-        pick_up_street
+        pick_up_address
         pick_up_city
         pick_up_country
         pick_up_employee_name
         drop_off_pick_up_time
         drop_off_name
-        drop_off_street
+        drop_off_address
         drop_off_city
         drop_off_country
         drop_off_phone

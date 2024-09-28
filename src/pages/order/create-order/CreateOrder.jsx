@@ -60,7 +60,7 @@ const CreateOrder = () => {
     },
     destinationDetailsData: {
       pick_up_name: "",
-      pick_up_street: "",
+      pick_up_address: "",
       pick_up_postal_code: "",
       pick_up_city: "",
       pick_up_country: "",
@@ -69,7 +69,7 @@ const CreateOrder = () => {
       drop_off_pick_up_date: null,
       drop_off_pick_up_time: "",
       drop_off_name: "",
-      drop_off_street: "",
+      drop_off_address: "",
       drop_off_postal_code: "",
       drop_off_city: "",
       drop_off_country: "",
