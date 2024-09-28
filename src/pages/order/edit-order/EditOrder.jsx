@@ -21,7 +21,6 @@ const EditOrder = () => {
       type_of_transport: "",
       mode_of_transportation: [],
       transport_with: [],
-      week_days: "",
       start_date: startDate,
       return_date: endDate,
       start_time: "",
