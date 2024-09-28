@@ -46,17 +46,17 @@ const PreviewDetails = ({
   const navigate = useNavigate();
   const handleCreateAnOrder = async () => {
     try {
-      //   const { data } = await createAnOrder({
-      //     variables: {
-      //       inputData: createOrderData,
-      //     },
-      //   });
+      const { data } = await createAnOrder({
+        variables: {
+          inputData: createOrderData,
+        },
+      });
       console.log(createOrderData);
-      //   if (data?.createAnOrder?.id) {
-      //     localStorage.removeItem("createOrderData");
-      //     navigate("/orders/all-orders");
-      //     setShowPreview(false);
-      //   }
+      if (data?.createAnOrder?.id) {
+        localStorage.removeItem("createOrderData");
+        navigate("/orders/all-orders");
+        setShowPreview(false);
+      }
     } catch (error) {
       const { message, response } = error;
       console.log(message, response);
