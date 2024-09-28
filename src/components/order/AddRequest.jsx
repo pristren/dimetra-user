@@ -1,4 +1,4 @@
-import { Upload } from "@/assets/icons";
+import { Loading, Upload } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -8,33 +8,54 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { CREATE_MESSAGE_REQUESTS } from "@/pages/order/send-request/graphql/mutations/createMessageRequest.gql";
+import { uploadFile } from "@/utils";
+import { useMutation } from "@apollo/client";
 import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import toast from "react-hot-toast";
 
-const AddRequest = () => {
+const AddRequest = ({ setRequestModalOpen }) => {
+  const [file, setFile] = useState(null);
+  const [createMessageRequest, { loading }] = useMutation(
+    CREATE_MESSAGE_REQUESTS
+  );
   const defaultValues = {
     title: "",
     message: "",
-    orderNumber: "",
+    order_number: "",
   };
 
   const form = useForm({
     defaultValues,
   });
 
-  const [file, setFile] = useState(null);
-
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
 
-  const handleInputChange = (e) => {
-    console.log(e.target.value);
-  };
-
-  const onSubmit = (data) => {
-    console.log(data);
-    console.log(file);
+  const onSubmit = async (data) => {
+    const file_url = await uploadFile(file);
+    await createMessageRequest({
+      variables: {
+        inputData: {
+          ...data,
+          file: file_url || "",
+        },
+      },
+    })
+      .then(({ data }) => {
+        if (data?.createMessageRequest?.id) {
+          toast.success("Request sent successfully");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setRequestModalOpen(false);
+        form.reset(defaultValues);
+      });
   };
 
   return (
@@ -57,7 +78,6 @@ const AddRequest = () => {
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
-                    handleInputChange(e);
                   }}
                 />
               </FormControl>
@@ -83,7 +103,6 @@ const AddRequest = () => {
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
-                    handleInputChange(e);
                   }}
                 />
               </FormControl>
@@ -108,7 +127,7 @@ const AddRequest = () => {
 
         <FormField
           control={form.control}
-          name="orderNumber"
+          name="order_number"
           render={({ field }) => (
             <FormItem className="mb-8">
               <FormLabel className="mb-2 text-black">
@@ -117,13 +136,12 @@ const AddRequest = () => {
               <FormControl>
                 <Input
                   className={
-                    form.formState.errors.orderNumber ? "border-red-500" : ""
+                    form.formState.errors.order_number ? "border-red-500" : ""
                   }
                   placeholder="Enter order number"
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
-                    handleInputChange(e);
                   }}
                 />
               </FormControl>
@@ -133,7 +151,11 @@ const AddRequest = () => {
         />
         <div className="flex items-center justify-center mt-12 w-full">
           <Button type="submit" className="px-14">
-            Send
+            {loading ? (
+              <Loading className="w-6 h-6 mx-auto text-white" />
+            ) : (
+              "Send Request"
+            )}
           </Button>
         </div>
       </form>

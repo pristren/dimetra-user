@@ -13,7 +13,7 @@ import PasswordChangeForm from "./PasswordChangeForm";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInitializeUser from "@/hooks/useInitializeUser";
-import { UPDATE_AN_USER } from "./graphql/mutations/updateAnUser.qgl";
+import { UPDATE_AN_USER } from "./graphql/mutations/updateAnUser.gql";
 import { useMutation } from "@apollo/client";
 import {
   setProfileImageLoaded,
@@ -22,6 +22,7 @@ import {
 import axios from "axios";
 import { UPDATE_AN_USER_PASSWORD } from "./graphql/mutations/updateUserPassword.gql";
 import toast from "react-hot-toast";
+import { uploadFile } from "@/utils";
 
 const OrderSettings = () => {
   const { userInfo, profileImageLoaded } = useSelector((state) => state.user);
@@ -63,33 +64,11 @@ const OrderSettings = () => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [appDialougeOpen, setAppDialougeOpen] = useState(false);
 
-  const handleUpload = async () => {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-      try {
-        const response = await axios.post("/upload/file", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        return response.data.fileUrl;
-      } catch (error) {
-        console.error(
-          `Error: ${
-            error.response ? error.response.data.message : error.message
-          }`
-        );
-      }
-    }
-  };
-
   const [updateAnUser] = useMutation(UPDATE_AN_USER);
   const [updateUserPassword] = useMutation(UPDATE_AN_USER_PASSWORD);
   const onSubmitUserDetails = async (value) => {
     setLoading(true);
-    const profile_image = await handleUpload();
+    const profile_image = await uploadFile(selectedFile);
 
     await updateAnUser({
       variables: {
@@ -158,7 +137,7 @@ const OrderSettings = () => {
           trigger={
             <div className="flex justify-end items-center gap-2">
               <Security />
-              <p className="highlight text-nowrap">Update Password</p>
+              <p className="highlight text-nowrap underline">Update Password</p>
             </div>
           }
           className={"p-8"}
@@ -193,10 +172,10 @@ const OrderSettings = () => {
               />
             </div>
             <div>
-              <h6 className="mb-2">
+              <p className="mb-2 w-full text-3xl">
                 {userInfo?.first_name} {userInfo?.last_name}
-              </h6>
-              <p>{userInfo?.phone}</p>
+              </p>
+              <p className=" w-full text-xl">{userInfo?.phone}</p>
             </div>
           </div>
           <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
@@ -219,26 +198,24 @@ const OrderSettings = () => {
         </div>
         <div className="mt-20 ">
           <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
-            <p className="highlight ml-3 text-gray-500 w-40">Email</p>
-            <p className="highlight">{userInfo?.email}</p>
+            <p className=" ml-3 text-gray-500 w-40">Email</p>
+            <p className="">{userInfo?.email}</p>
           </div>
           <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
-            <p className="highlight ml-3 text-gray-500 w-40">Address</p>
-            <p className="highlight">{userInfo?.address}</p>
+            <p className=" ml-3 text-gray-500 w-40">Address</p>
+            <p className="">{userInfo?.address}</p>
           </div>
           <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
-            <p className="highlight ml-3 text-gray-500 w-40">Billing address</p>
-            <p className="highlight">{userInfo?.billing_address}</p>
+            <p className=" ml-3 text-gray-500 w-40">Billing address</p>
+            <p className="">{userInfo?.billing_address}</p>
           </div>
           <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
-            <p className="highlight ml-3 text-gray-500 w-40">Code</p>
-            <p className="highlight">{userInfo?.code}</p>
+            <p className=" ml-3 text-gray-500 w-40">Code</p>
+            <p className="">{userInfo?.code}</p>
           </div>
           <div className="flex items-center gap-20 pb-5 px-5">
-            <p className="highlight ml-3 text-gray-500 w-40">
-              Internal Koststelle
-            </p>
-            <p className="highlight">
+            <p className=" ml-3 text-gray-500 w-40">Internal Koststelle</p>
+            <p className="">
               {userInfo?.internal_cost_center || "Not available"}
             </p>
           </div>

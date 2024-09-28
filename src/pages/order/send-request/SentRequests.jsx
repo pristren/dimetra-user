@@ -1,22 +1,32 @@
 import { ArrowUpDown } from "@/assets/icons";
 import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
+import { useLazyQuery } from "@apollo/client";
 import { Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { GET_ALL_MESSAGE_REQUESTS } from "./graphql/queries/getAllMessageRequests.gql";
 
 const SentRequests = () => {
-  const data = [
-    {
-      id: "1",
-      subject: "This is a subject of a request for an order.",
-      orderNo: "123",
-      createdAt: "23 September 2024",
-      status: "Completed",
+  const [data, setData] = useState([]);
+
+  const [getAllMessageRequests] = useLazyQuery(GET_ALL_MESSAGE_REQUESTS, {
+    variables: {},
+    errorPolicy: "all",
+    fetchPolicy: "no-cache",
+    onCompleted: (response) => {
+      setData(response.getMessageRequests);
     },
-  ];
+    onError: (error) => {
+      console.error({ error });
+    },
+  });
+  useEffect(() => {
+    getAllMessageRequests();
+  }, [getAllMessageRequests]);
 
   const columns = [
     {
-      accessorKey: "subject",
+      accessorKey: "title",
       header: () => (
         <div className="flex items-center gap-2">
           <span>Subject</span>
@@ -28,7 +38,7 @@ const SentRequests = () => {
       ),
     },
     {
-      accessorKey: "orderNo",
+      accessorKey: "order_number",
       header: () => (
         <div className="flex items-center gap-2">
           <span>Order No</span>
@@ -43,7 +53,7 @@ const SentRequests = () => {
       accessorKey: "createdAt",
       header: () => (
         <div className="flex items-center gap-2">
-          <span>Created</span>
+          <span>Created At</span>
           <ArrowUpDown
             className="ml-2 h-4 w-4 cursor-pointer"
             aria-label="Sort by Created"
@@ -62,11 +72,30 @@ const SentRequests = () => {
           />
         </div>
       ),
-      cell: ({ row }) => (
-        <Button className="py-1 h-min px-2 bg-lime-200 hover:bg-lime-300 rounded-md w-max text-black">
-          {row.getValue("status")}
-        </Button>
-      ),
+      cell: ({ row }) => {
+        const status = row.getValue("status");
+        let color =
+          status === "pending"
+            ? "bg-[#FEF1E0]"
+            : status === "resolved"
+            ? "bg-[#D1F8D5]"
+            : "bg-[#DCF3FF]";
+        let hoverColor =
+          status === "pending"
+            ? "hover:bg-[#FEEBD3]"
+            : status === "resolved"
+            ? "hover:bg-[#CFFFD4]"
+            : "hover:bg-[#CDEBFF]";
+        return (
+          <Button
+            className={` h-min rounded-md w-max text-black
+            ${color} ${hoverColor} py-1 px-3 capitalize
+            `}
+          >
+            {row.getValue("status")}
+          </Button>
+        );
+      },
     },
   ];
   return (

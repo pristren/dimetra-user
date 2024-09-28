@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import AppUserDetails from "@/components/common/AppUserDetails";
 import { registerAnUser } from "../apis/register";
 import { useNavigate } from "react-router-dom";
+import { uploadFile } from "@/utils";
 
 const validateEmail = (email) => {
   return String(email)
@@ -62,36 +63,15 @@ const RegisterForm = () => {
 
   const [selectedFile, setSelectedFile] = useState(null);
 
-  const handleUpload = async () => {
-    if (selectedFile) {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-      try {
-        const response = await axios.post("/upload/file", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-        return response.data.fileUrl;
-      } catch (error) {
-        console.error(
-          `Error: ${
-            error.response ? error.response.data.message : error.message
-          }`
-        );
-      }
-    }
-  };
-
   const onSubmit = async (data) => {
     setLoading(true);
 
     const { confirmPassword, ...submitData } = data;
 
-    const profile_image = await handleUpload();
+    const profile_image = await uploadFile(selectedFile);
     await registerAnUser({
       ...submitData,
-      profile_image,
+      profile_image: profile_image || "",
     })
       .then((res) => {
         if (res?.data?.token) {
