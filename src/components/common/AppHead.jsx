@@ -13,6 +13,7 @@ import { DatePicker } from "@/components/ui/DatePicker";
 import AppSelect from "@/components/common/AppSelect";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 export default function AppHead({
   pageTitle,
@@ -36,6 +37,7 @@ export default function AppHead({
   isSearchVisible = true,
   isRecurring = false,
 }) {
+  const [requestModalOpen, setRequestModalOpen] = useState(false);
   return (
     <div className="flex items-center justify-between gap-5 w-full mb-10">
       <div className="flex items-center gap-3">
@@ -88,14 +90,14 @@ export default function AppHead({
           </Link>
         )}
         {showModal?.name && (
-          <Dialog>
+          <Dialog open={requestModalOpen} onOpenChange={setRequestModalOpen}>
             <DialogTrigger className="bg-primary flex gap-2 text-white py-2 px-5 rounded-md">
               {showModal?.icon && showModal?.icon} {showModal.name}
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-2xl">
               <DialogHeader>
                 <DialogTitle className="mb-10">Request</DialogTitle>
-                <AddRequest />
+                <AddRequest setRequestModalOpen={setRequestModalOpen} />
               </DialogHeader>
             </DialogContent>
           </Dialog>

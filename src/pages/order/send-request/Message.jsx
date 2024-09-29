@@ -219,24 +219,20 @@ const Message = () => {
 
   return (
     <div className="relative">
-      <h6>Order #123456</h6>
-      <div className="bg-white border border-gray-200 rounded-md mt-3 min-h-[78vh]">
+      <h4>Order #123456</h4>
+      <div className="bg-white border border-gray-200 rounded-md mt-3 h-[calc(100vh-10rem)]">
         <div className="flex items-center justify-start gap-3 border-b border-gray-300 px-4 py-4">
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREoRGyXmHy_6aIgXYqWHdOT3KjfmnuSyxypw&s"
-            className="w-10 h-10 rounded-full"
-            alt="profile"
-          />
+          <DefaultAvatar className="w-10 h-10 rounded-full" />
           <div>
-            <p className="">Mohammad Rafi</p>
-            <div className="flex items-center justify-start gap-2">
+            <p className="font-medium">Customer Support</p>
+            {/* <div className="flex items-center justify-start gap-2">
               <p className="bg-green-600 w-2 h-2 rounded-full"></p>
               <p className="text-sm">Online</p>
-            </div>
+            </div> */}
           </div>
         </div>
 
-        <div className="px-4 py-4 h-[57vh] overflow-y-auto hide-scrollbar">
+        <div className="px-4 py-4 h-[calc(100vh-20rem)] overflow-y-auto hide-scrollbar">
           {renderMessages()}
         </div>
         {selectedImage && (
@@ -248,7 +244,7 @@ const Message = () => {
             />
           </div>
         )}
-        <div className="flex items-center justify-center gap-3 w-full px-4 mt-auto bg-white mb-5">
+        <div className="flex items-center justify-center gap-3 w-full px-4 mt-auto bg-white  pt-3">
           <div>
             <Label htmlFor="image" className="cursor-pointer">
               <Attach />
