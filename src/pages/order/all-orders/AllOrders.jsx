@@ -69,7 +69,7 @@ const AllOrders = () => {
   });
   useEffect(() => {
     getAllOrders();
-  }, [getAllOrders]);
+  }, []);
 
   const [deleteAnOrder] = useMutation(DELETE_AN_ORDER, {
     onCompleted: (data) => {
@@ -93,7 +93,7 @@ const AllOrders = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "on ride":
+      case "on_ride":
         return "#FEF1E0";
       case "confirmed":
         return "#D1F8D5";
@@ -104,14 +104,6 @@ const AllOrders = () => {
       default:
         return "#FFFFFF";
     }
-  };
-
-  const handlePauseOrder = (orderId) => {
-    setData((prevData) =>
-      prevData.map((order) =>
-        order.id === orderId ? { ...order, status: "Paused" } : order
-      )
-    );
   };
 
   const handleDeleteOrder = (orderId) => {
@@ -172,7 +164,7 @@ const AllOrders = () => {
       ),
     },
     {
-      accessorKey: `user.first_name`,
+      accessorKey: `driver`,
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -182,6 +174,9 @@ const AllOrders = () => {
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
+      cell: ({ row }) => {
+        return <p className="capitalize">N/A</p>;
+      },
     },
     {
       accessorKey: "patientData.name",
@@ -246,6 +241,8 @@ const AllOrders = () => {
       ),
       cell: ({ row }) => {
         const orderId = row.original.id;
+        const isRecurring =
+          row.original.transportationData?.type_of_transport === "recurring";
         return (
           <div className="flex justify-center items-center">
             <DropdownMenu>
@@ -273,7 +270,11 @@ const AllOrders = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem className="py-2 mb-2 cursor-pointer">
                   <Link
-                    to={`/orders/order-details/${orderId}`}
+                    to={
+                      isRecurring
+                        ? `/orders/recurring-orders/${orderId}`
+                        : `/orders/order-details/${orderId}`
+                    }
                     className="flex items-center gap-3 text-[16px]"
                   >
                     <Document className="size-5" />
