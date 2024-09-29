@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { useMutation } from "@apollo/client";
 import { CREATE_AN_ORDER } from "@/pages/order/create-order/graphql/mutations/createAnOrder.gql";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 const PreviewDetails = ({
   createOrderData,
@@ -82,7 +83,10 @@ const PreviewDetails = ({
                   Type of transport
                   <span className="highlight">(simple selection)</span>
                 </h6>
-                <RadioGroup value={transportationData?.type_of_transport}>
+                <RadioGroup
+                  disabled
+                  value={transportationData?.type_of_transport}
+                >
                   {transportOptions.map((option) => (
                     <div
                       key={option.value}
@@ -108,6 +112,7 @@ const PreviewDetails = ({
                 {transportModesOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
+                      disabled
                       id={option.value}
                       checked={transportationData.mode_of_transportation?.includes(
                         option.value
@@ -131,6 +136,7 @@ const PreviewDetails = ({
                 {transportWithOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
                     <Checkbox
+                      disabled
                       id={option.value}
                       checked={transportationData.transport_with?.includes(
                         option.value
@@ -165,10 +171,15 @@ const PreviewDetails = ({
                       Select Start Date and Time*:
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker date={startDate} setDate={setStartDate} />
+                      <DatePicker
+                        disabled
+                        date={startDate}
+                        setDate={setStartDate}
+                      />
                       <AppSelect
                         items={timeOptions}
                         placeholder="00:00"
+                        disabled
                         isTime={true}
                       />
                     </div>
@@ -177,11 +188,16 @@ const PreviewDetails = ({
                       Select Return Time* :
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker date={endDate} setDate={setEndDate} />
+                      <DatePicker
+                        disabled
+                        date={endDate}
+                        setDate={setEndDate}
+                      />
                       <AppSelect
                         items={timeOptions}
                         placeholder="00:00"
                         isTime={true}
+                        disabled
                       />
                     </div>
 
@@ -196,6 +212,7 @@ const PreviewDetails = ({
                           className="flex items-center mb-2"
                         >
                           <Checkbox
+                            disabled
                             id={option.value}
                             checked={selectedWeekdays.includes(option.value)}
                           />
@@ -207,7 +224,7 @@ const PreviewDetails = ({
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
-                    <RadioGroup value={transportationData?.ends}>
+                    <RadioGroup disabled value={transportationData?.ends}>
                       {durationOptions.map((option) => (
                         <div
                           key={option.value}
@@ -285,7 +302,7 @@ const PreviewDetails = ({
                     Name <sup className="text-[13px]">*</sup>
                   </Label>
                   <Input
-                    readOnly
+                    disabled
                     value={patientData?.name}
                     placeholder="Type your name"
                     className="border-gray-300"
@@ -296,7 +313,7 @@ const PreviewDetails = ({
                     Surname <sup className="text-[13px]">*</sup>
                   </Label>
                   <Input
-                    readOnly
+                    disabled
                     value={patientData?.surname}
                     placeholder="Type your surname"
                     className="border-gray-300"
@@ -308,8 +325,14 @@ const PreviewDetails = ({
                     Date of Birth <sup className="text-[13px]">*</sup>
                   </Label>
                   <Input
-                    readOnly
-                    value={patientData?.date_of_birth}
+                    disabled
+                    value={
+                      patientData?.date_of_birth
+                        ? moment(patientData?.date_of_birth).format(
+                            "DD MMMM YYYY"
+                          )
+                        : "Not provided"
+                    }
                     placeholder="Type your date of birth"
                     className="border-gray-300"
                   />
@@ -319,7 +342,7 @@ const PreviewDetails = ({
                     Area/Room <sup className="text-[13px]">*</sup>
                   </Label>
                   <Input
-                    readOnly
+                    disabled
                     value={patientData?.area_room}
                     placeholder="Type your area or room"
                     className="border-gray-300"
@@ -330,7 +353,7 @@ const PreviewDetails = ({
                     Kostenstelle <sup className="text-[13px]">*</sup>
                   </Label>
                   <Input
-                    readOnly
+                    disabled
                     value={patientData?.cost_center}
                     placeholder="Type your kostenstelle"
                     className="border-gray-300"
@@ -339,7 +362,7 @@ const PreviewDetails = ({
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">How Much</Label>
                   <Input
-                    readOnly
+                    disabled
                     value={patientData?.how_much}
                     placeholder="Type how much"
                     className="border-gray-300"
@@ -348,7 +371,7 @@ const PreviewDetails = ({
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">Isolation</Label>
                   <div className="flex items-center">
-                    <Checkbox checked={patientData?.isolation} readOnly />
+                    <Checkbox checked={patientData?.isolation} disabled />
                     <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
                       Yes
                     </Label>
@@ -361,7 +384,7 @@ const PreviewDetails = ({
                   <div className="flex items-center">
                     <Checkbox
                       checked={patientData?.patient_above_90kg}
-                      readOnly
+                      disabled
                     />
                     <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
                       No
@@ -371,7 +394,7 @@ const PreviewDetails = ({
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">Special</Label>
                   <Input
-                    readOnly
+                    disabled
                     value={patientData?.special_note}
                     placeholder="Requires special_note attention"
                     className="border-gray-300"
@@ -391,7 +414,7 @@ const PreviewDetails = ({
                       Name / Institution <sup className="text-[13px]">*</sup>
                     </Label>
                     <Input
-                      readOnly
+                      disabled
                       value={destinationDetailsData?.pick_up_name}
                       placeholder="Pre filled"
                       className="border-gray-300"
@@ -402,7 +425,7 @@ const PreviewDetails = ({
                       Street <sup className="text-[13px]">*</sup>
                     </Label>
                     <Input
-                      readOnly
+                      disabled
                       value={destinationDetailsData?.pick_up_address}
                       className="border-gray-300"
                     />
@@ -412,7 +435,7 @@ const PreviewDetails = ({
                       Postal Code <sup className="text-[13px]">*</sup>
                     </Label>
                     <Input
-                      readOnly
+                      disabled
                       value={destinationDetailsData?.pick_up_postal_code}
                       className="border-gray-300"
                     />
@@ -422,7 +445,7 @@ const PreviewDetails = ({
                       City <sup className="text-[13px]">*</sup>
                     </Label>
                     <Input
-                      readOnly
+                      disabled
                       value={destinationDetailsData?.pick_up_city}
                       placeholder="Enter City Name"
                       className="border-gray-300"
@@ -433,7 +456,7 @@ const PreviewDetails = ({
                       Country <sup className="text-[13px]">*</sup>
                     </Label>
                     <Input
-                      readOnly
+                      disabled
                       value={destinationDetailsData?.pick_up_country}
                       placeholder="Enter Country"
                       className="border-gray-300"
@@ -444,7 +467,7 @@ const PreviewDetails = ({
                       Working Employee Name <sup className="text-[13px]">*</sup>
                     </Label>
                     <Input
-                      readOnly
+                      disabled
                       value={destinationDetailsData?.pick_up_employee_name}
                       placeholder="Type the working employee's name"
                       className="border-gray-300"
@@ -461,10 +484,15 @@ const PreviewDetails = ({
                         <Label className="block mb-2 font-medium">
                           Date <sup className="text-[13px]">*</sup>
                         </Label>
-                        <DatePicker
-                          date={dropDate}
-                          setDate={setDropDate}
-                          className="py-6"
+                        <Input
+                          disabled
+                          value={
+                            dropDate
+                              ? moment(dropDate).format("DD MMMM YYYY")
+                              : "Not provided"
+                          }
+                          placeholder="Type your drop off date"
+                          className="border-gray-300"
                         />
                       </div>
                     )}
@@ -475,7 +503,7 @@ const PreviewDetails = ({
                           Pickup time <sup className="text-[13px]">*</sup>
                         </Label>
                         <Input
-                          readOnly
+                          disabled
                           value={destinationDetailsData?.drop_off_pick_up_time}
                           placeholder="Pick-Up Time"
                           className="border-gray-300"
@@ -487,7 +515,7 @@ const PreviewDetails = ({
                         Name / Institution <sup className="text-[13px]">*</sup>
                       </Label>
                       <Input
-                        readOnly
+                        disabled
                         value={destinationDetailsData?.drop_off_name}
                         placeholder="Enter Name"
                         className="border-gray-300"
@@ -498,7 +526,7 @@ const PreviewDetails = ({
                         Street <sup className="text-[13px]">*</sup>
                       </Label>
                       <Input
-                        readOnly
+                        disabled
                         value={destinationDetailsData?.drop_off_address}
                         placeholder="Enter Street"
                         className="border-gray-300"
@@ -509,7 +537,7 @@ const PreviewDetails = ({
                         Postal Code <sup className="text-[13px]">*</sup>
                       </Label>
                       <Input
-                        readOnly
+                        disabled
                         value={destinationDetailsData?.drop_off_postal_code}
                         placeholder="Enter Street"
                         className="border-gray-300"
@@ -520,7 +548,7 @@ const PreviewDetails = ({
                         City <sup className="text-[13px]">*</sup>
                       </Label>
                       <Input
-                        readOnly
+                        disabled
                         value={destinationDetailsData?.drop_off_city}
                         placeholder="Enter City Name"
                         className="border-gray-300"
@@ -531,7 +559,7 @@ const PreviewDetails = ({
                         Country <sup className="text-[13px]">*</sup>
                       </Label>
                       <Input
-                        readOnly
+                        disabled
                         value={destinationDetailsData?.drop_off_country}
                         placeholder="Enter Country"
                         className="border-gray-300"
@@ -540,7 +568,7 @@ const PreviewDetails = ({
                     <div className="mb-5">
                       <Label className="block mb-2 font-medium">Phone</Label>
                       <Input
-                        readOnly
+                        disabled
                         value={destinationDetailsData?.drop_off_phone}
                         placeholder="Type the phone number"
                         className="border-gray-300"
@@ -553,12 +581,21 @@ const PreviewDetails = ({
                       <h6 className="mb-8 mt-14">Return journey</h6>
                       <div className="mb-5">
                         <Label className="block mb-2 font-medium">Date</Label>
-                        <DatePicker date={returnDate} setDate={setReturnDate} />
+                        <Input
+                          disabled
+                          value={
+                            returnDate
+                              ? moment(returnDate).format("DD MMMM YYYY")
+                              : "Not provided"
+                          }
+                          placeholder="Type your return date"
+                          className="border-gray-300"
+                        />
                       </div>
                       <div className="mb-5">
                         <Label className="block mb-2 font-medium">Time</Label>
                         <Input
-                          readOnly
+                          disabled
                           value={destinationDetailsData?.return_approx_time}
                           placeholder="Enter Time"
                           className="border-gray-300"
@@ -569,7 +606,7 @@ const PreviewDetails = ({
                           Floor/Department
                         </Label>
                         <Input
-                          readOnly
+                          disabled
                           value={destinationDetailsData?.return_floor}
                           placeholder="Type the stock or department"
                           className="border-gray-300"
@@ -590,7 +627,7 @@ const PreviewDetails = ({
                     Prename/Institution
                   </Label>
                   <Input
-                    readOnly
+                    disabled
                     value={billingDetailsData?.pre_name}
                     placeholder="Type your prename or institution"
                     className="border-gray-300"
@@ -599,7 +636,7 @@ const PreviewDetails = ({
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">Name</Label>
                   <Input
-                    readOnly
+                    disabled
                     value={billingDetailsData?.name}
                     placeholder="Type your name"
                     className="border-gray-300"
@@ -608,7 +645,7 @@ const PreviewDetails = ({
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">Street</Label>
                   <Input
-                    readOnly
+                    disabled
                     value={billingDetailsData?.street}
                     placeholder="Type your street"
                     className="border-gray-300"
@@ -617,7 +654,7 @@ const PreviewDetails = ({
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">Place</Label>
                   <Input
-                    readOnly
+                    disabled
                     value={billingDetailsData?.place}
                     placeholder="Type your place"
                     className="border-gray-300"
@@ -626,7 +663,7 @@ const PreviewDetails = ({
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">Contact</Label>
                   <Input
-                    readOnly
+                    disabled
                     value={billingDetailsData?.contact}
                     placeholder="Type your contact number"
                     className="border-gray-300"

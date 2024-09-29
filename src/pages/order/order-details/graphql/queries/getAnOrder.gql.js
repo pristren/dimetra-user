@@ -47,6 +47,7 @@ export const GET_AN_ORDER = gql`
         pick_up_country
         pick_up_employee_name
         drop_off_pick_up_time
+        drop_off_pick_up_date
         drop_off_name
         drop_off_address
         drop_off_city

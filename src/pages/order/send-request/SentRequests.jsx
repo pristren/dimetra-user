@@ -22,7 +22,7 @@ const SentRequests = () => {
   });
   useEffect(() => {
     getAllMessageRequests();
-  }, [getAllMessageRequests]);
+  }, []);
 
   const columns = [
     {
@@ -98,6 +98,7 @@ const SentRequests = () => {
       },
     },
   ];
+
   return (
     <div>
       <AppTable
@@ -113,6 +114,7 @@ const SentRequests = () => {
         isRecurring={false}
         isDateVisible={false}
         isFilterVisible={false}
+        getData={getAllMessageRequests}
       />
     </div>
   );

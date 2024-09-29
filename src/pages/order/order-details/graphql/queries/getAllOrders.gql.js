@@ -11,6 +11,7 @@ export const GET_ALL_ORDERS = gql`
       status
       transportationData {
         type_of_transport
+        free_dates
       }
       patientData {
         name
@@ -18,6 +19,7 @@ export const GET_ALL_ORDERS = gql`
       destinationDetailsData {
         pick_up_address
         drop_off_address
+        drop_off_pick_up_date
       }
       createdAt
     }

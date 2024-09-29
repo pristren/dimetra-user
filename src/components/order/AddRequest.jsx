@@ -15,11 +15,10 @@ import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const AddRequest = ({ setRequestModalOpen }) => {
+const AddRequest = ({ setRequestModalOpen, getData = () => {} }) => {
   const [file, setFile] = useState(null);
-  const [createMessageRequest, { loading }] = useMutation(
-    CREATE_MESSAGE_REQUESTS
-  );
+  const [loading, setLoading] = useState(false);
+  const [createMessageRequest] = useMutation(CREATE_MESSAGE_REQUESTS);
   const defaultValues = {
     title: "",
     message: "",
@@ -35,6 +34,7 @@ const AddRequest = ({ setRequestModalOpen }) => {
   };
 
   const onSubmit = async (data) => {
+    setLoading(true);
     const file_url = await uploadFile(file);
     await createMessageRequest({
       variables: {
@@ -47,6 +47,7 @@ const AddRequest = ({ setRequestModalOpen }) => {
       .then(({ data }) => {
         if (data?.createMessageRequest?.id) {
           toast.success("Request sent successfully");
+          getData();
         }
       })
       .catch((error) => {
@@ -55,6 +56,8 @@ const AddRequest = ({ setRequestModalOpen }) => {
       .finally(() => {
         setRequestModalOpen(false);
         form.reset(defaultValues);
+        setFile(null);
+        setLoading(false);
       });
   };
 
@@ -122,6 +125,13 @@ const AddRequest = ({ setRequestModalOpen }) => {
               className={`${file ? "" : "border-red-500"} hidden`}
             />
           </FormControl>
+          <p>
+            {file ? (
+              <span className="text-gray-500">{file?.name}</span>
+            ) : (
+              "No file chosen"
+            )}
+          </p>
           <FormMessage />
         </FormItem>
 

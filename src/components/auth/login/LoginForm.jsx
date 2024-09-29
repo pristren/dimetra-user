@@ -27,6 +27,7 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [isRememberMe, setIsRememberMe] = useState(false);
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -44,8 +45,8 @@ export default function LoginForm() {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "a@b.com",
-      password: "123456",
+      email: "",
+      password: "",
     },
   });
 
@@ -60,8 +61,12 @@ export default function LoginForm() {
               id: res?.data?.user?._id,
             })
           );
+          if (isRememberMe) {
+            localStorage.setItem("access_token", res?.data?.token);
+          } else {
+            sessionStorage.setItem("access_token", res?.data?.token);
+          }
           dispatch(setAccessToken(res?.data?.token));
-          localStorage.setItem("access_token", res?.data?.token);
           navigate("/orders/all-orders");
         }
       })
@@ -127,7 +132,11 @@ export default function LoginForm() {
             </div>
             <div className="flex justify-between mt-4 mb-8">
               <div className="flex items-center space-x-2">
-                <Checkbox id="remember" />
+                <Checkbox
+                  id="remember"
+                  checked={isRememberMe}
+                  onClick={() => setIsRememberMe(!isRememberMe)}
+                />
                 <Label
                   className="text-[#6F767E] font-normal tracking-wide cursor-pointer"
                   htmlFor="remember"
