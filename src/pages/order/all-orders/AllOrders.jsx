@@ -14,15 +14,18 @@ import { ArrowUpDown, Document, Pause, Pencil, Trash } from "@/assets/icons";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_ALL_ORDERS } from "../order-details/graphql/queries/getAllOrders.gql";
 import { DELETE_AN_ORDER } from "./graphql/mutations/deleteOrder.gql";
+import moment from "moment";
+import { UPDATE_ORDER_STATUS } from "./graphql/mutations/updateOrderStatus.gql";
 
 const AllOrders = () => {
   const [date, setDate] = useState(null);
   const filters = [
     "All Order",
     "Recurring",
-    "Verlegungsart",
-    "Sammelauftrag",
-    "Privatfahrt",
+    "Transfer trip",
+    "Investigation trip",
+    "Private trips",
+    "Collection order",
   ];
 
   const [data, setData] = useState([]);
@@ -32,7 +35,33 @@ const AllOrders = () => {
     errorPolicy: "all",
     fetchPolicy: "no-cache",
     onCompleted: (response) => {
-      setData(response.getAllOrders);
+      setData(
+        response.getAllOrders
+          ?.filter((order) => order.status !== "completed")
+          ?.map((order) => ({
+            ...order,
+            destinationDetailsData: {
+              ...order.destinationDetailsData,
+              drop_off_pick_up_date:
+                order.transportationData?.type_of_transport === "recurring"
+                  ? moment(order.transportationData?.free_dates[0]).format(
+                      "DD MMMM YYYY"
+                    )
+                  : moment(
+                      order.destinationDetailsData?.drop_off_pick_up_date
+                    ).format("DD MMMM YYYY"),
+            },
+            transportationData: {
+              ...order.transportationData,
+              type_of_transport:
+                order.transportationData?.type_of_transport?.includes("_")
+                  ? order.transportationData?.type_of_transport
+                      .split("_")
+                      .join(" ")
+                  : order.transportationData?.type_of_transport,
+            },
+          }))
+      );
     },
     onError: (error) => {
       console.error({ error });
@@ -52,9 +81,19 @@ const AllOrders = () => {
     },
   });
 
+  const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS, {
+    onCompleted: (data) => {
+      console.log("Order status updated:", data);
+      getAllOrders();
+    },
+    onError: (err) => {
+      console.error("Error updating order status:", err);
+    },
+  });
+
   const getStatusColor = (status) => {
     switch (status) {
-      case "On Ride":
+      case "on ride":
         return "#FEF1E0";
       case "confirmed":
         return "#D1F8D5";
@@ -81,18 +120,32 @@ const AllOrders = () => {
     });
   };
 
+  const updateAnOrderStatus = (orderId, status) => {
+    updateOrderStatus({
+      variables: {
+        queryData: { id: orderId },
+        inputData: { status },
+      },
+    });
+  };
+
   const columns = [
     {
-      accessorKey: "createdAt",
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
+      accessorKey: "destinationDetailsData.drop_off_pick_up_date",
+      header: ({ column }) => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
           Date & Time
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
+      cell: ({ row }) => {
+        const date =
+          row.original?.destinationDetailsData?.drop_off_pick_up_date;
+        return <p>{date}</p>;
+      },
     },
     {
       accessorKey: "destinationDetailsData.pick_up_address",
@@ -153,6 +206,10 @@ const AllOrders = () => {
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
+      cell: ({ row }) => {
+        const type = row.original.transportationData?.type_of_transport;
+        return <p className="capitalize">{type}</p>;
+      },
     },
     {
       accessorKey: "status",
@@ -171,7 +228,7 @@ const AllOrders = () => {
 
         return (
           <Button
-            className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs"
+            className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs capitalize"
             style={{ backgroundColor: statusColor }}
           >
             {status}
@@ -225,7 +282,7 @@ const AllOrders = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
-                  onClick={() => handlePauseOrder(orderId)}
+                  onClick={() => updateAnOrderStatus(orderId, "paused")}
                 >
                   <Pause className="size-5" />
                   <span className="text-gray-700 text-sm">Pause</span>

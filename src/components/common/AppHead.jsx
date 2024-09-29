@@ -36,6 +36,7 @@ export default function AppHead({
   setGlobalFilter,
   isSearchVisible = true,
   isRecurring = false,
+  getData = () => {},
 }) {
   const [requestModalOpen, setRequestModalOpen] = useState(false);
   return (
@@ -77,7 +78,7 @@ export default function AppHead({
           <div className="relative">
             <Input
               placeholder="Search By Any Field"
-              value={globalFilter || ""}
+              value={globalFilter ?? ""}
               onChange={(event) => setGlobalFilter(event.target.value)}
               className="w-72 h-10"
             />
@@ -97,7 +98,10 @@ export default function AppHead({
             <DialogContent className="w-[90%] max-w-2xl">
               <DialogHeader>
                 <DialogTitle className="mb-10">Request</DialogTitle>
-                <AddRequest setRequestModalOpen={setRequestModalOpen} />
+                <AddRequest
+                  setRequestModalOpen={setRequestModalOpen}
+                  getData={getData}
+                />
               </DialogHeader>
             </DialogContent>
           </Dialog>
