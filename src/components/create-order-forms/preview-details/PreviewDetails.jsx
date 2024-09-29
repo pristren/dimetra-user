@@ -45,10 +45,14 @@ const PreviewDetails = ({
   const [createAnOrder] = useMutation(CREATE_AN_ORDER);
   const navigate = useNavigate();
   const handleCreateAnOrder = async () => {
+    const updatedData = { ...createOrderData };
+    if (updatedData?.transportationData?.type_of_transport !== "recurring") {
+      delete updatedData.transportationData?.recurring_type;
+    }
     try {
       const { data } = await createAnOrder({
         variables: {
-          inputData: createOrderData,
+          inputData: updatedData,
         },
       });
       console.log(createOrderData);
