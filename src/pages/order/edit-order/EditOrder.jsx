@@ -25,7 +25,7 @@ const EditOrder = () => {
       return_date: endDate,
       start_time: "",
       return_time: "",
-      multiple_weekdays: [],
+      multiple_week_days: [],
       ends: "",
     },
     patientData: {

@@ -26,7 +26,7 @@ export const GET_AN_ORDER = gql`
         return_date
         start_time
         return_time
-        multiple_weekdays
+        multiple_week_days
         ends
       }
       patientData {
