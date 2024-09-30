@@ -406,7 +406,7 @@ const DestinationDetails = ({
                         <FormControl>
                           <AppSelect
                             items={timeOptions}
-                            placeholder="00:00"
+                            placeholder="Select time"
                             onValueChange={(value) =>
                               updateDestinationData(
                                 "drop_off_pick_up_time",

@@ -34,6 +34,7 @@ export function AppTable({
   isRecurring = false,
   showModal,
   rowClickable = false,
+  getData = () => {},
 }) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -84,6 +85,7 @@ export function AppTable({
         setGlobalFilter={setGlobalFilter}
         isSearchVisible={isSearchVisible}
         isRecurring={isRecurring}
+        getData={getData}
       />
       <div className="rounded-md border w-full">
         <Table>

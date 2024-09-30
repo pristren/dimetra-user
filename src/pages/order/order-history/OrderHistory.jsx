@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,6 +11,9 @@ import { ArrowUpDown } from "@/assets/icons";
 import { EllipsisVertical } from "lucide-react";
 import { Link } from "react-router-dom";
 import ReactToPrint from "react-to-print";
+import { useLazyQuery } from "@apollo/client";
+import { GET_ALL_ORDERS } from "../order-details/graphql/queries/getAllOrders.gql";
+import moment from "moment";
 
 const OrderHistory = () => {
   const [date, setDate] = useState(null);
@@ -21,44 +24,63 @@ const OrderHistory = () => {
   const filters = [
     "All Order",
     "Recurring",
-    "Verlegungsart",
-    "Sammelauftrag",
-    "Privatfahrt",
+    "Transfer trip",
+    "Investigation trip",
+    "Private trips",
+    "Collection order",
   ];
 
-  const data = [
-    {
-      date: "2024-09-08",
-      time: "14:30",
-      pickUp: "123 Main St.",
-      destination: "456 Elm St.",
-      vehicle: "Sedan",
-      driver: "John Doe",
-      dispatcher: "Jane Smith",
-      status: "Completed",
-      rateToDriver: "Rate the driver",
-      action: "View",
-      orderType: "Recurring",
+  const [data, setData] = useState([]);
+
+  const [getAllOrders] = useLazyQuery(GET_ALL_ORDERS, {
+    variables: {},
+    errorPolicy: "all",
+    fetchPolicy: "no-cache",
+    onCompleted: (response) => {
+      setData(
+        response.getAllOrders
+          ?.filter(
+            (order) =>
+              order.status === "completed" || order.status === "rejected"
+          )
+          .map((order) => ({
+            ...order,
+            destinationDetailsData: {
+              ...order.destinationDetailsData,
+              drop_off_pick_up_date:
+                order.transportationData?.type_of_transport === "recurring"
+                  ? moment(order.transportationData?.free_dates[0]).format(
+                      "DD MMMM YYYY"
+                    )
+                  : moment(
+                      order.destinationDetailsData?.drop_off_pick_up_date
+                    ).format("DD MMMM YYYY"),
+            },
+            transportationData: {
+              ...order.transportationData,
+              type_of_transport:
+                order.transportationData?.type_of_transport?.includes("_")
+                  ? order.transportationData?.type_of_transport
+                      .split("_")
+                      .join(" ")
+                  : order.transportationData?.type_of_transport,
+            },
+          }))
+      );
     },
-    {
-      date: "2024-09-08",
-      time: "14:30",
-      pickUp: "123 Main St.",
-      destination: "456 Elm St.",
-      vehicle: "Sedan",
-      driver: "John Doe",
-      dispatcher: "Jane Smith",
-      status: "Paused",
-      rateToDriver: "Rate the driver",
-      orderType: "Sammelauftrag",
+    onError: (error) => {
+      console.error({ error });
     },
-  ];
+  });
+  useEffect(() => {
+    getAllOrders();
+  }, [getAllOrders]);
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Rejected":
+      case "rejected":
         return "#FEF1E0";
-      case "Completed":
+      case "completed":
         return "#D1F8D5";
       default:
         return "#FFFFFF";
@@ -74,38 +96,43 @@ const OrderHistory = () => {
 
   const columns = [
     {
-      accessorKey: "date",
-      header: () => (
-        <div className="flex items-center gap-2">
-          <span>Date & Time</span>
-          <ArrowUpDown
-            className="ml-2 h-4 w-4 cursor-pointer"
-            aria-label="Sort by Date & Time"
-          />
+      accessorKey: "destinationDetailsData.drop_off_pick_up_date",
+      header: ({ column }) => (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex items-center cursor-pointer"
+        >
+          Date & Time
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+      cell: ({ row }) => {
+        const date =
+          row.original?.destinationDetailsData?.drop_off_pick_up_date;
+        return <p>{date}</p>;
+      },
+    },
+    {
+      accessorKey: "destinationDetailsData.pick_up_address",
+      header: ({ column: { toggleSorting, getIsSorted } }) => (
+        <div
+          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          className="flex items-center cursor-pointer"
+        >
+          Pick Up
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
     },
     {
-      accessorKey: "pickUp",
-      header: () => (
-        <div className="flex items-center gap-2">
-          <span>Pick Up</span>
-          <ArrowUpDown
-            className="ml-2 h-4 w-4 cursor-pointer"
-            aria-label="Sort by Pick Up"
-          />
-        </div>
-      ),
-    },
-    {
-      accessorKey: "destination",
-      header: () => (
-        <div className="flex items-center gap-2">
-          <span>Destination</span>
-          <ArrowUpDown
-            className="ml-2 h-4 w-4 cursor-pointer"
-            aria-label="Sort by Destination"
-          />
+      accessorKey: "destinationDetailsData.drop_off_address",
+      header: ({ column: { toggleSorting, getIsSorted } }) => (
+        <div
+          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          className="flex items-center cursor-pointer"
+        >
+          Destination
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
     },
@@ -120,16 +147,20 @@ const OrderHistory = () => {
           />
         </div>
       ),
+      cell: ({ row }) => {
+        const vehicle = row.getValue("vehicle") || "N/A";
+        return <p className="text-center">{vehicle}</p>;
+      },
     },
     {
-      accessorKey: "driver",
-      header: () => (
-        <div className="flex items-center gap-2">
-          <span>Driver</span>
-          <ArrowUpDown
-            className="ml-2 h-4 w-4 cursor-pointer"
-            aria-label="Sort by Driver"
-          />
+      accessorKey: `user.first_name`,
+      header: ({ column: { toggleSorting, getIsSorted } }) => (
+        <div
+          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          className="flex items-center cursor-pointer"
+        >
+          Driver
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
     },
@@ -144,6 +175,10 @@ const OrderHistory = () => {
           />
         </div>
       ),
+      cell: ({ row }) => {
+        const dispatcher = row.getValue("dispatcher") || "N/A";
+        return <p className="text-center">{dispatcher}</p>;
+      },
     },
     {
       accessorKey: "status",
@@ -162,7 +197,7 @@ const OrderHistory = () => {
 
         return (
           <Button
-            className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs"
+            className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs capitalize"
             style={{ backgroundColor: statusColor }}
           >
             {status}
@@ -186,7 +221,7 @@ const OrderHistory = () => {
           <Link to="/orders/review/:id">
             <Button
               disabled={row.getValue("status") === "Paused"}
-              className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs bg-[#D0EF0F]"
+              className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs bg-[#D0EF0F] hover:bg-[#D0EF0F]"
             >
               Rate the driver
             </Button>

@@ -68,7 +68,8 @@ const OrderSettings = () => {
   const [updateUserPassword] = useMutation(UPDATE_AN_USER_PASSWORD);
   const onSubmitUserDetails = async (value) => {
     setLoading(true);
-    const profile_image = await uploadFile(selectedFile);
+    const profile_image =
+      (await uploadFile(selectedFile)) || userInfo?.profile_image;
 
     await updateAnUser({
       variables: {
@@ -89,14 +90,18 @@ const OrderSettings = () => {
       })
       .finally(() => {
         setLoading(false);
-        dispatch(setProfileImageLoaded(false));
-        const query = document.getElementsByClassName(
-          "profile_image_class_to_hide"
-        );
-        query?.length > 0 &&
-          [...query].forEach((query) => {
-            query.classList.add("hidden");
-          });
+        if (selectedFile) {
+          dispatch(setProfileImageLoaded(false));
+          const query = document.getElementsByClassName(
+            "profile_image_class_to_hide"
+          );
+          query?.length > 0 &&
+            [...query].forEach((query) => {
+              query.classList.add("hidden");
+            });
+        }
+
+        setSelectedFile(null);
       });
   };
 

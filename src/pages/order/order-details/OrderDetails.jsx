@@ -5,6 +5,7 @@ import { GET_AN_ORDER } from "./graphql/queries/getAnOrder.gql";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
+import moment from "moment";
 
 function OrderDetails() {
   const [data, setData] = useState({});
@@ -26,27 +27,37 @@ function OrderDetails() {
   }, [getAnOrder]);
 
   return (
-    <div>
+    <div className="capitalize">
       <h5>Order Details</h5>
       <Card className="mt-6 bg-white p-6 border-opacity-50 ">
         <h5>Transportation Details</h5>
         <div className="grid grid-cols-3 mt-10 mb-20">
           <div>
             <p className="highlight mb-4">Type of Transport</p>
-            <p>{data?.transportationData?.type_of_transport}</p>
+            <p>
+              {data?.transportationData?.type_of_transport?.includes("_")
+                ? data?.transportationData?.type_of_transport
+                    ?.split("_")
+                    .join(" ")
+                : data?.transportationData?.type_of_transport}
+            </p>
           </div>
           <div>
             <p className="highlight mb-4">Mode of Transportation</p>
             {data?.transportationData?.mode_of_transportation?.map(
               (mode, index) => (
-                <p key={index}>{mode}</p>
+                <p key={index}>
+                  {mode?.includes("_") ? mode?.split("_").join(" ") : mode}
+                </p>
               )
             )}
           </div>
           <div>
             <p className="highlight mb-4">Transport With</p>
             {data?.transportationData?.transport_with?.map((person, index) => (
-              <p key={index}>{person}</p>
+              <p key={index}>
+                {person?.includes("_") ? person?.split("_").join(" ") : person}
+              </p>
             ))}
           </div>
         </div>
@@ -72,7 +83,13 @@ function OrderDetails() {
             </div>
             <div className="flex items-center gap-6">
               <p>Order Type: </p>
-              <p>{data?.transportationData?.type_of_transport}</p>
+              <p>
+                {data?.transportationData?.type_of_transport?.includes("_")
+                  ? data?.transportationData?.type_of_transport
+                      ?.split("_")
+                      .join(" ")
+                  : data?.transportationData?.type_of_transport}
+              </p>
             </div>
             <div className="flex items-center gap-6">
               <p>Destination : </p>
@@ -84,9 +101,23 @@ function OrderDetails() {
                 <p>{data?.transportationData?.start_date}</p>
               </div>
             )}
-            <div className="flex items-center gap-6">
+            <div className="flex items-start gap-6">
               <p>Vehicle: </p>
-              <p>{data?.transportationData?.transport_with}</p>
+              <div className="flex items-start gap-2">
+                {data?.transportationData?.transport_with?.map(
+                  (person, index) => (
+                    <p key={index}>
+                      {person?.includes("_")
+                        ? person?.split("_").join(" ")
+                        : person}{" "}
+                      {index !==
+                      data?.transportationData?.transport_with?.length - 1
+                        ? ","
+                        : ""}
+                    </p>
+                  )
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -95,7 +126,7 @@ function OrderDetails() {
 
         <div className="my-14">
           <h5>Destination Details</h5>
-          <div className="grid grid-cols-3 gap-6 text-nowrap mt-10">
+          <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
             <div>
               <p className="highlight mb-5">Pick up</p>
               <div className="flex items-center gap-6 mb-8">
@@ -123,11 +154,20 @@ function OrderDetails() {
               <p className="highlight mb-5">Drop-Off</p>
               <div className="flex items-center gap-6 mb-8">
                 <p>Date :</p>
-                <p>{data?.destinationDetailsData?.drop_off_pick_up_date}</p>
+                <p>
+                  {data?.destinationDetailsData?.drop_off_pick_up_date
+                    ? moment(
+                        data?.destinationDetailsData?.drop_off_pick_up_date
+                      ).format("DD MMMM YYYY")
+                    : "not yet"}
+                </p>
               </div>
               <div className="flex items-center gap-6 mb-8">
                 <p>Pickup time :</p>
-                <p>{data?.destinationDetailsData?.pick_up_time || "not yet"}</p>
+                <p>
+                  {data?.destinationDetailsData?.drop_off_pick_up_time ||
+                    "not yet"}
+                </p>
               </div>
               <div className="flex items-center gap-6 mb-8">
                 <p>Name/ Institution :</p>
@@ -152,7 +192,7 @@ function OrderDetails() {
                 </p>
               </div>
             </div>
-            <div>
+            {/* <div>
               <p className="highlight mb-5">Return journey</p>
               <div className="flex items-center gap-6 mb-8">
                 <p>Date :</p>
@@ -166,7 +206,7 @@ function OrderDetails() {
                 <p>Floor/Department :</p>
                 <p>{data?.destinationDetailsData?.return_floor}</p>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
 
