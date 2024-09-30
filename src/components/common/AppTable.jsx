@@ -25,8 +25,8 @@ export function AppTable({
   columns,
   pageTitle,
   addButton,
-  date,
-  setDate,
+  queryData,
+  setQueryData,
   filters,
   isDateVisible,
   isFilterVisible,
@@ -74,9 +74,9 @@ export function AppTable({
       <AppHead
         pageTitle={pageTitle}
         addButton={addButton}
-        date={date}
+        queryData={queryData}
         showModal={showModal}
-        setDate={setDate}
+        setQueryData={setQueryData}
         filters={filters}
         isDateVisible={isDateVisible}
         isFilterVisible={isFilterVisible}
