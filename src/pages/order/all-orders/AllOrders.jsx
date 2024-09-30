@@ -26,7 +26,7 @@ const AllOrders = () => {
   const [totalPage, setTotalPage] = useState(null);
   const [data, setData] = useState([]);
 
-  const [getAllOrders] = useLazyQuery(GET_ALL_ORDERS, {
+  const [getAllOrders, { loading }] = useLazyQuery(GET_ALL_ORDERS, {
     variables: { queryData },
     errorPolicy: "all",
     fetchPolicy: "no-cache",
@@ -315,6 +315,7 @@ const AllOrders = () => {
         isSearchVisible={true}
         isRecurring={false}
         totalPage={totalPage}
+        isLoading={loading}
       />
     </div>
   );
