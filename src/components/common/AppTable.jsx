@@ -35,6 +35,7 @@ export function AppTable({
   showModal,
   rowClickable = false,
   getData = () => {},
+  totalPage,
 }) {
   const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
@@ -148,7 +149,11 @@ export function AppTable({
         <div className="flex items-center gap-5 justify-end text-nowrap px-5 border-t py-5">
           {/* <p>Showing 1 to 1 of 1 entries</p> */}
           <div>
-            <AppPagination />
+            <AppPagination
+              queryData={queryData}
+              setQueryData={setQueryData}
+              totalPage={totalPage}
+            />
           </div>
         </div>
       </div>

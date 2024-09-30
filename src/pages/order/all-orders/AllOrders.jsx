@@ -21,8 +21,9 @@ import { transportOptions } from "@/components/create-order-forms/helpers";
 const AllOrders = () => {
   const [queryData, setQueryData] = useState({
     filter_by: "all_order",
+    page: 1,
   });
-
+  const [totalPage, setTotalPage] = useState(null);
   const [data, setData] = useState([]);
 
   const [getAllOrders] = useLazyQuery(GET_ALL_ORDERS, {
@@ -30,6 +31,7 @@ const AllOrders = () => {
     errorPolicy: "all",
     fetchPolicy: "no-cache",
     onCompleted: (response) => {
+      setTotalPage(response.getAllOrders?.totalPages);
       setData(
         response.getAllOrders?.data
           ?.filter((order) => order.status !== "completed")
@@ -312,6 +314,7 @@ const AllOrders = () => {
         ]}
         isSearchVisible={true}
         isRecurring={false}
+        totalPage={totalPage}
       />
     </div>
   );

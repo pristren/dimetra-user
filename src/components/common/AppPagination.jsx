@@ -8,30 +8,92 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-const AppPagination = () => {
+const AppPagination = ({ queryData, setQueryData, totalPage }) => {
+  const currentPage = queryData.page;
+
+  const handlePageChange = (page) => {
+    if (page < 1 || page > totalPage) return;
+    setQueryData((prev) => ({
+      ...prev,
+      page,
+    }));
+  };
+
+  const renderPaginationItems = () => {
+    const items = [];
+
+    if (totalPage <= 5) {
+      for (let i = 1; i <= totalPage; i++) {
+        items.push(
+          <PaginationItem key={i} className={currentPage === i ? "active" : ""}>
+            <PaginationLink onClick={() => handlePageChange(i)}>
+              {i}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+    } else {
+      items.push(
+        <PaginationItem key={1} className={currentPage === 1 ? "active" : ""}>
+          <PaginationLink onClick={() => handlePageChange(1)}>1</PaginationLink>
+        </PaginationItem>
+      );
+
+      if (currentPage > 3) {
+        items.push(<PaginationEllipsis key="start-ellipsis" />);
+      }
+
+      const startPage = Math.max(2, currentPage - 1);
+      const endPage = Math.min(totalPage - 1, currentPage + 1);
+
+      for (let i = startPage; i <= endPage; i++) {
+        items.push(
+          <PaginationItem key={i} className={currentPage === i ? "active" : ""}>
+            <PaginationLink onClick={() => handlePageChange(i)}>
+              {i}
+            </PaginationLink>
+          </PaginationItem>
+        );
+      }
+
+      if (currentPage < totalPage - 2) {
+        items.push(<PaginationEllipsis key="end-ellipsis" />);
+      }
+
+      items.push(
+        <PaginationItem
+          key={totalPage}
+          className={currentPage === totalPage ? "active" : ""}
+        >
+          <PaginationLink onClick={() => handlePageChange(totalPage)}>
+            {totalPage}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    }
+
+    return items;
+  };
+
   return (
     <Pagination>
       <PaginationContent>
         <PaginationItem>
-          <PaginationPrevious href="#" />
+          <PaginationPrevious
+            className={"cursor-pointer"}
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          />
         </PaginationItem>
-        <PaginationItem className="bg-white border rounded-lg">
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
+
+        {renderPaginationItems()}
+
         <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationEllipsis />
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">10</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationNext href="#" />
+          <PaginationNext
+            className={"cursor-pointer"}
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPage}
+          />
         </PaginationItem>
       </PaginationContent>
     </Pagination>
