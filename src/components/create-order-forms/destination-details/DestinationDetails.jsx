@@ -194,14 +194,14 @@ const DestinationDetails = ({
   }, [...fieldsFilled]);
 
   return (
-    <Card className="w-[70%] px-5 py-5">
+    <Card className="lg:px-5 lg:py-5">
       <CardHeader>
         <CardTitle className="title">Destination Details</CardTitle>
       </CardHeader>
-      <CardContent className="px-10">
+      <CardContent className="lg:px-10">
         <Form {...form}>
           <form>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div className="pr-5">
                 <h6 className="text-xl font-semibold mb-4">Pick-Up</h6>
 

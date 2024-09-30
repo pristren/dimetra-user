@@ -10,7 +10,7 @@ const BackAndNextBtn = ({
   handleGoPrev
 }) => {
   return (
-    <div className="flex items-center justify-between mt-5">
+    <div className="flex items-center justify-between gap-5 mt-5">
       <Button
         className="flex gap-1 items-center"
         variant="outline"

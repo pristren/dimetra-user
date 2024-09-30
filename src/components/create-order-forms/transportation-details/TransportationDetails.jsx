@@ -156,14 +156,14 @@ const TransportationDetails = ({
   }, [startDate, endDate, freeDates]);
 
   return (
-    <Card className="w-[70%] px-5 py-5">
+    <Card className="lg:px-5 lg:py-5">
       <CardHeader>
         <CardTitle className="title">Transportation details</CardTitle>
       </CardHeader>
-      <CardContent className="px-10">
+      <CardContent className="lg:px-10">
         <Form {...form}>
           <form>
-            <div className="grid grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               <div className="pr-5">
                 <h6 className="mb-6">
                   Type of transport
