@@ -20,10 +20,10 @@ export default function AuthLayout({ children, childContainer, ...props }) {
         )}
       >
         {children}
-      <div className="mt-20 flex flex-col items-center justify-center">
-        <p className="text-lg mb-5 text-center">Powered by</p>
-        <Logo />
-      </div>
+        <div className="mt-8 flex flex-col items-center justify-center">
+          <p className="text-lg mb-2 text-center">Powered by</p>
+          <Logo />
+        </div>
       </div>
     </div>
   );

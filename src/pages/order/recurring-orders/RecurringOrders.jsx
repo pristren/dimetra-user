@@ -8,10 +8,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { EllipsisVertical } from "lucide-react";
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLazyQuery } from "@apollo/client";
+import { GET_ALL_RECURRING_ORDERS } from "./graphql/queries/getAllRecurringOrders.gql";
+import moment from "moment";
 
 const RecurringOrders = () => {
+  const { id } = useParams();
+  //   const []
   const [data, setData] = useState([
     {
       id: "1",
@@ -58,17 +63,50 @@ const RecurringOrders = () => {
       orderType: "Regular",
     },
   ]);
+  //   const [data, setData] = useState([]);
+
+  const [getAllRecurringOrders] = useLazyQuery(GET_ALL_RECURRING_ORDERS, {
+    variables: {
+      queryData: {
+        id,
+      },
+    },
+    errorPolicy: "all",
+    fetchPolicy: "no-cache",
+    onCompleted: (response) => {
+      setData(
+        response.getAllRecurringOrders?.map((order) => ({
+          ...order,
+          destinationDetailsData: {
+            ...order.destinationDetailsData,
+            drop_off_pick_up_date: moment(
+              order.destinationDetailsData?.drop_off_pick_up_date
+            ).format("DD MMMM YYYY"),
+          },
+        }))
+      );
+    },
+    onError: (error) => {
+      console.error({ error });
+    },
+  });
+  useEffect(() => {
+    getAllRecurringOrders();
+  }, []);
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Completed":
+      case "completed":
         return "#F0F8D1";
-      case "Rejected":
+      case "rejected":
         return "#F9D1D1";
-      case "Confirmed":
+      case "confirmed":
         return "#D1F8D5";
-      case "Paused":
+      case "paused":
         return "#DCF3FF";
+      case "pending":
+        return "#DCF3FF";
+
       default:
         return "#FFFFFF";
     }
@@ -87,27 +125,41 @@ const RecurringOrders = () => {
 
   const columns = [
     {
-      accessorKey: "date",
-      header: () => (
-        <div className="flex items-center gap-2">
+      accessorKey: "destinationDetailsData.drop_off_pick_up_date",
+      header: ({ column }) => (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex items-center cursor-pointer"
+        >
           Date & Time
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
+      cell: ({ row }) => {
+        const date =
+          row.original?.destinationDetailsData?.drop_off_pick_up_date;
+        return <p>{date}</p>;
+      },
     },
     {
-      accessorKey: "pickUp",
-      header: () => (
-        <div className="flex items-center gap-2">
+      accessorKey: "destinationDetailsData.pick_up_address",
+      header: ({ column: { toggleSorting, getIsSorted } }) => (
+        <div
+          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          className="flex items-center cursor-pointer"
+        >
           Pick Up
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
     },
     {
-      accessorKey: "destination",
-      header: () => (
-        <div className="flex items-center gap-2">
+      accessorKey: "destinationDetailsData.drop_off_address",
+      header: ({ column: { toggleSorting, getIsSorted } }) => (
+        <div
+          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          className="flex items-center cursor-pointer"
+        >
           Destination
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
@@ -121,6 +173,7 @@ const RecurringOrders = () => {
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
+      cell: (row) => <div className="">N/A</div>,
     },
     {
       accessorKey: "driver",
@@ -130,11 +183,15 @@ const RecurringOrders = () => {
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
+      cell: (row) => <div className="">N/A</div>,
     },
     {
-      accessorKey: "patientName",
-      header: () => (
-        <div className="flex items-center gap-2">
+      accessorKey: "patientData.name",
+      header: ({ column: { toggleSorting, getIsSorted } }) => (
+        <div
+          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          className="flex items-center cursor-pointer"
+        >
           Patient Name
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
