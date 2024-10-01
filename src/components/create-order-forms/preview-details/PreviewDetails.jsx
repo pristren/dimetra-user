@@ -20,8 +20,8 @@ import { CREATE_AN_ORDER } from "@/pages/order/create-order/graphql/mutations/cr
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import AppModal from "@/components/common/AppModal";
-import SuccessfullyCreatedOrderModalImage from "@/assets/icons/SuccessfullyCreatedOrderModalImage";
 import { useState } from "react";
+import { SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
 
 const PreviewDetails = ({
   createOrderData,

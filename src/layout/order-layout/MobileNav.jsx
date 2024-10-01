@@ -1,5 +1,5 @@
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { Logout } from "@/assets/icons";
+import { DimetraMobileLogo, Logout } from "@/assets/icons";
 import {
   CarFront,
   ClipboardList,
@@ -14,7 +14,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import DimetraMobileLogo from "@/assets/icons/DimetraMobileLogo";
 
 const MobileNav = () => {
   const location = useLocation();

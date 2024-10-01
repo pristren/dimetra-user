@@ -10,7 +10,7 @@ import { registerAnUser } from "../apis/register";
 import { useNavigate } from "react-router-dom";
 import { uploadFile } from "@/utils";
 import AppModal from "@/components/common/AppModal";
-import TickMarkImage from "@/assets/icons/TickMarkImage";
+import { TickMarkImage } from "@/assets/icons";
 
 const validateEmail = (email) => {
   return String(email)

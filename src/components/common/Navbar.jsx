@@ -1,5 +1,4 @@
-import { DefaultAvatar, Logo } from "@/assets/icons";
-import DimetraMobileLogo from "@/assets/icons/DimetraMobileLogo";
+import { DefaultAvatar, DimetraMobileLogo, Logo } from "@/assets/icons";
 import Language from "@/components/helper-ui/Language";
 import MobileNav from "@/layout/order-layout/MobileNav";
 import { setProfileImageLoaded } from "@/redux/slices/user/userSlice";
