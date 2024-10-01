@@ -165,11 +165,15 @@ const PreviewDetails = ({
                   Select Recurring Type:
                 </h3>
                 <AppSelect
-                  items={["Week", "Free"]}
-                  placeholder="Week"
-                  defaultValue={transportationData.recurring_type}
-                  disabled
-                />
+  items={[
+    { value: "week", label: "Week" },
+    { value: "free", label: "Free" },
+  ]}
+  placeholder="Week"
+  defaultValue={transportationData.recurring_type}
+  disabled
+/>
+
 
                 {transportationData.recurring_type === "Week" ? (
                   <div className="">
