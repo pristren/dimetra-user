@@ -19,6 +19,9 @@ import { useMutation } from "@apollo/client";
 import { CREATE_AN_ORDER } from "@/pages/order/create-order/graphql/mutations/createAnOrder.gql";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import AppModal from "@/components/common/AppModal";
+import { useState } from "react";
+import { SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
 
 const PreviewDetails = ({
   createOrderData,
@@ -28,10 +31,7 @@ const PreviewDetails = ({
   setStartDate,
   selectedWeekdays,
   returnDate,
-  setReturnDate,
   dropDate,
-  setDropDate,
-  setShowPreview,
 }) => {
   const {
     transportationData,
@@ -39,7 +39,7 @@ const PreviewDetails = ({
     destinationDetailsData,
     billingDetailsData,
   } = createOrderData;
-
+  const [showModal, setShowModal] = useState(false);
   const calculateMonthlyOccurrences = (weekdays) => {
     return weekdays.length * 4;
   };
@@ -47,9 +47,12 @@ const PreviewDetails = ({
   const navigate = useNavigate();
   const handleCreateAnOrder = async () => {
     const updatedData = { ...createOrderData };
+    console.log(updatedData);
+
     if (updatedData?.transportationData?.type_of_transport !== "recurring") {
       delete updatedData.transportationData?.recurring_type;
     }
+
     try {
       const { data } = await createAnOrder({
         variables: {
@@ -57,26 +60,29 @@ const PreviewDetails = ({
         },
       });
       if (data?.createAnOrder?.id) {
-        localStorage.removeItem("createOrderData");
-        navigate("/orders/all-orders");
-        setShowPreview(false);
+        // localStorage.removeItem("createOrderData");
+        setShowModal(true);
       }
     } catch (error) {
       const { message, response } = error;
       console.error(message, response);
     }
   };
+  const closeModal = () => {
+    setShowModal(false);
+    navigate("/orders/all-orders");
+  };
 
   return (
     <div className="p-2">
       {/* Single Card for all details */}
-      <Card className="w-full px-5 py-5 border-none shadow-none">
+      <Card className="w-full lg:px-5 lg:py-5 text-left border-none shadow-none">
         <CardHeader>
           <CardTitle className="title">Preview Details</CardTitle>
         </CardHeader>
-        <CardContent className="px-10">
+        <CardContent className="lg:px-10">
           <div className="space-y-8">
-            <div className="grid grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
               <div className="pr-5">
                 <h6 className="mb-4">
                   Type of transport
@@ -158,7 +164,10 @@ const PreviewDetails = ({
                   Select Recurring Type:
                 </h3>
                 <AppSelect
-                  items={["Week", "Free"]}
+                  items={[
+                    { value: "week", label: "Week" },
+                    { value: "free", label: "Free" },
+                  ]}
                   placeholder="Week"
                   defaultValue={transportationData.recurring_type}
                   disabled
@@ -204,7 +213,7 @@ const PreviewDetails = ({
                       Select Weekdays
                       <span className="highlight">(multiple selection)</span>:
                     </h3>
-                    <div className="grid grid-cols-3 gap-3 mt-2">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-2">
                       {weekdaysOptions.map((option) => (
                         <div
                           key={option.value}
@@ -295,7 +304,7 @@ const PreviewDetails = ({
             )}
             <div>
               <h6 className="title mb-10">Patient Details</h6>
-              <div className="grid grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
                     Name <sup className="text-[13px]">*</sup>
@@ -405,7 +414,7 @@ const PreviewDetails = ({
             {/* Destination Details */}
             <div>
               <h6 className="title mb-10">Destination Details</h6>
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 <div className="pr-5">
                   <h6 className="mb-8">Pick-Up</h6>
                   <div className="mb-5">
@@ -620,7 +629,7 @@ const PreviewDetails = ({
             {/* Billing Details */}
             <div>
               <h6 className="title mb-10">Billing Address</h6>
-              <div className="grid grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
                     Prename/Institution
@@ -676,6 +685,15 @@ const PreviewDetails = ({
               Submit
             </Button>
           </div>
+          {showModal && (
+            <AppModal
+              icon={<SuccessfullyCreatedOrderModalImage />}
+              head="Order sent successfully"
+              details="Your order has been placed successfully! Thank you for Order"
+              buttonText="Continue"
+              onClose={closeModal}
+            />
+          )}
         </CardContent>
       </Card>
     </div>
