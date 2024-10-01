@@ -16,27 +16,24 @@ import { GET_ALL_ORDERS } from "../order-details/graphql/queries/getAllOrders.gq
 import { DELETE_AN_ORDER } from "./graphql/mutations/deleteOrder.gql";
 import moment from "moment";
 import { UPDATE_ORDER_STATUS } from "./graphql/mutations/updateOrderStatus.gql";
+import { transportOptions } from "@/components/create-order-forms/helpers";
 
 const AllOrders = () => {
-  const [date, setDate] = useState(null);
-  const filters = [
-    "All Order",
-    "Recurring",
-    "Transfer trip",
-    "Investigation trip",
-    "Private trips",
-    "Collection order",
-  ];
-
+  const [queryData, setQueryData] = useState({
+    filter_by: "all_order",
+    page: 1,
+  });
+  const [totalPage, setTotalPage] = useState(null);
   const [data, setData] = useState([]);
 
-  const [getAllOrders] = useLazyQuery(GET_ALL_ORDERS, {
-    variables: {},
+  const [getAllOrders, { loading }] = useLazyQuery(GET_ALL_ORDERS, {
+    variables: { queryData },
     errorPolicy: "all",
     fetchPolicy: "no-cache",
     onCompleted: (response) => {
+      setTotalPage(response.getAllOrders?.totalPages);
       setData(
-        response.getAllOrders
+        response.getAllOrders?.data
           ?.filter((order) => order.status !== "completed")
           ?.map((order) => ({
             ...order,
@@ -309,11 +306,16 @@ const AllOrders = () => {
         }}
         isDateVisible={true}
         isFilterVisible={true}
-        date={date}
-        setDate={setDate}
-        filters={filters}
+        queryData={queryData}
+        setQueryData={setQueryData}
+        filters={[
+          { value: "all_order", label: "All order" },
+          ...transportOptions,
+        ]}
         isSearchVisible={true}
         isRecurring={false}
+        totalPage={totalPage}
+        isLoading={loading}
       />
     </div>
   );

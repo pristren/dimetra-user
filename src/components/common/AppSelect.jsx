@@ -13,14 +13,15 @@ const AppSelect = ({
   isTime = false,
   className,
   onValueChange,
-  defaultValue,
+  value,
   disabled = false,
 }) => {
   return (
     <Select
       disabled={disabled}
       onValueChange={onValueChange}
-      defaultValue={defaultValue}
+      defaultValue={items?.find((f) => f?.value === value)}
+      value={items?.find((f) => f?.value === value)}
     >
       <SelectTrigger isTime={isTime} className={className}>
         <SelectValue placeholder={placeholder} />
@@ -28,7 +29,7 @@ const AppSelect = ({
       <SelectContent>
         {items?.map((item, i) => (
           <SelectItem key={i} value={item}>
-            {item}
+            {item?.label}
           </SelectItem>
         ))}
       </SelectContent>

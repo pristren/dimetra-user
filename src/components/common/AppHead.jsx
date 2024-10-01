@@ -14,6 +14,7 @@ import AppSelect from "@/components/common/AppSelect";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import useDebounce from "@/hooks/useDebounce";
 
 export default function AppHead({
   pageTitle,
@@ -24,8 +25,8 @@ export default function AppHead({
   addButton = {
     visibility: false,
   },
-  date,
-  setDate,
+  queryData,
+  setQueryData,
   filters,
   isDateVisible,
   isFilterVisible,
@@ -39,6 +40,10 @@ export default function AppHead({
   getData = () => {},
 }) {
   const [requestModalOpen, setRequestModalOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+  const handleSearchInputChange = useDebounce((value) => {
+    setQueryData((prev) => ({ ...prev, search_keyword: value || undefined }));
+  }, 500);
   return (
     <div className="flex items-center justify-between gap-5 w-full mb-10">
       <div className="flex items-center gap-3">
@@ -56,7 +61,14 @@ export default function AppHead({
           </div>
         )}
 
-        {isDateVisible && <DatePicker date={date} setDate={setDate} />}
+        {isDateVisible && (
+          <DatePicker
+            date={queryData?.date}
+            setDate={(value) =>
+              setQueryData((prev) => ({ ...prev, date: value }))
+            }
+          />
+        )}
       </div>
       <div className="flex items-center gap-4">
         {isFilterVisible && (
@@ -64,12 +76,9 @@ export default function AppHead({
             items={filters}
             placeholder="Filters"
             className="max-w-sm"
+            value={queryData?.filter_by}
             onValueChange={(event) => {
-              if (event === "All Order") {
-                table?.setGlobalFilter("");
-              } else {
-                table?.setGlobalFilter(event);
-              }
+              setQueryData((prev) => ({ ...prev, filter_by: event?.value }));
             }}
           />
         )}
@@ -78,8 +87,11 @@ export default function AppHead({
           <div className="relative">
             <Input
               placeholder="Search By Any Field"
-              value={globalFilter ?? ""}
-              onChange={(event) => setGlobalFilter(event.target.value)}
+              value={searchValue}
+              onChange={(event) => {
+                setSearchValue(event.target.value);
+                handleSearchInputChange(event.target.value);
+              }}
               className="w-72 h-10"
             />
             <Search className="absolute right-2 top-1/2 -translate-y-1/2" />
