@@ -24,3 +24,4 @@ export { default as ErrorCrossImage } from "./ErrorCrossImage.jsx";
 export { default as WarningImage } from "./WarningImage.jsx";
 export { default as Search } from "./Search.jsx";
 export { default as Notification } from "./Notification.jsx";
+export { default as GoldenStar } from "./GoldenStar.jsx";
