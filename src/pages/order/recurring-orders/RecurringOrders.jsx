@@ -48,15 +48,18 @@ const RecurringOrders = () => {
   useEffect(() => {
     getAllRecurringOrders();
   }, []);
-  const [updateOrderStatus] = useMutation(UPDATE_RECCURING_ORDER_STATUS, {
-    onCompleted: (data) => {
-      console.log("Order status updated:", data);
-      getAllRecurringOrders();
-    },
-    onError: (err) => {
-      console.error("Error updating order status:", err);
-    },
-  });
+  const [updateRecurringOrderStatus] = useMutation(
+    UPDATE_RECCURING_ORDER_STATUS,
+    {
+      onCompleted: (data) => {
+        console.log("Order status updated:", data);
+        getAllRecurringOrders();
+      },
+      onError: (err) => {
+        console.error("Error updating order status:", err);
+      },
+    }
+  );
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -76,8 +79,8 @@ const RecurringOrders = () => {
     }
   };
 
-  const updateAnOrderStatus = (orderId, status) => {
-    updateOrderStatus({
+  const updateARecurringOrderStatus = (orderId, status) => {
+    updateRecurringOrderStatus({
       variables: {
         queryData: { id: orderId },
         inputData: { status },
@@ -228,7 +231,9 @@ const RecurringOrders = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="flex items-center gap-3 text-[16px] mb-2 py-2"
-                  onClick={() => updateAnOrderStatus(row.original.id, "paused")}
+                  onClick={() =>
+                    updateARecurringOrderStatus(row.original.id, "paused")
+                  }
                 >
                   <Pause className="size-5" />
                   <span className="text-gray-700 text-sm">Pause</span>

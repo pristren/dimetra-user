@@ -16,6 +16,11 @@ import { GET_ALL_ORDERS } from "../order-details/graphql/queries/getAllOrders.gq
 import moment from "moment";
 
 const OrderHistory = () => {
+  const [queryData, setQueryData] = useState({
+    filter_by: "all_order",
+    page: 1,
+  });
+  const [totalPage, setTotalPage] = useState(null);
   const [date, setDate] = useState(null);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const printRef = useRef();
@@ -33,15 +38,21 @@ const OrderHistory = () => {
   const [data, setData] = useState([]);
 
   const [getAllOrders] = useLazyQuery(GET_ALL_ORDERS, {
-    variables: {},
+    variables: {
+      queryData,
+    },
     errorPolicy: "all",
     fetchPolicy: "no-cache",
     onCompleted: (response) => {
+      setTotalPage(response.getAllOrders?.totalPages);
+
       setData(
-        response.getAllOrders
+        response.getAllOrders?.data
           ?.filter(
             (order) =>
-              order.status === "completed" || order.status === "rejected"
+              order.status === "completed" ||
+              order.status === "rejected" ||
+              order.status === "deleted"
           )
           .map((order) => ({
             ...order,
@@ -82,6 +93,8 @@ const OrderHistory = () => {
         return "#FEF1E0";
       case "completed":
         return "#D1F8D5";
+      case "deleted":
+        return "#F9D1D1";
       default:
         return "#FFFFFF";
     }
@@ -220,7 +233,10 @@ const OrderHistory = () => {
         return (
           <Link to="/orders/review/:id">
             <Button
-              disabled={row.getValue("status") === "Paused"}
+              disabled={
+                row.getValue("status") === "rejected" ||
+                row.getValue("status") === "deleted"
+              }
               className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs bg-[#D0EF0F] hover:bg-[#D0EF0F]"
             >
               Rate the driver
@@ -282,6 +298,9 @@ const OrderHistory = () => {
         filters={filters}
         isSearchVisible={true}
         isRecurring={false}
+        totalPage={totalPage}
+        queryData={queryData}
+        setQueryData={setQueryData}
       />
 
       <ReactToPrint
