@@ -22,3 +22,5 @@ export { default as PhoneCall } from "./PhoneCall.jsx";
 export { default as SuccessTickImage } from "./SuccessTickImage.jsx";
 export { default as ErrorCrossImage } from "./ErrorCrossImage.jsx";
 export { default as WarningImage } from "./WarningImage.jsx";
+export { default as Search } from "./Search.jsx";
+export { default as Notification } from "./Notification.jsx";

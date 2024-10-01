@@ -74,13 +74,14 @@ export default function AppHead({
           />
         )}
       </div>
-      {pageTitle === "All Orders" && pageTitle === "History" && (
+      {(pageTitle === "All Orders" || pageTitle === "History") && (
         <div className="flex items-center gap-2 lg:hidden">
           <Button>All</Button>
           <Button variant="outline">Assigned</Button>
           <Button variant="outline">Un-assigned</Button>
         </div>
       )}
+
       <div className="flex lg:items-center flex-col lg:flex-row gap-4">
         {isFilterVisible && (
           <AppSelect
@@ -103,7 +104,7 @@ export default function AppHead({
                 setSearchValue(event.target.value);
                 handleSearchInputChange(event.target.value);
               }}
-              className="w-72 h-10"
+              className="w-full lg:w-72 h-10"
             />
             <Search className="absolute right-2 top-1/2 -translate-y-1/2" />
           </div>

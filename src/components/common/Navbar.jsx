@@ -1,4 +1,4 @@
-import { DefaultAvatar, DimetraMobileLogo, Logo } from "@/assets/icons";
+import { DefaultAvatar, DimetraMobileLogo, Logo, Notification, Search } from "@/assets/icons";
 import Language from "@/components/helper-ui/Language";
 import MobileNav from "@/layout/order-layout/MobileNav";
 import { setProfileImageLoaded } from "@/redux/slices/user/userSlice";
@@ -30,8 +30,10 @@ export default function Navbar() {
           <DimetraMobileLogo />
         </Link>
       </div>
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 lg:gap-6">
+        <Search className="cursor-pointer" />
         <Language />
+        <Notification className="cursor-pointer" />
         <div className="flex items-center gap-2">
           {userInfo?.profile_image ? (
             <div className="flex items-center">
