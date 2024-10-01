@@ -35,7 +35,10 @@ const AllOrders = () => {
       setTotalPage(response.getAllOrders?.totalPages);
       setData(
         response.getAllOrders?.data
-          ?.filter((order) => order.status !== "completed")
+          ?.filter(
+            (order) =>
+              order.status !== "completed" && order.status !== "deleted"
+          )
           ?.map((order) => ({
             ...order,
             destinationDetailsData: {
@@ -69,15 +72,15 @@ const AllOrders = () => {
     getAllOrders();
   }, []);
 
-  const [deleteAnOrder] = useMutation(DELETE_AN_ORDER, {
-    onCompleted: (data) => {
-      console.log("Order deleted:", data);
-      getAllOrders();
-    },
-    onError: (err) => {
-      console.error("Error deleting order:", err);
-    },
-  });
+  //   const [deleteAnOrder] = useMutation(DELETE_AN_ORDER, {
+  //     onCompleted: (data) => {
+  //       console.log("Order deleted:", data);
+  //       getAllOrders();
+  //     },
+  //     onError: (err) => {
+  //       console.error("Error deleting order:", err);
+  //     },
+  //   }); // this will be removed with backend as well
 
   const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS, {
     onCompleted: (data) => {
@@ -104,11 +107,11 @@ const AllOrders = () => {
     }
   };
 
-  const handleDeleteOrder = (orderId) => {
-    deleteAnOrder({
-      variables: { queryData: { id: orderId } },
-    });
-  };
+  //   const handleDeleteOrder = (orderId) => {
+  //     deleteAnOrder({
+  //       variables: { queryData: { id: orderId } },
+  //     });
+  //   };
 
   const updateAnOrderStatus = (orderId, status) => {
     updateOrderStatus({
@@ -261,7 +264,7 @@ const AllOrders = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
-                  onClick={() => handleDeleteOrder(orderId)}
+                  onClick={() => updateAnOrderStatus(orderId, "deleted")}
                 >
                   <Trash className="size-5" />
                   <span className="text-gray-700 text-sm">{t("storno")}</span>
