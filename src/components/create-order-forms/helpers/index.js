@@ -1,38 +1,39 @@
+import { t } from "i18next";
+
 export const transportOptions = [
-  { value: "transfer_trip", label: "Transfer trip" },
-  { value: "investigation_trip", label: "Investigation trip" },
-  { value: "private_trips", label: "Private trips" },
-  { value: "collection_order", label: "Collection order" },
-  { value: "recurring", label: "Recurring" },
+  { value: "transfer_trip", label: t("transfer_trip") },
+  { value: "investigation_trip", label: t("investigation_trip") },
+  { value: "private_trips", label: t("private_trips") },
+  { value: "collection_order", label: t("collection_order") },
+  { value: "recurring", label: t("recurring") },
 ];
 
 export const transportModesOptions = [
-  { value: "relocation", label: "Relocation" },
-  { value: "wheelchair_mts", label: "Wheelchair (MTS)" },
-  { value: "own_wheelchair", label: "In Own Wheelchair" },
-  { value: "lying_down", label: "Lying Down" },
-  { value: "pedestrian", label: "Pedestrian" },
-  { value: "second_transport_helper", label: "Second Transport Helper" },
-  { value: "carrying_chair", label: "Carrying Chair" },
+  { value: "relocation", label: t("relocation") },
+  { value: "wheelchair_mts", label: t("wheelchair_mts") },
+  { value: "own_wheelchair", label: t("own_wheelchair") },
+  { value: "lying_down", label: t("lying_down") },
+  { value: "pedestrian", label: t("pedestrian") },
+  { value: "second_transport_helper", label: t("second_transport_helper") },
+  { value: "carrying_chair", label: t("carrying_chair") },
 ];
 
 export const transportWithOptions = [
-  { value: "none_of_that", label: "None of That" },
-  { value: "infusion", label: "Infusion" },
-  { value: "infusomat", label: "Infusomat" },
-  { value: "accompanying_reason", label: "Accompanying Reason" },
-  { value: "oxygen_liters_per_min", label: "Oxygen (Liters/Min)" },
+  { value: "none_of_that", label: t("none_of_that") },
+  { value: "infusion", label: t("infusion") },
+  { value: "infusomat", label: t("infusomat") },
+  { value: "accompanying_reason", label: t("accompanying_reason") },
+  { value: "oxygen_liters_per_min", label: t("oxygen_liters_per_min") },
 ];
 
-
 export const weekdaysOptions = [
-  { value: "monday", label: "Monday" },
-  { value: "tuesday", label: "Tuesday" },
-  { value: "wednesday", label: "Wednesday" },
-  { value: "thursday", label: "Thursday" },
-  { value: "friday", label: "Friday" },
-  { value: "saturday", label: "Saturday" },
-  { value: "sunday", label: "Sunday" },
+  { value: "monday", label: t("monday") },
+  { value: "tuesday", label: t("tuesday") },
+  { value: "wednesday", label: t("wednesday") },
+  { value: "thursday", label: t("thursday") },
+  { value: "friday", label: t("friday") },
+  { value: "saturday", label: t("saturday") },
+  { value: "sunday", label: t("sunday") },
 ];
 
 export const durationOptions = [
@@ -41,6 +42,7 @@ export const durationOptions = [
   { value: "6months", label: "6 Months" },
   { value: "1year", label: "After 1 Year" },
 ];
+
 
 export const timeOptions = [
   "00:00",

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Select,
   SelectContent,
@@ -6,26 +6,58 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useTranslation } from "react-i18next";
+
 import { UsaLogo, GermanyLogo } from "@/assets/icons";
+
 export default function Language() {
+  const { i18n } = useTranslation();
   const languages = [
     {
       icon: <UsaLogo />,
       name: "English",
+      value: "en",
     },
     {
       icon: <GermanyLogo />,
       name: "German",
+      value: "de",
     },
   ];
+
   const [defaultLanguage, setDefaultLanguage] = useState(languages[0]);
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
+  const handleLanguageChange = (language) => {
+    localStorage.setItem("languageCode", language.value);
+    changeLanguage(language.value);
+    setDefaultLanguage(language);
+  };
+
+  useEffect(() => {
+    const savedLanguageCode = localStorage.getItem("languageCode");
+    if (savedLanguageCode) {
+      const savedLanguage = languages.find(
+        (lang) => lang.value === savedLanguageCode
+      );
+      if (savedLanguage) {
+        setDefaultLanguage(savedLanguage);
+        changeLanguage(savedLanguage.value);
+      }
+    }
+  }, []);
 
   return (
     <Select
-      value={defaultLanguage}
-      onValueChange={(value) => setDefaultLanguage(value)}
+      value={defaultLanguage.value}
+      onValueChange={(value) =>
+        handleLanguageChange(languages.find((lang) => lang.value === value))
+      }
     >
-      <SelectTrigger className="w-min focus:ring-0  focus:ring-offset-0 border-none">
+      <SelectTrigger className="w-min focus:ring-0 focus:ring-offset-0 border-none">
         <SelectValue asChild placeholder="">
           <div className="flex items-center gap-2">
             <p className="text-4xl mb-0">{defaultLanguage.icon}</p>
@@ -35,10 +67,10 @@ export default function Language() {
       </SelectTrigger>
       <SelectContent className="w-min">
         {languages.map((language, i) => (
-          <SelectItem className="px-2 py-1" key={i} value={language}>
+          <SelectItem className="px-2 py-1" key={i} value={language.value}>
             <div className="flex items-center gap-2">
               {language.icon}
-              <p> {language.name}</p>
+              <p>{language.name}</p>
             </div>
           </SelectItem>
         ))}

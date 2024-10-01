@@ -1,6 +1,7 @@
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Logo, Logout } from "@/assets/icons";
 import { CarFront, ClipboardList, MessageCircle, Settings } from "lucide-react";
+import { t } from "i18next";
 
 const LeftSideNav = () => {
   const location = useLocation();
@@ -11,6 +12,7 @@ const LeftSideNav = () => {
     sessionStorage.removeItem("access_token");
     navigate("/login");
   };
+
   return (
     <div className="w-60 h-screen border-r text-gray-500 p-4 pt-8 sticky top-0">
       <Link to="/">
@@ -25,7 +27,7 @@ const LeftSideNav = () => {
         }`}
       >
         <ClipboardList />
-        <p>All Orders</p>
+        <p>{t("all_orders")}</p>
       </Link>
       <Link
         to="/orders/history"
@@ -34,7 +36,7 @@ const LeftSideNav = () => {
         }`}
       >
         <CarFront />
-        <p>History</p>
+        <p>{t("history")}</p>
       </Link>
       <Link
         to="/orders/setting"
@@ -43,7 +45,7 @@ const LeftSideNav = () => {
         }`}
       >
         <Settings />
-        <p>Settings</p>
+        <p>{t("settings")}</p>
       </Link>
       <Link
         to="/orders/sent-requests"
@@ -54,14 +56,14 @@ const LeftSideNav = () => {
         }`}
       >
         <MessageCircle />
-        <p>Sent Request</p>
+        <p>{t("sent_requests")}</p>
       </Link>
       <div
         onClick={handleLogout}
         className="flex justify-center text-lg items-center gap-2 absolute bottom-5 cursor-pointer px-2 py-2"
       >
         <Logout />
-        Logout
+        <p>{t("logout")}</p>
       </div>
     </div>
   );

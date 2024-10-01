@@ -26,6 +26,7 @@ import {
 } from "@/components/create-order-forms/helpers";
 import { useEffect } from "react";
 import { calculateFormProgress } from "@/utils";
+import { t } from "i18next";
 
 const TransportationDetails = ({
   handleFormChange,
@@ -158,7 +159,7 @@ const TransportationDetails = ({
   return (
     <Card className="w-[70%] px-5 py-5">
       <CardHeader>
-        <CardTitle className="title">Transportation details</CardTitle>
+        <CardTitle className="title">{t("transportation_details")}</CardTitle>
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
@@ -166,8 +167,8 @@ const TransportationDetails = ({
             <div className="grid grid-cols-3 gap-5">
               <div className="pr-5">
                 <h6 className="mb-6">
-                  Type of transport
-                  <span className="highlight">(simple selection)</span>
+                {t("type_of_transport")}
+                  <span className="highlight">({t("simple_selection")})</span>
                 </h6>
                 <FormField
                   control={form.control}
@@ -209,8 +210,8 @@ const TransportationDetails = ({
 
               <div className="pr-5">
                 <h6 className="mb-6">
-                  Mode of transportation{" "}
-                  <span className="highlight">(multiple selection)</span>
+                  {t("mode_of_transportation")}
+                  <span className="highlight">({t("multiple_selection")})</span>
                 </h6>
                 {transportModesOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
@@ -235,8 +236,8 @@ const TransportationDetails = ({
 
               <div>
                 <h6 className="mb-6">
-                  Transport with{" "}
-                  <span className="highlight">(multiple selection)</span>
+                  {t("transport_with")}
+                  <span className="highlight">({t("multiple_selection")})</span>
                 </h6>
                 {transportWithOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
@@ -262,7 +263,7 @@ const TransportationDetails = ({
             {transportationData?.type_of_transport === "recurring" && (
               <div>
                 <h3 className="text-lg font-medium mb-3 mt-5">
-                  Select Recurring Type:
+                  {t("select_recurring_type")}:
                 </h3>
                 <AppSelect
                   items={["Week", "Free"]}
@@ -276,7 +277,7 @@ const TransportationDetails = ({
                 {transportationData.recurring_type === "Week" ? (
                   <div className="">
                     <h3 className="text-lg font-medium mt-10 mb-5">
-                      Select Start Date and Time*:
+                      {t("select_start_date_and_time")}*:
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
                       <DatePicker
@@ -296,8 +297,8 @@ const TransportationDetails = ({
                     </div>
 
                     <h3 className="text-lg font-medium mt-10 mb-5">
-                      Select Return Date Time{" "}
-                      <span className="highlight">(optional)</span>:
+                    {t("select_return_date_time")}
+                      <span className="highlight">({t("optional")})</span>:
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
                       <DatePicker date={endDate} setDate={setEndDate} />
@@ -313,8 +314,11 @@ const TransportationDetails = ({
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
-                      Select Weekdays{" "}
-                      <span className="highlight">(multiple selection)</span>:
+                    {t("select_weekdays")}
+                      <span className="highlight">
+                        ({t("multiple_selection")})
+                      </span>
+                      :
                     </h3>
                     <div className="grid grid-cols-3 gap-3 mt-2">
                       {weekdaysOptions.map((option) => (
@@ -336,7 +340,7 @@ const TransportationDetails = ({
                       ))}
                     </div>
 
-                    <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
+                    <h3 className="text-lg font-medium mb-3 mt-5">{t("ends")}:</h3>
                     <FormField
                       control={form.control}
                       name="duration"
@@ -372,7 +376,7 @@ const TransportationDetails = ({
                     />
 
                     <h2 className="text-lg font-semibold mt-5">
-                      Summary: Monthly on day{" "}
+                    {t("summary_monthly_on_day")}
                       {calculateMonthlyOccurrences(selectedWeekdays)}
                     </h2>
                   </div>
@@ -380,7 +384,7 @@ const TransportationDetails = ({
                   <div className="">
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                        Select Start Date and Time* (max 60):
+                      {t("select_return_date_and_time")}* (max 60):
                       </h3>
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
@@ -406,7 +410,7 @@ const TransportationDetails = ({
                     </div>
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                        Select Return Date and Time:
+                      {t("select_return_date_and_time")}:
                       </h3>
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
@@ -443,7 +447,7 @@ const TransportationDetails = ({
                 className="mt-5 bg-secondary text-black hover:text-white px-12"
                 onClick={() => handleFormChange("patientDetails")}
               >
-                Next
+                {t("next")}
               </Button>
             </div>
           </form>

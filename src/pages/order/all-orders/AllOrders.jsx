@@ -17,6 +17,7 @@ import { DELETE_AN_ORDER } from "./graphql/mutations/deleteOrder.gql";
 import moment from "moment";
 import { UPDATE_ORDER_STATUS } from "./graphql/mutations/updateOrderStatus.gql";
 import { transportOptions } from "@/components/create-order-forms/helpers";
+import { t } from "i18next";
 
 const AllOrders = () => {
   const [queryData, setQueryData] = useState({
@@ -126,7 +127,7 @@ const AllOrders = () => {
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Date & Time
+          {t("date_time")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -143,7 +144,7 @@ const AllOrders = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Pick Up
+          {t("pick_up")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -155,7 +156,7 @@ const AllOrders = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Destination
+          {t("destination")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -167,7 +168,7 @@ const AllOrders = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Driver
+          {t("driver")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -182,7 +183,7 @@ const AllOrders = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Patient Name
+          {t("patient_name")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -194,7 +195,7 @@ const AllOrders = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Order Type
+          {t("order_type")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -210,7 +211,7 @@ const AllOrders = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Status
+          {t("status")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -232,7 +233,7 @@ const AllOrders = () => {
       accessorKey: "action",
       header: () => (
         <div className="text-center flex items-center justify-center">
-          Action
+          {t("action")}
           <ArrowUpDown className="h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -255,7 +256,7 @@ const AllOrders = () => {
                     className="flex items-center gap-3 text-[16px] cursor-pointer"
                   >
                     <Pencil className="size-5" />
-                    <span className="text-gray-700 text-sm">Edit</span>
+                    <span className="text-gray-700 text-sm">{t("edit")}</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -263,7 +264,7 @@ const AllOrders = () => {
                   onClick={() => handleDeleteOrder(orderId)}
                 >
                   <Trash className="size-5" />
-                  <span className="text-gray-700 text-sm">Storno</span>
+                  <span className="text-gray-700 text-sm">{t("storno")}</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="py-2 mb-2 cursor-pointer">
                   <Link
@@ -275,7 +276,7 @@ const AllOrders = () => {
                     className="flex items-center gap-3 text-[16px]"
                   >
                     <Document className="size-5" />
-                    <span className="text-gray-700 text-sm">View Details</span>
+                    <span className="text-gray-700 text-sm">{t("view_details")}</span>
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
@@ -283,7 +284,7 @@ const AllOrders = () => {
                   onClick={() => updateAnOrderStatus(orderId, "paused")}
                 >
                   <Pause className="size-5" />
-                  <span className="text-gray-700 text-sm">Pause</span>
+                  <span className="text-gray-700 text-sm">{t("pause")}</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -298,10 +299,10 @@ const AllOrders = () => {
       <AppTable
         columns={columns}
         data={data}
-        pageTitle={"All Orders"}
+        pageTitle={t("all_orders")}
         addButton={{
           visibility: true,
-          name: "Make an order",
+          name: t('make_an_order'),
           url: "/create-order",
         }}
         isDateVisible={true}
@@ -309,7 +310,7 @@ const AllOrders = () => {
         queryData={queryData}
         setQueryData={setQueryData}
         filters={[
-          { value: "all_order", label: "All order" },
+          { value: "all_order", label: t("all_order") },
           ...transportOptions,
         ]}
         isSearchVisible={true}
