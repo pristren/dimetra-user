@@ -265,7 +265,10 @@ const TransportationDetails = ({
                   Select Recurring Type:
                 </h3>
                 <AppSelect
-                  items={["Week", "Free"]}
+                    items={[
+                      { value: "week", label: "Week" },
+                      { value: "free", label: "Free" },
+                    ]}
                   defaultValue={transportationData.recurring_type}
                   onValueChange={(value) =>
                     updateCreateOrderData("recurring_type", value)
