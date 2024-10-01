@@ -1,4 +1,4 @@
-import { Security } from "@/assets/icons";
+import { Human, PhoneCall, Security } from "@/assets/icons";
 import AppDialog from "@/components/common/AppDialog";
 import AppUserDetails from "@/components/common/AppUserDetails";
 import {
@@ -19,7 +19,6 @@ import {
   setProfileImageLoaded,
   setUserInfo,
 } from "@/redux/slices/user/userSlice";
-import axios from "axios";
 import { UPDATE_AN_USER_PASSWORD } from "./graphql/mutations/updateUserPassword.gql";
 import toast from "react-hot-toast";
 import { uploadFile } from "@/utils";
@@ -157,8 +156,8 @@ const OrderSettings = () => {
       </div>
       <div className="bg-white border border-gray-300 rounded-lg mt-8">
         <div className="flex items-center justify-between p-8">
-          <div className="flex items-center justify-center gap-5">
-            <div className="h-52 w-52 rounded-3xl border-[8px] border-white shadow-xl">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-5">
+            <div className="h-56 w-56 rounded-3xl border-[8px] border-white shadow-xl">
               {!profileImageLoaded && (
                 <div className="w-full h-full rounded-3xl  bg-gray-200 animate-pulse"></div>
               )}
@@ -176,15 +175,38 @@ const OrderSettings = () => {
                 }}
               />
             </div>
+            <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
+              <DialogTrigger className="bg-white hover:bg-gray-200 rounded-md py-2 px-5 text-blue-500 w-full shadow-xl lg:hidden">
+                Edit
+              </DialogTrigger>
+              <DialogContent className="w-[90%] max-w-3xl">
+                <DialogHeader>
+                  <DialogTitle>Edit Profile</DialogTitle>
+                  <AppUserDetails
+                    form={form}
+                    onSubmit={onSubmitUserDetails}
+                    selectedFile={selectedFile}
+                    setSelectedFile={setSelectedFile}
+                    loading={loading}
+                  />
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
             <div>
-              <p className="mb-2 w-full text-3xl">
-                {userInfo?.first_name} {userInfo?.last_name}
-              </p>
-              <p className=" w-full text-xl">{userInfo?.phone}</p>
+              <div className="flex items-center justify-center lg:justify-start gap-2 mb-4">
+                <Human className="lg:hidden" />
+                <h4>
+                  {userInfo?.first_name} {userInfo?.last_name}
+                </h4>
+              </div>
+              <div className="flex items-center justify-center lg:justify-start gap-2">
+                <PhoneCall className="lg:hidden" />
+                <p className="font-medium">{userInfo?.phone}</p>
+              </div>
             </div>
           </div>
           <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
-            <DialogTrigger className="bg-gray-100 hover:bg-gray-200 shadow-xl rounded-full py-2 px-5 text-blue-500">
+            <DialogTrigger className="bg-gray-100 hover:bg-gray-200 shadow-xl rounded-full py-2 px-5 text-blue-500 hidden lg:block">
               Edit
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-3xl">
@@ -201,26 +223,26 @@ const OrderSettings = () => {
             </DialogContent>
           </Dialog>
         </div>
-        <div className="mt-20 ">
-          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
+        <div className="mt-10 lg:mt-20">
+          <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className=" ml-3 text-gray-500 w-40">Email</p>
-            <p className="">{userInfo?.email}</p>
+            <p className="font-medium lg:font-normal">{userInfo?.email}</p>
           </div>
-          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
+          <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className=" ml-3 text-gray-500 w-40">Address</p>
-            <p className="">{userInfo?.address}</p>
+            <p className="font-medium lg:font-normal">{userInfo?.address}</p>
           </div>
-          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
+          <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className=" ml-3 text-gray-500 w-40">Billing address</p>
-            <p className="">{userInfo?.billing_address}</p>
+            <p className="font-medium lg:font-normal">{userInfo?.billing_address}</p>
           </div>
-          <div className="flex items-center gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
+          <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className=" ml-3 text-gray-500 w-40">Code</p>
-            <p className="">{userInfo?.code}</p>
+            <p className="font-medium lg:font-normal">{userInfo?.code}</p>
           </div>
-          <div className="flex items-center gap-20 pb-5 px-5">
+          <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 pb-5 px-5">
             <p className=" ml-3 text-gray-500 w-40">Internal Koststelle</p>
-            <p className="">
+            <p className="font-medium lg:font-normal">
               {userInfo?.internal_cost_center || "Not available"}
             </p>
           </div>

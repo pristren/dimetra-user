@@ -11,7 +11,7 @@ const SelectGroup = SelectPrimitive.Group;
 const SelectValue = SelectPrimitive.Value;
 
 const SelectTrigger = React.forwardRef(
-  ({ className, children, isTime, ...props }, ref) => (
+  ({ className, children, isTime, isDownArrowHidden, ...props }, ref) => (
     <SelectPrimitive.Trigger
       ref={ref}
       className={cn(
@@ -21,9 +21,15 @@ const SelectTrigger = React.forwardRef(
       {...props}
     >
       {children}
-      <SelectPrimitive.Icon asChild>
-        {isTime ? <Clock  className="h-4 w-4 opacity-50" /> : <ChevronDown className="h-4 w-4 opacity-50" />}
-      </SelectPrimitive.Icon>
+      {!isDownArrowHidden && (
+        <SelectPrimitive.Icon asChild>
+          {isTime ? (
+            <Clock className="h-4 w-4 opacity-50" />
+          ) : (
+            <ChevronDown className="h-4 w-4 opacity-50" />
+          )}
+        </SelectPrimitive.Icon>
+      )}
     </SelectPrimitive.Trigger>
   )
 );

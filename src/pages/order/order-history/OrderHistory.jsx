@@ -27,13 +27,14 @@ const OrderHistory = () => {
   const reactToPrintTriggerRef = useRef();
 
   const filters = [
-    "All Order",
-    "Recurring",
-    "Transfer trip",
-    "Investigation trip",
-    "Private trips",
-    "Collection order",
+    { value: "All Order", label: "All Order" },
+    { value: "Recurring", label: "Recurring" },
+    { value: "Transfer trip", label: "Transfer trip" },
+    { value: "Investigation trip", label: "Investigation trip" },
+    { value: "Private trips", label: "Private trips" },
+    { value: "Collection order", label: "Collection order" },
   ];
+ 
 
   const [data, setData] = useState([]);
 

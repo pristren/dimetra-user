@@ -9,6 +9,8 @@ import AppUserDetails from "@/components/common/AppUserDetails";
 import { registerAnUser } from "../apis/register";
 import { useNavigate } from "react-router-dom";
 import { uploadFile } from "@/utils";
+import AppModal from "@/components/common/AppModal";
+import { TickMarkImage } from "@/assets/icons";
 
 const validateEmail = (email) => {
   return String(email)
@@ -45,6 +47,8 @@ const formSchema = z
 const RegisterForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,29 +65,28 @@ const RegisterForm = () => {
     },
   });
 
-  const [selectedFile, setSelectedFile] = useState(null);
-
   const onSubmit = async (data) => {
     setLoading(true);
-
     const { confirmPassword, ...submitData } = data;
 
-    const profile_image = await uploadFile(selectedFile);
-    await registerAnUser({
-      ...submitData,
-      profile_image: profile_image || "",
-    })
-      .then((res) => {
-        if (res?.data?.token) {
-          navigate("/login");
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        setLoading(false);
+    try {
+      // Upload the file and register the user
+      const profile_image = await uploadFile(selectedFile);
+      await registerAnUser({
+        ...submitData,
+        profile_image: profile_image || "",
       });
+      setShowModal(true);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    navigate("/login");
   };
 
   return (
@@ -100,6 +103,15 @@ const RegisterForm = () => {
         setSelectedFile={setSelectedFile}
         loading={loading}
       />
+      {showModal && (
+        <AppModal
+          icon={<TickMarkImage />}
+          head="Registration Successful"
+          details="You have been successfully registered! Thank you for joining us."
+          buttonText="Login"
+          onClose={closeModal}
+        />
+      )}
     </Card>
   );
 };
