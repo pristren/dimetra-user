@@ -172,7 +172,7 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
 
   const renderMessages = () => {
     if (!messages || !Array.isArray(messages)) {
-      return <div>No messages to display.</div>;
+      return <div>No messages yet.</div>;
     }
 
     return messages.map((msg, index) => {
@@ -251,7 +251,7 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
   return (
     <div className="relative">
       <h4>Order #123456</h4>
-      <div className="bg-white border border-gray-200 rounded-md mt-3 h-[calc(100vh-3rem)]">
+      <div className="bg-white border border-gray-200 rounded-md mt-3 h-[calc(100vh-10rem)]">
         <div className="flex items-center justify-start gap-3 border-b border-gray-300 px-4 py-4">
           <DefaultAvatar className="w-10 h-10 rounded-full" />
           <div>
@@ -265,6 +265,21 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
 
         <div className="px-4 py-4 h-[calc(100vh-20rem)] overflow-y-auto hide-scrollbar">
           {renderMessages()}
+          <div className="flex flex-wrap gap-2 lg:gap-4 mt-4 px-14">
+            {selectedImages.map((image, index) => (
+              <div key={index} className="relative">
+                <img
+                  src={image}
+                  alt={`Selected ${index}`}
+                  className="w-12 lg:w-24 h-12 lg:h-24 rounded-md"
+                />
+                <X
+                  className="absolute -top-2 lg:-top-3 -right-2 lg:-right-3 p-1 size-5 lg:size-7 bg-white border rounded-full "
+                  onClick={() => handleRemoveImage(index)}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
         {images && (
@@ -291,43 +306,26 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
             </DialogContent>
           </Dialog>
         )}
-        <div>
-          <div className="flex flex-wrap gap-4 mt-4 px-14">
-            {selectedImages.map((image, index) => (
-              <div key={index} className="relative">
-                <img
-                  src={image}
-                  alt={`Selected ${index}`}
-                  className="w-12 lg:w-24 h-12 lg:h-24 rounded-md"
-                />
-                <X
-                  className="absolute -top-3 -right-3 p-1 size-7 bg-white border rounded-full "
-                  onClick={() => handleRemoveImage(index)}
-                />
-              </div>
-            ))}
+        <div className="flex items-center justify-center gap-3 w-full px-4 mt-auto bg-white  pt-3">
+          <div>
+            <Label htmlFor="image" className="cursor-pointer">
+              <Attach />
+            </Label>
+            <Input
+              type="file"
+              id="image"
+              className="hidden"
+              multiple
+              onChange={handleImageChange}
+            />
           </div>
-          <div className="flex items-center justify-center gap-3 w-full px-4 mt-auto bg-white  pt-3">
-            <div>
-              <Label htmlFor="image" className="cursor-pointer">
-                <Attach />
-              </Label>
-              <Input
-                type="file"
-                id="image"
-                className="hidden"
-                multiple
-                onChange={handleImageChange}
-              />
-            </div>
 
-            <div className="relative w-full border border-gray-200 rounded-md">
-              <Input
-                className="w-[95%] border-none"
-                placeholder="Type a message"
-              />
-              <Send className="absolute right-3 top-1/2 -translate-y-1/2" />
-            </div>
+          <div className="relative w-full border border-gray-200 rounded-md">
+            <Input
+              className="w-[95%] border-none"
+              placeholder="Type a message"
+            />
+            <Send className="absolute right-3 top-1/2 -translate-y-1/2" />
           </div>
         </div>
       </div>

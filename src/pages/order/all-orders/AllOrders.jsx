@@ -31,6 +31,7 @@ const AllOrders = () => {
     errorPolicy: "all",
     fetchPolicy: "no-cache",
     onCompleted: (response) => {
+      console.log(response);
       setTotalPage(response.getAllOrders?.totalPages);
       setData(
         response.getAllOrders?.data
