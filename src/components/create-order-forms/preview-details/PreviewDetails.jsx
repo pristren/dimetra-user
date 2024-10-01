@@ -56,7 +56,6 @@ const PreviewDetails = ({
           inputData: updatedData,
         },
       });
-      console.log(createOrderData);
       if (data?.createAnOrder?.id) {
         localStorage.removeItem("createOrderData");
         navigate("/orders/all-orders");
@@ -64,7 +63,7 @@ const PreviewDetails = ({
       }
     } catch (error) {
       const { message, response } = error;
-      console.log(message, response);
+      console.error(message, response);
     }
   };
 

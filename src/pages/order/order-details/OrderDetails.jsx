@@ -18,7 +18,7 @@ function OrderDetails() {
       setData(response.getAnOrder);
     },
     onError: (error) => {
-      console.log({ error });
+      console.error({ error });
     },
   });
 

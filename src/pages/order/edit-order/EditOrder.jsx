@@ -75,7 +75,7 @@ const EditOrder = () => {
       setEditOrderData(response.getAnOrder);
     },
     onError: (error) => {
-      console.log({ error });
+      console.error({ error });
     },
   });
 
