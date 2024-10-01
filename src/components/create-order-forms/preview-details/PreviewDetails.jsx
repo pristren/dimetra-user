@@ -59,14 +59,13 @@ const PreviewDetails = ({
           inputData: updatedData,
         },
       });
-
       if (data?.createAnOrder?.id) {
         // localStorage.removeItem("createOrderData");
         setShowModal(true);
       }
     } catch (error) {
       const { message, response } = error;
-      console.log(message, response);
+      console.error(message, response);
     }
   };
   const closeModal = () => {
@@ -165,15 +164,14 @@ const PreviewDetails = ({
                   Select Recurring Type:
                 </h3>
                 <AppSelect
-  items={[
-    { value: "week", label: "Week" },
-    { value: "free", label: "Free" },
-  ]}
-  placeholder="Week"
-  defaultValue={transportationData.recurring_type}
-  disabled
-/>
-
+                  items={[
+                    { value: "week", label: "Week" },
+                    { value: "free", label: "Free" },
+                  ]}
+                  placeholder="Week"
+                  defaultValue={transportationData.recurring_type}
+                  disabled
+                />
 
                 {transportationData.recurring_type === "Week" ? (
                   <div className="">
@@ -689,7 +687,7 @@ const PreviewDetails = ({
           </div>
           {showModal && (
             <AppModal
-            icon={<SuccessfullyCreatedOrderModalImage />}
+              icon={<SuccessfullyCreatedOrderModalImage />}
               head="Order sent successfully"
               details="Your order has been placed successfully! Thank you for Order"
               buttonText="Continue"

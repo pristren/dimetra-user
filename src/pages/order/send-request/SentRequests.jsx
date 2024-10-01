@@ -8,18 +8,28 @@ import { GET_ALL_MESSAGE_REQUESTS } from "./graphql/queries/getAllMessageRequest
 
 const SentRequests = () => {
   const [data, setData] = useState([]);
-
-  const [getAllMessageRequests] = useLazyQuery(GET_ALL_MESSAGE_REQUESTS, {
-    variables: {},
-    errorPolicy: "all",
-    fetchPolicy: "no-cache",
-    onCompleted: (response) => {
-      setData(response.getMessageRequests);
-    },
-    onError: (error) => {
-      console.error({ error });
-    },
+  const [queryData, setQueryData] = useState({
+    page: 1,
   });
+  const [totalPage, setTotalPage] = useState(null);
+
+  const [getAllMessageRequests, { loading }] = useLazyQuery(
+    GET_ALL_MESSAGE_REQUESTS,
+    {
+      variables: {
+        queryData,
+      },
+      errorPolicy: "all",
+      fetchPolicy: "no-cache",
+      onCompleted: (response) => {
+        setTotalPage(response.getMessageRequests?.totalPages);
+        setData(response.getMessageRequests.data);
+      },
+      onError: (error) => {
+        console.error({ error });
+      },
+    }
+  );
   useEffect(() => {
     getAllMessageRequests();
   }, []);
@@ -115,6 +125,10 @@ const SentRequests = () => {
         isDateVisible={false}
         isFilterVisible={false}
         getData={getAllMessageRequests}
+        totalPage={totalPage}
+        queryData={queryData}
+        setQueryData={setQueryData}
+        isLoading={loading}
       />
     </div>
   );

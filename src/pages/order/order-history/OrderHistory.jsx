@@ -12,8 +12,7 @@ import { EllipsisVertical } from "lucide-react";
 import { Link } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { useLazyQuery } from "@apollo/client";
-import { GET_ALL_ORDERS } from "../order-details/graphql/queries/getAllOrders.gql";
-import moment from "moment";
+import { GET_ALL_ORDERS_FOR_HISTORY } from "./graphql/queries/getAllOrdersForHistory.gql";
 
 const OrderHistory = () => {
   const [queryData, setQueryData] = useState({
@@ -38,55 +37,26 @@ const OrderHistory = () => {
 
   const [data, setData] = useState([]);
 
-  const [getAllOrders] = useLazyQuery(GET_ALL_ORDERS, {
-    variables: {
-      queryData,
-    },
-    errorPolicy: "all",
-    fetchPolicy: "no-cache",
-    onCompleted: (response) => {
-      setTotalPage(response.getAllOrders?.totalPages);
-
-      setData(
-        response.getAllOrders?.data
-          ?.filter(
-            (order) =>
-              order.status === "completed" ||
-              order.status === "rejected" ||
-              order.status === "deleted"
-          )
-          .map((order) => ({
-            ...order,
-            destinationDetailsData: {
-              ...order.destinationDetailsData,
-              drop_off_pick_up_date:
-                order.transportationData?.type_of_transport === "recurring"
-                  ? moment(order.transportationData?.free_dates[0]).format(
-                      "DD MMMM YYYY"
-                    )
-                  : moment(
-                      order.destinationDetailsData?.drop_off_pick_up_date
-                    ).format("DD MMMM YYYY"),
-            },
-            transportationData: {
-              ...order.transportationData,
-              type_of_transport:
-                order.transportationData?.type_of_transport?.includes("_")
-                  ? order.transportationData?.type_of_transport
-                      .split("_")
-                      .join(" ")
-                  : order.transportationData?.type_of_transport,
-            },
-          }))
-      );
-    },
-    onError: (error) => {
-      console.error({ error });
-    },
-  });
+  const [getOrdersForHistory, { loading }] = useLazyQuery(
+    GET_ALL_ORDERS_FOR_HISTORY,
+    {
+      variables: {
+        queryData,
+      },
+      errorPolicy: "all",
+      fetchPolicy: "no-cache",
+      onCompleted: (response) => {
+        setTotalPage(response.getOrdersForHistory?.totalPages);
+        setData(response.getOrdersForHistory?.data);
+      },
+      onError: (error) => {
+        console.error({ error });
+      },
+    }
+  );
   useEffect(() => {
-    getAllOrders();
-  }, [getAllOrders]);
+    getOrdersForHistory();
+  }, []);
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -257,24 +227,43 @@ const OrderHistory = () => {
           />
         </p>
       ),
-      cell: ({ row }) => (
-        <div className="flex items-center justify-center">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <EllipsisVertical
-                className="h-4 w-4 cursor-pointer"
-                aria-label="More options"
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => handlePrintOrder(row.original)}>
-                Print Order
-              </DropdownMenuItem>
-              <DropdownMenuItem>View Details</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      ),
+      cell: ({ row }) => {
+        const orderId = row.original.id;
+        const isRecurring =
+          row.original.transportationData?.type_of_transport === "recurring";
+        return (
+          <div className="flex justify-center items-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <EllipsisVertical className="h-4 w-4 cursor-pointer" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="-translate-x-5 p-3 w-48">
+                <DropdownMenuItem
+                  className="py-2  cursor-pointer"
+                  onClick={() => {
+                    handlePrintOrder(row.original);
+                  }}
+                >
+                  <span className="text-gray-700 text-sm">Print</span>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className="py-2  cursor-pointer">
+                  <Link
+                    to={
+                      isRecurring
+                        ? `/orders/recurring-orders/${orderId}`
+                        : `/orders/order-details/${orderId}`
+                    }
+                    className="flex items-center gap-3 text-[16px]"
+                  >
+                    <span className="text-gray-700 text-sm">View Details</span>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      },
     },
     {
       accessorKey: "orderType",
@@ -302,6 +291,7 @@ const OrderHistory = () => {
         totalPage={totalPage}
         queryData={queryData}
         setQueryData={setQueryData}
+        isLoading={loading}
       />
 
       <ReactToPrint
