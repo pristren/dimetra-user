@@ -12,34 +12,27 @@ import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_ALL_RECURRING_ORDERS } from "./graphql/queries/getAllRecurringOrders.gql";
-import moment from "moment";
 import { UPDATE_RECCURING_ORDER_STATUS } from "./graphql/mutations/updateAnRecurringOrderStatus.gql";
 
 const RecurringOrders = () => {
   const { id } = useParams();
   const [data, setData] = useState([]);
-  //   const [data, setData] = useState([]);
+  const [queryData, setQueryData] = useState({
+    filter_by: "all_order",
+    page: 1,
+    orderId: id,
+  });
+  const [totalPage, setTotalPage] = useState(null);
 
   const [getAllRecurringOrders] = useLazyQuery(GET_ALL_RECURRING_ORDERS, {
     variables: {
-      queryData: {
-        id,
-      },
+      queryData,
     },
     errorPolicy: "all",
     fetchPolicy: "no-cache",
     onCompleted: (response) => {
-      setData(
-        response.getAllRecurringOrders?.map((order) => ({
-          ...order,
-          destinationDetailsData: {
-            ...order.destinationDetailsData,
-            drop_off_pick_up_date: moment(
-              order.destinationDetailsData?.drop_off_pick_up_date
-            ).format("DD MMMM YYYY"),
-          },
-        }))
-      );
+      setTotalPage(response.getAllRecurringOrders?.totalPages);
+      setData(response.getAllRecurringOrders?.data);
     },
     onError: (error) => {
       console.error({ error });
@@ -51,8 +44,7 @@ const RecurringOrders = () => {
   const [updateRecurringOrderStatus] = useMutation(
     UPDATE_RECCURING_ORDER_STATUS,
     {
-      onCompleted: (data) => {
-        console.log("Order status updated:", data);
+      onCompleted: () => {
         getAllRecurringOrders();
       },
       onError: (err) => {
@@ -212,13 +204,6 @@ const RecurringOrders = () => {
                   <Pencil className="size-5 text-gray-600" />
                   <span className="text-gray-700 text-sm">Edit</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="flex items-center gap-3 text-[16px] mb-2 py-2"
-                  onClick={() => handleDeleteOrder(row.original.id)}
-                >
-                  <Trash className="size-5" />
-                  <span className="text-gray-700 text-sm">Storno</span>
-                </DropdownMenuItem>
 
                 <DropdownMenuItem className="py-2 mb-2">
                   <Link
@@ -255,6 +240,9 @@ const RecurringOrders = () => {
         isDateVisible={false}
         isRecurring={true}
         isFilterVisible={false}
+        totalPage={totalPage}
+        queryData={queryData}
+        setQueryData={setQueryData}
       />
     </div>
   );

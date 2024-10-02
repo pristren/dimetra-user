@@ -15,7 +15,7 @@ const useInitializeUser = () => {
       dispatch(setAccessToken(getAccessToken()));
     },
     onError: (error) => {
-      console.log({ error });
+      console.error({ error });
     },
   });
 

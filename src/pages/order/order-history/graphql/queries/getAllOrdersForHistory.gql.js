@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-export const GET_ALL_RECURRING_ORDERS = gql`
-  query GetAllRecurringOrders($queryData: CommonRecurringOrderQueryType!) {
-    getAllRecurringOrders(queryData: $queryData) {
+export const GET_ALL_ORDERS_FOR_HISTORY = gql`
+  query GET_ALL_ORDERS_FOR_HISTORY($queryData: CommonOrderQueryType) {
+    getOrdersForHistory(queryData: $queryData) {
       data {
         user {
           first_name
