@@ -167,7 +167,7 @@ const TransportationDetails = ({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               <div className="pr-5">
                 <h6 className="mb-6">
-                {t("type_of_transport")}
+                  {t("type_of_transport")}
                   <span className="highlight">({t("simple_selection")})</span>
                 </h6>
                 <FormField
@@ -196,7 +196,7 @@ const TransportationDetails = ({
                                 htmlFor={option.value}
                                 className="font-normal text-[16px]"
                               >
-                                {option.label}
+                                {t(option.label)}
                               </Label>
                             </div>
                           ))}
@@ -228,7 +228,7 @@ const TransportationDetails = ({
                       className="font-normal text-[16px] ml-2"
                       htmlFor={option.value}
                     >
-                      {option.label}
+                      {t(option.label)}
                     </Label>
                   </div>
                 ))}
@@ -254,7 +254,7 @@ const TransportationDetails = ({
                       className="font-normal text-[16px] ml-2"
                       htmlFor={option.value}
                     >
-                      {option.label}
+                      {t(option.label)}
                     </Label>
                   </div>
                 ))}
@@ -266,10 +266,10 @@ const TransportationDetails = ({
                   {t("select_recurring_type")}:
                 </h3>
                 <AppSelect
-                    items={[
-                      { value: "week", label: "Week" },
-                      { value: "free", label: "Free" },
-                    ]}
+                  items={[
+                    { value: "week", label: "Week" },
+                    { value: "free", label: "Free" },
+                  ]}
                   defaultValue={transportationData.recurring_type}
                   onValueChange={(value) =>
                     updateCreateOrderData("recurring_type", value)
@@ -300,7 +300,7 @@ const TransportationDetails = ({
                     </div>
 
                     <h3 className="text-lg font-medium mt-10 mb-5">
-                    {t("select_return_date_time")}
+                      {t("select_return_date_time")}
                       <span className="highlight">({t("optional")})</span>:
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
@@ -317,7 +317,7 @@ const TransportationDetails = ({
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
-                    {t("select_weekdays")}
+                      {t("select_weekdays")}
                       <span className="highlight">
                         ({t("multiple_selection")})
                       </span>
@@ -343,7 +343,9 @@ const TransportationDetails = ({
                       ))}
                     </div>
 
-                    <h3 className="text-lg font-medium mb-3 mt-5">{t("ends")}:</h3>
+                    <h3 className="text-lg font-medium mb-3 mt-5">
+                      {t("ends")}:
+                    </h3>
                     <FormField
                       control={form.control}
                       name="duration"
@@ -379,7 +381,7 @@ const TransportationDetails = ({
                     />
 
                     <h2 className="text-lg font-semibold mt-5">
-                    {t("summary_monthly_on_day")}
+                      {t("summary_monthly_on_day")}
                       {calculateMonthlyOccurrences(selectedWeekdays)}
                     </h2>
                   </div>
@@ -387,7 +389,7 @@ const TransportationDetails = ({
                   <div className="">
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                      {t("select_return_date_and_time")}* (max 60):
+                        {t("select_return_date_and_time")}* (max 60):
                       </h3>
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
@@ -413,7 +415,7 @@ const TransportationDetails = ({
                     </div>
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                      {t("select_return_date_and_time")}:
+                        {t("select_return_date_and_time")}:
                       </h3>
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker

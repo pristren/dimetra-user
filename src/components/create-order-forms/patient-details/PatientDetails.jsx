@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { t } from "i18next";
 
 const PatientDetails = ({
   handleFormChange,
@@ -90,7 +91,7 @@ const PatientDetails = ({
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
-        <CardTitle className="title">Patient Details</CardTitle>
+        <CardTitle className="title">{t("patient_details")}</CardTitle>
       </CardHeader>
       <CardContent className="lg:px-10">
         <Form {...form}>
@@ -104,8 +105,8 @@ const PatientDetails = ({
                     <FormLabel className="font-normal">
                       {createOrderData.transportationData?.type_of_transport ===
                       "collection_order"
-                        ? "Name Collection"
-                        : "Name"}
+                        ? t("name_collection")
+                        : t("name")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
@@ -113,7 +114,7 @@ const PatientDetails = ({
                         className={
                           form.formState.errors.name ? "border-red-500" : ""
                         }
-                        placeholder="Enter patient's name"
+                        placeholder={t("enter_patient_name")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -134,8 +135,8 @@ const PatientDetails = ({
                     <FormLabel className="font-normal">
                       {createOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
-                        ? "Number Patients"
-                        : "Surname"}
+                        ? t("number_patients")
+                        : t("surname")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
@@ -143,7 +144,7 @@ const PatientDetails = ({
                         className={
                           form.formState.errors.surname ? "border-red-500" : ""
                         }
-                        placeholder="Enter patient's surname"
+                        placeholder={t("enter_patient_surname")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -163,7 +164,8 @@ const PatientDetails = ({
                   render={() => (
                     <FormItem>
                       <FormLabel className="mb-2">
-                        Date of Birth<sup className="text-[13px]">*</sup>
+                        {t("date_of_birth")}
+                        <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <DatePicker
@@ -186,8 +188,8 @@ const PatientDetails = ({
                     <FormLabel className="font-normal">
                       {createOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
-                        ? "Cost Center"
-                        : "Area/Room"}
+                        ? t("cost_center")
+                        : t("area_room")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
@@ -197,7 +199,7 @@ const PatientDetails = ({
                             ? "border-red-500"
                             : ""
                         }
-                        placeholder="Enter patient's area/room"
+                        placeholder={t("enter_patient_area_room")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -218,8 +220,8 @@ const PatientDetails = ({
                     <FormLabel className="font-normal">
                       {createOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
-                        ? "How much"
-                        : "Cost Center"}
+                        ? t("how_much")
+                        : t("cost_center")}
                       {createOrderData.transportationData?.type_of_transport !==
                         "collectionOrder" && (
                         <sup className="text-[13px]">*</sup>
@@ -232,7 +234,7 @@ const PatientDetails = ({
                             ? "border-red-500"
                             : ""
                         }
-                        placeholder="Enter cost center"
+                        placeholder={t("enter_cost_center")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -250,13 +252,15 @@ const PatientDetails = ({
                 name="how_much"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">How Much</FormLabel>
+                    <FormLabel className="font-normal">
+                      {t("how_much")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className={
                           form.formState.errors.how_much ? "border-red-500" : ""
                         }
-                        placeholder="Enter amount"
+                        placeholder={t("enter_amount")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -274,7 +278,7 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem className="hidden lg:block">
                     <FormLabel className="block mb-5 font-normal">
-                      Isolation
+                      {t("isolation")}
                     </FormLabel>
                     <div className="flex items-center">
                       <FormControl>
@@ -301,7 +305,7 @@ const PatientDetails = ({
                         htmlFor="isolation"
                         className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
                       >
-                        Yes
+                        {t("yes")}
                       </Label>
                     </div>
                     <FormMessage />
@@ -315,7 +319,7 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem className="hidden lg:block">
                     <FormLabel className="block mb-5 font-normal">
-                      Patient Above 90 kg
+                      {t("patient_above_90kg")}
                     </FormLabel>
                     <div className="flex items-center">
                       <FormControl>
@@ -342,7 +346,7 @@ const PatientDetails = ({
                         htmlFor="patient_above_90kg"
                         className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
                       >
-                        Yes
+                        {t("yes")}
                       </Label>
                     </div>
                     <FormMessage />
@@ -356,7 +360,7 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem className="lg:hidden">
                     <FormLabel className="block mb-5 font-normal">
-                      Isolation
+                      {t("isolation")}
                     </FormLabel>
                     <Select
                       onValueChange={(value) => {
@@ -372,11 +376,11 @@ const PatientDetails = ({
                       value={field.value ? "yes" : "no"}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Isolation" />
+                        <SelectValue placeholder={t("select_isolation")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="yes">{t("yes")}</SelectItem>
+                        <SelectItem value="no">{t("no")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -390,7 +394,7 @@ const PatientDetails = ({
                 render={({ field }) => (
                   <FormItem className="lg:hidden">
                     <FormLabel className="block mb-5 font-normal">
-                      Patient Above 90 kg
+                      {t("patient_above_90kg")}
                     </FormLabel>
                     <Select
                       onValueChange={(value) => {
@@ -406,11 +410,11 @@ const PatientDetails = ({
                       value={field.value ? "yes" : "no"}
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select Option" />
+                        <SelectValue placeholder={t("select_option")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="yes">Yes</SelectItem>
-                        <SelectItem value="no">No</SelectItem>
+                        <SelectItem value="yes">{t("yes")}</SelectItem>
+                        <SelectItem value="no">{t("no")}</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -423,7 +427,9 @@ const PatientDetails = ({
                 name="special_note"
                 render={({ field }) => (
                   <FormItem className="lg:col-span-2">
-                    <FormLabel className="font-normal">Special</FormLabel>
+                    <FormLabel className="font-normal">
+                      {t("special_note")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className={`${
@@ -431,7 +437,7 @@ const PatientDetails = ({
                             ? "border-red-500"
                             : ""
                         }`}
-                        placeholder="Enter special notes"
+                        placeholder={t("enter_note")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -444,7 +450,6 @@ const PatientDetails = ({
                 )}
               />
             </div>
-
             <BackAndNextBtn
               isFillForm={true}
               isDisabled={patientProgress < 100}
