@@ -33,7 +33,6 @@ const OrderHistory = () => {
     { value: "Private trips", label: "Private trips" },
     { value: "Collection order", label: "Collection order" },
   ];
- 
 
   const [data, setData] = useState([]);
 
@@ -201,8 +200,14 @@ const OrderHistory = () => {
         </div>
       ),
       cell: ({ row }) => {
+        const isReviewGiven = row.original?.isReviewGiven;
+        let content = "Rate the driver";
+        if (isReviewGiven) {
+          content = "See the Review";
+        }
+
         return (
-          <Link to="/orders/review/:id">
+          <Link to={`/orders/review/${row.original?.id}`}>
             <Button
               disabled={
                 row.getValue("status") === "rejected" ||
@@ -210,7 +215,7 @@ const OrderHistory = () => {
               }
               className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs bg-[#D0EF0F] hover:bg-[#D0EF0F]"
             >
-              Rate the driver
+              {content}
             </Button>
           </Link>
         );
@@ -237,9 +242,9 @@ const OrderHistory = () => {
               <DropdownMenuTrigger>
                 <EllipsisVertical className="h-4 w-4 cursor-pointer" />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="-translate-x-5 p-3 w-48">
+              <DropdownMenuContent className="-translate-x-5 py-3 px-2 w-48">
                 <DropdownMenuItem
-                  className="py-2  cursor-pointer"
+                  className="py-2 cursor-pointer px-3"
                   onClick={() => {
                     handlePrintOrder(row.original);
                   }}
@@ -247,7 +252,7 @@ const OrderHistory = () => {
                   <span className="text-gray-700 text-sm">Print</span>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem className="py-2  cursor-pointer">
+                <DropdownMenuItem className="py-2  cursor-pointer px-3">
                   <Link
                     to={
                       isRecurring
@@ -311,32 +316,39 @@ const OrderHistory = () => {
   );
 };
 
-const OrderPrint = React.forwardRef(({ order }, ref) => (
-  <div className="px-2" ref={ref}>
-    <h4 className="text-center mt-5 mb-10">Order History</h4>
-    <table className="w-full mx-auto">
-      <tr className="border gap-4 p-2">
-        <th className="border text-center">Date</th>
-        <th className="border text-center">Time</th>
-        <th className="border text-center">Pick Up</th>
-        <th className="border text-center">Destination</th>
-        <th className="border text-center">Vehicle</th>
-        <th className="border text-center">Driver</th>
-        <th className="border text-center">Dispatcher</th>
-        <th className="border text-center">Status</th>
-      </tr>
-      <tr className="border gap-4 p-10">
-        <td className="border text-center">{order.date}</td>
-        <td className="border text-center">{order.time}</td>
-        <td className="border text-center">{order.pickUp}</td>
-        <td className="border text-center">{order.destination}</td>
-        <td className="border text-center">{order.vehicle}</td>
-        <td className="border text-center">{order.driver}</td>
-        <td className="border text-center">{order.dispatcher}</td>
-        <td className="border text-center">{order.status}</td>
-      </tr>
-    </table>
-  </div>
-));
+const OrderPrint = React.forwardRef(({ order }, ref) => {
+  return (
+    <div className="px-2" ref={ref}>
+      <h4 className="text-center mt-5 mb-10">Order Details</h4>
+      <table className="w-full mx-auto">
+        <thead>
+          <tr className="border gap-4 p-2">
+            <th className="border text-center">Date</th>
+            <th className="border text-center">Pick Up</th>
+            <th className="border text-center">Destination</th>
+            <th className="border text-center">Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr className="border gap-4 p-10">
+            <td className="border text-center">
+              {order?.destinationDetailsData?.drop_off_pick_up_date}
+            </td>
+            <td className="border text-center">
+              {order.destinationDetailsData.drop_off_address}
+            </td>
+            <td className="border text-center">
+              {order.destinationDetailsData.drop_off_address}
+            </td>
+            <td className="border text-center">{order.status}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+});
+
+OrderPrint.displayName = "OrderPrint";
 
 export default OrderHistory;
