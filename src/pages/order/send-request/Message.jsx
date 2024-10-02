@@ -115,7 +115,7 @@ const sampleMessages = [
 ];
 
 const Message = ({ messages = sampleMessages, userId = 1 }) => {
-  const [images, setImages] = useState(null);
+  const [imagesToShowInModal, setImagesToShowInModal] = useState(null);
   const [selectedImages, setSelectedImages] = useState([]);
 
   const handleImageChange = (e) => {
@@ -159,7 +159,7 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
           ))}
           <div
             className="relative w-20 lg:w-24 h-20 lg:h-24 bg-gray-300 rounded-md cursor-pointer"
-            onClick={() => setImages(images)}
+            onClick={() => setImagesToShowInModal(images)}
           >
             <span className="absolute inset-0 flex items-center justify-center text-white font-bold bg-black bg-opacity-50 rounded-md">
               +{images.length - 3}
@@ -294,8 +294,11 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
           ) : null}
         </div>
 
-        {images && (
-          <Dialog open={!!images} onOpenChange={() => setImages(null)}>
+        {imagesToShowInModal && (
+          <Dialog
+            open={!!imagesToShowInModal}
+            onOpenChange={() => setImagesToShowInModal(null)}
+          >
             <DialogTrigger asChild></DialogTrigger>
             <DialogContent className="max-h-[98vh] w-[90%] max-w-md overflow-y-auto">
               <DialogHeader>
@@ -303,7 +306,7 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
               </DialogHeader>
 
               <div className="grid grid-cols-2 gap-4">
-                {images.map((image, index) => (
+                {imagesToShowInModal.map((image, index) => (
                   <PhotoProvider key={index}>
                     <PhotoView src={image}>
                       <img
