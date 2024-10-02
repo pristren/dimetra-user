@@ -18,6 +18,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { calculateFormProgress } from "@/utils";
 import { Label } from "@/components/ui/label";
 import { DatePicker } from "@/components/ui/DatePicker";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const PatientDetails = ({
   handleFormChange,
@@ -81,14 +88,14 @@ const PatientDetails = ({
   }, [patientData, setPatientProgress]);
 
   return (
-    <Card className="w-[70%] px-5 py-5">
+    <Card className="lg:px-5 lg:py-5">
       <CardHeader>
         <CardTitle className="title">Patient Details</CardTitle>
       </CardHeader>
-      <CardContent className="px-10">
+      <CardContent className="lg:px-10">
         <Form {...form}>
           <form>
-            <div className="grid grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <FormField
                 control={form.control}
                 name="name"
@@ -153,7 +160,7 @@ const PatientDetails = ({
                 <FormField
                   control={form.control}
                   name="date_of_birth"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel className="mb-2">
                         Date of Birth<sup className="text-[13px]">*</sup>
@@ -265,7 +272,7 @@ const PatientDetails = ({
                 control={form.control}
                 name="isolation"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="hidden lg:block">
                     <FormLabel className="block mb-5 font-normal">
                       Isolation
                     </FormLabel>
@@ -306,7 +313,7 @@ const PatientDetails = ({
                 control={form.control}
                 name="patient_above_90kg"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="hidden lg:block">
                     <FormLabel className="block mb-5 font-normal">
                       Patient Above 90 kg
                     </FormLabel>
@@ -345,9 +352,77 @@ const PatientDetails = ({
 
               <FormField
                 control={form.control}
+                name="isolation"
+                render={({ field }) => (
+                  <FormItem className="lg:hidden">
+                    <FormLabel className="block mb-5 font-normal">
+                      Isolation
+                    </FormLabel>
+                    <Select
+                      onValueChange={(value) => {
+                        const booleanValue = value === "yes";
+                        handleInputChange({
+                          target: {
+                            name: "isolation",
+                            value: booleanValue,
+                          },
+                        });
+                        field.onChange(booleanValue);
+                      }}
+                      value={field.value ? "yes" : "no"}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Isolation" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="patient_above_90kg"
+                render={({ field }) => (
+                  <FormItem className="lg:hidden">
+                    <FormLabel className="block mb-5 font-normal">
+                      Patient Above 90 kg
+                    </FormLabel>
+                    <Select
+                      onValueChange={(value) => {
+                        const booleanValue = value === "yes";
+                        handleInputChange({
+                          target: {
+                            name: "patient_above_90kg",
+                            value: booleanValue,
+                          },
+                        });
+                        field.onChange(booleanValue);
+                      }}
+                      value={field.value ? "yes" : "no"}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="yes">Yes</SelectItem>
+                        <SelectItem value="no">No</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
                 name="special_note"
                 render={({ field }) => (
-                  <FormItem className="col-span-2">
+                  <FormItem className="lg:col-span-2">
                     <FormLabel className="font-normal">Special</FormLabel>
                     <FormControl>
                       <Input

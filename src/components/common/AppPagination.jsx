@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/pagination";
 
 const AppPagination = ({ queryData, setQueryData, totalPage }) => {
-  const currentPage = queryData.page;
+  const currentPage = queryData?.page;
 
   const handlePageChange = (page) => {
     if (page < 1 || page > totalPage) return;

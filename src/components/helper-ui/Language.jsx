@@ -25,11 +25,11 @@ export default function Language() {
       value={defaultLanguage}
       onValueChange={(value) => setDefaultLanguage(value)}
     >
-      <SelectTrigger className="w-min focus:ring-0  focus:ring-offset-0 border-none">
+      <SelectTrigger className="w-min focus:ring-0 focus:ring-offset-0 border-none p-0" isDownArrowHidden={true}>
         <SelectValue asChild placeholder="">
           <div className="flex items-center gap-2">
             <p className="text-4xl mb-0">{defaultLanguage.icon}</p>
-            <p className="mb-0 mr-3">{defaultLanguage.name}</p>
+            <p className="mb-0 hidden lg:block">{defaultLanguage.name}</p>
           </div>
         </SelectValue>
       </SelectTrigger>

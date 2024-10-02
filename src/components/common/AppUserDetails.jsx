@@ -35,7 +35,7 @@ const AppUserDetails = ({
   return (
     <CardContent
       className={cn(
-        `px-10 max-h-[90vh] overflow-y-auto hide-scrollbar ${
+        `lg:px-10 max-h-[90vh] overflow-y-auto hide-scrollbar ${
           !isRegister && "pb-0"
         }`,
         customClass
@@ -99,7 +99,7 @@ const AppUserDetails = ({
               id="profileImage"
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 text-left gap-4">
             <FormField
               control={form.control}
               name="first_name"

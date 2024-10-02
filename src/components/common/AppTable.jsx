@@ -117,7 +117,7 @@ export function AppTable({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="h-24 text-primary text-center"
                 >
                   Loading...
                 </TableCell>
@@ -160,8 +160,7 @@ export function AppTable({
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center gap-5 justify-end text-nowrap px-5 border-t py-5">
-          {/* <p>Showing 1 to 1 of 1 entries</p> */}
+        <div className="flex items-center gap-5 justify-center lg:justify-end text-nowrap lg:px-5 border-t py-5">
           <div>
             <AppPagination
               queryData={queryData}

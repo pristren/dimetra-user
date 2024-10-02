@@ -33,33 +33,7 @@ const AllOrders = () => {
     onCompleted: (response) => {
       console.log(response);
       setTotalPage(response.getAllOrders?.totalPages);
-      setData(
-        response.getAllOrders?.data
-          ?.filter((order) => order.status !== "completed")
-          ?.map((order) => ({
-            ...order,
-            destinationDetailsData: {
-              ...order.destinationDetailsData,
-              drop_off_pick_up_date:
-                order.transportationData?.type_of_transport === "recurring"
-                  ? moment(order.transportationData?.free_dates[0]).format(
-                      "DD MMMM YYYY"
-                    )
-                  : moment(
-                      order.destinationDetailsData?.drop_off_pick_up_date
-                    ).format("DD MMMM YYYY"),
-            },
-            transportationData: {
-              ...order.transportationData,
-              type_of_transport:
-                order.transportationData?.type_of_transport?.includes("_")
-                  ? order.transportationData?.type_of_transport
-                      .split("_")
-                      .join(" ")
-                  : order.transportationData?.type_of_transport,
-            },
-          }))
-      );
+      setData(response.getAllOrders?.data);
     },
     onError: (error) => {
       console.error({ error });
@@ -69,19 +43,8 @@ const AllOrders = () => {
     getAllOrders();
   }, []);
 
-  const [deleteAnOrder] = useMutation(DELETE_AN_ORDER, {
-    onCompleted: (data) => {
-      console.log("Order deleted:", data);
-      getAllOrders();
-    },
-    onError: (err) => {
-      console.error("Error deleting order:", err);
-    },
-  });
-
   const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS, {
     onCompleted: (data) => {
-      console.log("Order status updated:", data);
       getAllOrders();
     },
     onError: (err) => {
@@ -102,12 +65,6 @@ const AllOrders = () => {
       default:
         return "#FFFFFF";
     }
-  };
-
-  const handleDeleteOrder = (orderId) => {
-    deleteAnOrder({
-      variables: { queryData: { id: orderId } },
-    });
   };
 
   const updateAnOrderStatus = (orderId, status) => {
@@ -134,7 +91,7 @@ const AllOrders = () => {
       cell: ({ row }) => {
         const date =
           row.original?.destinationDetailsData?.drop_off_pick_up_date;
-        return <p>{date}</p>;
+        return <p>{moment(date).format("DD MMMM YYYY")}</p>;
       },
     },
     {
@@ -201,7 +158,8 @@ const AllOrders = () => {
       ),
       cell: ({ row }) => {
         const type = row.original.transportationData?.type_of_transport;
-        return <p className="capitalize">{type}</p>;
+        let item = transportOptions.find((item) => item.value === type);
+        return <p className="capitalize">{item?.label}</p>;
       },
     },
     {
@@ -261,7 +219,7 @@ const AllOrders = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
-                  onClick={() => handleDeleteOrder(orderId)}
+                  onClick={() => updateAnOrderStatus(orderId, "deleted")}
                 >
                   <Trash className="size-5" />
                   <span className="text-gray-700 text-sm">Storno</span>
