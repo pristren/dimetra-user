@@ -1,4 +1,4 @@
-import { DefaultAvatar, DimetraMobileLogo, Logo, Notification, Search } from "@/assets/icons";
+import { DefaultAvatar, DimetraMobileLogo, Logo } from "@/assets/icons";
 import Language from "@/components/helper-ui/Language";
 import MobileNav from "@/layout/order-layout/MobileNav";
 import { setProfileImageLoaded } from "@/redux/slices/user/userSlice";
@@ -13,16 +13,12 @@ export default function Navbar() {
   return (
     <nav
       className={`
-        ${url === "/create-order" ? "" : "md:justify-end"}
+        ${url === "/create-order" ? "" : "lg:justify-end"}
         flex justify-between items-center border-b px-4 lg:px-8 py-2.5 sticky top-0 bg-white z-20
       `}
     >
       <Link to="/" className=" hidden lg:block">
-        <Logo
-          className={`${
-            url === "/create-order" ? "" : "md:hidden"
-          }`}
-        />
+        <Logo className={`${url === "/create-order" ? "" : "lg:hidden"}`} />
       </Link>
       <div className="flex items-center gap-2 lg:hidden">
         <MobileNav />
@@ -31,9 +27,7 @@ export default function Navbar() {
         </Link>
       </div>
       <div className="flex items-center gap-3 lg:gap-6">
-        <Search className="cursor-pointer" />
         <Language />
-        <Notification className="cursor-pointer" />
         <div className="flex items-center gap-2">
           {userInfo?.profile_image ? (
             <div className="flex items-center">
