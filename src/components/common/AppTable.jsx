@@ -160,7 +160,11 @@ export function AppTable({
             )}
           </TableBody>
         </Table>
-        <div className="flex items-center gap-5 justify-center lg:justify-end text-nowrap lg:px-5 border-t py-5">
+        <div
+          className={`flex items-center gap-5 justify-center lg:justify-end text-nowrap lg:px-5 ${
+            totalPage && "border-t py-5"
+          } `}
+        >
           <div>
             <AppPagination
               queryData={queryData}

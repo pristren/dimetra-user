@@ -268,10 +268,22 @@ function OrderDetails() {
         </div>
 
         <div className="flex items-center justify-center gap-6">
-          <Button className="bg-secondary text-black px-14">Back</Button>
-          <Link to={`/orders/edit-order/${id}`}>
-            <Button className="px-14">Edit</Button>
-          </Link>
+          <Button
+            onClick={() => {
+              window.history.back();
+            }}
+            className="px-14"
+            variant="secondary"
+          >
+            Back
+          </Button>
+          {data?.status !== "completed" &&
+            data?.status !== "rejected" &&
+            data?.status !== "deleted" && (
+              <Link disabled to={`/orders/edit-order/${id}`}>
+                <Button className="px-14">Edit</Button>
+              </Link>
+            )}
         </div>
       </Card>
     </div>

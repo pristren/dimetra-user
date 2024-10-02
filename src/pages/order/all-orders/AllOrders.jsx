@@ -17,6 +17,7 @@ import { DELETE_AN_ORDER } from "./graphql/mutations/deleteOrder.gql";
 import moment from "moment";
 import { UPDATE_ORDER_STATUS } from "./graphql/mutations/updateOrderStatus.gql";
 import { transportOptions } from "@/components/create-order-forms/helpers";
+import { ResumeIcon } from "@radix-ui/react-icons";
 
 const AllOrders = () => {
   const [queryData, setQueryData] = useState({
@@ -210,7 +211,7 @@ const AllOrders = () => {
                 <DropdownMenuItem className="py-2 mb-2 cursor-pointer">
                   <Link
                     to={`/orders/edit-order/${orderId}`}
-                    className="flex items-center gap-3 text-[16px] cursor-pointer"
+                    className="flex items-center gap-3 text-[16px] cursor-pointer w-full"
                   >
                     <Pencil className="size-5" />
                     <span className="text-gray-700 text-sm">Edit</span>
@@ -230,19 +231,30 @@ const AllOrders = () => {
                         ? `/orders/recurring-orders/${orderId}`
                         : `/orders/order-details/${orderId}`
                     }
-                    className="flex items-center gap-3 text-[16px]"
+                    className="flex items-center gap-3 text-[16px] w-full"
                   >
                     <Document className="size-5" />
                     <span className="text-gray-700 text-sm">View Details</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
-                  onClick={() => updateAnOrderStatus(orderId, "paused")}
-                >
-                  <Pause className="size-5" />
-                  <span className="text-gray-700 text-sm">Pause</span>
-                </DropdownMenuItem>
+                {row.original.status !== "paused" ? (
+                  <DropdownMenuItem
+                    className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
+                    onClick={() => updateAnOrderStatus(orderId, "paused")}
+                    disabled={row.original.status !== "pending"}
+                  >
+                    <Pause className="size-5" />
+                    <span className="text-gray-700 text-sm">Pause</span>
+                  </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem
+                    className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
+                    onClick={() => updateAnOrderStatus(orderId, "pending")}
+                  >
+                    <ResumeIcon className="size-5" />
+                    <span className="text-gray-700 text-sm">Resume</span>
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

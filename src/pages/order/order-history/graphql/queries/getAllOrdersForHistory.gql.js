@@ -23,6 +23,7 @@ export const GET_ALL_ORDERS_FOR_HISTORY = gql`
           drop_off_pick_up_date
         }
         createdAt
+        isReviewGiven
       }
       total
       totalPages
