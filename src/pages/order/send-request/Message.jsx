@@ -21,7 +21,7 @@ const sampleMessages = [
       "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
     ],
-    photoURL:
+    userPhotoURL:
       "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     displayName: "John Doe",
   },
@@ -31,21 +31,21 @@ const sampleMessages = [
     images: [
       "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
     ],
-    photoURL:
+    userPhotoURL:
       "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     displayName: "John Doe",
   },
   {
     userId: 1,
     text: "Hey, kemon acho?",
-    photoURL:
+    userPhotoURL:
       "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     displayName: "John Doe",
   },
   {
     userId: 1,
     text: "Hey, kemon acho? Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero doloribus est iusto ea nihil, odit quod ullam ut culpa odio?",
-    photoURL:
+    userPhotoURL:
       "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     displayName: "John Doe",
   },
@@ -53,7 +53,7 @@ const sampleMessages = [
     userId: 2,
     text: "I'm doing good, how about you?  Lorem ipsum dolor sit amet consectetur adipisicing elit. Vero doloribus est iusto ea nihil, odit quod ullam ut culpa odio?",
     images: [],
-    photoURL:
+    userPhotoURL:
       "https://img.freepik.com/free-photo/white-offroader-jeep-parking_114579-4007.jpg?uid=R63160567&ga=GA1.1.1996921210.1706246101&semt=ais_hybrid",
     displayName: "Jane Smith",
   },
@@ -68,7 +68,7 @@ const sampleMessages = [
       "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
     ],
-    photoURL:
+    userPhotoURL:
       "https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp",
     displayName: "John Doe",
   },
@@ -82,7 +82,7 @@ const sampleMessages = [
       "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
       "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
     ],
-    photoURL:
+    userPhotoURL:
       "https://img.freepik.com/free-photo/white-offroader-jeep-parking_114579-4007.jpg?uid=R63160567&ga=GA1.1.1996921210.1706246101&semt=ais_hybrid",
     displayName: "John Doe",
   },
@@ -92,7 +92,7 @@ const sampleMessages = [
     images: [
       "https://plus.unsplash.com/premium_photo-1664474619075-644dd191935f?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2V8ZW58MHx8MHx8fDA%3D",
     ],
-    photoURL:
+    userPhotoURL:
       "https://img.freepik.com/free-photo/white-offroader-jeep-parking_114579-4007.jpg?uid=R63160567&ga=GA1.1.1996921210.1706246101&semt=ais_hybrid",
     displayName: "John Doe",
   },
@@ -100,7 +100,7 @@ const sampleMessages = [
     userId: 2,
     text: "Wow, these are awesome!",
     images: [],
-    photoURL:
+    userPhotoURL:
       "https://img.freepik.com/free-photo/white-offroader-jeep-parking_114579-4007.jpg?uid=R63160567&ga=GA1.1.1996921210.1706246101&semt=ais_hybrid",
     displayName: "Jane Smith",
   },
@@ -108,7 +108,7 @@ const sampleMessages = [
     userId: 2,
     text: "Wow, these are awesome!",
     images: [],
-    photoURL:
+    userPhotoURL:
       "https://img.freepik.com/free-photo/white-offroader-jeep-parking_114579-4007.jpg?uid=R63160567&ga=GA1.1.1996921210.1706246101&semt=ais_hybrid",
     displayName: "Jane Smith",
   },
@@ -185,10 +185,14 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
       return (
         <div key={index}>
           {msg.userId === userId ? (
-            <div className="flex flex-row-reverse items-start justify-start gap-2 my-2">
-              {isFirstMessageFromUser && msg.photoURL ? (
+            <div
+              className={`flex flex-row-reverse items-start justify-start gap-2 my-2 max-w-full md:max-w-[60%] ms-auto ${
+                isFirstMessageFromUser && "mt-8"
+              }`}
+            >
+              {isFirstMessageFromUser && msg.userPhotoURL ? (
                 <img
-                  src={msg.photoURL}
+                  src={msg.userPhotoURL}
                   className="w-10 h-10 rounded-full"
                   alt={msg.displayName}
                 />
@@ -215,24 +219,30 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
               </div>
             </div>
           ) : (
-            <div className="flex items-start justify-start gap-2 my-2">
-              {isFirstMessageFromUser && (
+            <div
+              className={`flex items-start justify-start gap-2 my-2 max-w-full md:max-w-[60%] ${
+                isFirstMessageFromUser && "mt-8"
+              }`}
+            >
+              {isFirstMessageFromUser && msg.userPhotoURL ? (
                 <img
-                  src={msg.photoURL}
+                  src={msg.userPhotoURL}
                   className="w-10 h-10 rounded-full"
                   alt={msg.displayName}
                 />
-              )}
+              ) : isFirstMessageFromUser ? (
+                <DefaultAvatar className="w-10 h-10 rounded-full" />
+              ) : null}
               <div
                 className={`bg-secondary text-black ${
-                  msg.images ? "p-3 max-w-48 lg:max-w-56" : "px-3 py-1"
+                  msg.images?.length ? "p-3 max-w-48 lg:max-w-56" : "px-3 py-1"
                 } rounded-xl ${!isFirstMessageFromUser && "ml-12"}`}
               >
-                {msg.images && (
+                {msg.images?.length ? (
                   <div className="grid grid-cols-2 gap-2">
                     {renderImages(images)}
                   </div>
-                )}
+                ) : null}
                 <p
                   className={`${
                     msg?.images?.length > 0 && "mt-4"
@@ -251,7 +261,7 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
   return (
     <div className="relative">
       <h4>Order #123456</h4>
-      <div className="bg-white border border-gray-200 rounded-md mt-3 h-[calc(100vh-10rem)]">
+      <div className="bg-white border border-gray-200 rounded-md mt-3 h-[calc(100vh-10.5rem)]">
         <div className="flex items-center justify-start gap-3 border-b border-gray-300 px-4 py-4">
           <DefaultAvatar className="w-10 h-10 rounded-full" />
           <div>
@@ -263,23 +273,25 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
           </div>
         </div>
 
-        <div className="px-4 py-4 h-[calc(100vh-20rem)] overflow-y-auto hide-scrollbar">
+        <div className="px-4 pt-4 h-[calc(100vh-20rem)] overflow-y-auto hide-scrollbar relative w-full pb-0">
           {renderMessages()}
-          <div className="flex flex-wrap gap-2 lg:gap-4 mt-4 px-14">
-            {selectedImages.map((image, index) => (
-              <div key={index} className="relative">
-                <img
-                  src={image}
-                  alt={`Selected ${index}`}
-                  className="w-12 lg:w-24 h-12 lg:h-24 rounded-md"
-                />
-                <X
-                  className="absolute -top-2 lg:-top-3 -right-2 lg:-right-3 p-1 size-5 lg:size-7 bg-white border rounded-full "
-                  onClick={() => handleRemoveImage(index)}
-                />
-              </div>
-            ))}
-          </div>
+          {selectedImages.length > 0 ? (
+            <div className="flex flex-wrap gap-2 lg:gap-4 mt-4 px-10 sticky bottom-0 max-h-48 overflow-y-auto  pt-4  bg-white">
+              {selectedImages.map((image, index) => (
+                <div key={index} className="relative">
+                  <img
+                    src={image}
+                    alt={`Selected ${index}`}
+                    className="w-12 lg:w-24 h-12 lg:h-24 rounded-md object-cover"
+                  />
+                  <X
+                    className="absolute -top-2 lg:-top-3 -right-2 lg:-right-3 p-1 size-5 lg:size-7 bg-white border rounded-full cursor-pointer"
+                    onClick={() => handleRemoveImage(index)}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
 
         {images && (
