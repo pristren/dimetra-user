@@ -37,19 +37,19 @@ export default function Language() {
     setDefaultLanguage(language);
   };
 
+  const savedLanguageCode = localStorage.getItem("languageCode");
   useEffect(() => {
-    const savedLanguageCode = localStorage.getItem("languageCode");
     if (savedLanguageCode) {
       const savedLanguage = languages.find(
         (lang) => lang.value === savedLanguageCode
       );
       if (savedLanguage) {
         setDefaultLanguage(savedLanguage);
-        changeLanguage(savedLanguage.value);
+        changeLanguage(savedLanguageCode);
       }
     }
-  }, []);
-
+  }, [i18n, savedLanguageCode]);
+  
   return (
     <Select
       value={defaultLanguage.value}
