@@ -15,6 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { calculateFormProgress } from "@/utils";
+import { useTranslation } from "react-i18next";
 
 const BillingDetails = ({
   handleFormChange,
@@ -24,6 +25,7 @@ const BillingDetails = ({
   billingProgress,
   setShowPreview,
 }) => {
+  const { t } = useTranslation();
   const {
     pre_name = "",
     name = "",
@@ -39,11 +41,11 @@ const BillingDetails = ({
   }, [...fieldsFilled]);
 
   const formSchema = z.object({
-    preName: z.string().min(1, "Prename/Institution is required"),
-    name: z.string().min(1, "Name is required"),
-    street: z.string().min(1, "Street is required"),
-    place: z.string().min(1, "Place is required"),
-    contact: z.string().min(1, "Contact is required"),
+    preName: z.string().min(1, t("prename_institution_is_required")),
+    name: z.string().min(1, t("name_is_required")),
+    street: z.string().min(1, t("street_is_required")),
+    place: z.string().min(1, t("place_is_required")),
+    contact: z.string().min(1, t("contact_is_required")),
   });
 
   const form = useForm({
@@ -74,7 +76,7 @@ const BillingDetails = ({
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
-        <CardTitle className="title">Billing Address</CardTitle>
+        <CardTitle className="title">{t("billing_address")}</CardTitle>
       </CardHeader>
       <CardContent className="lg:px-10">
         <Form {...form}>
@@ -86,12 +88,12 @@ const BillingDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-normal">
-                      Prename/Institution
+                      {t("prename_institution")}
                     </FormLabel>
                     <FormControl>
                       <Input
                         className={errors.preName ? "border-red-500" : ""}
-                        placeholder="Type your prename or institution"
+                        placeholder={t("type_your_prename_or_institution")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -108,11 +110,11 @@ const BillingDetails = ({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">Name</FormLabel>
+                    <FormLabel className="font-normal">{t("name")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.name ? "border-red-500" : ""}
-                        placeholder="Type your name"
+                        placeholder={t("type_your_name")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -129,11 +131,11 @@ const BillingDetails = ({
                 name="street"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">Street</FormLabel>
+                    <FormLabel className="font-normal">{t("street")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.street ? "border-red-500" : ""}
-                        placeholder="Type your street"
+                        placeholder={t("type_your_street")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -150,11 +152,11 @@ const BillingDetails = ({
                 name="place"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">Place</FormLabel>
+                    <FormLabel className="font-normal">{t("place")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.place ? "border-red-500" : ""}
-                        placeholder="Type your place"
+                        placeholder={t("type_your_place")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -171,11 +173,11 @@ const BillingDetails = ({
                 name="contact"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">Contact</FormLabel>
+                    <FormLabel className="font-normal">{t("contact")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.contact ? "border-red-500" : ""}
-                        placeholder="Type your contact number"
+                        placeholder={t("type_your_contact_number")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);

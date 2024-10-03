@@ -1,39 +1,39 @@
 export const transportOptions = [
-  { value: "transfer_trip", label: "Transfer trip" },
-  { value: "investigation_trip", label: "Investigation trip" },
-  { value: "private_trips", label: "Private trips" },
-  { value: "collection_order", label: "Collection order" },
-  { value: "recurring", label: "Recurring" },
+  { value: "transfer_trip", label: "transfer_trip" },
+  { value: "investigation_trip", label: "investigation_trip" },
+  { value: "private_trips", label: "private_trips" },
+  { value: "collection_order", label: "collection_order" },
+  { value: "recurring", label: "recurring" },
 ];
 
 export const transportModesOptions = [
-  { value: "relocation", label: "Relocation" },
-  { value: "wheelchair_mts", label: "Wheelchair (MTS)" },
-  { value: "own_wheelchair", label: "In Own Wheelchair" },
-  { value: "lying_down", label: "Lying Down" },
-  { value: "pedestrian", label: "Pedestrian" },
-  { value: "second_transport_helper", label: "Second Transport Helper" },
-  { value: "carrying_chair", label: "Carrying Chair" },
+  { value: "relocation", label: "relocation" },
+  { value: "wheelchair_mts", label: "wheelchair_mts" },
+  { value: "own_wheelchair", label: "in_own_wheelchair" },
+  { value: "lying_down", label: "lying_down" },
+  { value: "pedestrian", label: "pedestrian" },
+  { value: "second_transport_helper", label: "second_transport_helper" },
+  { value: "carrying_chair", label: "carrying_chair" },
 ];
 
 export const transportWithOptions = [
-  { value: "none_of_that", label: "None of That" },
-  { value: "infusion", label: "Infusion" },
-  { value: "infusomat", label: "Infusomat" },
-  { value: "accompanying_reason", label: "Accompanying Reason" },
-  { value: "oxygen_liters_per_min", label: "Oxygen (Liters/Min)" },
+  { value: "none_of_that", label: "none_of_that" },
+  { value: "infusion", label: "infusion" },
+  { value: "infusomat", label: "infusomat" },
+  { value: "accompanying_reason", label: "accompanying_reason" },
+  { value: "oxygen_liters_per_min", label: "oxygen_liters_per_min" },
 ];
-
 
 export const weekdaysOptions = [
-  { value: "monday", label: "Monday" },
-  { value: "tuesday", label: "Tuesday" },
-  { value: "wednesday", label: "Wednesday" },
-  { value: "thursday", label: "Thursday" },
-  { value: "friday", label: "Friday" },
-  { value: "saturday", label: "Saturday" },
-  { value: "sunday", label: "Sunday" },
+  { value: "monday", label: "monday" },
+  { value: "tuesday", label: "tuesday" },
+  { value: "wednesday", label: "wednesday" },
+  { value: "thursday", label: "thursday" },
+  { value: "friday", label: "friday" },
+  { value: "saturday", label: "saturday" },
+  { value: "sunday", label: "sunday" },
 ];
+
 
 export const durationOptions = [
   { value: "1month", label: "1 Month" },
@@ -41,6 +41,7 @@ export const durationOptions = [
   { value: "6months", label: "6 Months" },
   { value: "1year", label: "After 1 Year" },
 ];
+
 
 export const timeOptions = [
   { value: "00:00", label: "00:00" },
@@ -92,3 +93,4 @@ export const timeOptions = [
   { value: "23:00", label: "23:00" },
   { value: "23:30", label: "23:30" },
 ];
+
