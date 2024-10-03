@@ -33,8 +33,6 @@ const PatientDetails = ({
   createOrderData,
   setCreateOrderData,
   patientProgress,
-  dateOfBirth,
-  setDateOfBirth,
 }) => {
   const { patientData } = createOrderData;
 
@@ -54,16 +52,6 @@ const PatientDetails = ({
     resolver: zodResolver(formSchema),
     defaultValues: patientData,
   });
-
-  useEffect(() => {
-    setCreateOrderData((prev) => ({
-      ...prev,
-      patientData: {
-        ...prev.patientData,
-        date_of_birth: dateOfBirth,
-      },
-    }));
-  }, [patientData.date_of_birth, dateOfBirth, setCreateOrderData]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -169,8 +157,16 @@ const PatientDetails = ({
                       </FormLabel>
                       <FormControl>
                         <DatePicker
-                          date={dateOfBirth}
-                          setDate={setDateOfBirth}
+                          date={patientData?.date_of_birth}
+                          setDate={(value) =>
+                            setCreateOrderData((prev) => ({
+                              ...prev,
+                              patientData: {
+                                ...prev.patientData,
+                                date_of_birth: value,
+                              },
+                            }))
+                          }
                           className="py-6"
                         />
                       </FormControl>

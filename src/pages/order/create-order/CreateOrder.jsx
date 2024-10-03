@@ -16,6 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { createOrderDefaultState } from "@/components/create-order-forms/helpers";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -23,70 +24,10 @@ const CreateOrder = () => {
   const [destinationProgress, setDestinationProgress] = useState(0);
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [returnDate, setReturnDate] = useState(null);
-  const [dropDate, setDropDate] = useState(null);
-  const [dateOfBirth, setDateOfBirth] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
-  const [selectedWeekdays, setSelectedWeekdays] = useState([]);
-  const [freeDates, setFreeDates] = useState();
-  const [createOrderData, setCreateOrderData] = useState({
-    transportationData: {
-      type_of_transport: "",
-      mode_of_transportation: [],
-      transport_with: [],
-      recurring_type: "",
-      start_date: startDate,
-      return_date: endDate,
-      start_time: "",
-      return_time: "",
-      multiple_week_days: [],
-      ends: "",
-      free_dates: [],
-      free_dates_start_time: "",
-      free_dates_return_time: "",
-    },
-    patientData: {
-      name: "",
-      surname: "",
-      date_of_birth: null,
-      area_room: "",
-      cost_center: "",
-      how_much: "",
-      special_note: "",
-      isolation: false,
-      patient_above_90kg: false,
-    },
-    destinationDetailsData: {
-      pick_up_name: "",
-      pick_up_address: "",
-      pick_up_postal_code: "",
-      pick_up_city: "",
-      pick_up_country: "",
-      pick_up_employee_name: "",
-
-      drop_off_pick_up_date: null,
-      drop_off_pick_up_time: "",
-      drop_off_name: "",
-      drop_off_address: "",
-      drop_off_postal_code: "",
-      drop_off_city: "",
-      drop_off_country: "",
-      drop_off_phone: "",
-
-      return_date: null,
-      return_approx_time: "",
-      return_floor: "",
-    },
-    billingDetailsData: {
-      pre_name: "",
-      name: "",
-      street: "",
-      place: "",
-      contact: "",
-    },
-  });
+  const [createOrderData, setCreateOrderData] = useState(
+    createOrderDefaultState
+  );
 
   const prevCreateOrderDataRef = useRef(createOrderData);
 
@@ -101,56 +42,9 @@ const CreateOrder = () => {
     const storedData = localStorage.getItem("createOrderData");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
-      if (
-        (parsedData.transportationData.start_date ||
-          parsedData.transportationData.return_date ||
-          parsedData.transportationData.multiple_week_days) &&
-        parsedData.transportationData.type_of_transport === "recurring"
-      ) {
-        setStartDate(parsedData.transportationData.start_date);
-        setEndDate(parsedData.transportationData.return_date);
-        setSelectedWeekdays(parsedData.transportationData.multiple_week_days);
-      } else if (
-        parsedData.transportationData.recurring_type &&
-        parsedData.transportationData.type_of_transport === "recurring"
-      ) {
-        setCreateOrderData((prev) => ({
-          ...prev,
-          transportationData: {
-            ...prev.transportationData,
-            recurring_type: parsedData.transportationData.recurring_type,
-          },
-        }));
-      }
-
       setCreateOrderData(parsedData);
-
-      if (parsedData.patientData?.date_of_birth) {
-        setDateOfBirth(parsedData.patientData.date_of_birth);
-      }
-      if (parsedData.destinationDetailsData?.drop_off_pick_up_date) {
-        setDropDate(parsedData.destinationDetailsData.drop_off_pick_up_date);
-      }
-      if (parsedData.destinationDetailsData?.return_date) {
-        setReturnDate(parsedData.destinationDetailsData.return_date);
-      }
     }
   }, []);
-
-  useEffect(() => {
-    setCreateOrderData((prev) => ({
-      ...prev,
-      patientData: {
-        ...prev.patientData,
-        date_of_birth: dateOfBirth,
-      },
-      destinationDetailsData: {
-        ...prev.destinationDetailsData,
-        drop_off_pick_up_date: dropDate,
-        return_date: returnDate,
-      },
-    }));
-  }, [dateOfBirth, dropDate, returnDate]);
 
   const handleFormChange = (step) => {
     if (
@@ -234,31 +128,17 @@ const CreateOrder = () => {
     createOrderData,
     billingProgress,
     currentStep,
-    endDate,
-    startDate,
-    selectedWeekdays,
-    returnDate,
-    dropDate,
-    dateOfBirth,
     patientProgress,
     destinationProgress,
     showPreview,
     setShowPreview,
-    setDateOfBirth,
-    setDropDate,
-    setReturnDate,
-    setSelectedWeekdays,
     setCreateOrderData,
-    setEndDate,
-    setStartDate,
     setCurrentStep,
     setBillingProgress,
     handleFormChange,
     setTransportationProgress,
     setPatientProgress,
     setDestinationProgress,
-    freeDates,
-    setFreeDates,
   };
   return (
     <div className="relative overflow-y-auto">
@@ -272,7 +152,10 @@ const CreateOrder = () => {
             progressValue={transportationProgress}
             isDisabled={false}
           />
-          <Progress value={transportationProgress} className="mt-3 lg:mt-5 h-2 lg:h-4" />
+          <Progress
+            value={transportationProgress}
+            className="mt-3 lg:mt-5 h-2 lg:h-4"
+          />
 
           <StepIcon
             step="patientDetails"
@@ -282,7 +165,10 @@ const CreateOrder = () => {
             progressValue={patientProgress}
             isDisabled={transportationProgress < 100}
           />
-          <Progress value={patientProgress} className="mt-3 lg:mt-5 h-2 lg:h-4" />
+          <Progress
+            value={patientProgress}
+            className="mt-3 lg:mt-5 h-2 lg:h-4"
+          />
 
           <StepIcon
             step="destinationDetails"
@@ -292,7 +178,10 @@ const CreateOrder = () => {
             progressValue={destinationProgress}
             isDisabled={patientProgress < 100}
           />
-          <Progress value={destinationProgress} className="mt-3 lg:mt-5 h-2 lg:h-4" />
+          <Progress
+            value={destinationProgress}
+            className="mt-3 lg:mt-5 h-2 lg:h-4"
+          />
 
           <StepIcon
             step="billingDetails"
@@ -305,15 +194,15 @@ const CreateOrder = () => {
         </div>
 
         <div className="lg:w-[70%] px-3 lg:px-0">
-        {currentStep === "transportDetails" ? (
-          <TransportationDetails {...props} />
-        ) : currentStep === "patientDetails" ? (
-          <PatientDetails {...props} />
-        ) : currentStep === "destinationDetails" ? (
-          <DestinationDetails {...props} />
-        ) : (
-          currentStep === "billingDetails" && <BillingDetails {...props} />
-        )}
+          {currentStep === "transportDetails" ? (
+            <TransportationDetails {...props} />
+          ) : currentStep === "patientDetails" ? (
+            <PatientDetails {...props} />
+          ) : currentStep === "destinationDetails" ? (
+            <DestinationDetails {...props} />
+          ) : (
+            currentStep === "billingDetails" && <BillingDetails {...props} />
+          )}
         </div>
         <Dialog open={showPreview} onOpenChange={setShowPreview}>
           <DialogContent className="w-[90%] max-w-[60rem] px-0 border-none max-h-[98vh] overflow-y-auto">
