@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { t } from "i18next";
 
 const AppSelect = ({
   items,
@@ -29,7 +30,7 @@ const AppSelect = ({
       <SelectContent>
         {items?.map((item, i) => (
           <SelectItem key={i} value={item}>
-            {item?.label}
+            {t(item?.label)}
           </SelectItem>
         ))}
       </SelectContent>

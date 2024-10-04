@@ -280,7 +280,7 @@ const AllOrders = () => {
         queryData={queryData}
         setQueryData={setQueryData}
         filters={[
-          { value: "all_order", label: t("all_order") },
+          { value: "all_order", label: t("all_orders") },
           ...transportOptions,
         ]}
         isSearchVisible={true}
