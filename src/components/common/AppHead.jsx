@@ -57,10 +57,10 @@ export default function AppHead({
           )}
         </div>
 
-        {isRecurring && (
+        {isRecurring !== false && (
           <div className=" flex gap-3 items-center">
-            <h4 className="text-xl">Order ID :</h4>
-            <span className=" text-gray-500">#453422</span>
+            <h4 className="text-xl text-nowrap">Order ID :</h4>
+            <span className=" text-gray-500">#{isRecurring?.slice(-8)}</span>
           </div>
         )}
 
@@ -89,8 +89,8 @@ export default function AppHead({
             placeholder="Filters"
             className="max-w-sm w-max"
             value={queryData?.filter_by}
-            onValueChange={(event) => {
-              setQueryData((prev) => ({ ...prev, filter_by: event?.value }));
+            onValueChange={(value) => {
+              setQueryData((prev) => ({ ...prev, filter_by: value }));
             }}
           />
         )}

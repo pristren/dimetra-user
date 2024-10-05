@@ -1,5 +1,6 @@
 {
   "all_orders": "Alle Bestellungen",
+  "all_order": "Alle Bestellungen",
   "history": "Verlauf",
   "settings": "Einstellungen",
   "sent_requests": "Gesendete Anfragen",
@@ -92,5 +93,6 @@
   "place": "ort",
   "type_your_place": "geben sie ihren ort ein",
   "contact": "kontakt",
-  "type_your_contact_number": "geben sie ihre kontaktnummer ein"
+  "type_your_contact_number": "geben sie ihre kontaktnummer ein",
+  "in_own_wheelchair": "Im eigenen Rollstuhl"
 }

@@ -15,7 +15,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
-const EditBillingDetails = ({ editOrderData, setEditOrderData, handleUpdate }) => {
+const EditBillingDetails = ({
+  editOrderData,
+  setEditOrderData,
+  handleUpdate,
+}) => {
   const {
     pre_name = "",
     name = "",
@@ -59,11 +63,9 @@ const EditBillingDetails = ({ editOrderData, setEditOrderData, handleUpdate }) =
     form.reset(editOrderData.billingDetailsData);
   }, [editOrderData.billingDetailsData, form]);
   return (
-    <Card className="px-5 py-5 border-none rounded-none">
-      <CardHeader>
-        <CardTitle>Billing Address</CardTitle>
-      </CardHeader>
-      <CardContent className="px-10">
+    <Card className="p-6 border-none rounded-none">
+      <h4 className="px-3">Billing Address</h4>
+      <CardContent className="px-3 mt-4">
         <Form {...form}>
           <form>
             <div className="grid grid-cols-3 gap-5">

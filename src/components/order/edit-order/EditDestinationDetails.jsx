@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import AppSelect from "@/components/common/AppSelect";
 import { timeOptions } from "@/components/create-order-forms/helpers";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { DatePicker } from "@/components/ui/DatePicker";
 import {
   Form,
@@ -33,6 +33,7 @@ const EditDestinationDetails = ({
       pick_up_country = "",
       pick_up_employee_name = "",
       drop_off_pick_up_time = "",
+      drop_off_pick_up_date = "",
       drop_off_name = "",
       drop_off_address = "",
       drop_off_city = "",
@@ -54,6 +55,7 @@ const EditDestinationDetails = ({
 
     drop_off_date: z.string().min(1, "Date is required"),
     drop_off_pick_up_time: z.string().min(1, "Pick-Up Time is required"),
+    drop_off_pick_up_date: z.string().min(1, "Pick-Up Date is required"),
     drop_off_name: z.string().min(1, "Name is required"),
     drop_off_address: z.string().min(1, "Address is required"),
     drop_off_city: z.string().min(1, "City is required"),
@@ -76,6 +78,7 @@ const EditDestinationDetails = ({
       pick_up_employee_name,
       dropDate,
       drop_off_pick_up_time,
+      drop_off_pick_up_date,
       drop_off_name,
       drop_off_address,
       drop_off_city,
@@ -112,11 +115,9 @@ const EditDestinationDetails = ({
     }));
   };
   return (
-    <Card className="px-5 py-5  border-none rounded-none">
-      <CardHeader>
-        <CardTitle>Destination Details</CardTitle>
-      </CardHeader>
-      <CardContent className="px-10">
+    <Card className="p-6 border-none rounded-none">
+      <h4 className="px-3">Destination Details</h4>
+      <CardContent className="px-3 mt-4">
         <Form {...form}>
           <form>
             <div className="grid grid-cols-3 gap-5">
@@ -266,14 +267,18 @@ const EditDestinationDetails = ({
                 {/* Drop-Off Date */}
                 <FormField
                   control={form.control}
-                  name="drop_off_date"
+                  name="drop_off_pick_up_date"
                   render={() => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
                         Drop-Off Date <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker date={dropDate} setDate={setDropDate} />
+                        <DatePicker
+                          mode="single"
+                          date={dropDate}
+                          setDate={setDropDate}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -281,6 +286,7 @@ const EditDestinationDetails = ({
                 />
 
                 {/* Drop-Off Pickup Time */}
+                {console.log(drop_off_pick_up_time)}
                 <FormField
                   control={form.control}
                   name="drop_off_pick_up_time"
@@ -299,7 +305,8 @@ const EditDestinationDetails = ({
                               value
                             )
                           }
-                          value={return_day_letter}
+                          isTimeSelected={true}
+                          value={drop_off_pick_up_time}
                         />
                       </FormControl>
                       <FormMessage />
@@ -477,6 +484,7 @@ const EditDestinationDetails = ({
                               updateDestinationData("return_approx_time", value)
                             }
                             value={return_approx_time}
+                            isTimeSelected={true}
                           />
                         </FormControl>
                         <FormMessage />
