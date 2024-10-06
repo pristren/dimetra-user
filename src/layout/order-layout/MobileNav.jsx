@@ -37,7 +37,7 @@ const MobileNav = () => {
         <SheetHeader>
           <SheetTitle />
           <div className="flex items-center justify-between">
-            <Link to="/">
+            <Link to="/orders/all-orders">
               <DimetraMobileLogo className="mx-auto" />
             </Link>
           </div>
