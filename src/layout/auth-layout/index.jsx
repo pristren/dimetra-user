@@ -8,7 +8,7 @@ export default function AuthLayout({ children, childContainer, ...props }) {
   return (
     <div className="h-screen" {...props}>
       <nav className="flex justify-between items-center  px-4 border-b h-16">
-        <Link to="/">
+        <Link to="/orders/all-orders">
           <Logo />
         </Link>
         <Language />

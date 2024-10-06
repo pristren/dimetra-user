@@ -17,12 +17,12 @@ export default function Navbar() {
         flex justify-between items-center border-b px-4 lg:px-8 py-2.5 sticky top-0 bg-white z-20
       `}
     >
-      <Link to="/" className=" hidden lg:block">
+      <Link to="/orders/all-orders" className=" hidden lg:block">
         <Logo className={`${url === "/create-order" ? "" : "lg:hidden"}`} />
       </Link>
       <div className="flex items-center gap-2 lg:hidden">
         <MobileNav />
-        <Link to="/">
+        <Link to="/orders/all-orders">
           <DimetraMobileLogo />
         </Link>
       </div>
