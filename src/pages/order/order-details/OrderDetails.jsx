@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { GET_AN_ORDER } from "./graphql/queries/getAnOrder.gql";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import moment from "moment";
@@ -11,23 +11,23 @@ import { GET_A_RECURRING_ORDER } from "../recurring-orders/graphql/queries/getAR
 function OrderDetails({ singleRecurring = false }) {
   const [data, setData] = useState({});
   const { id } = useParams();
-
-  const { loading: singleOrderLoading } = useQuery(GET_AN_ORDER, {
-    skip: singleRecurring,
-    variables: { queryData: { id: id } },
-    errorPolicy: "all",
-    fetchPolicy: "no-cache",
-    onCompleted: (response) => {
-      setData(response.getAnOrder);
-    },
-    onError: (error) => {
-      console.error({ error });
-    },
-  });
-  const { loading: singleRecurringOrderLoading } = useQuery(
-    GET_A_RECURRING_ORDER,
+  const [getAnOrder, { loading: singleOrderLoading }] = useLazyQuery(
+    GET_AN_ORDER,
     {
-      skip: !singleRecurring,
+      variables: { queryData: { id: id } },
+      errorPolicy: "all",
+      fetchPolicy: "no-cache",
+      onCompleted: (response) => {
+        setData(response.getAnOrder);
+      },
+      onError: (error) => {
+        console.error({ error });
+      },
+    }
+  );
+
+  const [getARecurringOrder, { loading: singleRecurringOrderLoading }] =
+    useLazyQuery(GET_A_RECURRING_ORDER, {
       variables: { queryData: { id: id } },
       errorPolicy: "all",
       fetchPolicy: "no-cache",
@@ -37,8 +37,15 @@ function OrderDetails({ singleRecurring = false }) {
       onError: (error) => {
         console.error({ error });
       },
+    });
+
+  useEffect(() => {
+    if (singleRecurring) {
+      getARecurringOrder();
+    } else {
+      getAnOrder();
     }
-  );
+  }, [singleRecurring]);
 
   return (
     <div className="capitalize">

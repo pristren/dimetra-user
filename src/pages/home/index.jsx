@@ -10,9 +10,7 @@ export default function Home() {
     variables: {},
     errorPolicy: "all",
     fetchPolicy: "no-cache",
-    onCompleted: (data) => {
-      console.log(data);
-    },
+    onCompleted: () => {},
     onError: (error) => {
       console.log({ error });
     },
