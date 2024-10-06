@@ -286,7 +286,6 @@ const EditDestinationDetails = ({
                 />
 
                 {/* Drop-Off Pickup Time */}
-                {console.log(drop_off_pick_up_time)}
                 <FormField
                   control={form.control}
                   name="drop_off_pick_up_time"

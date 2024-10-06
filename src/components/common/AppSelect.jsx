@@ -18,8 +18,6 @@ const AppSelect = ({
   disabled = false,
   isTimeSelected = false,
 }) => {
-  console.log(isTimeSelected);
-
   return (
     <Select
       disabled={disabled}

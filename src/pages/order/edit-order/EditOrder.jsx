@@ -102,7 +102,7 @@ const EditOrder = () => {
         return_date: returnDate,
       },
     };
-    console.log(dataTobeUpdated);
+    // console.log(dataTobeUpdated); // dataTobeUpdated is the updated data
   };
 
   const props = {
