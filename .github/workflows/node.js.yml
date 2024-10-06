@@ -25,10 +25,14 @@ jobs:
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
         
+    # Remove node_modules folder
+    - name: Remove node_modules
+      run: rm -rf node_modules
+    
     # Install node_modules
     - name: Install Dependencies
       run: npm ci  # or npm install if you don’t use package-lock.json
 
     # Restart the PM2 process after dependencies are installed
-    # - name: Restart PM2 Process
-    #   run: pm2 restart dimetra-user
+    - name: Restart PM2 Process
+      run: pm2 restart dimetra-user
