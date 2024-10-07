@@ -160,7 +160,7 @@ const AllOrders = () => {
       cell: ({ row }) => {
         const type = row.original.transportationData?.type_of_transport;
         let item = transportOptions.find((item) => item.value === type);
-        return <p className="capitalize">{item?.label}</p>;
+        return <p className="capitalize">{t(item?.label)}</p>;
       },
     },
     {
@@ -235,7 +235,9 @@ const AllOrders = () => {
                     className="flex items-center gap-3 text-[16px] w-full"
                   >
                     <Document className="size-5" />
-                    <span className="text-gray-700 text-sm">{t("view_details")}</span>
+                    <span className="text-gray-700 text-sm">
+                      {t("view_details")}
+                    </span>
                   </Link>
                 </DropdownMenuItem>
                 {row.original.status !== "paused" ? (
@@ -272,7 +274,7 @@ const AllOrders = () => {
         pageTitle={t("all_orders")}
         addButton={{
           visibility: true,
-          name: t('make_an_order'),
+          name: t("make_an_order"),
           url: "/create-order",
         }}
         isDateVisible={true}

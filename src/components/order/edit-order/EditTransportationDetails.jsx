@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
+import { t } from "i18next";
 
 const EditTransportationDetails = ({
   editOrderData,
@@ -25,7 +26,7 @@ const EditTransportationDetails = ({
   endDate,
   setEditOrderData,
 }) => {
-  const {transportationData} = editOrderData;
+  const { transportationData } = editOrderData;
   const form_schema = z.object({
     type_of_transport: z.string().min(1, "Transport type is required"),
     mode_of_transportation: z
@@ -78,16 +79,14 @@ const EditTransportationDetails = ({
   };
 
   return (
-    <Card className="px-5 py-5 border-none rounded-none">
-      <CardHeader>
-        <CardTitle>Transportation details</CardTitle>
-      </CardHeader>
-      <CardContent className="px-10">
+    <Card className="mt-2 bg-white p-6 border-none">
+      <h4 className="px-3">Transportation Details</h4>
+      <CardContent className="px-3 mt-4">
         <Form {...form}>
           <form>
             <div className="grid grid-cols-3 gap-5">
               <div className="pr-5">
-                <p className="mb-4 text-xl font-semibold">
+                <p className="mb-4  font-semibold">
                   Type of transport{" "}
                   <span className="text-[15px]">(simple selection)</span>
                 </p>
@@ -114,7 +113,7 @@ const EditTransportationDetails = ({
                                 id={option.value}
                               />
                               <Label htmlFor={option.value}>
-                                {option.label}
+                                {t(option.label)}
                               </Label>
                             </div>
                           ))}
@@ -127,7 +126,7 @@ const EditTransportationDetails = ({
               </div>
 
               <div className="pr-5">
-                <p className="mb-4 text-xl font-semibold">
+                <p className="mb-4 font-semibold">
                   Mode of transportation{" "}
                   <span className="text-[15px]">(multiple selection)</span>
                 </p>
@@ -143,14 +142,14 @@ const EditTransportationDetails = ({
                       }
                     />
                     <Label className="ml-2" htmlFor={option.value}>
-                      {option.label}
+                      {t(option.label)}
                     </Label>
                   </div>
                 ))}
               </div>
 
               <div>
-                <p className="mb-4 text-xl font-semibold">
+                <p className="mb-4 font-semibold">
                   Transport with{" "}
                   <span className="text-[15px]">(multiple selection)</span>
                 </p>
@@ -166,7 +165,7 @@ const EditTransportationDetails = ({
                       }
                     />
                     <Label className="ml-2" htmlFor={option.value}>
-                      {option.label}
+                      {t(option.label)}
                     </Label>
                   </div>
                 ))}

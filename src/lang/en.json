@@ -1,5 +1,6 @@
 {
   "all_orders": "All Orders",
+  "all_order": "All Order",
   "history": "History",
   "settings": "Settings",
   "sent_requests": "Sent Requests",
@@ -92,5 +93,6 @@
   "place": "place",
   "type_your_place": "type your place",
   "contact": "contact",
-  "type_your_contact_number": "type your contact number"
+  "type_your_contact_number": "type your contact number",
+  "in_own_wheelchair": "In Own Wheelchair"
 }

@@ -48,14 +48,21 @@ function App() {
         }
       >
         <Route index element={<Navigate to="all-orders" />} />
-        <Route path="order-details/:id" element={<OrderDetails />} />
-        <Route path="edit-order/:id" element={<EditOrder />} />
         <Route path="all-orders" element={<AllOrders />} />
         <Route path="history" element={<OrderHistory />} />
-        <Route path="review/:id" element={<RateTheDriver />} />
-        <Route path="recurring-orders/:id" element={<RecurringOrders />} />
         <Route path="setting" element={<OrderSettings />} />
         <Route path="sent-requests" element={<SentRequests />} />
+        <Route
+          path="order-details/:id"
+          element={<OrderDetails singleRecurring={false} />}
+        />
+        <Route
+          path="recurring-orders/order-details/:id"
+          element={<OrderDetails singleRecurring={true} />}
+        />
+        <Route path="recurring-orders/:id" element={<RecurringOrders />} />
+        <Route path="edit-order/:id" element={<EditOrder />} />
+        <Route path="review/:id" element={<RateTheDriver />} />
         <Route path="message/:id" element={<Message />} />
         <Route path="details/:id" element={<OrderDetails />} />
       </Route>

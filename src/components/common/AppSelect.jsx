@@ -16,21 +16,22 @@ const AppSelect = ({
   onValueChange,
   value,
   disabled = false,
+  isTimeSelected = false,
 }) => {
   return (
     <Select
       disabled={disabled}
       onValueChange={onValueChange}
-      defaultValue={items?.find((f) => f?.value === value)}
-      value={items?.find((f) => f?.value === value)}
+      defaultValue={items?.find((f) => f?.value === value)?.value}
+      value={items?.find((f) => f?.value === value)?.value}
     >
       <SelectTrigger isTime={isTime} className={className}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         {items?.map((item, i) => (
-          <SelectItem key={i} value={item}>
-            {t(item?.label)}
+          <SelectItem key={i} value={item?.value}>
+            {!isTimeSelected ? t(item?.label) : item?.label}
           </SelectItem>
         ))}
       </SelectContent>

@@ -134,7 +134,7 @@ const OrderSettings = () => {
   return (
     <div>
       <div className="flex items-center justify-between gap-5">
-        <h5 className="text-nowrap">My Profile</h5>
+        <h2 className="text-2xl font-bold text-nowrap">My Profile</h2>
         <AppDialog
           open={appDialougeOpen}
           onOpenChange={setAppDialougeOpen}
@@ -234,7 +234,9 @@ const OrderSettings = () => {
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className=" ml-3 text-gray-500 w-40">Billing address</p>
-            <p className="font-medium lg:font-normal">{userInfo?.billing_address}</p>
+            <p className="font-medium lg:font-normal">
+              {userInfo?.billing_address}
+            </p>
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className=" ml-3 text-gray-500 w-40">Code</p>

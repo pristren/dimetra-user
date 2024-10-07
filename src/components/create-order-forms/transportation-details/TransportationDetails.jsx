@@ -277,7 +277,7 @@ const TransportationDetails = ({
                   placeholder="Select a type"
                 />
 
-                {transportationData.recurring_type === "Week" ? (
+                {transportationData.recurring_type === "week" ? (
                   <div className="">
                     <h3 className="text-lg font-medium mt-10 mb-5">
                       {t("select_start_date_and_time")}*:
@@ -385,7 +385,7 @@ const TransportationDetails = ({
                       {calculateMonthlyOccurrences(selectedWeekdays)}
                     </h2>
                   </div>
-                ) : transportationData.recurring_type === "Free" ? (
+                ) : transportationData.recurring_type === "free" ? (
                   <div className="">
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">

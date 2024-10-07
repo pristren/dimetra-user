@@ -7,6 +7,7 @@ import EditTransportationDetails from "@/components/order/edit-order/EditTranspo
 import EditPatientDetails from "@/components/order/edit-order/EditPatientDetails";
 import EditDestinationDetails from "@/components/order/edit-order/EditDestinationDetails";
 import EditBillingDetails from "@/components/order/edit-order/EditBillingDetails";
+import { Card } from "@/components/ui/card";
 
 const EditOrder = () => {
   const [startDate, setStartDate] = useState(null);
@@ -73,6 +74,11 @@ const EditOrder = () => {
     fetchPolicy: "no-cache",
     onCompleted: (response) => {
       setEditOrderData(response.getAnOrder);
+      setDropDate(
+        response.getAnOrder?.destinationDetailsData?.drop_off_pick_up_date
+      );
+      setDateOfBirth(response.getAnOrder?.patientData?.date_of_birth);
+      setReturnDate(response.getAnOrder?.destinationDetailsData?.return_date);
     },
     onError: (error) => {
       console.error({ error });
@@ -81,10 +87,22 @@ const EditOrder = () => {
 
   useEffect(() => {
     getAnOrder();
-  }, [getAnOrder]);
+  }, []);
 
   const handleUpdate = () => {
-    console.log(editOrderData);
+    const dataTobeUpdated = {
+      ...editOrderData,
+      patientData: {
+        ...editOrderData.patientData,
+        date_of_birth: dateOfBirth,
+      },
+      destinationDetailsData: {
+        ...editOrderData.destinationDetailsData,
+        drop_off_pick_up_date: dropDate,
+        return_date: returnDate,
+      },
+    };
+    // console.log(dataTobeUpdated); // dataTobeUpdated is the updated data
   };
 
   const props = {
@@ -100,10 +118,13 @@ const EditOrder = () => {
   };
   return (
     <div>
-      <EditTransportationDetails {...props} />
-      <EditPatientDetails {...props} />
-      <EditDestinationDetails {...props} />
-      <EditBillingDetails {...props} />
+      <h5 className="mb-4">Edit Order</h5>
+      <Card className="bg-white p-0 border-opacity-50 border">
+        <EditTransportationDetails {...props} />
+        <EditPatientDetails {...props} />
+        <EditDestinationDetails {...props} />
+        <EditBillingDetails {...props} />
+      </Card>
     </div>
   );
 };
