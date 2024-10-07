@@ -175,23 +175,6 @@ const OrderSettings = () => {
                 }}
               />
             </div>
-            <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
-              <DialogTrigger className="bg-white hover:bg-gray-200 rounded-md py-2 px-5 text-blue-500 w-full shadow-xl lg:hidden">
-                Edit
-              </DialogTrigger>
-              <DialogContent className="w-[90%] max-w-3xl">
-                <DialogHeader>
-                  <DialogTitle>Edit Profile</DialogTitle>
-                  <AppUserDetails
-                    form={form}
-                    onSubmit={onSubmitUserDetails}
-                    selectedFile={selectedFile}
-                    setSelectedFile={setSelectedFile}
-                    loading={loading}
-                  />
-                </DialogHeader>
-              </DialogContent>
-            </Dialog>
             <div>
               <div className="flex items-center justify-center lg:justify-start gap-2 mb-4">
                 <Human className="lg:hidden" />

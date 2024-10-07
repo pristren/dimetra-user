@@ -413,6 +413,7 @@ const DestinationDetails = ({
                                 value
                               )
                             }
+                            isTimeSelected={true}
                             value={drop_off_pick_up_time}
                           />
                         </FormControl>

@@ -59,7 +59,7 @@ const PreviewDetails = ({
         },
       });
       if (data?.createAnOrder?.id) {
-        // localStorage.removeItem("createOrderData");
+        localStorage.removeItem("createOrderData");
         setShowModal(true);
       }
     } catch (error) {

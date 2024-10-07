@@ -296,6 +296,7 @@ const TransportationDetails = ({
                           updateCreateOrderData("start_time", value)
                         }
                         defaultValue={transportationData.start_time}
+                        isTimeSelected={true}
                       />
                     </div>
 
@@ -313,6 +314,7 @@ const TransportationDetails = ({
                         onValueChange={(value) =>
                           updateCreateOrderData("return_time", value)
                         }
+                        isTimeSelected={true}
                       />
                     </div>
 
