@@ -168,6 +168,7 @@ const PreviewDetails = ({
                     { value: "free", label: "Free" },
                   ]}
                   placeholder="Week"
+                  className="cursor-pointer"
                   defaultValue={transportationData.recurring_type}
                   disabled
                 />
@@ -185,7 +186,8 @@ const PreviewDetails = ({
                       />
                       <AppSelect
                         items={timeOptions}
-                        placeholder="00:00"
+                            className="cursor-pointer"
+                            placeholder="00:00"
                         disabled
                         isTime={true}
                       />
@@ -205,7 +207,8 @@ const PreviewDetails = ({
                         placeholder="00:00"
                         isTime={true}
                         disabled
-                      />
+                        className="cursor-pointer"
+                        />
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
@@ -272,7 +275,8 @@ const PreviewDetails = ({
                           defaultValue={
                             transportationData.free_dates_start_time
                           }
-                        />
+                          className="cursor-pointer"
+                          />
                       </div>
                     </div>
                     <div className="mt-5 mb-5 ">
@@ -294,7 +298,8 @@ const PreviewDetails = ({
                           defaultValue={
                             transportationData.free_dates_return_time
                           }
-                        />
+                          className="cursor-pointer"
+                          />
                       </div>
                     </div>
                   </div>

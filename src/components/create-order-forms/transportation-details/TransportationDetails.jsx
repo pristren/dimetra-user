@@ -275,7 +275,8 @@ const TransportationDetails = ({
                     updateCreateOrderData("recurring_type", value)
                   }
                   placeholder="Select a type"
-                />
+                  className="cursor-pointer"
+                  />
 
                 {transportationData.recurring_type === "week" ? (
                   <div className="">
@@ -296,7 +297,8 @@ const TransportationDetails = ({
                           updateCreateOrderData("start_time", value)
                         }
                         defaultValue={transportationData.start_time}
-                      />
+                        className="cursor-pointer"
+                        />
                     </div>
 
                     <h3 className="text-lg font-medium mt-10 mb-5">
@@ -313,7 +315,8 @@ const TransportationDetails = ({
                         onValueChange={(value) =>
                           updateCreateOrderData("return_time", value)
                         }
-                      />
+                        className="cursor-pointer"
+                        />
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
@@ -410,7 +413,8 @@ const TransportationDetails = ({
                           defaultValue={
                             transportationData.free_dates_start_time
                           }
-                        />
+                          className="cursor-pointer"
+                          />
                       </div>
                     </div>
                     <div className="mt-5 mb-5 ">
@@ -437,7 +441,8 @@ const TransportationDetails = ({
                           defaultValue={
                             transportationData.free_dates_return_time
                           }
-                        />
+                          className="cursor-pointer"
+                          />
                       </div>
                     </div>
                   </div>

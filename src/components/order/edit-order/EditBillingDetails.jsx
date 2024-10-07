@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { z } from "zod";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { t } from "i18next";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -64,7 +65,7 @@ const EditBillingDetails = ({
   }, [editOrderData.billingDetailsData, form]);
   return (
     <Card className="p-6 border-none rounded-none">
-      <h4 className="px-3">Billing Address</h4>
+      <h4 className="px-3">{t("billing_address")}</h4>
       <CardContent className="px-3 mt-4">
         <Form {...form}>
           <form>
@@ -74,11 +75,11 @@ const EditBillingDetails = ({
                 name="pre_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Prename/Institution</FormLabel>
+                    <FormLabel>{t("prename_institution")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.preName ? "border-red-500" : ""}
-                        placeholder="Type your prename or institution"
+                        placeholder={t("type_prename_or_institution")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -95,11 +96,11 @@ const EditBillingDetails = ({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Name</FormLabel>
+                    <FormLabel>{t("name")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.name ? "border-red-500" : ""}
-                        placeholder="Type your name"
+                        placeholder={t("type_name")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -117,11 +118,11 @@ const EditBillingDetails = ({
                 name="street"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Street</FormLabel>
+                    <FormLabel>{t("street")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.street ? "border-red-500" : ""}
-                        placeholder="Type your street"
+                        placeholder={t("type_street")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -138,11 +139,11 @@ const EditBillingDetails = ({
                 name="place"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Place</FormLabel>
+                    <FormLabel>{t("place")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.place ? "border-red-500" : ""}
-                        placeholder="Type your place"
+                        placeholder={t("type_place")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -159,11 +160,11 @@ const EditBillingDetails = ({
                 name="contact"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Contact</FormLabel>
+                    <FormLabel>{t("contact")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.contact ? "border-red-500" : ""}
-                        placeholder="Type your contact number"
+                        placeholder={t("type_contact_number")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -179,7 +180,7 @@ const EditBillingDetails = ({
           </form>
         </Form>
         <div className="flex items-center justify-center my-10">
-          <Button onClick={handleUpdate}>Update</Button>
+          <Button onClick={handleUpdate}>{t("update")}</Button>
         </div>
       </CardContent>
     </Card>
