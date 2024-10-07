@@ -27,7 +27,6 @@ const CreateOrder = () => {
   const [endDate, setEndDate] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
   const [dropDate, setDropDate] = useState(null);
-  const [dateOfBirth, setDateOfBirth] = useState(null);
   const [showPreview, setShowPreview] = useState(false);
   const [selectedWeekdays, setSelectedWeekdays] = useState([]);
   const [freeDates, setFreeDates] = useState();
@@ -125,9 +124,6 @@ const CreateOrder = () => {
 
       setCreateOrderData(parsedData);
 
-      if (parsedData.patientData?.date_of_birth) {
-        setDateOfBirth(parsedData.patientData.date_of_birth);
-      }
       if (parsedData.destinationDetailsData?.drop_off_pick_up_date) {
         setDropDate(parsedData.destinationDetailsData.drop_off_pick_up_date);
       }
@@ -140,17 +136,13 @@ const CreateOrder = () => {
   useEffect(() => {
     setCreateOrderData((prev) => ({
       ...prev,
-      patientData: {
-        ...prev.patientData,
-        date_of_birth: dateOfBirth,
-      },
       destinationDetailsData: {
         ...prev.destinationDetailsData,
         drop_off_pick_up_date: dropDate,
         return_date: returnDate,
       },
     }));
-  }, [dateOfBirth, dropDate, returnDate]);
+  }, [dropDate, returnDate]);
 
   const handleFormChange = (step) => {
     if (
@@ -239,12 +231,10 @@ const CreateOrder = () => {
     selectedWeekdays,
     returnDate,
     dropDate,
-    dateOfBirth,
     patientProgress,
     destinationProgress,
     showPreview,
     setShowPreview,
-    setDateOfBirth,
     setDropDate,
     setReturnDate,
     setSelectedWeekdays,
@@ -272,7 +262,10 @@ const CreateOrder = () => {
             progressValue={transportationProgress}
             isDisabled={false}
           />
-          <Progress value={transportationProgress} className="mt-3 lg:mt-5 h-2 lg:h-4" />
+          <Progress
+            value={transportationProgress}
+            className="mt-3 lg:mt-5 h-2 lg:h-4"
+          />
 
           <StepIcon
             step="patientDetails"
@@ -282,7 +275,10 @@ const CreateOrder = () => {
             progressValue={patientProgress}
             isDisabled={transportationProgress < 100}
           />
-          <Progress value={patientProgress} className="mt-3 lg:mt-5 h-2 lg:h-4" />
+          <Progress
+            value={patientProgress}
+            className="mt-3 lg:mt-5 h-2 lg:h-4"
+          />
 
           <StepIcon
             step="destinationDetails"
@@ -292,7 +288,10 @@ const CreateOrder = () => {
             progressValue={destinationProgress}
             isDisabled={patientProgress < 100}
           />
-          <Progress value={destinationProgress} className="mt-3 lg:mt-5 h-2 lg:h-4" />
+          <Progress
+            value={destinationProgress}
+            className="mt-3 lg:mt-5 h-2 lg:h-4"
+          />
 
           <StepIcon
             step="billingDetails"
@@ -305,15 +304,15 @@ const CreateOrder = () => {
         </div>
 
         <div className="lg:w-[70%] px-3 lg:px-0">
-        {currentStep === "transportDetails" ? (
-          <TransportationDetails {...props} />
-        ) : currentStep === "patientDetails" ? (
-          <PatientDetails {...props} />
-        ) : currentStep === "destinationDetails" ? (
-          <DestinationDetails {...props} />
-        ) : (
-          currentStep === "billingDetails" && <BillingDetails {...props} />
-        )}
+          {currentStep === "transportDetails" ? (
+            <TransportationDetails {...props} />
+          ) : currentStep === "patientDetails" ? (
+            <PatientDetails {...props} />
+          ) : currentStep === "destinationDetails" ? (
+            <DestinationDetails {...props} />
+          ) : (
+            currentStep === "billingDetails" && <BillingDetails {...props} />
+          )}
         </div>
         <Dialog open={showPreview} onOpenChange={setShowPreview}>
           <DialogContent className="w-[90%] max-w-[60rem] px-0 border-none max-h-[98vh] overflow-y-auto">
