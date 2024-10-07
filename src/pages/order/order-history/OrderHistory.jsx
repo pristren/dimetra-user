@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { useLazyQuery } from "@apollo/client";
 import { GET_ALL_ORDERS_FOR_HISTORY } from "./graphql/queries/getAllOrdersForHistory.gql";
+import { transportOptions } from "@/components/create-order-forms/helpers";
+import { t } from "i18next";
 
 const OrderHistory = () => {
   const [queryData, setQueryData] = useState({
@@ -24,15 +26,6 @@ const OrderHistory = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const printRef = useRef();
   const reactToPrintTriggerRef = useRef();
-
-  const filters = [
-    { value: "All Order", label: "All Order" },
-    { value: "Recurring", label: "Recurring" },
-    { value: "Transfer trip", label: "Transfer trip" },
-    { value: "Investigation trip", label: "Investigation trip" },
-    { value: "Private trips", label: "Private trips" },
-    { value: "Collection order", label: "Collection order" },
-  ];
 
   const [data, setData] = useState([]);
 
@@ -288,9 +281,12 @@ const OrderHistory = () => {
         }}
         isDateVisible={true}
         isFilterVisible={true}
+        filters={[
+          { value: "all_order", label: t("all_order") },
+          ...transportOptions,
+        ]}
         date={date}
         setDate={setDate}
-        filters={filters}
         isSearchVisible={true}
         isRecurring={false}
         totalPage={totalPage}
