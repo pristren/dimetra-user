@@ -27,6 +27,7 @@ import {
 import { useEffect } from "react";
 import { calculateFormProgress } from "@/utils";
 import { t } from "i18next";
+import { Input } from "@/components/ui/input";
 
 const TransportationDetails = ({
   handleFormChange,
@@ -119,27 +120,45 @@ const TransportationDetails = ({
   useEffect(() => {
     const fieldsFilled =
       transportationData?.type_of_transport === "recurring" &&
-      transportationData?.recurring_type === "Week"
+      transportationData?.recurring_type === "week"
         ? [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation.length > 0,
-            transportationData?.transport_with?.length > 0,
+            transportationData?.transport_with?.length > 0
+              ? transportationData?.transport_with.includes(
+                  "oxygen_liters_per_min"
+                )
+                ? transportationData?.oxygen_liters_per_min > 0
+                : true
+              : false,
             transportationData?.multiple_week_days?.length > 0,
             transportationData?.start_date,
             transportationData?.ends,
           ]
         : transportationData?.type_of_transport === "recurring" &&
-          transportationData?.recurring_type === "Free"
+          transportationData?.recurring_type === "free"
         ? [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation?.length > 0,
-            transportationData?.transport_with?.length > 0,
+            transportationData?.transport_with?.length > 0
+              ? transportationData?.transport_with.includes(
+                  "oxygen_liters_per_min"
+                )
+                ? transportationData?.oxygen_liters_per_min > 0
+                : true
+              : false,
             transportationData?.free_dates?.length > 0,
           ]
         : [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation?.length > 0,
-            transportationData?.transport_with.length > 0,
+            transportationData?.transport_with?.length > 0
+              ? transportationData?.transport_with.includes(
+                  "oxygen_liters_per_min"
+                )
+                ? transportationData?.oxygen_liters_per_min > 0
+                : true
+              : false,
           ];
     setTransportationProgress(calculateFormProgress(fieldsFilled));
   }, [transportationData]);
@@ -240,7 +259,14 @@ const TransportationDetails = ({
                   <span className="highlight">({t("multiple_selection")})</span>
                 </h6>
                 {transportWithOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-4">
+                  <div
+                    key={option.value}
+                    className={`${
+                      option.value !== "oxygen_liters_per_min"
+                        ? "flex items-center"
+                        : ""
+                    }  mb-4 `}
+                  >
                     <Checkbox
                       id={option.value}
                       checked={transportationData.transport_with?.includes(
@@ -251,11 +277,27 @@ const TransportationDetails = ({
                       }
                     />
                     <Label
-                      className="font-normal text-[16px] ml-2"
+                      className="font-normal text-[16px] ml-2 text-nowrap"
                       htmlFor={option.value}
                     >
                       {t(option.label)}
                     </Label>
+                    <div className="w-full mt-2">
+                      {option.value === "oxygen_liters_per_min" && (
+                        <Input
+                          placeholder=""
+                          className=" h-10"
+                          type="number"
+                          onChange={(e) => {
+                            updateCreateOrderData(
+                              "oxygen_liters_per_min",
+                              e.target.value
+                            );
+                          }}
+                          value={transportationData?.oxygen_liters_per_min}
+                        />
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
