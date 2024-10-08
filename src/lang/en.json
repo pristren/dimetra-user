@@ -128,5 +128,6 @@
   "type_street": "Type your street",
   "type_place": "Type your place",
   "type_contact_number": "Type your contact number",
-  "update": "Update"
+  "update": "Update",
+  "view_order_lists": "View Order Lists"
 }

@@ -128,5 +128,6 @@
   "type_street": "Geben Sie Ihre Straße ein",
   "type_place": "Geben Sie Ihren Ort ein",
   "type_contact_number": "Geben Sie Ihre Telefonnummer ein",
-  "update": "Aktualisieren"
+  "update": "Aktualisieren",
+  "view_order_lists": "Bestelllisten ansehen"
 }

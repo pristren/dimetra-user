@@ -245,18 +245,28 @@ const OrderHistory = () => {
                   <span className="text-gray-700 text-sm">Print</span>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem className="py-2  cursor-pointer px-3">
+                <DropdownMenuItem className="py-2 px-3 cursor-pointer">
                   <Link
-                    to={
-                      isRecurring
-                        ? `/orders/recurring-orders/${orderId}`
-                        : `/orders/order-details/${orderId}`
-                    }
-                    className="flex items-center gap-3 text-[16px]"
+                    to={`/orders/order-details/${orderId}`}
+                    className="flex items-center gap-3 text-[16px] w-full"
                   >
-                    <span className="text-gray-700 text-sm">View Details</span>
+                    <span className="text-gray-700 text-sm">
+                      {t("view_details")}
+                    </span>
                   </Link>
                 </DropdownMenuItem>
+                {isRecurring && (
+                  <DropdownMenuItem className="py-2 px-3 cursor-pointer">
+                    <Link
+                      to={`/orders/recurring-orders/${orderId}`}
+                      className="flex items-center gap-3 text-[16px] w-full"
+                    >
+                      <span className="text-gray-700 text-sm">
+                        {t("view_order_lists")}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

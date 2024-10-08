@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, List } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -227,11 +227,7 @@ const AllOrders = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem className="py-2 mb-2 cursor-pointer">
                   <Link
-                    to={
-                      isRecurring
-                        ? `/orders/recurring-orders/${orderId}`
-                        : `/orders/order-details/${orderId}`
-                    }
+                    to={`/orders/order-details/${orderId}`}
                     className="flex items-center gap-3 text-[16px] w-full"
                   >
                     <Document className="size-5" />
@@ -240,6 +236,20 @@ const AllOrders = () => {
                     </span>
                   </Link>
                 </DropdownMenuItem>
+                {isRecurring && (
+                  <DropdownMenuItem className="py-2 mb-2 cursor-pointer">
+                    <Link
+                      to={`/orders/recurring-orders/${orderId}`}
+                      className="flex items-center gap-3 text-[16px] w-full"
+                    >
+                      <List className="size-5" />
+                      <span className="text-gray-700 text-sm">
+                        {t("view_order_lists")}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+
                 {row.original.status !== "paused" ? (
                   <DropdownMenuItem
                     className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
