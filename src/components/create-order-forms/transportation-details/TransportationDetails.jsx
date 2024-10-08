@@ -270,7 +270,8 @@ const TransportationDetails = ({
                     updateCreateRecurringOrderData("recurring_type", val?.value)
                   }
                   placeholder="Select a type"
-                />
+                  className="cursor-pointer"
+                  />
 
                 {recurringData?.recurring_type === "week" ? (
                   <div className="">
@@ -295,6 +296,7 @@ const TransportationDetails = ({
                             val?.value
                           )
                         }
+                        className="cursor-pointer"     
                         defaultValue={recurringData?.start_time}
                         isTimeSelected={true}
                       />
@@ -322,6 +324,7 @@ const TransportationDetails = ({
                             val?.value
                           )
                         }
+                        className="cursor-pointer"
                         isTimeSelected={true}
                       />
                     </div>
@@ -421,6 +424,7 @@ const TransportationDetails = ({
                               val?.value
                             )
                           }
+                          className="cursor-pointer"
                           defaultValue={recurringData?.free_dates_start_time}
                         />
                       </div>
@@ -448,6 +452,7 @@ const TransportationDetails = ({
                               val?.value
                             )
                           }
+                          className="cursor-pointer"
                           defaultValue={recurringData?.free_dates_return_time}
                         />
                       </div>

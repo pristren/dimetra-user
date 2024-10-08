@@ -169,7 +169,11 @@ const PreviewDetails = ({
                     { value: "free", label: "Free" },
                   ]}
                   placeholder="Week"
+
+                  className="cursor-pointer"
+
                   defaultValue={recurringData.recurring_type}
+
                   disabled
                 />
 
@@ -182,7 +186,8 @@ const PreviewDetails = ({
                       <DatePicker disabled date={recurringData?.start_date} />
                       <AppSelect
                         items={timeOptions}
-                        placeholder="00:00"
+                            className="cursor-pointer"
+                            placeholder="00:00"
                         disabled
                         value={recurringData?.start_time}
                         isTime={true}
@@ -200,7 +205,8 @@ const PreviewDetails = ({
                         isTime={true}
                         value={recurringData?.return_time}
                         disabled
-                      />
+                        className="cursor-pointer"
+                        />
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
@@ -268,8 +274,10 @@ const PreviewDetails = ({
                           placeholder="Select a time"
                           isTime={true}
                           disabled
+                          className="cursor-pointer"
                           defaultValue={recurringData.free_dates_start_time}
                         />
+
                       </div>
                     </div>
                     <div className="mt-5 mb-5 ">
@@ -288,8 +296,10 @@ const PreviewDetails = ({
                           placeholder="No time selected"
                           isTime={true}
                           disabled
+                          className="cursor-pointer"
                           defaultValue={recurringData.free_dates_return_time}
                         />
+
                       </div>
                     </div>
                   </div>

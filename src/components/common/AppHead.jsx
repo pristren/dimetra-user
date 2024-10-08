@@ -87,7 +87,7 @@ export default function AppHead({
           <AppSelect
             items={filters}
             placeholder="Filters"
-            className="max-w-sm w-max"
+            className="max-w-sm w-max cursor-pointer"
             value={queryData?.filter_by}
             onValueChange={(value) => {
               setQueryData((prev) => ({ ...prev, filter_by: value }));
