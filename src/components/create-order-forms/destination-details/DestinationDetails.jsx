@@ -27,10 +27,6 @@ const DestinationDetails = ({
   setDestinationProgress,
   createOrderData,
   setCreateOrderData,
-  returnDate,
-  setReturnDate,
-  dropDate,
-  setDropDate,
   destinationProgress,
 }) => {
   const {
@@ -50,6 +46,8 @@ const DestinationDetails = ({
       drop_off_phone = "",
       return_approx_time = "",
       return_floor = "",
+      drop_off_pick_up_date,
+      return_date,
     } = {},
   } = createOrderData;
 
@@ -60,8 +58,10 @@ const DestinationDetails = ({
 
   const handleNext = (e) => {
     e.preventDefault();
-    const dropDateFormatted = moment(dropDate).format("YYYY-MM-DD");
-    const returnDateFormatted = moment(returnDate).format("YYYY-MM-DD");
+    const dropDateFormatted = moment(drop_off_pick_up_date).format(
+      "YYYY-MM-DD"
+    );
+    const returnDateFormatted = moment(return_date).format("YYYY-MM-DD");
     if (dropDateFormatted === returnDateFormatted) {
       const dropOffMinutes = timeStringToMinutes(drop_off_pick_up_time);
       const returnMinutes = timeStringToMinutes(return_approx_time);
@@ -114,7 +114,7 @@ const DestinationDetails = ({
       pick_up_city,
       pick_up_country,
       pick_up_employee_name,
-      dropDate,
+      drop_off_pick_up_date,
       drop_off_pick_up_time,
       drop_off_name,
       drop_off_address,
@@ -122,7 +122,7 @@ const DestinationDetails = ({
       drop_off_city,
       drop_off_country,
       drop_off_phone,
-      returnDate,
+      return_date,
       return_approx_time,
       return_floor,
     },
@@ -166,7 +166,7 @@ const DestinationDetails = ({
     drop_off_city,
     drop_off_country,
     drop_off_phone,
-    dropDate,
+    drop_off_pick_up_date,
   ];
 
   const fieldsFilledRecurring = [
@@ -384,7 +384,18 @@ const DestinationDetails = ({
                           Drop-Off Date <sup className="text-[13px]">*</sup>
                         </FormLabel>
                         <FormControl>
-                          <DatePicker date={dropDate} setDate={setDropDate} />
+                          <DatePicker
+                            date={drop_off_pick_up_date}
+                            setDate={(value) =>
+                              setCreateOrderData((prev) => ({
+                                ...prev,
+                                destinationDetailsData: {
+                                  ...prev.destinationDetailsData,
+                                  drop_off_pick_up_date: value,
+                                },
+                              }))
+                            }
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -605,8 +616,16 @@ const DestinationDetails = ({
                             </FormLabel>
                             <FormControl>
                               <DatePicker
-                                date={returnDate}
-                                setDate={setReturnDate}
+                                date={return_date}
+                                setDate={(value) =>
+                                  setCreateOrderData((prev) => ({
+                                    ...prev,
+                                    patientData: {
+                                      ...prev.patientData,
+                                      return_date: value,
+                                    },
+                                  }))
+                                }
                               />
                             </FormControl>
                             <FormMessage />
