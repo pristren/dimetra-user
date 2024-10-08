@@ -424,11 +424,8 @@ const DestinationDetails = ({
                                 value
                               )
                             }
-
                             className="cursor-pointer"
-
                             isTimeSelected={true}
-
                             value={drop_off_pick_up_time}
                           />
                         </FormControl>
@@ -650,14 +647,15 @@ const DestinationDetails = ({
                                 items={timeOptions}
                                 placeholder="00:00"
                                 isTime={true}
-                            className="cursor-pointer"
-                            onValueChange={(value) =>
+                                className="cursor-pointer"
+                                onValueChange={(value) =>
                                   updateDestinationData(
                                     "return_approx_time",
                                     value
                                   )
                                 }
                                 value={return_approx_time}
+                                isTimeSelected={true}
                               />
                             </FormControl>
                             <FormMessage />

@@ -266,11 +266,11 @@ const TransportationDetails = ({
                   ]}
                   value={recurringData?.recurring_type}
                   onValueChange={(val) =>
-                    updateCreateRecurringOrderData("recurring_type", val?.value)
+                    updateCreateRecurringOrderData("recurring_type", val)
                   }
                   placeholder="Select a type"
                 />
-
+                {console.log(recurringData)}
                 {recurringData?.recurring_type === "week" ? (
                   <div className="">
                     <h3 className="text-lg font-medium mt-10 mb-5">
@@ -289,10 +289,7 @@ const TransportationDetails = ({
                         placeholder="00:00"
                         isTime={true}
                         onValueChange={(val) =>
-                          updateCreateRecurringOrderData(
-                            "start_time",
-                            val?.value
-                          )
+                          updateCreateRecurringOrderData("start_time", val)
                         }
                         defaultValue={recurringData?.start_time}
                         isTimeSelected={true}
@@ -316,10 +313,7 @@ const TransportationDetails = ({
                         defaultValue={recurringData?.return_time}
                         isTime={true}
                         onValueChange={(val) =>
-                          updateCreateRecurringOrderData(
-                            "return_time",
-                            val?.value
-                          )
+                          updateCreateRecurringOrderData("return_time", val)
                         }
                         isTimeSelected={true}
                       />
@@ -417,10 +411,11 @@ const TransportationDetails = ({
                           onValueChange={(val) =>
                             updateCreateRecurringOrderData(
                               "free_dates_start_time",
-                              val?.value
+                              val
                             )
                           }
                           defaultValue={recurringData?.free_dates_start_time}
+                          isTimeSelected={true}
                         />
                       </div>
                     </div>
@@ -444,10 +439,11 @@ const TransportationDetails = ({
                           onValueChange={(val) =>
                             updateCreateRecurringOrderData(
                               "free_dates_return_time",
-                              val?.value
+                              val
                             )
                           }
                           defaultValue={recurringData?.free_dates_return_time}
+                          isTimeSelected={true}
                         />
                       </div>
                     </div>
