@@ -27,23 +27,16 @@ import {
 import { useEffect } from "react";
 import { calculateFormProgress } from "@/utils";
 import { t } from "i18next";
+import { size } from "lodash";
 
 const TransportationDetails = ({
   handleFormChange,
   createOrderData,
   setCreateOrderData,
   setTransportationProgress,
-  endDate,
-  startDate,
-  setEndDate,
-  setStartDate,
-  selectedWeekdays,
-  setSelectedWeekdays,
   transportationProgress,
-  freeDates,
-  setFreeDates,
 }) => {
-  const { transportationData } = createOrderData;
+  const { transportationData, recurringData } = createOrderData;
 
   const form_schema = z.object({
     type_of_transport: z.string().min(1, "Transport type is required"),
@@ -67,10 +60,10 @@ const TransportationDetails = ({
       type_of_transport: transportationData?.type_of_transport || "",
       mode_of_transportation: transportationData?.mode_of_transportation || [],
       transport_with: transportationData?.transport_with || [],
-      duration: transportationData?.ends || "",
-      start_date: startDate || null,
-      return_date: endDate || null,
-      multiple_week_days: transportationData?.multiple_week_days || [],
+      duration: recurringData?.ends || "",
+      start_date: recurringData?.start_date || null,
+      return_date: recurringData?.return_date || null,
+      multiple_week_days: recurringData?.multiple_week_days || [],
     },
   });
 
@@ -79,6 +72,16 @@ const TransportationDetails = ({
       ...prev,
       transportationData: {
         ...prev.transportationData,
+        [key]: value,
+      },
+    }));
+  };
+
+  const updateCreateRecurringOrderData = (key, value) => {
+    setCreateOrderData((prev) => ({
+      ...prev,
+      recurringData: {
+        ...prev.recurringData,
         [key]: value,
       },
     }));
@@ -102,39 +105,33 @@ const TransportationDetails = ({
 
   const handleWeekdayChange = (option) => {
     const { value } = option;
-    setSelectedWeekdays((prev) =>
-      prev.includes(value)
-        ? prev.filter((day) => day !== value)
-        : [...prev, value]
-    );
-
-    updateCreateOrderData(
+    updateCreateRecurringOrderData(
       "multiple_week_days",
-      selectedWeekdays.includes(value)
-        ? selectedWeekdays.filter((day) => day !== value)
-        : [...selectedWeekdays, value]
+      recurringData?.multiple_week_days.includes(value)
+        ? recurringData?.multiple_week_days.filter((day) => day !== value)
+        : [...recurringData?.multiple_week_days, value]
     );
   };
 
   useEffect(() => {
     const fieldsFilled =
       transportationData?.type_of_transport === "recurring" &&
-      transportationData?.recurring_type === "Week"
+      recurringData?.recurring_type === "week"
         ? [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation.length > 0,
             transportationData?.transport_with?.length > 0,
-            transportationData?.multiple_week_days?.length > 0,
-            transportationData?.start_date,
-            transportationData?.ends,
+            recurringData?.multiple_week_days?.length > 0,
+            recurringData?.start_date,
+            recurringData?.ends,
           ]
         : transportationData?.type_of_transport === "recurring" &&
-          transportationData?.recurring_type === "Free"
+          recurringData?.recurring_type === "free"
         ? [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation?.length > 0,
             transportationData?.transport_with?.length > 0,
-            transportationData?.free_dates?.length > 0,
+            recurringData?.free_dates?.length > 0,
           ]
         : [
             transportationData?.type_of_transport,
@@ -144,17 +141,15 @@ const TransportationDetails = ({
     setTransportationProgress(calculateFormProgress(fieldsFilled));
   }, [transportationData]);
 
-  useEffect(() => {
+  const handleDateChange = (key, value) => {
     setCreateOrderData((prev) => ({
       ...prev,
-      transportationData: {
-        ...prev.transportationData,
-        start_date: startDate,
-        return_date: endDate,
-        free_dates: freeDates,
+      recurringData: {
+        ...prev.recurringData,
+        [key]: value,
       },
     }));
-  }, [startDate, endDate, freeDates]);
+  };
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -270,35 +265,41 @@ const TransportationDetails = ({
                     { value: "week", label: "Week" },
                     { value: "free", label: "Free" },
                   ]}
-                  defaultValue={transportationData.recurring_type}
-                  onValueChange={(value) =>
-                    updateCreateOrderData("recurring_type", value)
+                  value={recurringData?.recurring_type}
+                  onValueChange={(val) =>
+                    updateCreateRecurringOrderData("recurring_type", val?.value)
                   }
                   placeholder="Select a type"
                   className="cursor-pointer"
                   />
 
-                {transportationData.recurring_type === "week" ? (
+                {recurringData?.recurring_type === "week" ? (
                   <div className="">
                     <h3 className="text-lg font-medium mt-10 mb-5">
                       {t("select_start_date_and_time")}*:
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
                       <DatePicker
-                        date={startDate}
-                        setDate={setStartDate}
+                        date={recurringData?.start_date}
+                        setDate={(value) =>
+                          handleDateChange("start_date", value)
+                        }
                         startMonth={new Date()}
                       />
                       <AppSelect
                         items={timeOptions}
                         placeholder="00:00"
                         isTime={true}
-                        onValueChange={(value) =>
-                          updateCreateOrderData("start_time", value)
+                        onValueChange={(val) =>
+                          updateCreateRecurringOrderData(
+                            "start_time",
+                            val?.value
+                          )
                         }
-                        defaultValue={transportationData.start_time}
-                        className="cursor-pointer"
-                        />
+                        className="cursor-pointer"     
+                        defaultValue={recurringData?.start_time}
+                        isTimeSelected={true}
+                      />
                     </div>
 
                     <h3 className="text-lg font-medium mt-10 mb-5">
@@ -306,17 +307,26 @@ const TransportationDetails = ({
                       <span className="highlight">({t("optional")})</span>:
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker date={endDate} setDate={setEndDate} />
+                      <DatePicker
+                        date={recurringData?.return_date}
+                        setDate={(value) =>
+                          handleDateChange("return_date", value)
+                        }
+                      />
                       <AppSelect
                         items={timeOptions}
                         placeholder="00:00"
-                        defaultValue={transportationData.return_time}
+                        defaultValue={recurringData?.return_time}
                         isTime={true}
-                        onValueChange={(value) =>
-                          updateCreateOrderData("return_time", value)
+                        onValueChange={(val) =>
+                          updateCreateRecurringOrderData(
+                            "return_time",
+                            val?.value
+                          )
                         }
                         className="cursor-pointer"
-                        />
+                        isTimeSelected={true}
+                      />
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
@@ -334,7 +344,7 @@ const TransportationDetails = ({
                         >
                           <Checkbox
                             id={option.value}
-                            checked={transportationData?.multiple_week_days?.includes(
+                            checked={recurringData?.multiple_week_days?.includes(
                               option.value
                             )}
                             onClick={() => handleWeekdayChange(option)}
@@ -358,9 +368,9 @@ const TransportationDetails = ({
                             <RadioGroup
                               onValueChange={(value) => {
                                 field.onChange(value);
-                                updateCreateOrderData("ends", value);
+                                updateCreateRecurringOrderData("ends", value);
                               }}
-                              value={transportationData.ends}
+                              value={recurringData?.ends}
                             >
                               {durationOptions.map((option) => (
                                 <div
@@ -385,36 +395,38 @@ const TransportationDetails = ({
 
                     <h2 className="text-lg font-semibold mt-5">
                       {t("summary_monthly_on_day")}
-                      {calculateMonthlyOccurrences(selectedWeekdays)}
+                      {calculateMonthlyOccurrences(
+                        recurringData?.multiple_week_days
+                      )}
                     </h2>
                   </div>
-                ) : transportationData.recurring_type === "free" ? (
+                ) : recurringData?.recurring_type === "free" ? (
                   <div className="">
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                        {t("select_return_date_and_time")}* (max 60):
+                        {t("select_start_date_and_time")}* (max 60):
                       </h3>
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
                           mode="multiple"
-                          date={freeDates}
-                          setDate={setFreeDates}
+                          date={recurringData?.free_dates}
+                          setDate={(value) =>
+                            handleDateChange("free_dates", value)
+                          }
                         />
                         <AppSelect
                           items={timeOptions}
                           placeholder="Select a time"
                           isTime={true}
-                          onValueChange={(value) =>
-                            updateCreateOrderData(
+                          onValueChange={(val) =>
+                            updateCreateRecurringOrderData(
                               "free_dates_start_time",
-                              value
+                              val?.value
                             )
                           }
-                          defaultValue={
-                            transportationData.free_dates_start_time
-                          }
                           className="cursor-pointer"
-                          />
+                          defaultValue={recurringData?.free_dates_start_time}
+                        />
                       </div>
                     </div>
                     <div className="mt-5 mb-5 ">
@@ -424,25 +436,25 @@ const TransportationDetails = ({
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
                           mode="multiple"
-                          date={freeDates}
-                          setDate={setFreeDates}
+                          date={recurringData?.free_dates}
+                          setDate={(value) =>
+                            handleDateChange("free_dates", value)
+                          }
                           disabled
                         />
                         <AppSelect
                           items={timeOptions}
                           placeholder="Select a time"
                           isTime={true}
-                          onValueChange={(value) =>
-                            updateCreateOrderData(
+                          onValueChange={(val) =>
+                            updateCreateRecurringOrderData(
                               "free_dates_return_time",
-                              value
+                              val?.value
                             )
                           }
-                          defaultValue={
-                            transportationData.free_dates_return_time
-                          }
                           className="cursor-pointer"
-                          />
+                          defaultValue={recurringData?.free_dates_return_time}
+                        />
                       </div>
                     </div>
                   </div>
