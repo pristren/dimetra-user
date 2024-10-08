@@ -38,6 +38,7 @@ const PreviewDetails = ({
     patientData,
     destinationDetailsData,
     billingDetailsData,
+    recurringData,
   } = createOrderData;
   const [showModal, setShowModal] = useState(false);
   const calculateMonthlyOccurrences = (weekdays) => {
@@ -168,25 +169,27 @@ const PreviewDetails = ({
                     { value: "free", label: "Free" },
                   ]}
                   placeholder="Week"
-                  defaultValue={transportationData.recurring_type}
+
+                  className="cursor-pointer"
+
+                  defaultValue={recurringData.recurring_type}
+
                   disabled
                 />
 
-                {transportationData.recurring_type === "Week" ? (
+                {recurringData.recurring_type === "week" ? (
                   <div className="">
                     <h3 className="text-lg font-medium mt-10 mb-5">
                       Select Start Date and Time*:
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker
-                        disabled
-                        date={startDate}
-                        setDate={setStartDate}
-                      />
+                      <DatePicker disabled date={recurringData?.start_date} />
                       <AppSelect
                         items={timeOptions}
-                        placeholder="00:00"
+                            className="cursor-pointer"
+                            placeholder="00:00"
                         disabled
+                        value={recurringData?.start_time}
                         isTime={true}
                       />
                     </div>
@@ -195,17 +198,15 @@ const PreviewDetails = ({
                       Select Return Time* :
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker
-                        disabled
-                        date={endDate}
-                        setDate={setEndDate}
-                      />
+                      <DatePicker disabled date={recurringData?.return_date} />
                       <AppSelect
                         items={timeOptions}
                         placeholder="00:00"
                         isTime={true}
+                        value={recurringData?.return_time}
                         disabled
-                      />
+                        className="cursor-pointer"
+                        />
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
@@ -221,7 +222,9 @@ const PreviewDetails = ({
                           <Checkbox
                             disabled
                             id={option.value}
-                            checked={selectedWeekdays.includes(option.value)}
+                            checked={recurringData?.multiple_week_days?.includes(
+                              option.value
+                            )}
                           />
                           <Label className="ml-2" htmlFor={option.value}>
                             {option.label}
@@ -231,7 +234,7 @@ const PreviewDetails = ({
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">Ends:</h3>
-                    <RadioGroup disabled value={transportationData?.ends}>
+                    <RadioGroup disabled value={recurringData?.ends}>
                       {durationOptions.map((option) => (
                         <div
                           key={option.value}
@@ -248,10 +251,12 @@ const PreviewDetails = ({
 
                     <h6 className="text-lg font-semibold mt-5">
                       Summary: Monthly on day
-                      {calculateMonthlyOccurrences(selectedWeekdays)}
+                      {calculateMonthlyOccurrences(
+                        recurringData?.multiple_week_days
+                      )}
                     </h6>
                   </div>
-                ) : transportationData.recurring_type === "Free" ? (
+                ) : recurringData.recurring_type === "free" ? (
                   <div className="">
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
@@ -260,7 +265,7 @@ const PreviewDetails = ({
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
                           mode="multiple"
-                          date={transportationData.free_dates}
+                          date={recurringData.free_dates}
                           disabled
                         />
 
@@ -269,10 +274,10 @@ const PreviewDetails = ({
                           placeholder="Select a time"
                           isTime={true}
                           disabled
-                          defaultValue={
-                            transportationData.free_dates_start_time
-                          }
+                          className="cursor-pointer"
+                          defaultValue={recurringData.free_dates_start_time}
                         />
+
                       </div>
                     </div>
                     <div className="mt-5 mb-5 ">
@@ -282,7 +287,7 @@ const PreviewDetails = ({
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
                           mode="multiple"
-                          date={transportationData.free_dates}
+                          date={recurringData.free_dates}
                           disabled
                         />
 
@@ -291,10 +296,10 @@ const PreviewDetails = ({
                           placeholder="No time selected"
                           isTime={true}
                           disabled
-                          defaultValue={
-                            transportationData.free_dates_return_time
-                          }
+                          className="cursor-pointer"
+                          defaultValue={recurringData.free_dates_return_time}
                         />
+
                       </div>
                     </div>
                   </div>
@@ -485,8 +490,7 @@ const PreviewDetails = ({
                 <div>
                   <div>
                     <h6 className="mb-8">Drop-Off</h6>
-                    {createOrderData?.transportationData?.type_of_transport !==
-                      "recurring" && (
+                    {transportationData?.type_of_transport !== "recurring" && (
                       <div className="mb-5">
                         <Label className="block mb-2 font-medium">
                           Date <sup className="text-[13px]">*</sup>
@@ -503,8 +507,7 @@ const PreviewDetails = ({
                         />
                       </div>
                     )}
-                    {createOrderData?.transportationData?.type_of_transport !==
-                      "recurring" && (
+                    {transportationData?.type_of_transport !== "recurring" && (
                       <div className="mb-5">
                         <Label className="block mb-2 font-medium">
                           Pickup time <sup className="text-[13px]">*</sup>
