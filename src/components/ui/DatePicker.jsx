@@ -29,11 +29,18 @@ export function DatePicker({
         >
           {mode !== "single" && date?.length > 0 ? (
             <span>
-              {format(date[0], "dd MMMM yyyy")}
-              {date.length - 1 !== 0
+              {
+                // show the lowest date
+                format(date?.sort((a, b) => a - b)[0], "dd MMMM yyyy")
+              }
+              {date?.length - 1 !== 0
                 ? ` and ${date.length - 1}
               ${
-                date.length === 2 ? "other" : date.length > 2 ? "others" : null
+                date?.length === 2
+                  ? "other"
+                  : date?.length > 2
+                  ? "others"
+                  : null
               }`
                 : null}
             </span>

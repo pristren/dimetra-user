@@ -27,6 +27,7 @@ import {
 import { useEffect } from "react";
 import { calculateFormProgress } from "@/utils";
 import { t } from "i18next";
+import toast from "react-hot-toast";
 
 const TransportationDetails = ({
   handleFormChange,
@@ -77,13 +78,40 @@ const TransportationDetails = ({
   };
 
   const updateCreateRecurringOrderData = (key, value) => {
-    setCreateOrderData((prev) => ({
-      ...prev,
-      recurringData: {
-        ...prev.recurringData,
-        [key]: value,
-      },
-    }));
+    if (key === "recurring_type" && value === "free") {
+      setCreateOrderData((prev) => ({
+        ...prev,
+        recurringData: {
+          ...prev.recurringData,
+          [key]: value,
+          start_date: null,
+          return_date: null,
+          start_time: "",
+          return_time: "",
+          multiple_week_days: [],
+          ends: "",
+        },
+      }));
+    } else if (key === "recurring_type" && value === "week") {
+      setCreateOrderData((prev) => ({
+        ...prev,
+        recurringData: {
+          ...prev.recurringData,
+          [key]: value,
+          free_dates: [new Date()],
+          free_dates_start_time: "",
+          free_dates_return_time: "",
+        },
+      }));
+    } else {
+      setCreateOrderData((prev) => ({
+        ...prev,
+        recurringData: {
+          ...prev.recurringData,
+          [key]: value,
+        },
+      }));
+    }
   };
 
   const handleCheckBox = (type, value) => {
@@ -131,6 +159,7 @@ const TransportationDetails = ({
             transportationData?.mode_of_transportation?.length > 0,
             transportationData?.transport_with?.length > 0,
             recurringData?.free_dates?.length > 0,
+            recurringData?.free_dates_start_time,
           ]
         : [
             transportationData?.type_of_transport,
@@ -138,7 +167,7 @@ const TransportationDetails = ({
             transportationData?.transport_with.length > 0,
           ];
     setTransportationProgress(calculateFormProgress(fieldsFilled));
-  }, [transportationData]);
+  }, [transportationData, recurringData, setTransportationProgress]);
 
   const handleDateChange = (key, value) => {
     setCreateOrderData((prev) => ({
@@ -148,6 +177,46 @@ const TransportationDetails = ({
         [key]: value,
       },
     }));
+  };
+
+  const handleNext = (e) => {
+    e.preventDefault();
+    if (recurringData?.recurring_type === "free") {
+      const startTime = new Date(
+        new Date().setHours(
+          recurringData?.free_dates_start_time.split(":")[0],
+          recurringData?.free_dates_start_time.split(":")[1]
+        )
+      );
+      const returnTime = new Date(
+        new Date().setHours(
+          recurringData?.free_dates_return_time.split(":")[0],
+          recurringData?.free_dates_return_time.split(":")[1]
+        )
+      );
+      if (startTime >= returnTime) {
+        toast.error("Return time should be after start time");
+        return;
+      }
+    } else if (recurringData?.recurring_type === "week") {
+      const startTime = new Date(
+        new Date().setHours(
+          recurringData?.start_time.split(":")[0],
+          recurringData?.start_time.split(":")[1]
+        )
+      );
+      const returnTime = new Date(
+        new Date().setHours(
+          recurringData?.return_time.split(":")[0],
+          recurringData?.return_time.split(":")[1]
+        )
+      );
+      if (startTime >= returnTime) {
+        toast.error("Return time should be after start time");
+        return;
+      }
+    }
+    handleFormChange("patientDetails");
   };
 
   return (
@@ -270,11 +339,10 @@ const TransportationDetails = ({
                   }
                   placeholder="Select a type"
                 />
-                {console.log(recurringData)}
                 {recurringData?.recurring_type === "week" ? (
                   <div className="">
                     <h3 className="text-lg font-medium mt-10 mb-5">
-                      {t("select_start_date_and_time")}*:
+                      {t("select_start_date_and_time")} *
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
                       <DatePicker
@@ -283,6 +351,9 @@ const TransportationDetails = ({
                           handleDateChange("start_date", value)
                         }
                         startMonth={new Date()}
+                        disabled={{
+                          before: new Date(),
+                        }}
                       />
                       <AppSelect
                         items={timeOptions}
@@ -293,12 +364,12 @@ const TransportationDetails = ({
                         }
                         defaultValue={recurringData?.start_time}
                         isTimeSelected={true}
+                        value={recurringData?.start_time}
                       />
                     </div>
-
-                    <h3 className="text-lg font-medium mt-10 mb-5">
-                      {t("select_return_date_time")}
-                      <span className="highlight">({t("optional")})</span>:
+                    <h3 className="text-lg font-medium  mb-5">
+                      {t("select_return_date_time")}{" "}
+                      <span className="highlight">({t("optional")})</span>
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
                       <DatePicker
@@ -306,6 +377,10 @@ const TransportationDetails = ({
                         setDate={(value) =>
                           handleDateChange("return_date", value)
                         }
+                        disabled={{
+                          before: new Date(recurringData?.start_date),
+                          after: new Date(recurringData?.start_date),
+                        }}
                       />
                       <AppSelect
                         items={timeOptions}
@@ -316,6 +391,7 @@ const TransportationDetails = ({
                           updateCreateRecurringOrderData("return_time", val)
                         }
                         isTimeSelected={true}
+                        value={recurringData?.return_time}
                       />
                     </div>
 
@@ -394,15 +470,26 @@ const TransportationDetails = ({
                   <div className="">
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                        {t("select_start_date_and_time")}* (max 60):
+                        {t("select_start_date_and_time")} *
+                        <span className="text-sm text-gray-500"> (max 60)</span>
                       </h3>
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
                           mode="multiple"
-                          date={recurringData?.free_dates}
+                          date={
+                            recurringData?.free_dates
+                              ? recurringData?.free_dates.map(
+                                  (date) => new Date(date)
+                                )
+                              : []
+                          }
                           setDate={(value) =>
                             handleDateChange("free_dates", value)
                           }
+                          disabled={{
+                            before: new Date(),
+                          }}
+                          max={60}
                         />
                         <AppSelect
                           items={timeOptions}
@@ -416,12 +503,16 @@ const TransportationDetails = ({
                           }
                           defaultValue={recurringData?.free_dates_start_time}
                           isTimeSelected={true}
+                          value={recurringData?.free_dates_start_time}
                         />
                       </div>
                     </div>
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                        {t("select_return_date_and_time")}:
+                        {t("select_return_date_and_time")}{" "}
+                        <span className="text-sm text-gray-600">
+                          {t("(optional)")}
+                        </span>
                       </h3>
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
@@ -444,6 +535,7 @@ const TransportationDetails = ({
                           }
                           defaultValue={recurringData?.free_dates_return_time}
                           isTimeSelected={true}
+                          value={recurringData?.free_dates_return_time}
                         />
                       </div>
                     </div>
@@ -457,7 +549,7 @@ const TransportationDetails = ({
                 type="submit"
                 disabled={transportationProgress < 100}
                 className="mt-5 bg-secondary text-black hover:text-white px-12"
-                onClick={() => handleFormChange("patientDetails")}
+                onClick={(e) => handleNext(e)}
               >
                 {t("next")}
               </Button>
