@@ -15,7 +15,7 @@ const LeftSideNav = () => {
 
   return (
     <div className="hidden lg:block w-60 h-screen border-r text-gray-500 p-4 pt-8 sticky top-0">
-      <Link to="/">
+      <Link to="/orders/all-orders">
         <Logo className="mx-auto" />
       </Link>
       <Link

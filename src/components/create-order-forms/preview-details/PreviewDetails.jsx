@@ -48,7 +48,6 @@ const PreviewDetails = ({
   const navigate = useNavigate();
   const handleCreateAnOrder = async () => {
     const updatedData = { ...createOrderData };
-    console.log(updatedData);
 
     if (updatedData?.transportationData?.type_of_transport !== "recurring") {
       delete updatedData.transportationData?.recurring_type;
@@ -61,7 +60,7 @@ const PreviewDetails = ({
         },
       });
       if (data?.createAnOrder?.id) {
-        // localStorage.removeItem("createOrderData");
+        localStorage.removeItem("createOrderData");
         setShowModal(true);
       }
     } catch (error) {

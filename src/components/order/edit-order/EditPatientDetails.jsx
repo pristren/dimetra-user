@@ -54,11 +54,10 @@ const EditPatientDetails = ({
     }));
   };
   return (
-    <Card className="px-5 py-5 border-none rounded-none">
-      <CardHeader>
-        <CardTitle>Patient Details</CardTitle>
-      </CardHeader>
-      <CardContent className="px-10">
+    <Card className="p-6 border-none rounded-none">
+      <h4 className="px-3">Patient Details</h4>
+
+      <CardContent className="px-3 mt-3">
         <Form {...form}>
           <form>
             <div className="grid grid-cols-3 gap-5">

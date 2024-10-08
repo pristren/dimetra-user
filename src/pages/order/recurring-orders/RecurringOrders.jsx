@@ -1,4 +1,4 @@
-import { ArrowUpDown, Document, Pause, Pencil, Trash } from "@/assets/icons";
+import { ArrowUpDown, Document, Pause, Pencil } from "@/assets/icons";
 import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_ALL_RECURRING_ORDERS } from "./graphql/queries/getAllRecurringOrders.gql";
 import { UPDATE_RECCURING_ORDER_STATUS } from "./graphql/mutations/updateAnRecurringOrderStatus.gql";
+import { ResumeIcon } from "@radix-ui/react-icons";
 
 const RecurringOrders = () => {
   const { id } = useParams();
@@ -24,20 +25,23 @@ const RecurringOrders = () => {
   });
   const [totalPage, setTotalPage] = useState(null);
 
-  const [getAllRecurringOrders] = useLazyQuery(GET_ALL_RECURRING_ORDERS, {
-    variables: {
-      queryData,
-    },
-    errorPolicy: "all",
-    fetchPolicy: "no-cache",
-    onCompleted: (response) => {
-      setTotalPage(response.getAllRecurringOrders?.totalPages);
-      setData(response.getAllRecurringOrders?.data);
-    },
-    onError: (error) => {
-      console.error({ error });
-    },
-  });
+  const [getAllRecurringOrders, { loading }] = useLazyQuery(
+    GET_ALL_RECURRING_ORDERS,
+    {
+      variables: {
+        queryData,
+      },
+      errorPolicy: "all",
+      fetchPolicy: "no-cache",
+      onCompleted: (response) => {
+        setTotalPage(response.getAllRecurringOrders?.totalPages);
+        setData(response.getAllRecurringOrders?.data);
+      },
+      onError: (error) => {
+        console.error({ error });
+      },
+    }
+  );
   useEffect(() => {
     getAllRecurringOrders();
   }, []);
@@ -78,9 +82,6 @@ const RecurringOrders = () => {
         inputData: { status },
       },
     });
-  };
-  const handleDeleteOrder = (orderId) => {
-    setData((prevData) => prevData.filter((order) => order.id !== orderId));
   };
 
   const columns = [
@@ -193,6 +194,7 @@ const RecurringOrders = () => {
         </div>
       ),
       cell: ({ row }) => {
+        const orderId = row.original.id;
         return (
           <div className="flex justify-center items-center">
             <DropdownMenu>
@@ -200,29 +202,42 @@ const RecurringOrders = () => {
                 <EllipsisVertical className="h-4 w-4 cursor-pointer" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="-translate-x-5 p-4 w-60">
-                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2">
+                <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer">
                   <Pencil className="size-5 text-gray-600" />
                   <span className="text-gray-700 text-sm">Edit</span>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem className="py-2 mb-2">
                   <Link
-                    to={`/orders/order-details/${row.original.id}`}
-                    className="flex items-center gap-3 text-[16px]"
+                    to={`/orders/recurring-orders/order-details/${orderId}`}
+                    className="flex items-center gap-3 text-[16px] w-full"
                   >
                     <Document className="size-5" />
                     <span className="text-gray-700 text-sm">View Details</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="flex items-center gap-3 text-[16px] mb-2 py-2"
-                  onClick={() =>
-                    updateARecurringOrderStatus(row.original.id, "paused")
-                  }
-                >
-                  <Pause className="size-5" />
-                  <span className="text-gray-700 text-sm">Pause</span>
-                </DropdownMenuItem>
+                {row.original.status !== "paused" ? (
+                  <DropdownMenuItem
+                    className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
+                    onClick={() =>
+                      updateARecurringOrderStatus(orderId, "paused")
+                    }
+                    disabled={row.original.status !== "pending"}
+                  >
+                    <Pause className="size-5" />
+                    <span className="text-gray-700 text-sm">Pause</span>
+                  </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem
+                    className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
+                    onClick={() =>
+                      updateARecurringOrderStatus(orderId, "pending")
+                    }
+                  >
+                    <ResumeIcon className="size-5" />
+                    <span className="text-gray-700 text-sm">Resume</span>
+                  </DropdownMenuItem>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -238,11 +253,12 @@ const RecurringOrders = () => {
         data={data}
         pageTitle={"Recurring Orders"}
         isDateVisible={false}
-        isRecurring={true}
+        isRecurring={id}
         isFilterVisible={false}
         totalPage={totalPage}
         queryData={queryData}
         setQueryData={setQueryData}
+        isLoading={loading}
       />
     </div>
   );

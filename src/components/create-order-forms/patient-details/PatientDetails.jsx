@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { calculateFormProgress } from "@/utils";
 import { Label } from "@/components/ui/label";
-import { DatePicker } from "@/components/ui/DatePicker";
 import {
   Select,
   SelectContent,
@@ -26,6 +25,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { t } from "i18next";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 
 const PatientDetails = ({
   handleFormChange,
@@ -149,26 +158,102 @@ const PatientDetails = ({
                 <FormField
                   control={form.control}
                   name="date_of_birth"
-                  render={() => (
+                  render={({ field }) => (
                     <FormItem>
                       <FormLabel className="mb-2">
                         {t("date_of_birth")}
                         <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker
-                          date={patientData?.date_of_birth}
-                          setDate={(value) =>
-                            setCreateOrderData((prev) => ({
-                              ...prev,
-                              patientData: {
-                                ...prev.patientData,
-                                date_of_birth: value,
-                              },
-                            }))
-                          }
-                          className="py-6"
-                        />
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={"outline"}
+                                className={cn(
+                                  "w-full justify-between gap-4 text-left font-normal",
+                                  !field.value && "text-muted-foreground "
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, "PPP")
+                                ) : (
+                                  <span>{t("Pick a date")}</span>
+                                )}
+                                <div className="w-6 h-6 rounded-full p-1  flex justify-center items-center bg-primary text-white">
+                                  <CalendarIcon className="w-4 h-4" />
+                                </div>
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <div className="p-3">
+                              <Select
+                                onValueChange={(value) => {
+                                  const newDate = new Date(
+                                    field.value || new Date()
+                                  );
+                                  newDate.setFullYear(parseInt(value));
+                                  form.setValue("date_of_birth", newDate);
+                                }}
+                                value={
+                                  field.value
+                                    ? new Date(field.value)
+                                        .getFullYear()
+                                        .toString()
+                                    : ""
+                                }
+                              >
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select year" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {Array.from(
+                                    {
+                                      length:
+                                        new Date().getFullYear() - 1900 + 1,
+                                    },
+                                    (_, i) => (
+                                      <SelectItem
+                                        key={i}
+                                        value={(
+                                          new Date().getFullYear() - i
+                                        ).toString()}
+                                      >
+                                        {new Date().getFullYear() - i}
+                                      </SelectItem>
+                                    )
+                                  )}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="p-3 pt-0">
+                              <Calendar
+                                key={field.value}
+                                mode="single"
+                                selected={
+                                  field.value ? new Date(field.value) : null
+                                }
+                                onSelect={(date) => {
+                                  field.onChange(date);
+                                  setCreateOrderData((prev) => ({
+                                    ...prev,
+                                    patientData: {
+                                      ...prev.patientData,
+                                      date_of_birth: date,
+                                    },
+                                  }));
+                                }}
+                                defaultMonth={field.value}
+                                disabled={(date) =>
+                                  date > new Date() ||
+                                  date < new Date("1900-01-01")
+                                }
+                                initialFocus
+                              />
+                            </div>
+                          </PopoverContent>
+                        </Popover>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

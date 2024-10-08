@@ -1,4 +1,4 @@
-name: Dimetra-frontend CI/CD
+name: Dimetra-user CI/CD
 
 on:
   push:
@@ -6,41 +6,33 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     strategy:
       matrix:
         node-version: [20.x]
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v3
     
+    # Setup Node.js
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-
-    # Cache node_modules including global npm packages
-    - name: Cache npm dependencies
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-npm-${{ hashFiles('package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-npm-
-
-    - run: npm install
     
-    - name: Build the application
-      run: npm run build --if-present
-      
-    - name: Set environment variables
-      run: |
+    # Set up environment variables
+    - run: |
         touch .env
         echo "${{ secrets.PROD_ENV_FILE }}" > .env
+        
+    # Remove node_modules folder
+    - name: Remove node_modules
+      run: rm -rf node_modules
     
-    - name: Install PM2 globally
-      run: npm install -g pm2
+    # Install node_modules
+    - name: Install Dependencies
+      run: npm ci  # or npm install if you don’t use package-lock.json
 
-    - name: Start or Restart Application with PM2
-      run: |
-        pm2 start npm --name "dimetra-user" -- run dev || pm2 restart dimetra-user
+    # Restart the PM2 process after dependencies are installed
+    - name: Restart PM2 Process
+      run: pm2 restart dimetra-user

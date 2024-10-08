@@ -296,6 +296,7 @@ const TransportationDetails = ({
                           )
                         }
                         defaultValue={recurringData?.start_time}
+                        isTimeSelected={true}
                       />
                     </div>
 
@@ -321,6 +322,7 @@ const TransportationDetails = ({
                             val?.value
                           )
                         }
+                        isTimeSelected={true}
                       />
                     </div>
 

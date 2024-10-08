@@ -27,7 +27,7 @@ export function DatePicker({
             className
           )}
         >
-          {date?.length > 0 ? (
+          {mode !== "single" && date?.length > 0 ? (
             <span>
               {format(date[0], "dd MMMM yyyy")}
               {date.length - 1 !== 0
@@ -37,7 +37,7 @@ export function DatePicker({
               }`
                 : null}
             </span>
-          ) : date ? (
+          ) : date && mode === "single" ? (
             format(date, "dd MMMM yyyy")
           ) : (
             <span className="text-black">Pick a date</span>

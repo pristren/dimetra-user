@@ -6,6 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { t } from "i18next";
 
 const AppSelect = ({
   items,
@@ -15,24 +16,22 @@ const AppSelect = ({
   onValueChange,
   value,
   disabled = false,
+  isTimeSelected = false,
 }) => {
   return (
     <Select
       disabled={disabled}
-      onValueChange={(val) => {
-        const selectedItem = items.find((item) => item.value === val);
-        onValueChange(selectedItem);
-      }}
-      value={value}
-      defaultValue={value}
+      onValueChange={onValueChange}
+      defaultValue={items?.find((f) => f?.value === value)?.value}
+      value={items?.find((f) => f?.value === value)?.value}
     >
       <SelectTrigger isTime={isTime} className={className}>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
         {items?.map((item, i) => (
-          <SelectItem key={i} value={item.value}>
-            {item?.label}
+          <SelectItem key={i} value={item?.value}>
+            {!isTimeSelected ? t(item?.label) : item?.label}
           </SelectItem>
         ))}
       </SelectContent>
