@@ -47,53 +47,6 @@ const CreateOrder = () => {
   }, []);
 
   const handleFormChange = (step) => {
-    if (
-      step === "patientDetails" &&
-      createOrderData.transportationData.type_of_transport === "recurring"
-    ) {
-      if (createOrderData.transportationData.recurring_type === "Week") {
-        setCreateOrderData((prev) => ({
-          ...prev,
-          transportationData: {
-            ...prev.transportationData,
-            free_dates: [],
-            free_dates_start_time: "",
-            free_dates_return_time: "",
-          },
-        }));
-      } else {
-        setCreateOrderData((prev) => ({
-          ...prev,
-          transportationData: {
-            ...prev.transportationData,
-            multiple_week_days: [],
-            start_date: null,
-            return_date: null,
-            start_time: "",
-            return_time: "",
-            ends: "",
-          },
-        }));
-      }
-    } else if (
-      step === "patientDetails" &&
-      createOrderData.transportationData.type_of_transport !== "recurring"
-    ) {
-      setCreateOrderData((prev) => ({
-        ...prev,
-        transportationData: {
-          ...prev.transportationData,
-          multiple_week_days: [],
-          recurring_type: "",
-          start_date: null,
-          return_date: null,
-          start_time: "",
-          return_time: "",
-          ends: "",
-          free_dates: [],
-        },
-      }));
-    }
     setCurrentStep(step);
   };
 
