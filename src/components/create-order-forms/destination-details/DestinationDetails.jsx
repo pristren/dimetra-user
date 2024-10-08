@@ -75,6 +75,11 @@ const DestinationDetails = ({
         );
         return;
       }
+    } else if (dropDateFormatted > returnDateFormatted) {
+      toast("Return date must be greater than drop-off date.", {
+        icon: "⚠️",
+      });
+      return;
     }
 
     handleFormChange("billingDetails");
@@ -385,7 +390,11 @@ const DestinationDetails = ({
                         </FormLabel>
                         <FormControl>
                           <DatePicker
-                            date={drop_off_pick_up_date}
+                            date={
+                              drop_off_pick_up_date
+                                ? new Date(drop_off_pick_up_date)
+                                : null
+                            }
                             setDate={(value) =>
                               setCreateOrderData((prev) => ({
                                 ...prev,
@@ -395,6 +404,10 @@ const DestinationDetails = ({
                                 },
                               }))
                             }
+                            disabled={{
+                              before: new Date(),
+                              after: new Date(return_date),
+                            }}
                           />
                         </FormControl>
                         <FormMessage />
@@ -621,12 +634,17 @@ const DestinationDetails = ({
                                 setDate={(value) =>
                                   setCreateOrderData((prev) => ({
                                     ...prev,
-                                    patientData: {
-                                      ...prev.patientData,
+                                    destinationDetailsData: {
+                                      ...prev.destinationDetailsData,
                                       return_date: value,
                                     },
                                   }))
                                 }
+                                disabled={{
+                                  before: drop_off_pick_up_date
+                                    ? new Date(drop_off_pick_up_date)
+                                    : new Date(),
+                                }}
                               />
                             </FormControl>
                             <FormMessage />
