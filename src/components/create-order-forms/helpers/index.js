@@ -97,6 +97,7 @@ export const createOrderDefaultState = {
     type_of_transport: "",
     mode_of_transportation: [],
     transport_with: [],
+    oxygen_quantity: null,
   },
   recurringData: {
     recurring_type: "",
@@ -128,7 +129,6 @@ export const createOrderDefaultState = {
     pick_up_city: "",
     pick_up_country: "",
     pick_up_employee_name: "",
-
     drop_off_pick_up_date: null,
     drop_off_pick_up_time: "",
     drop_off_name: "",
@@ -137,7 +137,6 @@ export const createOrderDefaultState = {
     drop_off_city: "",
     drop_off_country: "",
     drop_off_phone: "",
-
     return_date: null,
     return_approx_time: "",
     return_floor: "",
