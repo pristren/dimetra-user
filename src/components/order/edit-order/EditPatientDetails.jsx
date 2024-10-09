@@ -78,7 +78,12 @@ const EditPatientDetails = ({
                         className={
                           form.formState.errors.name ? "border-red-500" : ""
                         }
-                        placeholder="Enter patient's name"
+                        placeholder={
+                          editOrderData.transportationData
+                            ?.type_of_transport === "collection_order"
+                            ? "Enter name collection"
+                            : "Enter patient's name"
+                        }
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -108,7 +113,12 @@ const EditPatientDetails = ({
                         className={
                           form.formState.errors.surname ? "border-red-500" : ""
                         }
-                        placeholder="Enter patient's surname"
+                        placeholder={
+                          editOrderData.transportationData
+                            ?.type_of_transport === "collection_order"
+                            ? "Enter number of patients"
+                            : "Enter patient's surname"
+                        }
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);

@@ -74,15 +74,27 @@ const PatientDetails = ({
   };
 
   useEffect(() => {
-    const fieldsFilled = [
-      patientData.name,
-      patientData.surname,
-      patientData.date_of_birth,
-      patientData.area_room,
-      patientData.cost_center,
-    ];
-
-    setPatientProgress(calculateFormProgress(fieldsFilled));
+    if (
+      createOrderData.transportationData?.type_of_transport ===
+      "collection_order"
+    ) {
+      const fieldsFilled = [
+        patientData.name,
+        patientData.surname,
+        patientData.area_room,
+        patientData.cost_center,
+      ];
+      setPatientProgress(calculateFormProgress(fieldsFilled));
+    } else {
+      const fieldsFilled = [
+        patientData.name,
+        patientData.surname,
+        patientData.date_of_birth,
+        patientData.area_room,
+        patientData.cost_center,
+      ];
+      setPatientProgress(calculateFormProgress(fieldsFilled));
+    }
   }, [patientData, setPatientProgress]);
 
   return (
@@ -111,7 +123,12 @@ const PatientDetails = ({
                         className={
                           form.formState.errors.name ? "border-red-500" : ""
                         }
-                        placeholder={t("enter_patient_name")}
+                        placeholder={
+                          createOrderData.transportationData
+                            ?.type_of_transport === "collection_order"
+                            ? "Enter name of the collection"
+                            : "Enter patient's name"
+                        }
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -141,7 +158,12 @@ const PatientDetails = ({
                         className={
                           form.formState.errors.surname ? "border-red-500" : ""
                         }
-                        placeholder={t("enter_patient_surname")}
+                        placeholder={
+                          createOrderData.transportationData
+                            ?.type_of_transport === "collection_order"
+                            ? "Enter number of patients"
+                            : "Enter patient's surname"
+                        }
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);

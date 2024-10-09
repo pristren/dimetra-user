@@ -4,6 +4,7 @@ export const GET_AN_ORDER = gql`
   query GET_AN_ORDER($queryData: CommonQueryType!) {
     getAnOrder(queryData: $queryData) {
       id
+      order_type
       user {
         id
         first_name
@@ -22,12 +23,7 @@ export const GET_AN_ORDER = gql`
         type_of_transport
         mode_of_transportation
         transport_with
-        start_date
-        return_date
-        start_time
-        return_time
-        multiple_week_days
-        ends
+        oxygen_quantity
       }
       patientData {
         name

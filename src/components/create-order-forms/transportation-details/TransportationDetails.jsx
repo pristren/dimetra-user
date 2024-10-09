@@ -28,6 +28,7 @@ import { useEffect } from "react";
 import { calculateFormProgress } from "@/utils";
 import { t } from "i18next";
 import toast from "react-hot-toast";
+import { Input } from "@/components/ui/input";
 
 const TransportationDetails = ({
   handleFormChange,
@@ -147,7 +148,11 @@ const TransportationDetails = ({
         ? [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation.length > 0,
-            transportationData?.transport_with?.length > 0,
+            transportationData?.transport_with?.length > 0
+              ? transportationData?.transport_with.includes("oxygen_quantity")
+                ? transportationData?.oxygen_quantity > 0
+                : true
+              : false,
             recurringData?.multiple_week_days?.length > 0,
             recurringData?.start_date,
             recurringData?.ends,
@@ -157,14 +162,22 @@ const TransportationDetails = ({
         ? [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation?.length > 0,
-            transportationData?.transport_with?.length > 0,
+            transportationData?.transport_with?.length > 0
+              ? transportationData?.transport_with.includes("oxygen_quantity")
+                ? transportationData?.oxygen_quantity > 0
+                : true
+              : false,
             recurringData?.free_dates?.length > 0,
             recurringData?.free_dates_start_time,
           ]
         : [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation?.length > 0,
-            transportationData?.transport_with.length > 0,
+            transportationData?.transport_with?.length > 0
+              ? transportationData?.transport_with.includes("oxygen_quantity")
+                ? transportationData?.oxygen_quantity > 0
+                : true
+              : false,
           ];
     setTransportationProgress(calculateFormProgress(fieldsFilled));
   }, [transportationData, recurringData, setTransportationProgress]);
@@ -303,22 +316,48 @@ const TransportationDetails = ({
                   <span className="highlight">({t("multiple_selection")})</span>
                 </h6>
                 {transportWithOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-4">
+                  <div
+                    key={option.value}
+                    className={`${
+                      option.value !== "oxygen_quantity"
+                        ? "flex items-center"
+                        : ""
+                    }  mb-4 `}
+                  >
                     <Checkbox
                       id={option.value}
                       checked={transportationData.transport_with?.includes(
                         option.value
                       )}
-                      onClick={() =>
-                        handleCheckBox("transport_with", option.value)
-                      }
+                      onClick={() => {
+                        handleCheckBox("transport_with", option.value);
+                      }}
                     />
                     <Label
-                      className="font-normal text-[16px] ml-2"
+                      className="font-normal text-[16px] ml-2 text-nowrap"
                       htmlFor={option.value}
                     >
                       {t(option.label)}
                     </Label>
+                    <div className="w-full mt-2">
+                      {option.value === "oxygen_quantity" &&
+                        transportationData.transport_with?.includes(
+                          "oxygen_quantity"
+                        ) && (
+                          <Input
+                            placeholder=""
+                            className=" h-10"
+                            type="number"
+                            onChange={(e) => {
+                              updateCreateOrderData(
+                                "oxygen_quantity",
+                                Number(e.target.value)
+                              );
+                            }}
+                            value={transportationData?.oxygen_quantity}
+                          />
+                        )}
+                    </div>
                   </div>
                 ))}
               </div>

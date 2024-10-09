@@ -12,7 +12,6 @@ export const GET_ALL_ORDERS_FOR_HISTORY = gql`
         status
         transportationData {
           type_of_transport
-          free_dates
         }
         patientData {
           name

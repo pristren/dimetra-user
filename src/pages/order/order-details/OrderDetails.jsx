@@ -57,9 +57,9 @@ function OrderDetails({ singleRecurring = false }) {
       ) : (
         <Card className="mt-6 bg-white p-6 border-opacity-50 ">
           <h5>Transportation Details</h5>
-          <div className="grid grid-cols-3 mt-10 mb-20">
+          <div className="grid grid-cols-3 mt-6 mb-20">
             <div>
-              <p className="highlight mb-4">Type of Transport</p>
+              <p className="font-medium  mb-3">Type of Transport</p>
               <p>
                 {data?.transportationData?.type_of_transport?.includes("_")
                   ? data?.transportationData?.type_of_transport
@@ -69,26 +69,28 @@ function OrderDetails({ singleRecurring = false }) {
               </p>
             </div>
             <div>
-              <p className="highlight mb-4">Mode of Transportation</p>
+              <p className="font-medium mb-2 last:mb-0">
+                Mode of Transportation
+              </p>
               {data?.transportationData?.mode_of_transportation?.map(
                 (mode, index) => (
-                  <p key={index}>
+                  <p key={index} className="space-y-2">
                     {mode?.includes("_") ? mode?.split("_").join(" ") : mode}
                   </p>
                 )
               )}
             </div>
             <div>
-              <p className="highlight mb-4">Transport With</p>
-              {data?.transportationData?.transport_with?.map(
-                (person, index) => (
-                  <p key={index}>
-                    {person?.includes("_")
-                      ? person?.split("_").join(" ")
-                      : person}
-                  </p>
-                )
-              )}
+              <p className="font-medium  mb-3">Transport With</p>
+              {data?.transportationData?.transport_with?.map((value, index) => (
+                <p key={index} className="mb-2 last:mb-0">
+                  {value === "oxygen_quantity"
+                    ? `Oxygen Quantity: (${data?.transportationData?.oxygen_quantity} L)`
+                    : value?.includes("_")
+                    ? value?.split("_").join(" ")
+                    : value}
+                </p>
+              ))}
             </div>
           </div>
 
@@ -98,7 +100,12 @@ function OrderDetails({ singleRecurring = false }) {
             <h5>Patient Details</h5>
             <div className="grid grid-cols-2 gap-6 mt-10">
               <div className="flex items-center gap-6">
-                <p>First Name: </p>
+                {data?.transportationData?.type_of_transport ===
+                "collection_order" ? (
+                  <p>Name Collection: </p>
+                ) : (
+                  <p>Name: </p>
+                )}
                 <p>{data?.patientData?.name}</p>
               </div>
               {data?.patientData?.dispatcher && (
@@ -107,6 +114,15 @@ function OrderDetails({ singleRecurring = false }) {
                   <p>{data?.patientData?.dispatcher}</p>
                 </div>
               )}
+              <div className="flex items-center gap-6">
+                {data?.transportationData?.type_of_transport ===
+                "collection_order" ? (
+                  <p>Number of patients: </p>
+                ) : (
+                  <p>Surname: </p>
+                )}
+                <p>{data?.patientData?.surname}</p>
+              </div>
               <div className="flex items-center gap-6">
                 <p>Pick up: </p>
                 <p>{data?.destinationDetailsData?.pick_up_address}</p>
@@ -156,9 +172,13 @@ function OrderDetails({ singleRecurring = false }) {
 
           <div className="my-14">
             <h5>Destination Details</h5>
-            <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
+            <div
+              className={`grid  gap-6 text-nowrap mt-10 ${
+                data?.order_type === "return" ? "grid-cols-2" : "grid-cols-3"
+              }`}
+            >
               <div>
-                <p className="highlight mb-5">Pick up</p>
+                <p className="font-medium text-lg mb-5">Pick up</p>
                 <div className="flex items-center gap-6 mb-8">
                   <p>Name / Institution: </p>
                   <p>{data?.destinationDetailsData?.pick_up_name}</p>
@@ -181,7 +201,7 @@ function OrderDetails({ singleRecurring = false }) {
                 </div>
               </div>
               <div>
-                <p className="highlight mb-5">Drop-Off</p>
+                <p className="font-medium text-lg mb-5">Drop-Off</p>
                 <div className="flex items-center gap-6 mb-8">
                   <p>Date :</p>
                   <p>
@@ -223,21 +243,29 @@ function OrderDetails({ singleRecurring = false }) {
                 </div>
               </div>
               {/* kamruzzaman bhai? should we keep it? return journey here? */}
-              {/* <div>
-              <p className="highlight mb-5">Return journey</p>
-              <div className="flex items-center gap-6 mb-8">
-                <p>Date :</p>
-                <p>{data?.destinationDetailsData?.return_date || "not yet"}</p>
-              </div>
-              <div className="flex items-center gap-6 mb-8">
-                <p>Time :</p>
-                <p>{data?.destinationDetailsData?.return_approx_time}</p>
-              </div>
-              <div className="flex items-center gap-6 mb-8">
-                <p>Floor/Department :</p>
-                <p>{data?.destinationDetailsData?.return_floor}</p>
-              </div>
-            </div> */}
+              {data?.order_type === "normal" && (
+                <div>
+                  <p className="font-medium text-lg mb-5">Return journey</p>
+                  <div className="flex items-center gap-6 mb-8">
+                    <p>Date :</p>
+                    <p>
+                      {data?.destinationDetailsData?.return_date
+                        ? moment(
+                            data?.destinationDetailsData?.return_date
+                          ).format("DD MMMM YYYY")
+                        : "not yet"}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-6 mb-8">
+                    <p>Time :</p>
+                    <p>{data?.destinationDetailsData?.return_approx_time}</p>
+                  </div>
+                  <div className="flex items-center gap-6 mb-8">
+                    <p>Floor/Department :</p>
+                    <p>{data?.destinationDetailsData?.return_floor}</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

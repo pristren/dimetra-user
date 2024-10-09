@@ -12,7 +12,6 @@ export const GET_ALL_RECURRING_ORDERS = gql`
         status
         transportationData {
           type_of_transport
-          free_dates
         }
         patientData {
           name

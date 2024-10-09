@@ -21,7 +21,7 @@ export const transportWithOptions = [
   { value: "infusion", label: "infusion" },
   { value: "infusomat", label: "infusomat" },
   { value: "accompanying_reason", label: "accompanying_reason" },
-  { value: "oxygen_liters_per_min", label: "oxygen_liters_per_min" },
+  { value: "oxygen_quantity", label: "oxygen_liters_per_min" },
 ];
 
 export const weekdaysOptions = [
