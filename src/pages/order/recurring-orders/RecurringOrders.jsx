@@ -14,6 +14,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_ALL_RECURRING_ORDERS } from "./graphql/queries/getAllRecurringOrders.gql";
 import { UPDATE_RECCURING_ORDER_STATUS } from "./graphql/mutations/updateAnRecurringOrderStatus.gql";
 import { ResumeIcon } from "@radix-ui/react-icons";
+import moment from "moment";
 
 const RecurringOrders = () => {
   const { id } = useParams();
@@ -99,7 +100,7 @@ const RecurringOrders = () => {
       cell: ({ row }) => {
         const date =
           row.original?.destinationDetailsData?.drop_off_pick_up_date;
-        return <p>{date}</p>;
+        return <p>{moment(date).format("DD MMMM YYYY")}</p>;
       },
     },
     {
