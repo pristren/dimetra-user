@@ -21,7 +21,8 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import AppModal from "@/components/common/AppModal";
 import { useState } from "react";
-import { SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
+import { Loading, SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
+import { t } from "i18next";
 
 const PreviewDetails = ({
   createOrderData,
@@ -41,12 +42,14 @@ const PreviewDetails = ({
     recurringData,
   } = createOrderData;
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const calculateMonthlyOccurrences = (weekdays) => {
     return weekdays.length * 4;
   };
   const [createAnOrder] = useMutation(CREATE_AN_ORDER);
   const navigate = useNavigate();
   const handleCreateAnOrder = async () => {
+    setLoading(true);
     const updatedData = { ...createOrderData };
 
     if (updatedData?.transportationData?.type_of_transport !== "recurring") {
@@ -66,6 +69,8 @@ const PreviewDetails = ({
     } catch (error) {
       const { message, response } = error;
       console.error(message, response);
+    } finally {
+      setLoading(false);
     }
   };
   const closeModal = () => {
@@ -102,7 +107,7 @@ const PreviewDetails = ({
                         htmlFor={option.value}
                         className="font-normal text-[16px]"
                       >
-                        {option.label}
+                        {t(option.label)}
                       </Label>
                     </div>
                   ))}
@@ -127,7 +132,7 @@ const PreviewDetails = ({
                       className="font-normal text-[16px] ml-2"
                       htmlFor={option.value}
                     >
-                      {option.label}
+                      {t(option.label)}
                     </Label>
                   </div>
                 ))}
@@ -151,7 +156,7 @@ const PreviewDetails = ({
                       className="font-normal text-[16px] ml-2"
                       htmlFor={option.value}
                     >
-                      {option.label}
+                      {t(option.label)}
                     </Label>
                   </div>
                 ))}
@@ -679,7 +684,11 @@ const PreviewDetails = ({
           </div>
           <div className="flex items-center justify-center">
             <Button onClick={handleCreateAnOrder} className="px-14 mt-5">
-              Submit
+              {loading ? (
+                <Loading className="w-6 h-6 mx-auto text-white" />
+              ) : (
+                "Submit"
+              )}
             </Button>
           </div>
           {showModal && (

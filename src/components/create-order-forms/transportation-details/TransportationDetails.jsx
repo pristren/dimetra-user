@@ -24,7 +24,7 @@ import {
   durationOptions,
   timeOptions,
 } from "@/components/create-order-forms/helpers";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { calculateFormProgress } from "@/utils";
 import { t } from "i18next";
 import toast from "react-hot-toast";
@@ -38,6 +38,10 @@ const TransportationDetails = ({
   transportationProgress,
 }) => {
   const { transportationData, recurringData } = createOrderData;
+
+  const [returnJourney, setReturnJourney] = useState(
+    recurringData?.free_dates_return_time ? true : false
+  );
 
   const form_schema = z.object({
     type_of_transport: z.string().min(1, "Transport type is required"),
@@ -412,7 +416,7 @@ const TransportationDetails = ({
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
                       <DatePicker
-                        date={recurringData?.return_date}
+                        date={recurringData?.return_date || null}
                         setDate={(value) =>
                           handleDateChange("return_date", value)
                         }
@@ -546,38 +550,59 @@ const TransportationDetails = ({
                         />
                       </div>
                     </div>
-                    <div className="mt-5 mb-5 ">
-                      <h3 className="text-lg font-medium mt-10 mb-5">
-                        {t("select_return_date_and_time")}{" "}
-                        <span className="text-sm text-gray-600">
-                          {t("(optional)")}
-                        </span>
-                      </h3>
-                      <div className="flex w-max gap-4 items-center">
-                        <DatePicker
-                          mode="multiple"
-                          date={recurringData?.free_dates}
-                          setDate={(value) =>
-                            handleDateChange("free_dates", value)
-                          }
-                          disabled
-                        />
-                        <AppSelect
-                          items={timeOptions}
-                          placeholder="Select a time"
-                          isTime={true}
-                          onValueChange={(val) =>
-                            updateCreateRecurringOrderData(
-                              "free_dates_return_time",
-                              val
-                            )
-                          }
-                          defaultValue={recurringData?.free_dates_return_time}
-                          isTimeSelected={true}
-                          value={recurringData?.free_dates_return_time}
-                        />
-                      </div>
+                    <div className="mt-8 flex items-center gap-2">
+                      <Checkbox
+                        id="return_journey"
+                        checked={returnJourney}
+                        onClick={() => {
+                          setReturnJourney(!returnJourney);
+                          updateCreateRecurringOrderData(
+                            "free_dates_return_time",
+                            ""
+                          );
+                        }}
+                      />
+                      <Label
+                        className="text-base font-medium"
+                        htmlFor="return_journey"
+                      >
+                        {t("return_journey")} ?
+                      </Label>
                     </div>
+                    {returnJourney && (
+                      <div className=" mb-5 ">
+                        <h3 className="text-lg font-medium mt-10 mb-5">
+                          {t("select_return_date_and_time")}{" "}
+                          <span className="text-sm text-gray-600">
+                            {t("(optional)")}
+                          </span>
+                        </h3>
+                        <div className="flex w-max gap-4 items-center">
+                          <DatePicker
+                            mode="multiple"
+                            date={recurringData?.free_dates}
+                            setDate={(value) =>
+                              handleDateChange("free_dates", value)
+                            }
+                            disabled
+                          />
+                          <AppSelect
+                            items={timeOptions}
+                            placeholder="Select a time"
+                            isTime={true}
+                            onValueChange={(val) =>
+                              updateCreateRecurringOrderData(
+                                "free_dates_return_time",
+                                val
+                              )
+                            }
+                            defaultValue={recurringData?.free_dates_return_time}
+                            isTimeSelected={true}
+                            value={recurringData?.free_dates_return_time}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : null}
               </div>

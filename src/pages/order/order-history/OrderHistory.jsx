@@ -15,6 +15,7 @@ import { useLazyQuery } from "@apollo/client";
 import { GET_ALL_ORDERS_FOR_HISTORY } from "./graphql/queries/getAllOrdersForHistory.gql";
 import { transportOptions } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
+import moment from "moment";
 
 const OrderHistory = () => {
   const [queryData, setQueryData] = useState({
@@ -85,7 +86,7 @@ const OrderHistory = () => {
       cell: ({ row }) => {
         const date =
           row.original?.destinationDetailsData?.drop_off_pick_up_date;
-        return <p>{date}</p>;
+        return <p>{moment(date).format("DD MMMM YYYY")}</p>;
       },
     },
     {

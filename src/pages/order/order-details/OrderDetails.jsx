@@ -173,36 +173,38 @@ function OrderDetails({ singleRecurring = false }) {
           <div className="my-14">
             <h5>Destination Details</h5>
             <div
-              className={`grid  gap-6 text-nowrap mt-10 ${
-                data?.order_type === "return" ? "grid-cols-2" : "grid-cols-3"
+              className={`grid  gap-3  mt-10 ${
+                data?.order_type === "return"
+                  ? "grid-cols-2"
+                  : "grid-cols-1 md:grid-cols-2 xl:grid-cols-3 "
               }`}
             >
               <div>
                 <p className="font-medium text-lg mb-5">Pick up</p>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>Name / Institution: </p>
                   <p>{data?.destinationDetailsData?.pick_up_name}</p>
                 </div>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>Street: </p>
                   <p>{data?.destinationDetailsData?.pick_up_address}</p>
                 </div>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>City :</p>
                   <p>{data?.destinationDetailsData?.pick_up_city}</p>
                 </div>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>Country :</p>
                   <p>{data?.destinationDetailsData?.pick_up_country}</p>
                 </div>
-                <div className="flex items-center gap-6 mb-8">
-                  <p>Working Employee Name :</p>
+                <div className="flex items-start gap-3 mb-8">
+                  <p className="text-nowrap">Working Employee Name :</p>
                   <p>{data?.destinationDetailsData?.pick_up_employee_name}</p>
                 </div>
               </div>
-              <div>
+              <div className="">
                 <p className="font-medium text-lg mb-5">Drop-Off</p>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>Date :</p>
                   <p>
                     {data?.destinationDetailsData?.drop_off_pick_up_date
@@ -212,30 +214,30 @@ function OrderDetails({ singleRecurring = false }) {
                       : "not yet"}
                   </p>
                 </div>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>Pickup time :</p>
                   <p>
                     {data?.destinationDetailsData?.drop_off_pick_up_time ||
                       "not yet"}
                   </p>
                 </div>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>Name/ Institution :</p>
                   <p>{data?.destinationDetailsData?.pick_up_name}</p>
                 </div>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>Street :</p>
                   <p>{data?.destinationDetailsData?.pick_up_address}</p>
                 </div>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>city :</p>
                   <p>{data?.destinationDetailsData?.pick_up_city}</p>
                 </div>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>Country :</p>
                   <p>{data?.destinationDetailsData?.pick_up_country} </p>
                 </div>
-                <div className="flex items-center gap-6 mb-8">
+                <div className="flex items-center gap-3 mb-8">
                   <p>Phone :</p>
                   <p>
                     {data?.destinationDetailsData?.pick_up_country || "not yet"}
@@ -244,9 +246,9 @@ function OrderDetails({ singleRecurring = false }) {
               </div>
               {/* kamruzzaman bhai? should we keep it? return journey here? */}
               {data?.order_type === "normal" && (
-                <div>
+                <div className="">
                   <p className="font-medium text-lg mb-5">Return journey</p>
-                  <div className="flex items-center gap-6 mb-8">
+                  <div className="flex items-center gap-3 mb-8">
                     <p>Date :</p>
                     <p>
                       {data?.destinationDetailsData?.return_date
@@ -256,11 +258,11 @@ function OrderDetails({ singleRecurring = false }) {
                         : "not yet"}
                     </p>
                   </div>
-                  <div className="flex items-center gap-6 mb-8">
+                  <div className="flex items-center gap-3 mb-8">
                     <p>Time :</p>
                     <p>{data?.destinationDetailsData?.return_approx_time}</p>
                   </div>
-                  <div className="flex items-center gap-6 mb-8">
+                  <div className="flex items-center gap-3 mb-8">
                     <p>Floor/Department :</p>
                     <p>{data?.destinationDetailsData?.return_floor}</p>
                   </div>
@@ -276,31 +278,27 @@ function OrderDetails({ singleRecurring = false }) {
             <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
               <div className="flex items-center gap-10">
                 <p>Prename / Institution : </p>
-                <p>{data?.billingDetailsData?.pre_name}</p>
+                <p>{data?.billingDetailsData?.pre_name || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
                 <p>Dispatcher:</p>
-                <p>{data?.billingDetailsData?.dispatcher || "not yet"}</p>
+                <p>{data?.billingDetailsData?.dispatcher || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
                 <p>Name :</p>
-                <p>{data?.billingDetailsData?.name}</p>
+                <p>{data?.billingDetailsData?.name || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
                 <p>Street :</p>
-                <p>{data?.billingDetailsData?.street}</p>
-              </div>
-              <div className="flex items-center gap-10">
-                <p>Date & time :</p>
-                <p>Select Date and time</p>
+                <p>{data?.billingDetailsData?.street || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
                 <p>Place :</p>
-                <p>{data?.billingDetailsData?.place}</p>
+                <p>{data?.billingDetailsData?.place || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
                 <p>Contact :</p>
-                <p>{data?.billingDetailsData?.contact}</p>
+                <p>{data?.billingDetailsData?.contact || "N/A"}</p>
               </div>
             </div>
           </div>

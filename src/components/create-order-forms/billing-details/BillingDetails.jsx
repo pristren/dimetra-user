@@ -36,9 +36,9 @@ const BillingDetails = ({
 
   const fieldsFilled = [pre_name, name, street, place, contact];
 
-  useEffect(() => {
-    setBillingProgress(calculateFormProgress(fieldsFilled));
-  }, [...fieldsFilled]);
+  //   useEffect(() => {
+  //     setBillingProgress(calculateFormProgress(fieldsFilled));
+  //   }, [...fieldsFilled]);
 
   const formSchema = z.object({
     preName: z.string().min(1, t("prename_institution_is_required")),
@@ -173,7 +173,9 @@ const BillingDetails = ({
                 name="contact"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">{t("contact")}</FormLabel>
+                    <FormLabel className="font-normal">
+                      {t("contact")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className={errors.contact ? "border-red-500" : ""}
@@ -193,7 +195,7 @@ const BillingDetails = ({
             <BackAndNextBtn
               isFillForm={true}
               isLastPage={true}
-              isDisabled={billingProgress < 100}
+              //   isDisabled={billingProgress < 100}
               handleGoPrev={() => handleFormChange("destinationDetails")}
               handleGoNext={(e) => {
                 e.preventDefault();
