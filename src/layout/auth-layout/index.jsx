@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function AuthLayout({ children, childContainer, ...props }) {
   return (
-    <div className="h-screen" {...props}>
+    <div className="min-h-screen md:h-screen" {...props}>
       <nav className="flex justify-between items-center  px-4 border-b h-16">
         <Link to="/orders/all-orders">
           <Logo />
