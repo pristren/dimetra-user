@@ -76,7 +76,7 @@ const RegisterForm = () => {
         ...submitData,
         profile_image: profile_image || "",
       }).then((res) => {
-        navigate(`/verify-email?token=${res.data.token}`);
+        navigate(`/verify-email-sent?token=${res.data.token}`);
       });
     } catch (err) {
       console.error(err);

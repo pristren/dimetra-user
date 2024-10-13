@@ -2,29 +2,29 @@
 import { Email } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
+import { sendVerificationEmail } from "../apis/sendVerificationEmail";
 
-const VerificationEmailSend = ({ token }) => {
-  const [seconds, setSeconds] = useState(120);
+const VerificationEmailSent = ({ token }) => {
+  const [seconds, setSeconds] = useState(6);
   const timerRef = useRef(null);
 
-  const [isDisabled, setIsDisabled] = useState(true);
-
-  //   const verifyLink = `http://localhost:5173/verify-email?token=${token}`;
-  //   console.log(verifyLink);
+  console.log(`http://localhost:5173/verify-email?token=${token}`); // to verify from console
 
   useEffect(() => {
     // Start the timer
     timerRef.current = setInterval(() => {
       setSeconds((prevCountdown) => {
         if (prevCountdown === 1) {
-          clearInterval(timerRef.current); // Clear the timer when it reaches 0
-          setIsDisabled(false); // Enable the button
+          clearInterval(timerRef.current);
         }
-        return prevCountdown - 1;
+        if (prevCountdown > 0) {
+          return prevCountdown - 1;
+        } else {
+          return prevCountdown;
+        }
       });
     }, 1000);
 
-    // Cleanup function when component unmounts or resets
     return () => {
       clearInterval(timerRef.current);
     };
@@ -35,27 +35,34 @@ const VerificationEmailSend = ({ token }) => {
     const remainingSeconds = seconds % 60;
     return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
-  // Reset the countdown and disable the button again
 
   const handleResendEmail = () => {
-    // Reset the countdown and disable the button again
+    setSeconds(6);
 
-    setSeconds(120);
-    setIsDisabled(true);
-
-    // Restart the timer
     timerRef.current = setInterval(() => {
       setSeconds((prevCountdown) => {
         if (prevCountdown === 1) {
           clearInterval(timerRef.current);
-          setIsDisabled(false);
         }
-        return prevCountdown - 1;
+        if (prevCountdown > 0) {
+          return prevCountdown - 1;
+        } else {
+          return prevCountdown;
+        }
       });
     }, 1000);
-
-    // Logic for resending the email
-    console.log("Resending email...");
+    sendVerificationEmail({ token })
+      .then((res) => {
+        if (res.message === "Verification email sent successfully") {
+          const newUrl = window.location.href.replace(token, res.data?.token);
+          window.history.replaceState(null, "", newUrl);
+        } else {
+          console.log(res);
+        }
+      })
+      .finally(() => {
+        // for toast if indeed
+      });
   };
 
   return (
@@ -67,10 +74,7 @@ const VerificationEmailSend = ({ token }) => {
         need to verify your email address to login into Dimetra
       </p>
 
-      <div className="mt-10">
-        <p className="text-center text-gray-700">
-          {formatTime(seconds)} Left to resend email
-        </p>
+      <div className="mt-5">
         <Button
           className="px-20 mt-10"
           disabled={seconds > 0}
@@ -78,9 +82,12 @@ const VerificationEmailSend = ({ token }) => {
         >
           Resend code
         </Button>
+        <p className="text-center text-gray-700 mt-4">
+          {formatTime(seconds)} Left
+        </p>
       </div>
     </div>
   );
 };
 
-export default VerificationEmailSend;
+export default VerificationEmailSent;

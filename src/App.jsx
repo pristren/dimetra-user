@@ -6,8 +6,8 @@ import Register from "@/pages/authentication/register";
 import ForgotPassword from "@/pages/authentication/forgot-password";
 import ResetPassword from "@/pages/authentication/reset-password";
 import OrderHistory from "@/pages/order/order-history/OrderHistory";
-import OrderLayout from "./layout/order-layout";
-import PrivateRoute from "./layout/PrivateRoute";
+import OrderLayout from "@/layout/order-layout";
+import PrivateRoute from "@/layout/PrivateRoute";
 import CreateOrder from "@/pages/order/create-order/CreateOrder";
 import OrderSettings from "@/pages/order/order-settings/OrderSettings";
 import AllOrders from "@/pages/order/all-orders/AllOrders";
@@ -17,6 +17,7 @@ import Message from "@/pages/order/send-request/Message";
 import RateTheDriver from "@/pages/order/order-history/RateTheDriver";
 import SentRequests from "@/pages/order/send-request/SentRequests";
 import EditOrder from "@/pages/order/edit-order/EditOrder";
+import VerifyEmailSent from "@/pages/authentication/verify-email-sent/VerifyEmailSent";
 import VerifyEmail from "@/pages/authentication/verify-email/VerifyEmail";
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/verify-email-sent" element={<VerifyEmailSent />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route
         path="/create-order"

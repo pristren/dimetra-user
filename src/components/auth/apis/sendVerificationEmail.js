@@ -1,9 +1,9 @@
 // /verify-email
 import axios from "axios";
 
-export const verifyEmail = async (body) => {
+export const sendVerificationEmail = async (body) => {
   return await axios
-    .post(`/auth/verify-email`, body)
+    .post(`/auth/verification-email-sent`, body)
     .then((res) => {
       return res.data;
     })
