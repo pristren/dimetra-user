@@ -75,8 +75,9 @@ const RegisterForm = () => {
       await registerAnUser({
         ...submitData,
         profile_image: profile_image || "",
+      }).then((res) => {
+        navigate(`/verify-email?token=${res.data.token}`);
       });
-      setShowModal(true);
     } catch (err) {
       console.error(err);
     } finally {
@@ -103,7 +104,7 @@ const RegisterForm = () => {
         setSelectedFile={setSelectedFile}
         loading={loading}
       />
-      {showModal && (
+      {/* {showModal && (
         <AppModal
           icon={<TickMarkImage />}
           head="Registration Successful"
@@ -111,7 +112,7 @@ const RegisterForm = () => {
           buttonText="Login"
           onClose={closeModal}
         />
-      )}
+      )} */}
     </Card>
   );
 };
