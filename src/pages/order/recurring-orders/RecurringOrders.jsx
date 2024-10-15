@@ -204,8 +204,13 @@ const RecurringOrders = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="-translate-x-5 p-4 w-60">
                 <DropdownMenuItem className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer">
-                  <Pencil className="size-5 text-gray-600" />
-                  <span className="text-gray-700 text-sm">Edit</span>
+                  <Link
+                    to={`/orders/edit-recurring-order/${orderId}`}
+                    className="flex items-center gap-3 text-[16px] w-full"
+                  >
+                    <Pencil className="size-5 text-gray-600" />
+                    <span className="text-gray-700 text-sm">Edit</span>
+                  </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem className="py-2 mb-2">

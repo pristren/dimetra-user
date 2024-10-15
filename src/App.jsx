@@ -19,6 +19,7 @@ import SentRequests from "@/pages/order/send-request/SentRequests";
 import EditOrder from "@/pages/order/edit-order/EditOrder";
 import VerifyEmailSent from "@/pages/authentication/verify-email-sent/VerifyEmailSent";
 import VerifyEmail from "@/pages/authentication/verify-email/VerifyEmail";
+import EditRecurringOrder from "@/pages/order/edit-recurring-orders/EditRecurringOrder";
 
 function App() {
   axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
@@ -64,6 +65,10 @@ function App() {
         />
         <Route path="recurring-orders/:id" element={<RecurringOrders />} />
         <Route path="edit-order/:id" element={<EditOrder />} />
+        <Route
+          path="edit-recurring-order/:id"
+          element={<EditRecurringOrder />}
+        />
         <Route path="review/:id" element={<RateTheDriver />} />
         <Route path="message/:id" element={<Message />} />
         <Route path="details/:id" element={<OrderDetails />} />

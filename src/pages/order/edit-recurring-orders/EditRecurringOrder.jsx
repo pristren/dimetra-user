@@ -7,11 +7,11 @@ import EditPatientDetails from "@/components/order/edit-order/EditPatientDetails
 import EditDestinationDetails from "@/components/order/edit-order/EditDestinationDetails";
 import EditBillingDetails from "@/components/order/edit-order/EditBillingDetails";
 import { Card } from "@/components/ui/card";
-import { UPDATE_AN_ORDER } from "./graphql/mutations/updateAnOrder.gql";
-import { GET_AN_ORDER } from "./graphql/queries/getAnOrder.gql";
+import { UPDATE_A_RECURRING_ORDER } from "./graphql/mutations/updateARecurringOrder.gql";
+import { GET_A_RECURRING_ORDER } from "./graphql/queries/getARecurringOrder.gql";
 import toast from "react-hot-toast";
 
-const EditOrder = () => {
+const EditRecurringOrder = () => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [dateOfBirth, setDateOfBirth] = useState(null);
@@ -67,17 +67,20 @@ const EditOrder = () => {
     },
   });
 
-  const [getAnOrder] = useLazyQuery(GET_AN_ORDER, {
+  const [getARecurringOrder] = useLazyQuery(GET_A_RECURRING_ORDER, {
     variables: { queryData: { id: id } },
     errorPolicy: "all",
     fetchPolicy: "no-cache",
     onCompleted: (response) => {
-      setEditOrderData(response.getAnOrder);
+      setEditOrderData(response.getARecurringOrder);
       setDropDate(
-        response.getAnOrder?.destinationDetailsData?.drop_off_pick_up_date
+        response.getARecurringOrder?.destinationDetailsData
+          ?.drop_off_pick_up_date
       );
-      setDateOfBirth(response.getAnOrder?.patientData?.date_of_birth);
-      setReturnDate(response.getAnOrder?.destinationDetailsData?.return_date);
+      setDateOfBirth(response.getARecurringOrder?.patientData?.date_of_birth);
+      setReturnDate(
+        response.getARecurringOrder?.destinationDetailsData?.return_date
+      );
     },
     onError: (error) => {
       console.error({ error });
@@ -85,7 +88,7 @@ const EditOrder = () => {
   });
 
   useEffect(() => {
-    getAnOrder();
+    getARecurringOrder();
   }, []);
 
   function removeTypename(obj) {
@@ -109,7 +112,7 @@ const EditOrder = () => {
     return obj;
   }
 
-  const [updateAnOrder] = useMutation(UPDATE_AN_ORDER);
+  const [updateARecurringOrder] = useMutation(UPDATE_A_RECURRING_ORDER);
 
   const handleUpdate = async () => {
     setLoading(true);
@@ -126,13 +129,13 @@ const EditOrder = () => {
       },
     };
     try {
-      const { data } = await updateAnOrder({
+      const { data } = await updateARecurringOrder({
         variables: {
           queryData: { id },
           inputData: removeTypename(dataTobeUpdated),
         },
       });
-      if (data?.updateAnOrder?.id) {
+      if (data?.updateARecurringOrder?.id) {
         toast.success("Order updated successfully");
         navigate("/orders/all-orders");
         setLoading(false);
@@ -170,4 +173,4 @@ const EditOrder = () => {
   );
 };
 
-export default EditOrder;
+export default EditRecurringOrder;
