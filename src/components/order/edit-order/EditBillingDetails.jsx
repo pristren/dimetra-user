@@ -15,11 +15,13 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import { Loading } from "@/assets/icons";
 
 const EditBillingDetails = ({
   editOrderData,
   setEditOrderData,
   handleUpdate,
+  loading,
 }) => {
   const {
     pre_name = "",
@@ -180,7 +182,13 @@ const EditBillingDetails = ({
           </form>
         </Form>
         <div className="flex items-center justify-center my-10">
-          <Button onClick={handleUpdate}>{t("update")}</Button>
+          <Button onClick={handleUpdate}>
+            {loading ? (
+              <Loading className="w-6 h-6 mx-auto text-white" />
+            ) : (
+              t("update")
+            )}
+          </Button>
         </div>
       </CardContent>
     </Card>

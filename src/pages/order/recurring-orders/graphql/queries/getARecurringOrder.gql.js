@@ -4,6 +4,7 @@ export const GET_A_RECURRING_ORDER = gql`
   query GET_A_RECURRING_ORDER($queryData: CommonQueryType!) {
     getARecurringOrder(queryData: $queryData) {
       id
+      order_type
       user {
         id
         first_name
@@ -22,12 +23,7 @@ export const GET_A_RECURRING_ORDER = gql`
         type_of_transport
         mode_of_transportation
         transport_with
-        start_date
-        return_date
-        start_time
-        return_time
-        multiple_week_days
-        ends
+        oxygen_quantity
       }
       patientData {
         name

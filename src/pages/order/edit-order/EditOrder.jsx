@@ -1,13 +1,15 @@
 /* eslint-disable no-unused-vars */
-import { useLazyQuery } from "@apollo/client";
-import { GET_AN_ORDER } from "../order-details/graphql/queries/getAnOrder.gql";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EditTransportationDetails from "@/components/order/edit-order/EditTransportationDetails";
 import EditPatientDetails from "@/components/order/edit-order/EditPatientDetails";
 import EditDestinationDetails from "@/components/order/edit-order/EditDestinationDetails";
 import EditBillingDetails from "@/components/order/edit-order/EditBillingDetails";
 import { Card } from "@/components/ui/card";
+import { UPDATE_AN_ORDER } from "./graphql/mutations/updateAnOrder.gql";
+import { GET_AN_ORDER } from "./graphql/queries/getAnOrder.gql";
+import toast from "react-hot-toast";
 
 const EditOrder = () => {
   const [startDate, setStartDate] = useState(null);
@@ -15,7 +17,9 @@ const EditOrder = () => {
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
   const [dropDate, setDropDate] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [editOrderData, setEditOrderData] = useState({
     transportationData: {
@@ -89,7 +93,31 @@ const EditOrder = () => {
     getAnOrder();
   }, []);
 
-  const handleUpdate = () => {
+  function removeTypename(obj) {
+    // If the object is an array, recursively apply to each item
+    if (Array.isArray(obj)) {
+      return obj.map(removeTypename);
+    }
+
+    // If the object is an object, iterate and remove __typename
+    if (typeof obj === "object" && obj !== null) {
+      const newObj = {};
+      for (const key in obj) {
+        if (key !== "__typename") {
+          newObj[key] = removeTypename(obj[key]);
+        }
+      }
+      return newObj;
+    }
+
+    // If it's not an object or array, return it as is
+    return obj;
+  }
+
+  const [updateAnOrder] = useMutation(UPDATE_AN_ORDER);
+
+  const handleUpdate = async () => {
+    setLoading(true);
     const dataTobeUpdated = {
       ...editOrderData,
       patientData: {
@@ -102,7 +130,24 @@ const EditOrder = () => {
         return_date: returnDate,
       },
     };
-    // console.log(dataTobeUpdated); // dataTobeUpdated is the updated data
+    try {
+      const { data } = await updateAnOrder({
+        variables: {
+          queryData: { id },
+          inputData: removeTypename(dataTobeUpdated),
+        },
+      });
+      if (data?.updateAnOrder?.id) {
+        toast.success("Order updated successfully");
+        navigate("/orders/all-orders");
+        setLoading(false);
+      }
+    } catch (error) {
+      const { message, response } = error;
+      console.error(message, response);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const props = {
@@ -115,6 +160,7 @@ const EditOrder = () => {
     setReturnDate,
     setDropDate,
     handleUpdate,
+    loading,
   };
   return (
     <div>
