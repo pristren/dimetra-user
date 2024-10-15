@@ -30,6 +30,7 @@ const EditDestinationDetails = ({
     destinationDetailsData: {
       pick_up_name = "",
       pick_up_address = "",
+      pick_up_postal_code = "",
       pick_up_city = "",
       pick_up_country = "",
       pick_up_employee_name = "",
@@ -37,6 +38,7 @@ const EditDestinationDetails = ({
       drop_off_pick_up_date = "",
       drop_off_name = "",
       drop_off_address = "",
+      drop_off_postal_code = "",
       drop_off_city = "",
       drop_off_country = "",
       drop_off_phone = "",
@@ -48,6 +50,7 @@ const EditDestinationDetails = ({
   const form_schema = z.object({
     pick_up_name: z.string().min(1, "Name is required"),
     pick_up_address: z.string().min(1, "Address is required"),
+    pick_up_postal_code: z.number().min(1, "Postal is required"),
     pick_up_city: z.string().min(1, "City is required"),
     pick_up_country: z.string().min(1, "Country is required"),
     pick_up_employee_name: z
@@ -62,7 +65,7 @@ const EditDestinationDetails = ({
     drop_off_city: z.string().min(1, "City is required"),
     drop_off_country: z.string().min(1, "Country is required"),
     drop_off_phone: z.string().min(1, "Phone is required"),
-
+    drop_off_postal_code: z.number().min(1, "Drop of postal code is required"),
     return_date: z.string().min(1, "Date is required"),
     return_day_letter: z.string().min(1, "This field is required"),
     return_approx_time: z.string().min(1, "Approx. Time is required"),
@@ -74,6 +77,7 @@ const EditDestinationDetails = ({
     defaultValues: {
       pick_up_name,
       pick_up_address,
+      pick_up_postal_code: Number(pick_up_postal_code), // Convert to number
       pick_up_city,
       pick_up_country,
       pick_up_employee_name,
@@ -82,6 +86,7 @@ const EditDestinationDetails = ({
       drop_off_pick_up_date,
       drop_off_name,
       drop_off_address,
+      drop_off_postal_code: Number(drop_off_postal_code), // Convert to number
       drop_off_city,
       drop_off_country,
       drop_off_phone,
@@ -99,10 +104,11 @@ const EditDestinationDetails = ({
       ...prev,
       destinationDetailsData: {
         ...prev.destinationDetailsData,
-        [name]: value,
+        [name]: name.includes("postal_code") ? Number(value) : value, // Convert postal codes to numbers
       },
     }));
   };
+
   useEffect(() => {
     form.reset(editOrderData.destinationDetailsData);
   }, [editOrderData.destinationDetailsData, form]);
@@ -169,6 +175,34 @@ const EditDestinationDetails = ({
                           }
                           placeholder={t("type_your_address")}
                           {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* Pick-Up Postal Code */}
+                <FormField
+                  control={form.control}
+                  name="pick_up_postal_code"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2 font-normal">
+                        Postal Code <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.pick_up_postal_code ? "border-red-500" : ""
+                          }
+                          placeholder="Type your postal code"
+                          {...field}
+                          type="number"
                           onChange={(e) => {
                             field.onChange(e);
                             handleInputChange(e);
@@ -360,6 +394,34 @@ const EditDestinationDetails = ({
                             errors.drop_off_address ? "border-red-500" : ""
                           }
                           placeholder={t("type_address")}
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                {/* drop off Postal Code */}
+                <FormField
+                  control={form.control}
+                  name="drop_off_postal_code"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="mb-2 font-normal">
+                        Postal Code <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            errors.drop_off_postal_code ? "border-red-500" : ""
+                          }
+                          type="number"
+                          placeholder="Type your postal code"
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);

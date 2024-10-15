@@ -12,8 +12,6 @@ import { GET_A_RECURRING_ORDER } from "./graphql/queries/getARecurringOrder.gql"
 import toast from "react-hot-toast";
 
 const EditRecurringOrder = () => {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
   const [dropDate, setDropDate] = useState(null);
@@ -45,7 +43,7 @@ const EditRecurringOrder = () => {
       pick_up_city: "",
       pick_up_country: "",
       pick_up_employee_name: "",
-
+      pick_up_postal_code: "",
       drop_off_pick_up_date: null,
       drop_off_pick_up_time: "",
       drop_off_name: "",
@@ -53,7 +51,7 @@ const EditRecurringOrder = () => {
       drop_off_city: "",
       drop_off_country: "",
       drop_off_phone: "",
-
+      drop_off_postal_code: "",
       return_date: null,
       return_approx_time: "",
       return_floor: "",
@@ -137,7 +135,7 @@ const EditRecurringOrder = () => {
       });
       if (data?.updateARecurringOrder?.id) {
         toast.success("Order updated successfully");
-        navigate("/orders/all-orders");
+        navigate(-1);
         setLoading(false);
       }
     } catch (error) {
