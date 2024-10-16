@@ -22,11 +22,14 @@ import { setAccessToken, setUserInfo } from "@/redux/slices/user/userSlice";
 import { loginAnUser } from "../apis/login";
 import { Loading } from "@/assets/icons";
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { EyeIcon } from "lucide-react";
 
 export default function LoginForm() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(false);
   const [isRememberMe, setIsRememberMe] = useState(false);
   const validateEmail = (email) => {
     return String(email)
@@ -71,7 +74,7 @@ export default function LoginForm() {
         }
       })
       .catch((err) => {
-        console.error(err);
+        toast.error(err.response.data.message);
       })
       .finally(() => setLoading(false));
   };
@@ -114,16 +117,23 @@ export default function LoginForm() {
                   <FormItem>
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        className={
-                          form.formState.errors.password !== undefined
-                            ? "border-red-500"
-                            : ""
-                        }
-                        placeholder="Type your password"
-                        type="password"
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Input
+                          className={
+                            form.formState.errors.password !== undefined
+                              ? "border-red-500"
+                              : ""
+                          }
+                          placeholder="Type your password"
+                          type={isShowPassword ? "text" : "password"}
+                          {...field}
+                        />
+                        <EyeIcon
+                          className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+                          onClick={() => setIsShowPassword(!isShowPassword)}
+                          size={20}
+                        />
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

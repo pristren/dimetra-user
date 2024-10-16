@@ -51,7 +51,7 @@ const AddRequest = ({ setRequestModalOpen, getData = () => {} }) => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        toast.error(error.message || "There was an error sending request");
       })
       .finally(() => {
         setRequestModalOpen(false);

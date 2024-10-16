@@ -19,6 +19,7 @@ import { UPDATE_ORDER_STATUS } from "./graphql/mutations/updateOrderStatus.gql";
 import { transportOptions } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
 import { ResumeIcon } from "@radix-ui/react-icons";
+import toast from "react-hot-toast";
 
 const AllOrders = () => {
   const [queryData, setQueryData] = useState({
@@ -38,6 +39,7 @@ const AllOrders = () => {
     },
     onError: (error) => {
       console.error({ error });
+      toast.error(error.message || "There was an error fetching orders");
     },
   });
   useEffect(() => {

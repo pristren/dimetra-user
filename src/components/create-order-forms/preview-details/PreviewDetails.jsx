@@ -23,6 +23,7 @@ import AppModal from "@/components/common/AppModal";
 import { useState } from "react";
 import { Loading, SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
 import { t } from "i18next";
+import toast from "react-hot-toast";
 
 const PreviewDetails = ({
   createOrderData,
@@ -69,6 +70,7 @@ const PreviewDetails = ({
     } catch (error) {
       const { message, response } = error;
       console.error(message, response);
+      toast.error(message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -270,14 +272,15 @@ const PreviewDetails = ({
                           date={recurringData.free_dates}
                           disabled
                         />
-
+                        {console.log(recurringData.free_dates_start_time)}
                         <AppSelect
                           items={timeOptions}
                           placeholder="Select a time"
                           isTime={true}
+                          isTimeSelected={true}
                           disabled
                           className="cursor-pointer"
-                          defaultValue={recurringData.free_dates_start_time}
+                          value={recurringData.free_dates_start_time}
                         />
                       </div>
                     </div>

@@ -83,7 +83,9 @@ const RegisterForm = () => {
         navigate("/login");
       });
     } catch (err) {
-      console.error(err);
+      toast.error(
+        err.response.data.message || "There was an error creating account"
+      );
     } finally {
       setLoading(false);
     }

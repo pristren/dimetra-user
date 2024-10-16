@@ -16,6 +16,7 @@ import { GET_ALL_ORDERS_FOR_HISTORY } from "./graphql/queries/getAllOrdersForHis
 import { transportOptions } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
 import moment from "moment";
+import toast from "react-hot-toast";
 
 const OrderHistory = () => {
   const [queryData, setQueryData] = useState({
@@ -44,6 +45,7 @@ const OrderHistory = () => {
       },
       onError: (error) => {
         console.error({ error });
+        toast.error(error.message || "There was an error fetching orders");
       },
     }
   );

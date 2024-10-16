@@ -82,10 +82,13 @@ const OrderSettings = () => {
         if (data) {
           dispatch(setUserInfo(data.updateAnUser));
           setEditModalOpen(false);
+          toast.success("Profile updated successfully", {
+            icon: "🔒",
+          });
         }
       })
       .catch((error) => {
-        console.error(error);
+        toast.error(error.message || "There was an error updating profile");
       })
       .finally(() => {
         setLoading(false);
@@ -123,7 +126,7 @@ const OrderSettings = () => {
         }
       })
       .catch((error) => {
-        console.error(error);
+        toast.error(error.message || "There was an error updating password");
       })
       .finally(() => {
         setAppDialougeOpen(false);

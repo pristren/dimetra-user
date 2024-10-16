@@ -74,13 +74,6 @@ export default function AppHead({
           />
         )}
       </div>
-      {(pageTitle === "All Orders" || pageTitle === "History") && (
-        <div className="flex items-center gap-2 lg:hidden">
-          <Button>All</Button>
-          <Button variant="outline">Assigned</Button>
-          <Button variant="outline">Un-assigned</Button>
-        </div>
-      )}
 
       <div className="flex lg:items-center flex-col lg:flex-row gap-4">
         {isFilterVisible && (
