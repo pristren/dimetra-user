@@ -67,22 +67,25 @@ const EditOrder = () => {
     },
   });
 
-  const [getAnOrder] = useLazyQuery(GET_AN_ORDER, {
-    variables: { queryData: { id: id } },
-    errorPolicy: "all",
-    fetchPolicy: "no-cache",
-    onCompleted: (response) => {
-      setEditOrderData(response.getAnOrder);
-      setDropDate(
-        response.getAnOrder?.destinationDetailsData?.drop_off_pick_up_date
-      );
-      setDateOfBirth(response.getAnOrder?.patientData?.date_of_birth);
-      setReturnDate(response.getAnOrder?.destinationDetailsData?.return_date);
-    },
-    onError: (error) => {
-      console.error({ error });
-    },
-  });
+  const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
+    GET_AN_ORDER,
+    {
+      variables: { queryData: { id: id } },
+      errorPolicy: "all",
+      fetchPolicy: "no-cache",
+      onCompleted: (response) => {
+        setEditOrderData(response.getAnOrder);
+        setDropDate(
+          response.getAnOrder?.destinationDetailsData?.drop_off_pick_up_date
+        );
+        setDateOfBirth(response.getAnOrder?.patientData?.date_of_birth);
+        setReturnDate(response.getAnOrder?.destinationDetailsData?.return_date);
+      },
+      onError: (error) => {
+        console.error({ error });
+      },
+    }
+  );
 
   useEffect(() => {
     getAnOrder();
@@ -160,12 +163,19 @@ const EditOrder = () => {
   return (
     <div>
       <h5 className="mb-4">Edit Order</h5>
-      <Card className="bg-white p-0 border-opacity-50 border">
-        <EditTransportationDetails {...props} />
-        <EditPatientDetails {...props} />
-        <EditDestinationDetails {...props} />
-        <EditBillingDetails {...props} />
-      </Card>
+
+      {getAnOrderLoading ? (
+        <Card className="h-[calc(100vh-11rem)] mt-6 flex justify-center items-center">
+          <p className="text-primary">Loading...</p>
+        </Card>
+      ) : (
+        <Card className="bg-white p-0 border-opacity-50 border">
+          <EditTransportationDetails {...props} />
+          <EditPatientDetails {...props} />
+          <EditDestinationDetails {...props} />
+          <EditBillingDetails {...props} />
+        </Card>
+      )}
     </div>
   );
 };

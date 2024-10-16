@@ -337,7 +337,17 @@ function OrderDetails({ singleRecurring = false }) {
             {data?.status !== "completed" &&
               data?.status !== "rejected" &&
               data?.status !== "deleted" && (
-                <Link disabled to={`/orders/edit-order/${id}`}>
+                <Link
+                  disabled={
+                    data?.transportationData?.type_of_transport ===
+                    "collection_order"
+                  }
+                  to={
+                    singleRecurring
+                      ? `/orders/edit-recurring-order/${id}`
+                      : `/orders/edit-order/${id}`
+                  }
+                >
                   <Button className="px-14">Edit</Button>
                 </Link>
               )}

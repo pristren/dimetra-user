@@ -65,25 +65,26 @@ const EditRecurringOrder = () => {
     },
   });
 
-  const [getARecurringOrder] = useLazyQuery(GET_A_RECURRING_ORDER, {
-    variables: { queryData: { id: id } },
-    errorPolicy: "all",
-    fetchPolicy: "no-cache",
-    onCompleted: (response) => {
-      setEditOrderData(response.getARecurringOrder);
-      setDropDate(
-        response.getARecurringOrder?.destinationDetailsData
-          ?.drop_off_pick_up_date
-      );
-      setDateOfBirth(response.getARecurringOrder?.patientData?.date_of_birth);
-      setReturnDate(
-        response.getARecurringOrder?.destinationDetailsData?.return_date
-      );
-    },
-    onError: (error) => {
-      console.error({ error });
-    },
-  });
+  const [getARecurringOrder, { loading: getARecurringOrderLoading }] =
+    useLazyQuery(GET_A_RECURRING_ORDER, {
+      variables: { queryData: { id: id } },
+      errorPolicy: "all",
+      fetchPolicy: "no-cache",
+      onCompleted: (response) => {
+        setEditOrderData(response.getARecurringOrder);
+        setDropDate(
+          response.getARecurringOrder?.destinationDetailsData
+            ?.drop_off_pick_up_date
+        );
+        setDateOfBirth(response.getARecurringOrder?.patientData?.date_of_birth);
+        setReturnDate(
+          response.getARecurringOrder?.destinationDetailsData?.return_date
+        );
+      },
+      onError: (error) => {
+        console.error({ error });
+      },
+    });
 
   useEffect(() => {
     getARecurringOrder();
@@ -161,12 +162,18 @@ const EditRecurringOrder = () => {
   return (
     <div>
       <h5 className="mb-4">Edit Order</h5>
-      <Card className="bg-white p-0 border-opacity-50 border">
-        <EditTransportationDetails {...props} />
-        <EditPatientDetails {...props} />
-        <EditDestinationDetails {...props} />
-        <EditBillingDetails {...props} />
-      </Card>
+      {getARecurringOrderLoading ? (
+        <Card className="h-[calc(100vh-11rem)] mt-6 flex justify-center items-center">
+          <p className="text-primary">Loading...</p>
+        </Card>
+      ) : (
+        <Card className="bg-white p-0 border-opacity-50 border">
+          <EditTransportationDetails {...props} />
+          <EditPatientDetails {...props} />
+          <EditDestinationDetails {...props} />
+          <EditBillingDetails {...props} />
+        </Card>
+      )}
     </div>
   );
 };

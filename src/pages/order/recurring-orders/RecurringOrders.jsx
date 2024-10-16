@@ -100,7 +100,14 @@ const RecurringOrders = () => {
       cell: ({ row }) => {
         const date =
           row.original?.destinationDetailsData?.drop_off_pick_up_date;
-        return <p>{moment(date).format("DD MMMM YYYY")}</p>;
+        return (
+          <p>
+            {moment(date).format("DD MMMM YYYY")}{" "}
+            <span className="text-gray-700 text-xs">
+              ({moment(date).format("dddd")})
+            </span>
+          </p>
+        );
       },
     },
     {

@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { uploadFile } from "@/utils";
 import AppModal from "@/components/common/AppModal";
 import { TickMarkImage } from "@/assets/icons";
+import toast from "react-hot-toast";
 
 const validateEmail = (email) => {
   return String(email)
@@ -76,7 +77,10 @@ const RegisterForm = () => {
         ...submitData,
         profile_image: profile_image || "",
       }).then((res) => {
-        navigate(`/verify-email-sent?token=${res.data.token}`);
+        // when email will work uncomment below code
+        // navigate(`/verify-email-sent?token=${res.data.token}`);
+        toast.success("Registration successful.Please login to continue!");
+        navigate("/login");
       });
     } catch (err) {
       console.error(err);

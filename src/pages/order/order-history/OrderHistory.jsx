@@ -237,26 +237,7 @@ const OrderHistory = () => {
                 <EllipsisVertical className="h-4 w-4 cursor-pointer" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="-translate-x-5 py-3 px-2 w-48">
-                <DropdownMenuItem
-                  className="py-2 cursor-pointer px-3"
-                  onClick={() => {
-                    handlePrintOrder(row.original);
-                  }}
-                >
-                  <span className="text-gray-700 text-sm">Print</span>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem className="py-2 px-3 cursor-pointer">
-                  <Link
-                    to={`/orders/order-details/${orderId}`}
-                    className="flex items-center gap-3 text-[16px] w-full"
-                  >
-                    <span className="text-gray-700 text-sm">
-                      {t("view_details")}
-                    </span>
-                  </Link>
-                </DropdownMenuItem>
-                {isRecurring && (
+                {isRecurring ? (
                   <DropdownMenuItem className="py-2 px-3 cursor-pointer">
                     <Link
                       to={`/orders/recurring-orders/${orderId}`}
@@ -267,6 +248,28 @@ const OrderHistory = () => {
                       </span>
                     </Link>
                   </DropdownMenuItem>
+                ) : (
+                  <>
+                    <DropdownMenuItem
+                      className="py-2 cursor-pointer px-3"
+                      onClick={() => {
+                        handlePrintOrder(row.original);
+                      }}
+                    >
+                      <span className="text-gray-700 text-sm">Print</span>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem className="py-2 px-3 cursor-pointer">
+                      <Link
+                        to={`/orders/order-details/${orderId}`}
+                        className="flex items-center gap-3 text-[16px] w-full"
+                      >
+                        <span className="text-gray-700 text-sm">
+                          {t("view_details")}
+                        </span>
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>

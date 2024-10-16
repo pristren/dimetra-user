@@ -225,18 +225,8 @@ const AllOrders = () => {
                   <Trash className="size-5" />
                   <span className="text-gray-700 text-sm">{t("storno")}</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className="py-2 mb-2 cursor-pointer">
-                  <Link
-                    to={`/orders/order-details/${orderId}`}
-                    className="flex items-center gap-3 text-[16px] w-full"
-                  >
-                    <Document className="size-5" />
-                    <span className="text-gray-700 text-sm">
-                      {t("view_details")}
-                    </span>
-                  </Link>
-                </DropdownMenuItem>
-                {isRecurring && (
+
+                {isRecurring ? (
                   <DropdownMenuItem className="py-2 mb-2 cursor-pointer">
                     <Link
                       to={`/orders/recurring-orders/${orderId}`}
@@ -245,6 +235,18 @@ const AllOrders = () => {
                       <List className="size-5" />
                       <span className="text-gray-700 text-sm">
                         {t("view_order_lists")}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                ) : (
+                  <DropdownMenuItem className="py-2 mb-2 cursor-pointer">
+                    <Link
+                      to={`/orders/order-details/${orderId}`}
+                      className="flex items-center gap-3 text-[16px] w-full"
+                    >
+                      <Document className="size-5" />
+                      <span className="text-gray-700 text-sm">
+                        {t("view_details")}
                       </span>
                     </Link>
                   </DropdownMenuItem>
