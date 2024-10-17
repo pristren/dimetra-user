@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import AuthFooter from "@/components/helper-ui/AuthFooter";
 import { cn } from "@/lib/utils";
 import { Loading } from "@/assets/icons";
+import { t } from "i18next";
 
 const AppUserDetails = ({
   onSubmit,
@@ -106,7 +107,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    First Name <sup className="text-[13px]">*</sup>
+                    {t("first_name")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -127,7 +128,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Last Name <sup className="text-[13px]">*</sup>
+                    {t('last_name')} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -148,7 +149,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Email <sup className="text-[13px]">*</sup>
+                    {t("email")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -169,7 +170,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Phone <sup className="text-[13px]">*</sup>
+                    {t("phone")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -190,7 +191,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Address <sup className="text-[13px]">*</sup>
+                    {t("address")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -210,7 +211,7 @@ const AppUserDetails = ({
               name="billing_address"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Billing Address</FormLabel>
+                  <FormLabel>{t("billing_address")}</FormLabel>
                   <FormControl>
                     <Input
                       className={
@@ -232,7 +233,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Code <sup className="text-[13px]">*</sup>
+                  {t("code")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -252,7 +253,7 @@ const AppUserDetails = ({
               name="internal_cost_center"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Internal Cost Center</FormLabel>
+                  <FormLabel>{t("internal_cost_center")}</FormLabel>
                   <FormControl>
                     <Input
                       className={
@@ -276,7 +277,7 @@ const AppUserDetails = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Password <sup className="text-[13px]">*</sup>
+                        {t("password")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -300,7 +301,7 @@ const AppUserDetails = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        Confirm Password <sup className="text-[13px]">*</sup>
+                        {t("confirm_password")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -326,7 +327,7 @@ const AppUserDetails = ({
               {loading ? (
                 <Loading className="w-6 h-6 mx-auto text-white" />
               ) : (
-                "Register"
+                t("register")
               )}
             </Button>
           )}
@@ -374,7 +375,7 @@ const AppUserDetails = ({
                 {loading ? (
                   <Loading className="w-6 h-6 mx-auto text-white" />
                 ) : (
-                  "Save"
+                  t("save")
                 )}
               </Button>
             </div>

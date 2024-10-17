@@ -24,6 +24,7 @@ import { Loading } from "@/assets/icons";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { EyeIcon } from "lucide-react";
+import { t } from "i18next";
 
 export default function LoginForm() {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ export default function LoginForm() {
   return (
     <Card className="w-[480px] px-5 py-5">
       <CardHeader className="mb-4">
-        <CardTitle className="text-center">Sign In</CardTitle>
+        <CardTitle className="text-center">{t("sign_in")}</CardTitle>
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
@@ -93,7 +94,7 @@ export default function LoginForm() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>{t("email")}</FormLabel>
                     <FormControl>
                       <Input
                         className={
@@ -101,7 +102,7 @@ export default function LoginForm() {
                             ? "border-red-500"
                             : ""
                         }
-                        placeholder="your@email.com"
+                        placeholder={t("your_email_com")}
                         type="email"
                         {...field}
                       />
@@ -115,7 +116,7 @@ export default function LoginForm() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel>{t("password")}</FormLabel>
                     <FormControl>
                       <div className="relative">
                         <Input
@@ -124,7 +125,7 @@ export default function LoginForm() {
                               ? "border-red-500"
                               : ""
                           }
-                          placeholder="Type your password"
+                          placeholder={t("type_your_password")}
                           type={isShowPassword ? "text" : "password"}
                           {...field}
                         />
@@ -151,21 +152,21 @@ export default function LoginForm() {
                   className="text-[#6F767E] font-normal tracking-wide cursor-pointer"
                   htmlFor="remember"
                 >
-                  Remember me
+                  {t("remember_me")}
                 </Label>
               </div>
               <Link
                 to="/forgot-password"
                 className="text-[#6F767E] font-normal tracking-wide text-destructive underline text-sm cursor-pointer"
               >
-                Forgot your password?
+                {t("forgot_your_password")}
               </Link>
             </div>
             <Button type="submit" className="block w-2/4 mx-auto">
               {loading ? (
                 <Loading className="w-6 h-6 mx-auto text-white" />
               ) : (
-                "Login"
+                t("login")
               )}
             </Button>
             <AuthFooter page={"login"} />

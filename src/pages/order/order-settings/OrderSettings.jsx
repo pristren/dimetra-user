@@ -22,6 +22,7 @@ import {
 import { UPDATE_AN_USER_PASSWORD } from "./graphql/mutations/updateUserPassword.gql";
 import toast from "react-hot-toast";
 import { uploadFile } from "@/utils";
+import { t } from "i18next";
 
 const OrderSettings = () => {
   const { userInfo, profileImageLoaded } = useSelector((state) => state.user);
@@ -137,18 +138,18 @@ const OrderSettings = () => {
   return (
     <div>
       <div className="flex items-center justify-between gap-5">
-        <h2 className="text-2xl font-bold text-nowrap">My Profile</h2>
+        <h2 className="text-2xl font-bold text-nowrap">{t("profile")}</h2>
         <AppDialog
           open={appDialougeOpen}
           onOpenChange={setAppDialougeOpen}
           trigger={
             <div className="flex justify-end items-center gap-2">
               <Security />
-              <p className="highlight text-nowrap underline">Update Password</p>
+              <p className="highlight text-nowrap underline">{t("update_password")}</p>
             </div>
           }
           className={"p-8"}
-          title="Change Password"
+          title={t("change_password_title")}
           content={
             <PasswordChangeForm
               loading={passwordChangeLoading}
@@ -193,11 +194,11 @@ const OrderSettings = () => {
           </div>
           <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
             <DialogTrigger className="bg-gray-100 hover:bg-gray-200 shadow-xl rounded-full py-2 px-5 text-blue-500 hidden lg:block">
-              Edit
+              {t("edit")}
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-3xl">
               <DialogHeader>
-                <DialogTitle>Edit Profile</DialogTitle>
+                <DialogTitle>{t("edit_profile")}</DialogTitle>
                 <AppUserDetails
                   form={form}
                   onSubmit={onSubmitUserDetails}
@@ -211,27 +212,27 @@ const OrderSettings = () => {
         </div>
         <div className="mt-10 lg:mt-20">
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
-            <p className=" ml-3 text-gray-500 w-40">Email</p>
+            <p className=" ml-3 text-gray-500 w-40">{t("edit")}</p>
             <p className="font-medium lg:font-normal">{userInfo?.email}</p>
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
-            <p className=" ml-3 text-gray-500 w-40">Address</p>
+            <p className=" ml-3 text-gray-500 w-40">{t("address")}</p>
             <p className="font-medium lg:font-normal">{userInfo?.address}</p>
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
-            <p className=" ml-3 text-gray-500 w-40">Billing address</p>
+            <p className=" ml-3 text-gray-500 w-40">{t("billing_address")}</p>
             <p className="font-medium lg:font-normal">
               {userInfo?.billing_address}
             </p>
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
-            <p className=" ml-3 text-gray-500 w-40">Code</p>
+            <p className=" ml-3 text-gray-500 w-40">{t("code")}</p>
             <p className="font-medium lg:font-normal">{userInfo?.code}</p>
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 pb-5 px-5">
-            <p className=" ml-3 text-gray-500 w-40">Internal Koststelle</p>
+            <p className=" ml-3 text-gray-500 w-40">{t("internal_cost_center")}</p>
             <p className="font-medium lg:font-normal">
-              {userInfo?.internal_cost_center || "Not available"}
+              {userInfo?.internal_cost_center || t("not_available")}
             </p>
           </div>
         </div>

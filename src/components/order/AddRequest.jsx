@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { CREATE_MESSAGE_REQUESTS } from "@/pages/order/send-request/graphql/mutations/createMessageRequest.gql";
 import { uploadFile } from "@/utils";
 import { useMutation } from "@apollo/client";
+import { t } from "i18next";
 import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -70,14 +71,14 @@ const AddRequest = ({ setRequestModalOpen, getData = () => {} }) => {
           render={({ field }) => (
             <FormItem className="mb-8">
               <FormLabel className="mb-2 text-black">
-                Title <sup className="text-[13px]">*</sup>
+                {t("title")} <sup className="text-[13px]">*</sup>
               </FormLabel>
               <FormControl>
                 <Input
                   className={
                     form.formState.errors.title ? "border-red-500" : ""
                   }
-                  placeholder="Enter title"
+                  placeholder={t("enter_title")}
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
@@ -95,14 +96,14 @@ const AddRequest = ({ setRequestModalOpen, getData = () => {} }) => {
           render={({ field }) => (
             <FormItem className="mb-8">
               <FormLabel className="mb-2 text-black">
-                Message <sup className="text-[13px]">*</sup>
+                {t("message")} <sup className="text-[13px]">*</sup>
               </FormLabel>
               <FormControl>
                 <Input
                   className={
                     form.formState.errors.message ? "border-red-500" : ""
                   }
-                  placeholder="Enter your message"
+                  placeholder={t("enter_message")}
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
@@ -116,7 +117,7 @@ const AddRequest = ({ setRequestModalOpen, getData = () => {} }) => {
 
         <FormItem className="mb-8">
           <FormLabel className="flex items-center justify-between border bg-gray-100 px-2 py-3 rounded-md mt-3 mb-3">
-            File Upload <Upload />
+            {t("file_upload")} <Upload />
           </FormLabel>
           <FormControl>
             <Input
@@ -129,7 +130,7 @@ const AddRequest = ({ setRequestModalOpen, getData = () => {} }) => {
             {file ? (
               <span className="text-gray-500">{file?.name}</span>
             ) : (
-              "No file chosen"
+              t("no_file_chosen")
             )}
           </p>
           <FormMessage />
@@ -141,14 +142,14 @@ const AddRequest = ({ setRequestModalOpen, getData = () => {} }) => {
           render={({ field }) => (
             <FormItem className="mb-8">
               <FormLabel className="mb-2 text-black">
-                Add order number (optional)
+                {t("add_order_number_optional")}
               </FormLabel>
               <FormControl>
                 <Input
                   className={
                     form.formState.errors.order_number ? "border-red-500" : ""
                   }
-                  placeholder="Enter order number"
+                  placeholder={t("enter_order_number")}
                   {...field}
                   onChange={(e) => {
                     field.onChange(e);
@@ -164,7 +165,7 @@ const AddRequest = ({ setRequestModalOpen, getData = () => {} }) => {
             {loading ? (
               <Loading className="w-6 h-6 mx-auto text-white" />
             ) : (
-              "Send Request"
+              t("send_request")
             )}
           </Button>
         </div>
