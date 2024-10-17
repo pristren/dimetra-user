@@ -1,3 +1,5 @@
+import { t } from "i18next";
+
 export default function WrongPath() {
-  return <div>Wrong</div>;
+  return <div>{t('wrong')}</div>;
 }

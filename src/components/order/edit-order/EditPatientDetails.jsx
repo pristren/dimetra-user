@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
+import { t } from "i18next";
 
 const EditPatientDetails = ({
   editOrderData,
@@ -25,11 +26,11 @@ const EditPatientDetails = ({
 }) => {
   const { patientData } = editOrderData;
   const formSchema = z.object({
-    name: z.string().min(1, "Name is required"),
-    surname: z.string().min(1, "Surname is required"),
-    date_of_birth: z.string().min(1, "Date of Birth is required"),
-    area_room: z.string().min(1, "Area/Room is required"),
-    cost_center: z.string().min(1, "Cost center is required"),
+    name: z.string().min(1, t("name_required")),
+    surname: z.string().min(1, t("surname_required")),
+    date_of_birth: z.string().min(1, t("date_of_birth_required")),
+    area_room: z.string().min(1, t('area_room_required')),
+    cost_center: z.string().min(1, t("cost_center_required")),
     how_much: z.string().optional(),
     special_note: z.string().optional(),
     isolation: z.boolean().optional(),
@@ -55,7 +56,7 @@ const EditPatientDetails = ({
   };
   return (
     <Card className="p-6 border-none rounded-none">
-      <h4 className="px-3">Patient Details</h4>
+      <h4 className="px-3">{t("patient_details")}</h4>
 
       <CardContent className="px-3 mt-3">
         <Form {...form}>
@@ -69,8 +70,8 @@ const EditPatientDetails = ({
                     <FormLabel>
                       {editOrderData.transportationData?.type_of_transport ===
                       "collection_order"
-                        ? "Name Collection"
-                        : "Name"}
+                        ? t("name_collection")
+                        : t('name')}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
@@ -81,8 +82,8 @@ const EditPatientDetails = ({
                         placeholder={
                           editOrderData.transportationData
                             ?.type_of_transport === "collection_order"
-                            ? "Enter name collection"
-                            : "Enter patient's name"
+                            ? t("enter_name_collection")
+                            : t("enter_patient_name")
                         }
                         {...field}
                         onChange={(e) => {
@@ -104,8 +105,8 @@ const EditPatientDetails = ({
                     <FormLabel>
                       {editOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
-                        ? "Number Patients"
-                        : "Surname"}
+                        ? t("number_patients")
+                        : t("surname")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
@@ -116,8 +117,8 @@ const EditPatientDetails = ({
                         placeholder={
                           editOrderData.transportationData
                             ?.type_of_transport === "collection_order"
-                            ? "Enter number of patients"
-                            : "Enter patient's surname"
+                            ? t("enter_number_of_patients")
+                            : t("enter_patient_surname")
                         }
                         {...field}
                         onChange={(e) => {
@@ -139,7 +140,7 @@ const EditPatientDetails = ({
                   render={() => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
-                        Date of Birth<sup className="text-[13px]">*</sup>
+                        {t("date_of_birth")}<sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <DatePicker
@@ -161,8 +162,8 @@ const EditPatientDetails = ({
                     <FormLabel>
                       {editOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
-                        ? "Cost Center"
-                        : "Area/Room"}
+                        ? t("cost_center")
+                        : t("area_room")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
@@ -172,7 +173,7 @@ const EditPatientDetails = ({
                             ? "border-red-500"
                             : ""
                         }
-                        placeholder="Enter patient's area/room"
+                        placeholder={t("enter_patient_area_room")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -193,8 +194,8 @@ const EditPatientDetails = ({
                     <FormLabel>
                       {editOrderData.transportationData?.type_of_transport ===
                       "collectionOrder"
-                        ? "How much"
-                        : "Cost Center"}
+                        ? t("how_much")
+                        : t("cost_center")}
                       {editOrderData.transportationData?.type_of_transport !==
                         "collectionOrder" && (
                         <sup className="text-[13px]">*</sup>
@@ -207,7 +208,7 @@ const EditPatientDetails = ({
                             ? "border-red-500"
                             : ""
                         }
-                        placeholder="Enter cost center"
+                        placeholder={t("enter_cost_center")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -225,13 +226,13 @@ const EditPatientDetails = ({
                 name="how_much"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>How Much</FormLabel>
+                    <FormLabel>{t("how_much")}</FormLabel>
                     <FormControl>
                       <Input
                         className={
                           form.formState.errors.how_much ? "border-red-500" : ""
                         }
-                        placeholder="Enter amount"
+                        placeholder={t('enter_amount')}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);
@@ -248,7 +249,7 @@ const EditPatientDetails = ({
                 name="isolation"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="block mb-3">Isolation</FormLabel>
+                    <FormLabel className="block mb-3">{t("isolation")}</FormLabel>
                     <div className="flex items-center">
                       <FormControl>
                         <Checkbox
@@ -289,7 +290,7 @@ const EditPatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="block mb-3">
-                      Patient Above 90 kg
+                      {t("patient_above_90kg")}
                     </FormLabel>
                     <div className="flex items-center">
                       <FormControl>
@@ -330,7 +331,7 @@ const EditPatientDetails = ({
                 name="special_note"
                 render={({ field }) => (
                   <FormItem className={"col-span-3"}>
-                    <FormLabel>Special</FormLabel>
+                    <FormLabel>{t("special")}</FormLabel>
                     <FormControl>
                       <Input
                         className={`${
@@ -338,7 +339,7 @@ const EditPatientDetails = ({
                             ? "border-red-500"
                             : ""
                         }`}
-                        placeholder="Enter special notes"
+                        placeholder={t("enter_special_notes")}
                         {...field}
                         onChange={(e) => {
                           field.onChange(e);

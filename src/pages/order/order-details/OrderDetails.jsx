@@ -7,6 +7,7 @@ import { Link, useParams } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import moment from "moment";
 import { GET_A_RECURRING_ORDER } from "../recurring-orders/graphql/queries/getARecurringOrder.gql";
+import { t } from "i18next";
 
 function OrderDetails({ singleRecurring = false }) {
   const [data, setData] = useState({});
@@ -49,17 +50,17 @@ function OrderDetails({ singleRecurring = false }) {
 
   return (
     <div className="capitalize">
-      <h5>Order Details</h5>
+      <h5>{t("order_details")}</h5>
       {singleOrderLoading || singleRecurringOrderLoading ? (
         <Card className="h-[calc(100vh-11rem)] mt-6 flex justify-center items-center">
-          <p className="text-primary">Loading...</p>
+          <p className="text-primary">{t("loading")}...</p>
         </Card>
       ) : (
         <Card className="mt-6 bg-white p-6 border-opacity-50 ">
-          <h5>Transportation Details</h5>
+          <h5>{t("transportation_details")}</h5>
           <div className="grid grid-cols-3 mt-6 mb-20">
             <div>
-              <p className="font-medium  mb-3">Type of Transport</p>
+              <p className="font-medium  mb-3">{t("type_of_transport")}</p>
               <p>
                 {data?.transportationData?.type_of_transport?.includes("_")
                   ? data?.transportationData?.type_of_transport
@@ -70,7 +71,7 @@ function OrderDetails({ singleRecurring = false }) {
             </div>
             <div>
               <p className="font-medium mb-2 last:mb-0">
-                Mode of Transportation
+                {t("mode_of_transportation")}
               </p>
               {data?.transportationData?.mode_of_transportation?.map(
                 (mode, index) => (
@@ -81,7 +82,7 @@ function OrderDetails({ singleRecurring = false }) {
               )}
             </div>
             <div>
-              <p className="font-medium  mb-3">Transport With</p>
+              <p className="font-medium  mb-3">{t("transport_with")}</p>
               {data?.transportationData?.transport_with?.map((value, index) => (
                 <p key={index} className="mb-2 last:mb-0">
                   {value === "oxygen_quantity"
@@ -97,38 +98,38 @@ function OrderDetails({ singleRecurring = false }) {
           <Separator />
 
           <div className="my-14">
-            <h5>Patient Details</h5>
+            <h5>{t("patient_details")}</h5>
             <div className="grid grid-cols-2 gap-6 mt-10">
               <div className="flex items-center gap-6">
                 {data?.transportationData?.type_of_transport ===
                 "collection_order" ? (
-                  <p>Name Collection: </p>
+                  <p>{t("name_collection")}: </p>
                 ) : (
-                  <p>Name: </p>
+                  <p>{t("name")}: </p>
                 )}
                 <p>{data?.patientData?.name}</p>
               </div>
               {data?.patientData?.dispatcher && (
                 <div className="flex items-center gap-6">
-                  <p>Dispatcher: </p>
+                  <p>{t("dispatcher")}: </p>
                   <p>{data?.patientData?.dispatcher}</p>
                 </div>
               )}
               <div className="flex items-center gap-6">
                 {data?.transportationData?.type_of_transport ===
                 "collection_order" ? (
-                  <p>Number of patients: </p>
+                  <p>{t("number_of_patients")}: </p>
                 ) : (
-                  <p>Surname: </p>
+                  <p>{t("surname")}: </p>
                 )}
                 <p>{data?.patientData?.surname}</p>
               </div>
               <div className="flex items-center gap-6">
-                <p>Pick up: </p>
+                <p>{t("pick_up")}: </p>
                 <p>{data?.destinationDetailsData?.pick_up_address}</p>
               </div>
               <div className="flex items-center gap-6">
-                <p>Order Type: </p>
+                <p>{t("order_type")}: </p>
                 <p>
                   {data?.transportationData?.type_of_transport?.includes("_")
                     ? data?.transportationData?.type_of_transport
@@ -138,17 +139,17 @@ function OrderDetails({ singleRecurring = false }) {
                 </p>
               </div>
               <div className="flex items-center gap-6">
-                <p>Destination : </p>
+                <p>{t("destination")} : </p>
                 <p>{data?.destinationDetailsData?.drop_off_address}</p>
               </div>
               {data?.transportationData?.start_date && (
                 <div className="flex items-center gap-6">
-                  <p>Date & time : </p>
+                  <p>{t("date_time")} : </p>
                   <p>{data?.transportationData?.start_date}</p>
                 </div>
               )}
               <div className="flex items-start gap-6">
-                <p>Vehicle: </p>
+                <p>{t("vehicle")}: </p>
                 <div className="flex items-start gap-2">
                   {data?.transportationData?.transport_with?.map(
                     (person, index) => (
@@ -171,7 +172,7 @@ function OrderDetails({ singleRecurring = false }) {
           <Separator />
 
           <div className="my-14">
-            <h5>Destination Details</h5>
+            <h5>{t("destination_details")}</h5>
             <div
               className={`grid  gap-3  mt-10 ${
                 data?.order_type === "return"
@@ -180,32 +181,32 @@ function OrderDetails({ singleRecurring = false }) {
               }`}
             >
               <div>
-                <p className="font-medium text-lg mb-5">Pick up</p>
+                <p className="font-medium text-lg mb-5">{t("pick_up")}</p>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>Name / Institution: </p>
+                  <p>{t("pick_up_name_institution")}: </p>
                   <p>{data?.destinationDetailsData?.pick_up_name}</p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>Street: </p>
+                  <p>{t("street")}: </p>
                   <p>{data?.destinationDetailsData?.pick_up_address}</p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>City :</p>
+                  <p>{t("city")} :</p>
                   <p>{data?.destinationDetailsData?.pick_up_city}</p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>Country :</p>
+                  <p>{t("country")} :</p>
                   <p>{data?.destinationDetailsData?.pick_up_country}</p>
                 </div>
                 <div className="flex items-start gap-3 mb-8">
-                  <p className="text-nowrap">Working Employee Name :</p>
+                  <p className="text-nowrap">{t("working_employee_name")} :</p>
                   <p>{data?.destinationDetailsData?.pick_up_employee_name}</p>
                 </div>
               </div>
               <div className="">
-                <p className="font-medium text-lg mb-5">Drop-Off</p>
+                <p className="font-medium text-lg mb-5">{t("drop_off")}</p>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>Date :</p>
+                  <p>{t('drop_off_date')} :</p>
                   <p>
                     {data?.destinationDetailsData?.drop_off_pick_up_date
                       ? moment(
@@ -215,30 +216,30 @@ function OrderDetails({ singleRecurring = false }) {
                   </p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>Pickup time :</p>
+                  <p>{t("pickup_time")} :</p>
                   <p>
                     {data?.destinationDetailsData?.drop_off_pick_up_time ||
                       "not yet"}
                   </p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>Name/ Institution :</p>
+                  <p>{t("name_institution")} :</p>
                   <p>{data?.destinationDetailsData?.pick_up_name}</p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>Street :</p>
+                  <p>{t("street")} :</p>
                   <p>{data?.destinationDetailsData?.pick_up_address}</p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>city :</p>
+                  <p>{t("city")} :</p>
                   <p>{data?.destinationDetailsData?.pick_up_city}</p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>Country :</p>
+                  <p>{t("country")} :</p>
                   <p>{data?.destinationDetailsData?.pick_up_country} </p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>Phone :</p>
+                  <p>{t("phone")} :</p>
                   <p>
                     {data?.destinationDetailsData?.pick_up_country || "not yet"}
                   </p>
@@ -247,9 +248,9 @@ function OrderDetails({ singleRecurring = false }) {
               {/* kamruzzaman bhai? should we keep it? return journey here? */}
               {data?.order_type === "normal" && (
                 <div className="">
-                  <p className="font-medium text-lg mb-5">Return journey</p>
+                  <p className="font-medium text-lg mb-5">{t("return_journey")}</p>
                   <div className="flex items-center gap-3 mb-8">
-                    <p>Date :</p>
+                    <p>{t("date")} :</p>
                     <p>
                       {data?.destinationDetailsData?.return_date
                         ? moment(
@@ -259,11 +260,11 @@ function OrderDetails({ singleRecurring = false }) {
                     </p>
                   </div>
                   <div className="flex items-center gap-3 mb-8">
-                    <p>Time :</p>
+                    <p>{t("time")} :</p>
                     <p>{data?.destinationDetailsData?.return_approx_time}</p>
                   </div>
                   <div className="flex items-center gap-3 mb-8">
-                    <p>Floor/Department :</p>
+                    <p>{t("floor_department")} :</p>
                     <p>{data?.destinationDetailsData?.return_floor}</p>
                   </div>
                 </div>
@@ -274,30 +275,30 @@ function OrderDetails({ singleRecurring = false }) {
           <Separator />
 
           <div className="my-14 ">
-            <h5>Billing Details</h5>
+            <h5>{t("billing_details")}</h5>
             <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
               <div className="flex items-center gap-10">
-                <p>Prename / Institution : </p>
+                <p>{t("prename_institution")} : </p>
                 <p>{data?.billingDetailsData?.pre_name || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
-                <p>Dispatcher:</p>
+                <p>{t("dispatcher_billing")}:</p>
                 <p>{data?.billingDetailsData?.dispatcher || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
-                <p>Name :</p>
+                <p>{t("name")} :</p>
                 <p>{data?.billingDetailsData?.name || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
-                <p>Street :</p>
+                <p>{t("street")} :</p>
                 <p>{data?.billingDetailsData?.street || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
-                <p>Place :</p>
+                <p>{t("place")} :</p>
                 <p>{data?.billingDetailsData?.place || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
-                <p>Contact :</p>
+                <p>{t("contact")} :</p>
                 <p>{data?.billingDetailsData?.contact || "N/A"}</p>
               </div>
             </div>
@@ -305,21 +306,21 @@ function OrderDetails({ singleRecurring = false }) {
 
           <Separator />
           <div className="my-14">
-            <h5>MTS Detail</h5>
+            <h5>{t("mts_detail")}</h5>
             <div className="flex items-center gap-6 mb-6 mt-10">
-              <p>Additionally:</p>
-              <p>Here Is Name</p>
+              <p>{t("additionally")}:</p>
+              <p>{t("here_is_name")}</p>
             </div>
             <div className="flex items-center gap-6 mb-6">
-              <p>Driver 1 :</p>
+              <p>{t("driver_1")} :</p>
               <p>Smith</p>
             </div>
             <div className="flex items-center gap-6 mb-6">
-              <p>Driver 2 :</p>
+              <p>{t("driver_2")} :</p>
               <p>Mayur</p>
             </div>
             <div className="flex items-center gap-6 mb-6">
-              <p>Verhicle :</p>
+              <p>{t("vehicle_number")} :</p>
               <p>17</p>
             </div>
           </div>
@@ -332,7 +333,7 @@ function OrderDetails({ singleRecurring = false }) {
               className="px-14"
               variant="secondary"
             >
-              Back
+              {t("back")}
             </Button>
             {data?.status !== "completed" &&
               data?.status !== "rejected" &&
@@ -348,7 +349,7 @@ function OrderDetails({ singleRecurring = false }) {
                       : `/orders/edit-order/${id}`
                   }
                 >
-                  <Button className="px-14">Edit</Button>
+                  <Button className="px-14">{t('edit')}</Button>
                 </Link>
               )}
           </div>

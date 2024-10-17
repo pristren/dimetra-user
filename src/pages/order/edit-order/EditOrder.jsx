@@ -10,10 +10,9 @@ import { Card } from "@/components/ui/card";
 import { UPDATE_AN_ORDER } from "./graphql/mutations/updateAnOrder.gql";
 import { GET_AN_ORDER } from "./graphql/queries/getAnOrder.gql";
 import toast from "react-hot-toast";
+import { t } from "i18next";
 
 const EditOrder = () => {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [returnDate, setReturnDate] = useState(null);
   const [dropDate, setDropDate] = useState(null);
@@ -162,11 +161,11 @@ const EditOrder = () => {
   };
   return (
     <div>
-      <h5 className="mb-4">Edit Order</h5>
+      <h5 className="mb-4">{t("edit_order")}</h5>
 
       {getAnOrderLoading ? (
         <Card className="h-[calc(100vh-11rem)] mt-6 flex justify-center items-center">
-          <p className="text-primary">Loading...</p>
+          <p className="text-primary">{t("loading")}...</p>
         </Card>
       ) : (
         <Card className="bg-white p-0 border-opacity-50 border">
