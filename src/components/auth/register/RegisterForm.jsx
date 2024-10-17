@@ -78,6 +78,7 @@ const RegisterForm = () => {
         ...submitData,
         profile_image: profile_image || "",
       }).then((res) => {
+        console.log(res);
         // when email will work uncomment below code
         // navigate(`/verify-email-sent?token=${res.data.token}`);
         toast.success("Registration successful.Please login to continue!");
