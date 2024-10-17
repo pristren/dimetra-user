@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { t } from "i18next";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -43,7 +44,7 @@ export default function ResetForm() {
   return (
     <Card className="w-[500px] px-5 py-5">
       <CardHeader className="">
-        <CardTitle className="text-center">Reset Password</CardTitle>
+        <CardTitle className="text-center">{t("reset_password")}</CardTitle>
       </CardHeader>
       <CardContent className="px-10">
         <Form {...form}>
@@ -56,7 +57,7 @@ export default function ResetForm() {
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>{t("password")}</FormLabel>
                       <FormControl>
                         <Input
                           className={
@@ -64,7 +65,7 @@ export default function ResetForm() {
                               ? "border-red-500"
                               : ""
                           }
-                          placeholder="Type your password"
+                          placeholder={t("placeholder_password")}
                           {...field}
                         />
                       </FormControl>
@@ -81,7 +82,7 @@ export default function ResetForm() {
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
+                      <FormLabel>{t("confirm_password")}</FormLabel>
                       <FormControl>
                         <Input
                           className={
@@ -89,7 +90,7 @@ export default function ResetForm() {
                               ? "border-red-500"
                               : ""
                           }
-                          placeholder="Confirm your password"
+                          placeholder={t("placeholder_confirm_password")}
                           {...field}
                         />
                       </FormControl>
@@ -101,7 +102,7 @@ export default function ResetForm() {
               />
             </div>
             <Button type="submit" className="mt-6 block w-2/4 mx-auto">
-              Reset Password
+              {t("reset_password_button")}
             </Button>
           </form>
         </Form>

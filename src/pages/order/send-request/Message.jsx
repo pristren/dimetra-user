@@ -175,7 +175,7 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
 
   const renderMessages = () => {
     if (!messages || !Array.isArray(messages)) {
-      return <div>No messages yet.</div>;
+      return <div>{t('no_messages_yet')}.</div>;
     }
 
     return messages.map((msg, index) => {
@@ -274,7 +274,7 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
             <h6>{t("customer_support")}</h6>
             <div className="flex items-center justify-start gap-2 mt-1">
               <p className="bg-green-600 w-2 h-2 rounded-full"></p>
-              <p className="text-sm">Online</p>
+              <p className="text-sm">{t("online")}</p>
             </div>
           </div>
         </div>
@@ -308,7 +308,7 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
             <DialogTrigger asChild></DialogTrigger>
             <DialogContent className="max-h-[98vh] w-[90%] max-w-md overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>See all images</DialogTitle>
+                <DialogTitle>{t("see_all_images")}</DialogTitle>
               </DialogHeader>
 
               <div className="grid grid-cols-2 gap-4">

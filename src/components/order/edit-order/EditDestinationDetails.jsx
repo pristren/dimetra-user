@@ -48,29 +48,29 @@ const EditDestinationDetails = ({
     } = {},
   } = editOrderData;
   const form_schema = z.object({
-    pick_up_name: z.string().min(1, "Name is required"),
-    pick_up_address: z.string().min(1, "Address is required"),
-    pick_up_postal_code: z.number().min(1, "Postal is required"),
-    pick_up_city: z.string().min(1, "City is required"),
-    pick_up_country: z.string().min(1, "Country is required"),
+    pick_up_name: z.string().min(1, t("name_required")),
+    pick_up_address: z.string().min(1, t("address_required")),
+    pick_up_postal_code: z.number().min(1, t("postal_code_required")),
+    pick_up_city: z.string().min(1, t("city_required")),
+    pick_up_country: z.string().min(1, t("country_required")),
     pick_up_employee_name: z
       .string()
-      .min(1, "Working Employee Name is required"),
+      .min(1, t("employee_name_required")),
 
-    drop_off_date: z.string().min(1, "Date is required"),
-    drop_off_pick_up_time: z.string().min(1, "Pick-Up Time is required"),
-    drop_off_pick_up_date: z.string().min(1, "Pick-Up Date is required"),
-    drop_off_name: z.string().min(1, "Name is required"),
-    drop_off_address: z.string().min(1, "Address is required"),
-    drop_off_city: z.string().min(1, "City is required"),
-    drop_off_country: z.string().min(1, "Country is required"),
-    drop_off_phone: z.string().min(1, "Phone is required"),
-    drop_off_postal_code: z.number().min(1, "Drop of postal code is required"),
-    return_date: z.string().min(1, "Date is required"),
-    return_day_letter: z.string().min(1, "This field is required"),
-    return_approx_time: z.string().min(1, "Approx. Time is required"),
+    drop_off_date: z.string().min(1, t("drop_off_date_required")),
+    drop_off_pick_up_time: z.string().min(1, t("pick_up_time_required")),
+    drop_off_pick_up_date: z.string().min(1, t("pick_up_date_required")),
+    drop_off_name: z.string().min(1, t("drop_off_name_required")),
+    drop_off_address: z.string().min(1, t("drop_off_address_required")),
+    drop_off_city: z.string().min(1, t("drop_off_city_required")),
+    drop_off_country: z.string().min(1, t("drop_off_country_required")),
+    drop_off_phone: z.string().min(1, t("drop_off_phone_required")),
+    drop_off_postal_code: z.number().min(1, t("drop_off_postal_code_required")),
+    return_date: z.string().min(1, t("return_date_required")),
+    return_day_letter: z.string().min(1, t("day_letter_required")),
+    return_approx_time: z.string().min(1, t("approx_time_required")),
     return_floor: z.string().optional(),
-  });
+});
 
   const form = useForm({
     resolver: zodResolver(form_schema),

@@ -21,6 +21,7 @@ import { calculateFormProgress } from "@/utils";
 import { timeOptions } from "@/components/create-order-forms/helpers";
 import toast from "react-hot-toast";
 import moment from "moment";
+import { t } from "i18next";
 
 const DestinationDetails = ({
   handleFormChange,
@@ -86,29 +87,27 @@ const DestinationDetails = ({
   };
 
   const form_schema = z.object({
-    pick_up_name: z.string().min(1, "Name is required"),
-    pick_up_address: z.string().min(1, "Street is required"),
-    pick_up_postal_code: z.number().min(1, "Postal is required"),
-    pick_up_city: z.string().min(1, "City is required"),
-    pick_up_country: z.string().min(1, "Country is required"),
-    pick_up_employee_name: z
-      .string()
-      .min(1, "Working Employee Name is required"),
+    pick_up_name: z.string().min(1, t("name_is_required")),
+    pick_up_address: z.string().min(1, t("street_is_required")),
+    pick_up_postal_code: z.number().min(1, t("postal_is_required")),
+    pick_up_city: z.string().min(1, t("city_is_required")),
+    pick_up_country: z.string().min(1, t("country_is_required")),
+    pick_up_employee_name: z.string().min(1, t("working_employee_name_is_required")),
 
-    drop_off_date: z.string().min(1, "Date is required"),
-    drop_off_pick_up_time: z.string().min(1, "Pick-Up Time is required"),
-    drop_off_name: z.string().min(1, "Name is required"),
-    drop_off_address: z.string().min(1, "Drop of street is required"),
-    drop_off_postal_code: z.number().min(1, "Drop of postal code is required"),
-    drop_off_city: z.string().min(1, "City is required"),
-    drop_off_country: z.string().min(1, "Country is required"),
-    drop_off_phone: z.string().min(1, "Phone is required"),
+    drop_off_date: z.string().min(1, t("date_is_required")),
+    drop_off_pick_up_time: z.string().min(1, t("pick_up_time_is_required")),
+    drop_off_name: z.string().min(1, t("name_is_required")),
+    drop_off_address: z.string().min(1, t("drop_off_street_is_required")),
+    drop_off_postal_code: z.number().min(1, t("drop_off_postal_code_is_required")),
+    drop_off_city: z.string().min(1, t("city_is_required")),
+    drop_off_country: z.string().min(1, t("country_is_required")),
+    drop_off_phone: z.string().min(1, t("phone_is_required")),
 
-    return_date: z.string().min(1, "Date is required"),
-    return_day_letter: z.string().min(1, "This field is required"),
-    return_approx_time: z.string().min(1, "Approx. Time is required"),
+    return_date: z.string().min(1, t("date_is_required")),
+    return_day_letter: z.string().min(1, t("this_field_is_required")),
+    return_approx_time: z.string().min(1, t("approx_time_is_required")),
     return_floor: z.string().optional(),
-  });
+});
 
   const form = useForm({
     resolver: zodResolver(form_schema),
@@ -201,14 +200,14 @@ const DestinationDetails = ({
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
-        <CardTitle className="title">Destination Details</CardTitle>
+        <CardTitle className="title">{t("destination_details")}</CardTitle>
       </CardHeader>
       <CardContent className="lg:px-10">
         <Form {...form}>
           <form>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div className="pr-5">
-                <h6 className="text-xl font-semibold mb-4">Pick-Up</h6>
+                <h6 className="text-xl font-semibold mb-4">{t("pickup")}</h6>
 
                 {/* Pick-Up Name */}
                 <FormField
@@ -217,14 +216,14 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        Name / Institution <sup className="text-[13px]">*</sup>
+                        {t("name_institution")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
                             errors.pick_up_name ? "border-red-500" : ""
                           }
-                          placeholder="Type your name or institution"
+                          placeholder={t("type_your_name_or_institution")}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -244,14 +243,14 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        Street <sup className="text-[13px]">*</sup>
+                        {t("street")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
                             errors.pick_up_address ? "border-red-500" : ""
                           }
-                          placeholder="Type your street"
+                          placeholder={t("type_your_street")}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -270,14 +269,14 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        Postal Code <sup className="text-[13px]">*</sup>
+                        {t("postal_code")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
                             errors.pick_up_postal_code ? "border-red-500" : ""
                           }
-                          placeholder="Type your postal code"
+                          placeholder={t("type_your_postal_code")}
                           {...field}
                           type="number"
                           onChange={(e) => {
@@ -298,14 +297,14 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        City <sup className="text-[13px]">*</sup>
+                        {t('city')} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
                             errors.pick_up_city ? "border-red-500" : ""
                           }
-                          placeholder="Type your city"
+                          placeholder={t("type_your_city")}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -325,14 +324,14 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        Country <sup className="text-[13px]">*</sup>
+                        {t("country")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
                             errors.pick_up_country ? "border-red-500" : ""
                           }
-                          placeholder="Type your country"
+                          placeholder={t("type_your_country")}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -352,7 +351,7 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        Working Employee Name{" "}
+                        {t("working_employee_name")}
                         <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
@@ -360,7 +359,7 @@ const DestinationDetails = ({
                           className={
                             errors.pick_up_employee_name ? "border-red-500" : ""
                           }
-                          placeholder="Type the employee's name"
+                          placeholder={t('type_the_employees_name')}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -375,7 +374,7 @@ const DestinationDetails = ({
               </div>
 
               <div className="pl-5">
-                <h6 className="text-xl font-semibold mb-4">Drop-Off</h6>
+                <h6 className="text-xl font-semibold mb-4">{t('dropoff')}</h6>
 
                 {/* Drop-Off Date */}
                 {createOrderData?.transportationData?.type_of_transport !==
@@ -386,7 +385,7 @@ const DestinationDetails = ({
                     render={({ field }) => (
                       <FormItem className="mb-7">
                         <FormLabel className="mb-2 font-normal">
-                          Drop-Off Date <sup className="text-[13px]">*</sup>
+                          {t("dropoff_date")} <sup className="text-[13px]">*</sup>
                         </FormLabel>
                         <FormControl>
                           <DatePicker
@@ -425,7 +424,7 @@ const DestinationDetails = ({
                     render={({ field }) => (
                       <FormItem className="mb-7">
                         <FormLabel className="mb-2 font-normal">
-                          Pickup Time <sup className="text-[13px]">*</sup>
+                          {t("pickup_time")} <sup className="text-[13px]">*</sup>
                         </FormLabel>
                         <FormControl>
                           <AppSelect
@@ -455,14 +454,14 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        Name / Institution <sup className="text-[13px]">*</sup>
+                        {t('dropoff_name')} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
                             errors.drop_off_name ? "border-red-500" : ""
                           }
-                          placeholder="Type name"
+                          placeholder={t('type_name')}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -482,14 +481,14 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        Street <sup className="text-[13px]">*</sup>
+                        {t("dropoff_street")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
                             errors.drop_off_address ? "border-red-500" : ""
                           }
-                          placeholder="Type Street"
+                          placeholder={t("type_street")}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -509,7 +508,7 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        Postal Code <sup className="text-[13px]">*</sup>
+                        {t('dropoff_postal_code')} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -537,14 +536,14 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        City <sup className="text-[13px]">*</sup>
+                        {t("dropoff_city")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
                             errors.drop_off_city ? "border-red-500" : ""
                           }
-                          placeholder="Type city"
+                          placeholder={t('type_city')}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -564,14 +563,14 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        Country <sup className="text-[13px]">*</sup>
+                        {t("dropoff_country")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
                           className={
                             errors.drop_off_country ? "border-red-500" : ""
                           }
-                          placeholder="Type country"
+                          placeholder={t("type_country")}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -591,7 +590,7 @@ const DestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2 font-normal">
-                        Phone <sup className="text-[13px]">*</sup>
+                        {t('dropoff_phone')} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -599,7 +598,7 @@ const DestinationDetails = ({
                             errors.drop_off_phone ? "border-red-500" : ""
                           }
                           type="number"
-                          placeholder="Type phone"
+                          placeholder={t('type_phone')}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
@@ -617,7 +616,7 @@ const DestinationDetails = ({
                   "recurring" && (
                   <div className="mt-10">
                     <h6 className="text-xl font-semibold mb-4">
-                      Return Journey
+                      {t('return_journey')}
                     </h6>
                     <div>
                       <FormField
@@ -626,7 +625,7 @@ const DestinationDetails = ({
                         render={({ field }) => (
                           <FormItem className="mb-7">
                             <FormLabel className="mb-2 font-normal">
-                              Return Date
+                              {t('return_date')}
                             </FormLabel>
                             <FormControl>
                               <DatePicker
@@ -658,7 +657,7 @@ const DestinationDetails = ({
                         render={({ field }) => (
                           <FormItem className="mb-7">
                             <FormLabel className="mb-2 font-normal">
-                              Approx. Time
+                              {t("return_approx_time")}
                             </FormLabel>
                             <FormControl>
                               <AppSelect
@@ -687,11 +686,11 @@ const DestinationDetails = ({
                         render={({ field }) => (
                           <FormItem className="mb-7">
                             <FormLabel className="mb-2 font-normal">
-                              Floor / Department
+                              {t('floor_department')}
                             </FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Floor number (optional)"
+                                placeholder={t('floor_number_optional')}
                                 {...field}
                                 onChange={(e) => {
                                   field.onChange(e);

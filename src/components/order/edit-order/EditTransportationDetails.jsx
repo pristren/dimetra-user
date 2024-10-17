@@ -80,15 +80,15 @@ const EditTransportationDetails = ({
 
   return (
     <Card className="mt-2 bg-white p-6 border-none">
-      <h4 className="px-3">Transportation Details</h4>
+      <h4 className="px-3">{t("transportation_details")}</h4>
       <CardContent className="px-3 mt-4">
         <Form {...form}>
           <form>
             <div className="grid grid-cols-3 gap-5">
               <div className="pr-5">
                 <p className="mb-4  font-semibold">
-                  Type of transport{" "}
-                  <span className="text-[15px]">(simple selection)</span>
+                  {t("type_of_transport")}
+                  <span className="text-[15px]">({t("simple_selection")})</span>
                 </p>
                 <FormField
                   control={form.control}
@@ -127,8 +127,8 @@ const EditTransportationDetails = ({
 
               <div className="pr-5">
                 <p className="mb-4 font-semibold">
-                  Mode of transportation{" "}
-                  <span className="text-[15px]">(multiple selection)</span>
+                  {t("mode_of_transportation")}
+                  <span className="text-[15px]">({t("multiple_selection")})</span>
                 </p>
                 {transportModesOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">
@@ -150,8 +150,8 @@ const EditTransportationDetails = ({
 
               <div>
                 <p className="mb-4 font-semibold">
-                  Transport with{" "}
-                  <span className="text-[15px]">(multiple selection)</span>
+                  {t("transport_with")}
+                  <span className="text-[15px]">({t("multiple_selection")})</span>
                 </p>
                 {transportWithOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">

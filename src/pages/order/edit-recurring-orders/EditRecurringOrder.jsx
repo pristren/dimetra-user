@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import { UPDATE_A_RECURRING_ORDER } from "./graphql/mutations/updateARecurringOrder.gql";
 import { GET_A_RECURRING_ORDER } from "./graphql/queries/getARecurringOrder.gql";
 import toast from "react-hot-toast";
+import { t } from "i18next";
 
 const EditRecurringOrder = () => {
   const [dateOfBirth, setDateOfBirth] = useState(null);
@@ -135,7 +136,7 @@ const EditRecurringOrder = () => {
         },
       });
       if (data?.updateARecurringOrder?.id) {
-        toast.success("Order updated successfully");
+        toast.success(t("order_updated_successfully"));
         navigate(-1);
         setLoading(false);
       }
@@ -161,10 +162,10 @@ const EditRecurringOrder = () => {
   };
   return (
     <div>
-      <h5 className="mb-4">Edit Order</h5>
+      <h5 className="mb-4">{t("edit_order")}</h5>
       {getARecurringOrderLoading ? (
         <Card className="h-[calc(100vh-11rem)] mt-6 flex justify-center items-center">
-          <p className="text-primary">Loading...</p>
+          <p className="text-primary">{t('loading')}...</p>
         </Card>
       ) : (
         <Card className="bg-white p-0 border-opacity-50 border">

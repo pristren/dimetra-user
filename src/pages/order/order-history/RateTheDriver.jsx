@@ -4,15 +4,14 @@ import { Controller, useForm } from "react-hook-form";
 import "@smastrom/react-rating/style.css";
 import { Textarea } from "@/components/ui/textarea";
 import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
-import { Separator } from "@/components/ui/separator";
+import { useParams } from "react-router-dom";
 import { DefaultAvatar, GoldenStar, Loading } from "@/assets/icons";
-import { EllipsisVertical } from "lucide-react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_A_REVIEW } from "./graphql/mutations/createAReview.gql";
 import { GET_A_REVIEW_FROM_ORDER } from "./graphql/queries/getAReviewFromOrder.gql";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { t } from "i18next";
 // import { GET_A_REVIEW } from "./graphql/queries/getAReview.gql";
 
 const RateTheDriver = () => {
@@ -50,13 +49,13 @@ const RateTheDriver = () => {
   const [createAReview] = useMutation(CREATE_A_REVIEW, {
     onCompleted: (data) => {
       reset();
-      toast.success("Rating submitted successfully");
+      toast.success(t('rating_submitted_successfully'));
       getAReviewFromOrder();
       setCreateReviewLoading(false);
     },
     onError: (error) => {
       console.log(error);
-      toast.error("Failed to submit rating");
+      toast.error(t('failed_to_submit_rating'));
       setCreateReviewLoading(false);
     },
   });
@@ -81,7 +80,7 @@ const RateTheDriver = () => {
         {reviewData === null && (
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm lg:text-[16px]">Write Your Review</p>
+              <p className="text-sm lg:text-[16px]">{t("write_your_review")}</p>
               <div className="flex items-center gap-1">
                 <Controller
                   control={control}
@@ -119,7 +118,7 @@ const RateTheDriver = () => {
               control={control}
               name="review_message"
               rules={{
-                required: "This field is required",
+                required: t('this_field_is_required'),
               }}
               render={({
                 field: { onChange, onBlur, value },
@@ -142,7 +141,7 @@ const RateTheDriver = () => {
               {createReviewLoading ? (
                 <Loading className="w-6 h-6 mx-auto text-white" />
               ) : (
-                "Submit Rating"
+                t("submit_rating")
               )}
             </Button>
           </form>
@@ -150,7 +149,7 @@ const RateTheDriver = () => {
         {/* {reviewData === null && <Separator className="my-5 h-[2px]" />} */}
 
         <div>
-          {loading ? <p className="text-primary">Loading...</p> : null}
+          {loading ? <p className="text-primary">{t("loading")}...</p> : null}
           {reviewData?.id && (
             <div>
               <div className="flex items-center justify-between gap-2">

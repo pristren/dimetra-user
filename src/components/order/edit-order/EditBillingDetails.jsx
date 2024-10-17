@@ -31,12 +31,13 @@ const EditBillingDetails = ({
     contact = "",
   } = editOrderData.billingDetailsData || {};
   const formSchema = z.object({
-    preName: z.string().min(1, "Prename/Institution is required"),
-    name: z.string().min(1, "Name is required"),
-    street: z.string().min(1, "Street is required"),
-    place: z.string().min(1, "Place is required"),
-    contact: z.string().min(1, "Contact is required"),
+    preName: z.string().min(1, t("prename_required")),
+    name: z.string().min(1, t("name_required")),
+    street: z.string().min(1, t("street_required")),
+    place: z.string().min(1, t("place_required")),
+    contact: z.string().min(1, t("contact_required")),
   });
+  
 
   const form = useForm({
     resolver: zodResolver(formSchema),

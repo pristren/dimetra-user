@@ -46,11 +46,11 @@ const PatientDetails = ({
   const { patientData } = createOrderData;
 
   const formSchema = z.object({
-    name: z.string().min(1, "Name is required"),
-    surname: z.string().min(1, "Surname is required"),
-    date_of_birth: z.string().min(1, "Date of Birth is required"),
-    area_room: z.string().min(1, "Area/Room is required"),
-    cost_center: z.string().min(1, "Cost center is required"),
+    name: z.string().min(1, t("name_required")),
+    surname: z.string().min(1, t("surname_required")),
+    date_of_birth: z.string().min(1, t("date_of_birth_required")),
+    area_room: z.string().min(1, t("area_room_required")),
+    cost_center: z.string().min(1, t("cost_center_required")),
     how_much: z.string().optional(),
     special_note: z.string().optional(),
     isolation: z.boolean().optional(),
@@ -126,8 +126,8 @@ const PatientDetails = ({
                         placeholder={
                           createOrderData.transportationData
                             ?.type_of_transport === "collection_order"
-                            ? "Enter name of the collection"
-                            : "Enter patient's name"
+                            ? t('enter_name_of_the_collection')
+                            : t('enter_patients_name')
                         }
                         {...field}
                         onChange={(e) => {
@@ -161,8 +161,8 @@ const PatientDetails = ({
                         placeholder={
                           createOrderData.transportationData
                             ?.type_of_transport === "collection_order"
-                            ? "Enter number of patients"
-                            : "Enter patient's surname"
+                            ? t("enter_number_of_patients")
+                            : t('enter_patients_surname')
                         }
                         {...field}
                         onChange={(e) => {

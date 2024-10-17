@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { t } from "i18next";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -39,9 +40,9 @@ export default function ForgotForm() {
   return (
     <Card className="w-[500px] px-5 py-5">
       <CardHeader className="">
-        <CardTitle className="text-center">Forgot Password</CardTitle>
+        <CardTitle className="text-center">{t("forgot_password")}</CardTitle>
         <h2 className="text-center pt-4 text-base">
-          Enter the email address associated with your account.
+          {t('enter_email_address')}
         </h2>
       </CardHeader>
       <CardContent className="px-10">
@@ -55,7 +56,7 @@ export default function ForgotForm() {
                 render={({ field }) => {
                   return (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>{t("email")}</FormLabel>
                       <FormControl>
                         <Input
                           className={
@@ -75,7 +76,7 @@ export default function ForgotForm() {
               />
             </div>
             <Button type="submit" className="block w-2/4 mx-auto">
-              Continue
+              {t('continue')}
             </Button>
           </form>
         </Form>
