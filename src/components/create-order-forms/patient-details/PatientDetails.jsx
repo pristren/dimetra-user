@@ -161,8 +161,8 @@ const PatientDetails = ({
                         placeholder={
                           createOrderData.transportationData
                             ?.type_of_transport === "collection_order"
-                            ? "Enter number of patients"
-                            : "Enter patient's surname"
+                            ? t("enter_number_of_patients")
+                            : t('enter_patients_surname')
                         }
                         {...field}
                         onChange={(e) => {
