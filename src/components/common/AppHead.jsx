@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
+import { t } from "i18next";
 
 export default function AppHead({
   pageTitle,
@@ -91,7 +92,7 @@ export default function AppHead({
         {isSearchVisible && (
           <div className="relative">
             <Input
-              placeholder="Search By Any Field"
+              placeholder={t("search_by_any_field")}
               value={searchValue}
               onChange={(event) => {
                 setSearchValue(event.target.value);

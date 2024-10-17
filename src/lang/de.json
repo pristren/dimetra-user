@@ -158,5 +158,18 @@
   "no_file_chosen": "Keine Datei ausgewählt",
   "add_order_number_optional": "Bestellnummer hinzufügen (optional)",
   "enter_order_number": "Bestellnummer eingeben",
-  "send_request": "Anfrage senden"
+  "send_request": "Anfrage senden",
+  "search_by_any_field": "Suche nach jedem Feld",
+  "forgot_password": "Passwort vergessen",
+  "enter_email_address": "Geben Sie die E-Mail-Adresse ein, die mit Ihrem Konto verknüpft ist.",
+  "placeholder_email": "deine@email.com",
+  "continue": "Weiter",
+  "reset_password": "Passwort zurücksetzen",
+  "placeholder_password": "Gib dein Passwort ein",
+  "placeholder_confirm_password": "Bestätige dein Passwort",
+  "reset_password_button": "Passwort zurücksetzen",
+  "verify_your_email": "bestätige deine e-mail",
+  "almost_there_we_have_sent_a_verification_email_to_your_email_address_you_need_to_verify_your_email_address_to_login_into_dimetra": "fast geschafft! wir haben eine bestätigungs-e-mail an deine e-mail-adresse gesendet. du musst deine e-mail-adresse bestätigen, um dich bei dimetra anzumelden.",
+  "resend_code": "code erneut senden",
+  "left": "{format_time(seconds)} verbleibend"
 }
