@@ -207,17 +207,15 @@ const OrderHistory = () => {
         }
 
         return (
-          <Link to={`/orders/review/${row.original?.id}`}>
-            <Button
-              disabled={
-                row.getValue("status") === "rejected" ||
-                row.getValue("status") === "deleted"
-              }
-              className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs bg-[#D0EF0F] hover:bg-[#D0EF0F]"
-            >
-              {content}
-            </Button>
-          </Link>
+          <Button
+            disabled={
+              row.getValue("status") === "rejected" ||
+              row.getValue("status") === "deleted"
+            }
+            className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs bg-[#D0EF0F] hover:bg-[#D0EF0F]"
+          >
+            <Link to={`/orders/review/${row.original?.id}`}>{content}</Link>
+          </Button>
         );
       },
     },

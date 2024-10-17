@@ -63,10 +63,10 @@ function OrderDetails({ singleRecurring = false }) {
               <p className="font-medium  mb-3">{t("type_of_transport")}</p>
               <p>
                 {data?.transportationData?.type_of_transport?.includes("_")
-                  ? data?.transportationData?.type_of_transport
+                  ? t(data?.transportationData?.type_of_transport)
                       ?.split("_")
                       .join(" ")
-                  : data?.transportationData?.type_of_transport}
+                  : t(data?.transportationData?.type_of_transport)}
               </p>
             </div>
             <div>
@@ -76,7 +76,9 @@ function OrderDetails({ singleRecurring = false }) {
               {data?.transportationData?.mode_of_transportation?.map(
                 (mode, index) => (
                   <p key={index} className="space-y-2">
-                    {mode?.includes("_") ? mode?.split("_").join(" ") : mode}
+                    {mode?.includes("_")
+                      ? t(mode?.split("_").join(" "))
+                      : t(mode)}
                   </p>
                 )
               )}
@@ -88,8 +90,8 @@ function OrderDetails({ singleRecurring = false }) {
                   {value === "oxygen_quantity"
                     ? `Oxygen Quantity: (${data?.transportationData?.oxygen_quantity} L)`
                     : value?.includes("_")
-                    ? value?.split("_").join(" ")
-                    : value}
+                    ? t(value?.split("_").join(" "))
+                    : t(value)}
                 </p>
               ))}
             </div>
@@ -132,10 +134,10 @@ function OrderDetails({ singleRecurring = false }) {
                 <p>{t("order_type")}: </p>
                 <p>
                   {data?.transportationData?.type_of_transport?.includes("_")
-                    ? data?.transportationData?.type_of_transport
+                    ? t(data?.transportationData?.type_of_transport)
                         ?.split("_")
                         .join(" ")
-                    : data?.transportationData?.type_of_transport}
+                    : t(data?.transportationData?.type_of_transport)}
                 </p>
               </div>
               <div className="flex items-center gap-6">
@@ -155,8 +157,8 @@ function OrderDetails({ singleRecurring = false }) {
                     (person, index) => (
                       <p key={index}>
                         {person?.includes("_")
-                          ? person?.split("_").join(" ")
-                          : person}{" "}
+                          ? t(person?.split("_").join(" "))
+                          : t(person)}{" "}
                         {index !==
                         data?.transportationData?.transport_with?.length - 1
                           ? ","
@@ -206,7 +208,7 @@ function OrderDetails({ singleRecurring = false }) {
               <div className="">
                 <p className="font-medium text-lg mb-5">{t("drop_off")}</p>
                 <div className="flex items-center gap-3 mb-8">
-                  <p>{t('drop_off_date')} :</p>
+                  <p>{t("drop_off_date")} :</p>
                   <p>
                     {data?.destinationDetailsData?.drop_off_pick_up_date
                       ? moment(
@@ -248,7 +250,9 @@ function OrderDetails({ singleRecurring = false }) {
               {/* kamruzzaman bhai? should we keep it? return journey here? */}
               {data?.order_type === "normal" && (
                 <div className="">
-                  <p className="font-medium text-lg mb-5">{t("return_journey")}</p>
+                  <p className="font-medium text-lg mb-5">
+                    {t("return_journey")}
+                  </p>
                   <div className="flex items-center gap-3 mb-8">
                     <p>{t("date")} :</p>
                     <p>
@@ -349,7 +353,7 @@ function OrderDetails({ singleRecurring = false }) {
                       : `/orders/edit-order/${id}`
                   }
                 >
-                  <Button className="px-14">{t('edit')}</Button>
+                  <Button className="px-14">{t("edit")}</Button>
                 </Link>
               )}
           </div>
