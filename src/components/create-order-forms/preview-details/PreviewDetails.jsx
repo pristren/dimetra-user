@@ -215,7 +215,10 @@ const PreviewDetails = ({
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
                       {t("select_weekdays")}
-                      <span className="highlight">({t("multiple_selection")})</span>:
+                      <span className="highlight">
+                        ({t("multiple_selection")})
+                      </span>
+                      :
                     </h3>
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-2">
                       {weekdaysOptions.map((option) => (
@@ -237,7 +240,9 @@ const PreviewDetails = ({
                       ))}
                     </div>
 
-                    <h3 className="text-lg font-medium mb-3 mt-5">{t("ends")}:</h3>
+                    <h3 className="text-lg font-medium mb-3 mt-5">
+                      {t("ends")}:
+                    </h3>
                     <RadioGroup disabled value={recurringData?.ends}>
                       {durationOptions.map((option) => (
                         <div
@@ -264,7 +269,7 @@ const PreviewDetails = ({
                   <div className="">
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                        {t('select_start_date_and_time_free')}
+                        {t("select_start_date_and_time_free")}
                       </h3>
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
@@ -375,7 +380,9 @@ const PreviewDetails = ({
                   />
                 </div>
                 <div className="mb-5">
-                  <Label className="block mb-2 font-medium">{t("how_much")}</Label>
+                  <Label className="block mb-2 font-medium">
+                    {t("how_much")}
+                  </Label>
                   <Input
                     disabled
                     value={patientData?.how_much}
@@ -384,7 +391,9 @@ const PreviewDetails = ({
                   />
                 </div>
                 <div className="mb-5">
-                  <Label className="block mb-2 font-medium">{t("isolation")}</Label>
+                  <Label className="block mb-2 font-medium">
+                    {t("isolation")}
+                  </Label>
                   <div className="flex items-center">
                     <Checkbox checked={patientData?.isolation} disabled />
                     <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
@@ -407,7 +416,9 @@ const PreviewDetails = ({
                   </div>
                 </div>
                 <div className="mb-5">
-                  <Label className="block mb-2 font-medium">{t("special")}</Label>
+                  <Label className="block mb-2 font-medium">
+                    {t("special")}
+                  </Label>
                   <Input
                     disabled
                     value={patientData?.special_note}
@@ -426,7 +437,8 @@ const PreviewDetails = ({
                   <h6 className="mb-8">{t("pick_up")}</h6>
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">
-                      {t("name_institution")} <sup className="text-[13px]">*</sup>
+                      {t("name_institution")}{" "}
+                      <sup className="text-[13px]">*</sup>
                     </Label>
                     <Input
                       disabled
@@ -479,7 +491,8 @@ const PreviewDetails = ({
                   </div>
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">
-                      {t("working_employee_name")} <sup className="text-[13px]">*</sup>
+                      {t("working_employee_name")}{" "}
+                      <sup className="text-[13px]">*</sup>
                     </Label>
                     <Input
                       disabled
@@ -513,7 +526,8 @@ const PreviewDetails = ({
                     {transportationData?.type_of_transport !== "recurring" && (
                       <div className="mb-5">
                         <Label className="block mb-2 font-medium">
-                         {t('pickup_time')} <sup className="text-[13px]">*</sup>
+                          {t("pickup_time")}{" "}
+                          <sup className="text-[13px]">*</sup>
                         </Label>
                         <Input
                           disabled
@@ -525,7 +539,8 @@ const PreviewDetails = ({
                     )}
                     <div className="mb-5">
                       <Label className="block mb-2 font-medium">
-                        {t("drop_off_name")} <sup className="text-[13px]">*</sup>
+                        {t("drop_off_name")}{" "}
+                        <sup className="text-[13px]">*</sup>
                       </Label>
                       <Input
                         disabled
@@ -536,7 +551,8 @@ const PreviewDetails = ({
                     </div>
                     <div className="mb-5">
                       <Label className="block mb-2 font-medium">
-                        {t("drop_off_street")} <sup className="text-[13px]">*</sup>
+                        {t("drop_off_street")}{" "}
+                        <sup className="text-[13px]">*</sup>
                       </Label>
                       <Input
                         disabled
@@ -547,7 +563,8 @@ const PreviewDetails = ({
                     </div>
                     <div className="mb-5">
                       <Label className="block mb-2 font-medium">
-                        {t("drop_off_postal_code")} <sup className="text-[13px]">*</sup>
+                        {t("drop_off_postal_code")}{" "}
+                        <sup className="text-[13px]">*</sup>
                       </Label>
                       <Input
                         disabled
@@ -558,7 +575,8 @@ const PreviewDetails = ({
                     </div>
                     <div className="mb-5">
                       <Label className="block mb-2 font-medium">
-                        {t("drop_off_city")} <sup className="text-[13px]">*</sup>
+                        {t("drop_off_city")}{" "}
+                        <sup className="text-[13px]">*</sup>
                       </Label>
                       <Input
                         disabled
@@ -569,7 +587,8 @@ const PreviewDetails = ({
                     </div>
                     <div className="mb-5">
                       <Label className="block mb-2 font-medium">
-                        {t("drop_off_enter_country")} <sup className="text-[13px]">*</sup>
+                        {t("drop_off_enter_country")}{" "}
+                        <sup className="text-[13px]">*</sup>
                       </Label>
                       <Input
                         disabled
@@ -579,7 +598,9 @@ const PreviewDetails = ({
                       />
                     </div>
                     <div className="mb-5">
-                      <Label className="block mb-2 font-medium">{t("phone")}</Label>
+                      <Label className="block mb-2 font-medium">
+                        {t("phone")}
+                      </Label>
                       <Input
                         disabled
                         value={destinationDetailsData?.drop_off_phone}
@@ -593,7 +614,9 @@ const PreviewDetails = ({
                     <div>
                       <h6 className="mb-8 mt-14">{t("return_journey")}</h6>
                       <div className="mb-5">
-                        <Label className="block mb-2 font-medium">{t("return_date")}</Label>
+                        <Label className="block mb-2 font-medium">
+                          {t("return_date")}
+                        </Label>
                         <Input
                           disabled
                           value={
@@ -606,7 +629,9 @@ const PreviewDetails = ({
                         />
                       </div>
                       <div className="mb-5">
-                        <Label className="block mb-2 font-medium">{t("return_time")}</Label>
+                        <Label className="block mb-2 font-medium">
+                          {t("return_time")}
+                        </Label>
                         <Input
                           disabled
                           value={destinationDetailsData?.return_approx_time}
@@ -633,11 +658,11 @@ const PreviewDetails = ({
 
             {/* Billing Details */}
             <div>
-              <h6 className="title mb-10">{t('billing_address')}</h6>
+              <h6 className="title mb-10">{t("billing_address")}</h6>
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
-                    {t('prename_institution')}
+                    {t("prename_institution")}
                   </Label>
                   <Input
                     disabled
@@ -656,7 +681,9 @@ const PreviewDetails = ({
                   />
                 </div>
                 <div className="mb-5">
-                  <Label className="block mb-2 font-medium">{t('street')}</Label>
+                  <Label className="block mb-2 font-medium">
+                    {t("street")}
+                  </Label>
                   <Input
                     disabled
                     value={billingDetailsData?.street}
@@ -674,7 +701,9 @@ const PreviewDetails = ({
                   />
                 </div>
                 <div className="mb-5">
-                  <Label className="block mb-2 font-medium">{t("contact")}</Label>
+                  <Label className="block mb-2 font-medium">
+                    {t("contact")}
+                  </Label>
                   <Input
                     disabled
                     value={billingDetailsData?.contact}
@@ -690,7 +719,7 @@ const PreviewDetails = ({
               {loading ? (
                 <Loading className="w-6 h-6 mx-auto text-white" />
               ) : (
-                t('submit')
+                t("submit")
               )}
             </Button>
           </div>

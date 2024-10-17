@@ -6,6 +6,7 @@ import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { GET_ALL_MESSAGE_REQUESTS } from "./graphql/queries/getAllMessageRequests.gql";
 import { t } from "i18next";
+import moment from "moment";
 
 const SentRequests = () => {
   const [data, setData] = useState([]);
@@ -71,6 +72,10 @@ const SentRequests = () => {
           />
         </div>
       ),
+      cell: ({ row }) => {
+        const createdAt = row.getValue("createdAt");
+        return <span>{moment(createdAt).format("DD MMM YYYY")}</span>;
+      },
     },
     {
       accessorKey: "status",
