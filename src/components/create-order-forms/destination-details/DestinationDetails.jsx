@@ -83,6 +83,18 @@ const DestinationDetails = ({
       return;
     }
 
+    if (return_approx_time && !return_date) {
+      toast("Return date is required if return approx time is provided.", {
+        icon: "⚠️",
+      });
+      return;
+    } else if (return_date && !return_approx_time) {
+      toast("Return approx time is required if return date is provided.", {
+        icon: "⚠️",
+      });
+      return;
+    }
+
     handleFormChange("billingDetails");
   };
 

@@ -42,6 +42,7 @@ const PreviewDetails = ({
     billingDetailsData,
     recurringData,
   } = createOrderData;
+
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const calculateMonthlyOccurrences = (weekdays) => {
@@ -514,8 +515,10 @@ const PreviewDetails = ({
                         <Input
                           disabled
                           value={
-                            dropDate
-                              ? moment(dropDate).format("DD MMMM YYYY")
+                            destinationDetailsData?.drop_off_pick_up_date
+                              ? moment(
+                                  destinationDetailsData?.drop_off_pick_up_date
+                                ).format("DD MMMM YYYY")
                               : "Not provided"
                           }
                           placeholder={t("type_your_drop_off_date")}
@@ -620,8 +623,10 @@ const PreviewDetails = ({
                         <Input
                           disabled
                           value={
-                            returnDate
-                              ? moment(returnDate).format("DD MMMM YYYY")
+                            destinationDetailsData?.drop_off_return_date
+                              ? moment(
+                                  destinationDetailsData?.drop_off_return_date
+                                ).format("DD MMMM YYYY")
                               : "Not provided"
                           }
                           placeholder={t("type_your_return_date")}
