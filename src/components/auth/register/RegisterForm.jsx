@@ -12,6 +12,7 @@ import { uploadFile } from "@/utils";
 import AppModal from "@/components/common/AppModal";
 import { TickMarkImage } from "@/assets/icons";
 import toast from "react-hot-toast";
+import { t } from "i18next";
 
 const validateEmail = (email) => {
   return String(email)
@@ -99,7 +100,7 @@ const RegisterForm = () => {
   return (
     <Card className="w-11/12 md:w-1/2 px-5 py-5">
       <CardHeader className="mb-4">
-        <CardTitle className="text-center">Register</CardTitle>
+        <CardTitle className="text-center">{t("register")}</CardTitle>
       </CardHeader>
       <AppUserDetails
         form={form}
