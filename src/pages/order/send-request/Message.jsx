@@ -12,6 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { t } from "i18next";
 
 const sampleMessages = [
   {
@@ -117,6 +119,7 @@ const sampleMessages = [
 const Message = ({ messages = sampleMessages, userId = 1 }) => {
   const [imagesToShowInModal, setImagesToShowInModal] = useState(null);
   const [selectedImages, setSelectedImages] = useState([]);
+  const { id } = useParams();
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -260,12 +263,15 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
 
   return (
     <div className="relative">
-      <h4>Order #123456</h4>
+      <h4>
+        {t("order")}
+        <span className="text-primary"> #{id.slice(-8)}</span>
+      </h4>
       <div className="bg-white border border-gray-200 rounded-md mt-3 h-[calc(100vh-10.5rem)]">
         <div className="flex items-center justify-start gap-3 border-b border-gray-300 px-4 py-4">
           <DefaultAvatar className="w-10 h-10 rounded-full" />
           <div>
-            <h6>Customer Support</h6>
+            <h6>{t("customer_support")}</h6>
             <div className="flex items-center justify-start gap-2 mt-1">
               <p className="bg-green-600 w-2 h-2 rounded-full"></p>
               <p className="text-sm">Online</p>

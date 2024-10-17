@@ -126,7 +126,7 @@ const AddRequest = ({ setRequestModalOpen, getData = () => {} }) => {
               className={`${file ? "" : "border-red-500"} hidden`}
             />
           </FormControl>
-          <p>
+          <p className="text-sm">
             {file ? (
               <span className="text-gray-500">{file?.name}</span>
             ) : (

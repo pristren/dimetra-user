@@ -15,6 +15,7 @@ import { GET_ALL_RECURRING_ORDERS } from "./graphql/queries/getAllRecurringOrder
 import { UPDATE_RECCURING_ORDER_STATUS } from "./graphql/mutations/updateAnRecurringOrderStatus.gql";
 import { ResumeIcon } from "@radix-ui/react-icons";
 import moment from "moment";
+import { t } from "i18next";
 
 const RecurringOrders = () => {
   const { id } = useParams();
@@ -93,7 +94,7 @@ const RecurringOrders = () => {
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Date & Time
+          {t("date_time")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -117,7 +118,7 @@ const RecurringOrders = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Pick Up
+          {t("pick_up")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -129,7 +130,7 @@ const RecurringOrders = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Destination
+          {t("destination")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -138,7 +139,7 @@ const RecurringOrders = () => {
       accessorKey: "vehicle",
       header: () => (
         <div className="flex items-center gap-2">
-          Vehicle
+          {t("vehicle")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -148,7 +149,7 @@ const RecurringOrders = () => {
       accessorKey: "driver",
       header: () => (
         <div className="flex items-center gap-2">
-          Driver
+          {t("driver")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -161,7 +162,7 @@ const RecurringOrders = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Patient Name
+          {t("patient_name")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -175,7 +176,7 @@ const RecurringOrders = () => {
       accessorKey: "status",
       header: () => (
         <div className="flex items-center gap-2">
-          Status
+          {t("status")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -197,7 +198,7 @@ const RecurringOrders = () => {
       accessorKey: "action",
       header: () => (
         <div className="text-center flex items-center justify-center">
-          Actions
+          {t("action")}
           <ArrowUpDown className="h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -216,7 +217,7 @@ const RecurringOrders = () => {
                     className="flex items-center gap-3 text-[16px] w-full"
                   >
                     <Pencil className="size-5 text-gray-600" />
-                    <span className="text-gray-700 text-sm">Edit</span>
+                    <span className="text-gray-700 text-sm">{t("edit")}</span>
                   </Link>
                 </DropdownMenuItem>
 
@@ -226,7 +227,9 @@ const RecurringOrders = () => {
                     className="flex items-center gap-3 text-[16px] w-full"
                   >
                     <Document className="size-5" />
-                    <span className="text-gray-700 text-sm">View Details</span>
+                    <span className="text-gray-700 text-sm">
+                      {t("view_details")}
+                    </span>
                   </Link>
                 </DropdownMenuItem>
                 {row.original.status !== "paused" ? (
@@ -238,7 +241,7 @@ const RecurringOrders = () => {
                     disabled={row.original.status !== "pending"}
                   >
                     <Pause className="size-5" />
-                    <span className="text-gray-700 text-sm">Pause</span>
+                    <span className="text-gray-700 text-sm">{t("pause")}</span>
                   </DropdownMenuItem>
                 ) : (
                   <DropdownMenuItem
@@ -248,7 +251,7 @@ const RecurringOrders = () => {
                     }
                   >
                     <ResumeIcon className="size-5" />
-                    <span className="text-gray-700 text-sm">Resume</span>
+                    <span className="text-gray-700 text-sm">{t("resume")}</span>
                   </DropdownMenuItem>
                 )}
               </DropdownMenuContent>
@@ -264,7 +267,7 @@ const RecurringOrders = () => {
       <AppTable
         columns={columns}
         data={data}
-        pageTitle={"Recurring Orders"}
+        pageTitle={"recurring_orders"}
         isDateVisible={false}
         isRecurring={id}
         isFilterVisible={false}

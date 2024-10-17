@@ -49,7 +49,7 @@ export default function AppHead({
               isRecurring ? "border-r-2 pr-4" : ""
             }`}
           >
-            {pageTitle}
+            {t(pageTitle)}
           </h2>
           {addButton.visibility && (
             <Link to={`${addButton.url}`} className="lg:hidden">
@@ -60,7 +60,7 @@ export default function AppHead({
 
         {isRecurring !== false && (
           <div className=" flex gap-3 items-center">
-            <h4 className="text-xl text-nowrap">Order ID :</h4>
+            <h4 className="text-xl text-nowrap">{t("order_id")} : :</h4>
             <span className=" text-gray-500">#{isRecurring?.slice(-8)}</span>
           </div>
         )}
@@ -111,11 +111,13 @@ export default function AppHead({
         {showModal?.name && (
           <Dialog open={requestModalOpen} onOpenChange={setRequestModalOpen}>
             <DialogTrigger className="bg-primary flex gap-2 text-white py-2 px-5 rounded-md">
-              {showModal?.icon && showModal?.icon} {showModal.name}
+              {showModal?.icon && showModal?.icon} {t(showModal.name)}
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-2xl">
               <DialogHeader>
-                <DialogTitle className="mb-10">Request</DialogTitle>
+                <DialogTitle className="mb-3 text-xl">
+                  {t("request")}
+                </DialogTitle>
                 <AddRequest
                   setRequestModalOpen={setRequestModalOpen}
                   getData={getData}

@@ -14,7 +14,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/assets/icons";
-
+import { t } from "i18next";
 const PasswordChangeForm = ({ onSubmit, loading }) => {
   const formSchema = z
     .object({
@@ -48,12 +48,13 @@ const PasswordChangeForm = ({ onSubmit, loading }) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Current Password<sup className="text-[13px]">*</sup>
+                      {t("current_password")}
+                      <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="Enter your current password"
+                        placeholder={t("enter_your_current_password")}
                         className={
                           form.formState.errors.current_password
                             ? "border-red-500"
@@ -75,12 +76,13 @@ const PasswordChangeForm = ({ onSubmit, loading }) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      New Password<sup className="text-[13px]">*</sup>
+                      {t("new_password")}
+                      <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="Enter your new password"
+                        placeholder={t("enter_your_new_password")}
                         className={
                           form.formState.errors.new_password
                             ? "border-red-500"
@@ -102,12 +104,13 @@ const PasswordChangeForm = ({ onSubmit, loading }) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Confirm Password<sup className="text-[13px]">*</sup>
+                      {t("confirm_password")}
+                      <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="password"
-                        placeholder="Confirm your new password"
+                        placeholder={t("confirm_your_new_password")}
                         className={
                           form.formState.errors.confirm_password
                             ? "border-red-500"
@@ -125,13 +128,13 @@ const PasswordChangeForm = ({ onSubmit, loading }) => {
 
               <div className="flex items-center justify-center w-full gap-3 mt-5">
                 <Button variant="outline" className="w-full">
-                  Cancel
+                  {t("cancel")}
                 </Button>
                 <Button className="w-full" type="submit">
                   {loading ? (
                     <Loading className="w-6 h-6 mx-auto text-white" />
                   ) : (
-                    "Update Password"
+                    `${t("update_password")}`
                   )}
                 </Button>
               </div>

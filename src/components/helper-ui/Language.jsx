@@ -35,6 +35,8 @@ export default function Language() {
     localStorage.setItem("languageCode", language.value);
     changeLanguage(language.value);
     setDefaultLanguage(language);
+    // cc kamruzzaman bhai, rafi bhai, we gonna change this reload method later
+    window.location.reload();
   };
 
   const savedLanguageCode = localStorage.getItem("languageCode");
@@ -49,7 +51,7 @@ export default function Language() {
       }
     }
   }, [i18n, savedLanguageCode]);
-  
+
   return (
     <Select
       value={defaultLanguage.value}
@@ -57,7 +59,10 @@ export default function Language() {
         handleLanguageChange(languages.find((lang) => lang.value === value))
       }
     >
-      <SelectTrigger className="w-min focus:ring-0 focus:ring-offset-0 border-none p-0" isDownArrowHidden={true}>
+      <SelectTrigger
+        className="w-min focus:ring-0 focus:ring-offset-0 border-none p-0"
+        isDownArrowHidden={true}
+      >
         <SelectValue asChild placeholder="">
           <div className="flex items-center gap-2">
             <p className="text-4xl mb-0">{defaultLanguage.icon}</p>
@@ -67,7 +72,12 @@ export default function Language() {
       </SelectTrigger>
       <SelectContent className="w-min">
         {languages.map((language, i) => (
-          <SelectItem className="px-2 py-1" key={i} value={language.value}>
+          <SelectItem
+            showIndicator={false}
+            className="px-2 py-1"
+            key={i}
+            value={language.value}
+          >
             <div className="flex items-center gap-2">
               {language.icon}
               <p>{language.name}</p>

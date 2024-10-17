@@ -8,6 +8,7 @@ import {
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
+import { t } from "i18next";
 
 export function DatePicker({
   className,
@@ -47,7 +48,7 @@ export function DatePicker({
           ) : date && mode === "single" ? (
             format(date, "dd MMMM yyyy")
           ) : (
-            <span className="text-black">Pick a date</span>
+            <span className="text-black">{t("pick_a_date")}</span>
           )}
           <div className="w-6 h-6 rounded-full p-1  flex justify-center items-center bg-primary text-white">
             <CalendarIcon className="w-4 h-4" />
