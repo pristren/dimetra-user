@@ -11,7 +11,7 @@ export default function AuthLayout({ children, childContainer, ...props }) {
         <Link to="/orders/all-orders">
           <Logo />
         </Link>
-        <Language />
+        {/* <Language /> */}
       </nav>
       <div
         className={cn(

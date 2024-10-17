@@ -17,6 +17,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { createOrderDefaultState } from "@/components/create-order-forms/helpers";
+import { t } from "i18next";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -72,7 +73,7 @@ const CreateOrder = () => {
       >
         {icon}
       </div>
-      {text}
+      {t(text)}
     </div>
   );
 
@@ -100,7 +101,7 @@ const CreateOrder = () => {
         <div className="flex gap-1 lg:gap-5 mb-5">
           <StepIcon
             step="transportDetails"
-            text="Transport"
+            text="transport"
             icon={<Pencil className="size-4 lg:size-6" />}
             progressValue={transportationProgress}
             isDisabled={false}
@@ -112,7 +113,7 @@ const CreateOrder = () => {
 
           <StepIcon
             step="patientDetails"
-            text="Patient"
+            text="patient"
             icon={<User className="size-4 lg:size-6" />}
             disabled={transportationProgress !== 100}
             progressValue={patientProgress}
@@ -125,7 +126,7 @@ const CreateOrder = () => {
 
           <StepIcon
             step="destinationDetails"
-            text="Destination"
+            text="destination"
             icon={<Truck className="size-4 lg:size-6" />}
             disabled={patientProgress !== 100}
             progressValue={destinationProgress}
@@ -138,7 +139,7 @@ const CreateOrder = () => {
 
           <StepIcon
             step="billingDetails"
-            text="Billing"
+            text="billing"
             icon={<Send className="size-4 lg:size-6" />}
             disabled={destinationProgress !== 100}
             progressValue={billingProgress}
@@ -168,7 +169,7 @@ const CreateOrder = () => {
           </DialogContent>
         </Dialog>
         <div className="mt-20">
-          <p className="text-lg mb-5 text-center">Powered by</p>
+          <p className="text-lg mb-5 text-center">{t("powered_by")}</p>
           <Logo />
         </div>
       </div>

@@ -81,7 +81,7 @@ const OrderHistory = () => {
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Date & Time
+          {t("date_time")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -98,7 +98,7 @@ const OrderHistory = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Pick Up
+          {t("pick_up")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -110,7 +110,7 @@ const OrderHistory = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Destination
+          {t("destination")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -119,7 +119,7 @@ const OrderHistory = () => {
       accessorKey: "vehicle",
       header: () => (
         <div className="flex items-center gap-2">
-          <span>Vehicle</span>
+          {t("vehicle")}
           <ArrowUpDown
             className="ml-2 h-4 w-4 cursor-pointer"
             aria-label="Sort by Vehicle"
@@ -132,22 +132,26 @@ const OrderHistory = () => {
       },
     },
     {
-      accessorKey: `user.first_name`,
+      accessorKey: `driver`,
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Driver
+          {t("driver")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
+      cell: ({ row }) => {
+        const driver = row.original?.driver || "N/A";
+        return <p className="text-center">{driver}</p>;
+      },
     },
     {
       accessorKey: "dispatcher",
       header: () => (
         <div className="flex items-center gap-2">
-          <span>Dispatcher</span>
+          {t("dispatcher")}
           <ArrowUpDown
             className="ml-2 h-4 w-4 cursor-pointer"
             aria-label="Sort by Dispatcher"
@@ -166,7 +170,7 @@ const OrderHistory = () => {
           onClick={() => toggleSorting(getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          Status
+          {t("status")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -188,7 +192,7 @@ const OrderHistory = () => {
       accessorKey: "rateToDriver",
       header: () => (
         <div className="flex items-center gap-2">
-          <span>Rate to Driver</span>
+          {t("rate_to_driver")}
           <ArrowUpDown
             className="ml-2 h-4 w-4 cursor-pointer"
             aria-label="Sort by Rate to Driver"
@@ -221,7 +225,7 @@ const OrderHistory = () => {
       accessorKey: "action",
       header: () => (
         <p className="text-center flex justify-center items-center">
-          Action
+          {t("action")}
           <ArrowUpDown
             className="ml-2 h-4 w-4 cursor-pointer"
             aria-label="Sort by Action"
@@ -258,7 +262,9 @@ const OrderHistory = () => {
                         handlePrintOrder(row.original);
                       }}
                     >
-                      <span className="text-gray-700 text-sm">Print</span>
+                      <span className="text-gray-700 text-sm">
+                        {t("print")}
+                      </span>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem className="py-2 px-3 cursor-pointer">
@@ -331,7 +337,7 @@ const OrderHistory = () => {
 const OrderPrint = React.forwardRef(({ order }, ref) => {
   return (
     <div className="px-2" ref={ref}>
-      <h4 className="text-center mt-5 mb-10">Order Details</h4>
+      <h4 className="text-center mt-5 mb-10">{t("order_details")}</h4>
       <table className="w-full mx-auto">
         <thead>
           <tr className="border gap-4 p-2">

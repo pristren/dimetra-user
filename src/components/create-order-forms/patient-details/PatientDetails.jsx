@@ -200,7 +200,7 @@ const PatientDetails = ({
                                 {field.value ? (
                                   format(field.value, "PPP")
                                 ) : (
-                                  <span>{t("Pick a date")}</span>
+                                  <span>{t("pick_a_date")}</span>
                                 )}
                                 <div className="w-6 h-6 rounded-full p-1  flex justify-center items-center bg-primary text-white">
                                   <CalendarIcon className="w-4 h-4" />

@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
+import { t } from "i18next";
 
 export default function AppHead({
   pageTitle,
@@ -48,7 +49,7 @@ export default function AppHead({
               isRecurring ? "border-r-2 pr-4" : ""
             }`}
           >
-            {pageTitle}
+            {t(pageTitle)}
           </h2>
           {addButton.visibility && (
             <Link to={`${addButton.url}`} className="lg:hidden">
@@ -91,7 +92,7 @@ export default function AppHead({
         {isSearchVisible && (
           <div className="relative">
             <Input
-              placeholder="Search By Any Field"
+              placeholder={t("search_by_any_field")}
               value={searchValue}
               onChange={(event) => {
                 setSearchValue(event.target.value);
@@ -110,11 +111,13 @@ export default function AppHead({
         {showModal?.name && (
           <Dialog open={requestModalOpen} onOpenChange={setRequestModalOpen}>
             <DialogTrigger className="bg-primary flex gap-2 text-white py-2 px-5 rounded-md">
-              {showModal?.icon && showModal?.icon} {showModal.name}
+              {showModal?.icon && showModal?.icon} {t(showModal.name)}
             </DialogTrigger>
             <DialogContent className="w-[90%] max-w-2xl">
               <DialogHeader>
-                <DialogTitle className="mb-10">Request</DialogTitle>
+                <DialogTitle className="mb-3 text-xl">
+                  {t("request")}
+                </DialogTitle>
                 <AddRequest
                   setRequestModalOpen={setRequestModalOpen}
                   getData={getData}

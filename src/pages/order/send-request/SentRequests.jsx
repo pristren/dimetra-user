@@ -5,6 +5,7 @@ import { useLazyQuery } from "@apollo/client";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { GET_ALL_MESSAGE_REQUESTS } from "./graphql/queries/getAllMessageRequests.gql";
+import { t } from "i18next";
 
 const SentRequests = () => {
   const [data, setData] = useState([]);
@@ -39,7 +40,7 @@ const SentRequests = () => {
       accessorKey: "title",
       header: () => (
         <div className="flex items-center gap-2">
-          <span>Subject</span>
+          <span>{t("subject")}</span>
           <ArrowUpDown
             className="ml-2 h-4 w-4 cursor-pointer"
             aria-label="Sort by Subject"
@@ -51,7 +52,7 @@ const SentRequests = () => {
       accessorKey: "order_number",
       header: () => (
         <div className="flex items-center gap-2">
-          <span>Order No</span>
+          <span>{t("order_number")}</span>
           <ArrowUpDown
             className="ml-2 h-4 w-4 cursor-pointer"
             aria-label="Sort by Order No"
@@ -63,7 +64,7 @@ const SentRequests = () => {
       accessorKey: "createdAt",
       header: () => (
         <div className="flex items-center gap-2">
-          <span>Created At</span>
+          <span>{t("created_at")}</span>
           <ArrowUpDown
             className="ml-2 h-4 w-4 cursor-pointer"
             aria-label="Sort by Created"
@@ -75,7 +76,7 @@ const SentRequests = () => {
       accessorKey: "status",
       header: () => (
         <div className="flex items-center gap-2">
-          <span>Status</span>
+          <span>{t("status")}</span>
           <ArrowUpDown
             className="ml-2 h-4 w-4 cursor-pointer"
             aria-label="Sort by Status"
@@ -113,9 +114,9 @@ const SentRequests = () => {
     <div>
       <AppTable
         rowClickable={true}
-        pageTitle={"Send Request"}
+        pageTitle={"sent_requests"}
         showModal={{
-          name: "Add Request",
+          name: "add_request",
           icon: <Plus />,
         }}
         columns={columns}
