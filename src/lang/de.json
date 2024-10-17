@@ -184,5 +184,7 @@
   "cancel": "Abbrechen",
   "enter_your_new_password": "Geben Sie Ihr neues Passwort ein",
   "confirm_your_new_password": "Bestätigen Sie Ihr neues Passwort",
-  "enter_your_current_password": "Geben Sie Ihr aktuelles Passwort ein"
+  "enter_your_current_password": "Geben Sie Ihr aktuelles Passwort ein",
+  "recurring_orders": "Wiederkehrende Bestellungen",
+  "order_id": "Bestell-ID"
 }

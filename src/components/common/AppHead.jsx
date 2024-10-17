@@ -60,7 +60,7 @@ export default function AppHead({
 
         {isRecurring !== false && (
           <div className=" flex gap-3 items-center">
-            <h4 className="text-xl text-nowrap">Order ID :</h4>
+            <h4 className="text-xl text-nowrap">{t("order_id")} : :</h4>
             <span className=" text-gray-500">#{isRecurring?.slice(-8)}</span>
           </div>
         )}
