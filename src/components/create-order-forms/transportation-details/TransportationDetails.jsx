@@ -503,7 +503,7 @@ const TransportationDetails = ({
                     />
 
                     <h2 className="text-lg font-semibold mt-5">
-                      {t("summary_monthly_on_day")}
+                      {t("summary_monthly_on_day")}{" "}
                       {calculateMonthlyOccurrences(
                         recurringData?.multiple_week_days
                       )}
