@@ -23,6 +23,7 @@ import EditRecurringOrder from "@/pages/order/edit-recurring-orders/EditRecurrin
 
 function App() {
   axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
+
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/orders/all-orders" />} />
