@@ -247,7 +247,7 @@ const TransportationDetails = ({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               <div className="pr-5">
                 <h6 className="mb-6">
-                  {t("type_of_transport")}
+                  {t("type_of_transport")}{" "}
                   <span className="highlight">({t("simple_selection")})</span>
                 </h6>
                 <FormField
@@ -290,7 +290,7 @@ const TransportationDetails = ({
 
               <div className="pr-5">
                 <h6 className="mb-6">
-                  {t("mode_of_transportation")}
+                  {t("mode_of_transportation")}{" "}
                   <span className="highlight">({t("multiple_selection")})</span>
                 </h6>
                 {transportModesOptions.map((option) => (
@@ -316,7 +316,7 @@ const TransportationDetails = ({
 
               <div>
                 <h6 className="mb-6">
-                  {t("transport_with")}
+                  {t("transport_with")}{" "}
                   <span className="highlight">({t("multiple_selection")})</span>
                 </h6>
                 {transportWithOptions.map((option) => (
@@ -439,7 +439,7 @@ const TransportationDetails = ({
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
-                      {t("select_weekdays")}
+                      {t("select_weekdays")}{" "}
                       <span className="highlight">
                         ({t("multiple_selection")})
                       </span>
@@ -466,7 +466,7 @@ const TransportationDetails = ({
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
-                      {t("ends")}:
+                      {t("ends")}{" "}
                     </h3>
                     <FormField
                       control={form.control}
