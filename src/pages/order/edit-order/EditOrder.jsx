@@ -114,6 +114,13 @@ const EditOrder = () => {
   const [updateAnOrder] = useMutation(UPDATE_AN_ORDER);
 
   const handleUpdate = async () => {
+    if (
+      editOrderData.patientData.patient_above_90kg &&
+      !editOrderData.patientData.how_much
+    ) {
+      toast.error("Please enter the amount");
+      return;
+    }
     setLoading(true);
     const dataTobeUpdated = {
       ...editOrderData,

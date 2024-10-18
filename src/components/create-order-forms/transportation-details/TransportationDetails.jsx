@@ -80,6 +80,24 @@ const TransportationDetails = ({
         [key]: value,
       },
     }));
+    if (key === "type_of_transport" && value !== "recurring") {
+      setCreateOrderData((prev) => ({
+        ...prev,
+        recurringData: {
+          ...prev.recurringData,
+          recurring_type: "",
+          start_date: null,
+          return_date: null,
+          start_time: "",
+          return_time: "",
+          multiple_week_days: [],
+          ends: "",
+          free_dates: [new Date()],
+          free_dates_start_time: "",
+          free_dates_return_time: "",
+        },
+      }));
+    }
   };
 
   const updateCreateRecurringOrderData = (key, value) => {

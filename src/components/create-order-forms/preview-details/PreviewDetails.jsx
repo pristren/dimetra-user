@@ -382,28 +382,6 @@ const PreviewDetails = ({
                 </div>
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
-                    {t("how_much")}
-                  </Label>
-                  <Input
-                    disabled
-                    value={patientData?.how_much}
-                    placeholder={t("type_how_much")}
-                    className="border-gray-300"
-                  />
-                </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("isolation")}
-                  </Label>
-                  <div className="flex items-center">
-                    <Checkbox checked={patientData?.isolation} disabled />
-                    <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
-                      {t("yes")}
-                    </Label>
-                  </div>
-                </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
                     {t("patient_above_90_kg")}
                   </Label>
                   <div className="flex items-center">
@@ -416,6 +394,31 @@ const PreviewDetails = ({
                     </Label>
                   </div>
                 </div>
+                {patientData?.patient_above_90kg && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("how_much")}
+                    </Label>
+                    <Input
+                      disabled
+                      value={patientData?.how_much}
+                      placeholder={t("type_how_much")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                )}
+                <div className="mb-5">
+                  <Label className="block mb-2 font-medium">
+                    {t("isolation")}
+                  </Label>
+                  <div className="flex items-center">
+                    <Checkbox checked={patientData?.isolation} disabled />
+                    <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
+                      {t("yes")}
+                    </Label>
+                  </div>
+                </div>
+
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
                     {t("special")}

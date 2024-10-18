@@ -29,7 +29,7 @@ const EditPatientDetails = ({
     name: z.string().min(1, t("name_required")),
     surname: z.string().min(1, t("surname_required")),
     date_of_birth: z.string().min(1, t("date_of_birth_required")),
-    area_room: z.string().min(1, t('area_room_required')),
+    area_room: z.string().min(1, t("area_room_required")),
     cost_center: z.string().min(1, t("cost_center_required")),
     how_much: z.string().optional(),
     special_note: z.string().optional(),
@@ -71,7 +71,7 @@ const EditPatientDetails = ({
                       {editOrderData.transportationData?.type_of_transport ===
                       "collection_order"
                         ? t("name_collection")
-                        : t('name')}
+                        : t("name")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
@@ -104,7 +104,7 @@ const EditPatientDetails = ({
                   <FormItem>
                     <FormLabel>
                       {editOrderData.transportationData?.type_of_transport ===
-                      "collectionOrder"
+                      "collection_order"
                         ? t("number_patients")
                         : t("surname")}
                       <sup className="text-[13px]">*</sup>
@@ -140,7 +140,8 @@ const EditPatientDetails = ({
                   render={() => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
-                        {t("date_of_birth")}<sup className="text-[13px]">*</sup>
+                        {t("date_of_birth")}
+                        <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <DatePicker
@@ -160,10 +161,7 @@ const EditPatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {editOrderData.transportationData?.type_of_transport ===
-                      "collectionOrder"
-                        ? t("cost_center")
-                        : t("area_room")}
+                      {t("area_room")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
@@ -192,14 +190,8 @@ const EditPatientDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      {editOrderData.transportationData?.type_of_transport ===
-                      "collectionOrder"
-                        ? t("how_much")
-                        : t("cost_center")}
-                      {editOrderData.transportationData?.type_of_transport !==
-                        "collectionOrder" && (
-                        <sup className="text-[13px]">*</sup>
-                      )}
+                      {t("cost_center")}
+                      <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -216,69 +208,6 @@ const EditPatientDetails = ({
                         }}
                       />
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="how_much"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("how_much")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        className={
-                          form.formState.errors.how_much ? "border-red-500" : ""
-                        }
-                        placeholder={t('enter_amount')}
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          handleInputChange(e);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="isolation"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="block mb-3">{t("isolation")}</FormLabel>
-                    <div className="flex items-center">
-                      <FormControl>
-                        <Checkbox
-                          className={
-                            form.formState.errors.isolation
-                              ? "border-red-500"
-                              : ""
-                          }
-                          id="isolation"
-                          {...field}
-                          checked={patientData?.isolation}
-                          onCheckedChange={(checked) =>
-                            handleInputChange({
-                              target: {
-                                name: "isolation",
-                                type: "checkbox",
-                                checked,
-                              },
-                            })
-                          }
-                        />
-                      </FormControl>
-                      <Label
-                        htmlFor="isolation"
-                        className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
-                      >
-                        Yes
-                      </Label>
-                    </div>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -303,10 +232,89 @@ const EditPatientDetails = ({
                           id="patient_above_90kg"
                           checked={patientData?.patient_above_90kg}
                           {...field}
-                          onCheckedChange={(checked) =>
+                          onCheckedChange={(checked) => {
                             handleInputChange({
                               target: {
                                 name: "patient_above_90kg",
+                                type: "checkbox",
+                                checked,
+                              },
+                            });
+                            if (checked === true) {
+                              form.setValue("how_much", "");
+                              setEditOrderData((prev) => ({
+                                ...prev,
+                                patientData: {
+                                  ...prev.patientData,
+                                  how_much: "",
+                                },
+                              }));
+                            }
+                          }}
+                        />
+                      </FormControl>
+                      <Label
+                        htmlFor="patient_above_90kg"
+                        className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
+                      >
+                        Yes
+                      </Label>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {patientData?.patient_above_90kg && (
+                <FormField
+                  control={form.control}
+                  name="how_much"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("how_much")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            form.formState.errors.how_much
+                              ? "border-red-500"
+                              : ""
+                          }
+                          placeholder={t("enter_amount")}
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
+              <FormField
+                control={form.control}
+                name="isolation"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="block mb-3">
+                      {t("isolation")}
+                    </FormLabel>
+                    <div className="flex items-center">
+                      <FormControl>
+                        <Checkbox
+                          className={
+                            form.formState.errors.isolation
+                              ? "border-red-500"
+                              : ""
+                          }
+                          id="isolation"
+                          {...field}
+                          checked={patientData?.isolation}
+                          onCheckedChange={(checked) =>
+                            handleInputChange({
+                              target: {
+                                name: "isolation",
                                 type: "checkbox",
                                 checked,
                               },
@@ -315,7 +323,7 @@ const EditPatientDetails = ({
                         />
                       </FormControl>
                       <Label
-                        htmlFor="patient_above_90kg"
+                        htmlFor="isolation"
                         className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
                       >
                         Yes
