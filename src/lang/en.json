@@ -343,5 +343,8 @@
   "type_the_stock_or_department": "Type the stock or department",
   "submit": "Submit",
   "order_sent_successfully": "Order sent successfully",
-  "your_order_has_been_placed_successfully": "Your order has been placed successfully! Thank you for Order"
+  "your_order_has_been_placed_successfully": "Your order has been placed successfully! Thank you for Order",
+  "check_preview": "Check Preview",
+  "previous": "Zurück",
+  "more_pages": "Mehr Seiten"
 }

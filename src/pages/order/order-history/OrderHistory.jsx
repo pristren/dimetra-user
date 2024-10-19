@@ -339,10 +339,10 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
       <table className="w-full mx-auto">
         <thead>
           <tr className="border gap-4 p-2">
-            <th className="border text-center">Date</th>
-            <th className="border text-center">Pick Up</th>
-            <th className="border text-center">Destination</th>
-            <th className="border text-center">Status</th>
+            <th className="border text-center">{t("date")}</th>
+            <th className="border text-center">{t("pick_up")}</th>
+            <th className="border text-center">{t("destination")}</th>
+            <th className="border text-center">{t("status")}</th>
           </tr>
         </thead>
 

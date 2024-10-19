@@ -734,9 +734,9 @@ const PreviewDetails = ({
           {showModal && (
             <AppModal
               icon={<SuccessfullyCreatedOrderModalImage />}
-              head="Order sent successfully"
-              details="Your order has been placed successfully! Thank you for Order"
-              buttonText="Continue"
+              head="order_sent_successfully"
+              details="your_order_has_been_placed_successfully"
+              buttonText="continue"
               onClose={closeModal}
             />
           )}

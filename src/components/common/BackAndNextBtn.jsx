@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { t } from "i18next";
 
 const BackAndNextBtn = ({
   isFillForm,
@@ -16,7 +17,7 @@ const BackAndNextBtn = ({
         variant="outline"
         onClick={handleGoPrev}
       >
-        <ArrowLeft /> Back
+        <ArrowLeft /> {t("back")}
       </Button>
       <Button
         disabled={isDisabled}
@@ -27,7 +28,7 @@ const BackAndNextBtn = ({
             : "bg-secondary text-gray-500 hover:bg-secondary"
         } px-12`}
       >
-        {isLastPage ? "Check Preview" : "Next"}
+        {isLastPage ? t('check_preview') : t("next")}
       </Button>
     </div>
   );
