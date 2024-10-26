@@ -44,7 +44,6 @@ const EditDestinationDetails = ({
       drop_off_phone = "",
       return_day_letter = "",
       return_approx_time = "",
-      return_floor = "",
     } = {},
   } = editOrderData;
   const form_schema = z.object({
@@ -69,7 +68,6 @@ const EditDestinationDetails = ({
     return_date: z.string().min(1, t("return_date_required")),
     return_day_letter: z.string().min(1, t("day_letter_required")),
     return_approx_time: z.string().min(1, t("approx_time_required")),
-    return_floor: z.string().optional(),
 });
 
   const form = useForm({
@@ -93,7 +91,6 @@ const EditDestinationDetails = ({
       returnDate,
       return_day_letter,
       return_approx_time,
-      return_floor,
     },
   });
   const { formState } = form;
@@ -557,29 +554,6 @@ const EditDestinationDetails = ({
                             }
                             value={return_approx_time}
                             isTimeSelected={true}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="return_floor"
-                    render={({ field }) => (
-                      <FormItem className="mb-7">
-                        <FormLabel className="mb-2">
-                          {t("floor_department")}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={t("floor_number_optional")}
-                            {...field}
-                            onChange={(e) => {
-                              field.onChange(e);
-                              handleInputChange(e);
-                            }}
                           />
                         </FormControl>
                         <FormMessage />

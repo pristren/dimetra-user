@@ -22,6 +22,7 @@ import { timeOptions } from "@/components/create-order-forms/helpers";
 import toast from "react-hot-toast";
 import moment from "moment";
 import { t } from "i18next";
+import { useSelector } from "react-redux";
 
 const DestinationDetails = ({
   handleFormChange,
@@ -30,13 +31,14 @@ const DestinationDetails = ({
   setCreateOrderData,
   destinationProgress,
 }) => {
+  const { userInfo } = useSelector((state) => state.user);
   const {
     destinationDetailsData: {
-      pick_up_name = "",
-      pick_up_address = "",
-      pick_up_postal_code,
-      pick_up_city = "",
-      pick_up_country = "",
+      pick_up_name = userInfo?.first_name + " " + userInfo?.last_name,
+      pick_up_address = userInfo?.address,
+      pick_up_postal_code = userInfo?.code,
+      pick_up_city = userInfo?.billing_address,
+      pick_up_country = userInfo?.address,
       pick_up_employee_name = "",
       drop_off_pick_up_time = "",
       drop_off_name = "",
@@ -46,7 +48,6 @@ const DestinationDetails = ({
       drop_off_country = "",
       drop_off_phone = "",
       return_approx_time = "",
-      return_floor = "",
       drop_off_pick_up_date,
       return_date,
     } = {},
@@ -122,31 +123,13 @@ const DestinationDetails = ({
     return_date: z.string().min(1, t("date_is_required")),
     return_day_letter: z.string().min(1, t("this_field_is_required")),
     return_approx_time: z.string().min(1, t("approx_time_is_required")),
-    return_floor: z.string().optional(),
   });
 
   const form = useForm({
     resolver: zodResolver(form_schema),
-    defaultValues: {
-      pick_up_name,
-      pick_up_address,
-      pick_up_postal_code,
-      pick_up_city,
-      pick_up_country,
-      pick_up_employee_name,
-      drop_off_pick_up_date,
-      drop_off_pick_up_time,
-      drop_off_name,
-      drop_off_address,
-      drop_off_postal_code,
-      drop_off_city,
-      drop_off_country,
-      drop_off_phone,
-      return_date,
-      return_approx_time,
-      return_floor,
-    },
+    defaultValues: createOrderData.destinationDetailsData,
   });
+  
 
   const { formState } = form;
   const { errors } = formState;
@@ -224,7 +207,6 @@ const DestinationDetails = ({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <div className="pr-5">
                 <h6 className="text-xl font-semibold mb-4">{t("pickup")}</h6>
-
                 {/* Pick-Up Name */}
                 <FormField
                   control={form.control}
@@ -696,29 +678,6 @@ const DestinationDetails = ({
                                 }
                                 value={return_approx_time}
                                 isTimeSelected={true}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="return_floor"
-                        render={({ field }) => (
-                          <FormItem className="mb-7">
-                            <FormLabel className="mb-2 font-normal">
-                              {t("floor_department")}
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder={t("floor_number_optional")}
-                                {...field}
-                                onChange={(e) => {
-                                  field.onChange(e);
-                                  handleInputChange(e);
-                                }}
                               />
                             </FormControl>
                             <FormMessage />

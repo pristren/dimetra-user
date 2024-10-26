@@ -23,7 +23,7 @@ const EditRecurringOrder = () => {
   const [editOrderData, setEditOrderData] = useState({
     transportationData: {
       type_of_transport: "",
-      mode_of_transportation: [],
+      mode_of_transportation: "",
       transport_with: [],
       oxygen_quantity: null,
     },
@@ -34,7 +34,7 @@ const EditRecurringOrder = () => {
       area_room: "",
       cost_center: "",
       how_much: "",
-      special_note: "",
+      which: "",
       isolation: false,
       patient_above_90kg: false,
     },
@@ -55,7 +55,6 @@ const EditRecurringOrder = () => {
       drop_off_postal_code: "",
       return_date: null,
       return_approx_time: "",
-      return_floor: "",
     },
     billingDetailsData: {
       pre_name: "",

@@ -16,7 +16,7 @@ export const GET_A_RECURRING_ORDER = gql`
         area_room
         cost_center
         how_much
-        special_note
+        which
         isolation
         patient_above_90kg
       }
@@ -37,7 +37,6 @@ export const GET_A_RECURRING_ORDER = gql`
         drop_off_phone
         return_date
         return_approx_time
-        return_floor
       }
       billingDetailsData {
         pre_name

@@ -122,23 +122,23 @@ const PreviewDetails = ({
                   {t("mode_of_transportation")}
                   <span className="highlight">({t("multiple_selection")})</span>
                 </h6>
-                {transportModesOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-4">
-                    <Checkbox
-                      disabled
-                      id={option.value}
-                      checked={transportationData.mode_of_transportation?.includes(
-                        option.value
-                      )}
-                    />
-                    <Label
-                      className="font-normal text-[16px] ml-2"
-                      htmlFor={option.value}
+
+                <RadioGroup value={transportationData?.mode_of_transportation}>
+                  {transportModesOptions.map((option) => (
+                    <div
+                      key={option.value}
+                      className="flex items-center space-x-2 mb-2"
                     >
-                      {t(option.label)}
-                    </Label>
-                  </div>
-                ))}
+                      <RadioGroupItem value={option.value} id={option.value} />
+                      <Label
+                        htmlFor={option.value}
+                        className="font-normal text-[16px]"
+                      >
+                        {t(option.label)}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
 
               <div>
@@ -407,6 +407,8 @@ const PreviewDetails = ({
                     />
                   </div>
                 )}
+                <div />
+               
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
                     {t("isolation")}
@@ -418,18 +420,20 @@ const PreviewDetails = ({
                     </Label>
                   </div>
                 </div>
+                {patientData?.isolation && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("which")}
+                    </Label>
+                    <Input
+                      disabled
+                      value={patientData?.which}
+                      placeholder={t("type_which")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                )}
 
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("special")}
-                  </Label>
-                  <Input
-                    disabled
-                    value={patientData?.special_note}
-                    placeholder="Requires special_note attention"
-                    className="border-gray-300"
-                  />
-                </div>
               </div>
             </div>
 
@@ -644,17 +648,6 @@ const PreviewDetails = ({
                           disabled
                           value={destinationDetailsData?.return_approx_time}
                           placeholder={t("enter_time")}
-                          className="border-gray-300"
-                        />
-                      </div>
-                      <div className="mb-5">
-                        <Label className="block mb-2 font-medium">
-                          {t("floor_department")}
-                        </Label>
-                        <Input
-                          disabled
-                          value={destinationDetailsData?.return_floor}
-                          placeholder={t("type_the_stock_or_department")}
                           className="border-gray-300"
                         />
                       </div>

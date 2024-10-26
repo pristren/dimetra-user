@@ -56,6 +56,7 @@ const OrderSettings = () => {
       internal_cost_center: userInfo?.internal_cost_center,
       profile_image: userInfo?.profile_image || "",
     },
+    mode: "onSubmit",
   });
   const dispatch = useDispatch();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -67,6 +68,19 @@ const OrderSettings = () => {
   const [updateAnUser] = useMutation(UPDATE_AN_USER);
   const [updateUserPassword] = useMutation(UPDATE_AN_USER_PASSWORD);
   const onSubmitUserDetails = async (value) => {
+
+    if (
+      !value.first_name ||
+      !value.last_name ||
+      !value.email ||
+      !value.phone ||
+      !value.address ||
+      !value.code
+    ) {
+      toast.error("Fill up the required fields");
+      return;
+    }
+
     setLoading(true);
     const profile_image =
       (await uploadFile(selectedFile)) || userInfo?.profile_image;
@@ -89,7 +103,7 @@ const OrderSettings = () => {
         }
       })
       .catch((error) => {
-        toast.error(error.message || t('profile_update_error'));
+        toast.error(error.message || t("profile_update_error"));
       })
       .finally(() => {
         setLoading(false);
@@ -145,7 +159,9 @@ const OrderSettings = () => {
           trigger={
             <div className="flex justify-end items-center gap-2">
               <Security />
-              <p className="highlight text-nowrap underline">{t("update_password")}</p>
+              <p className="highlight text-nowrap underline">
+                {t("update_password")}
+              </p>
             </div>
           }
           className={"p-8"}
@@ -230,7 +246,9 @@ const OrderSettings = () => {
             <p className="font-medium lg:font-normal">{userInfo?.code}</p>
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 pb-5 px-5">
-            <p className=" ml-3 text-gray-500 w-40">{t("internal_cost_center")}</p>
+            <p className=" ml-3 text-gray-500 w-40">
+              {t("internal_cost_center")}
+            </p>
             <p className="font-medium lg:font-normal">
               {userInfo?.internal_cost_center || t("not_available")}
             </p>

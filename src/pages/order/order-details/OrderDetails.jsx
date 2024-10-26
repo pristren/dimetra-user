@@ -73,15 +73,11 @@ function OrderDetails({ singleRecurring = false }) {
               <p className="font-medium mb-2 last:mb-0">
                 {t("mode_of_transportation")}
               </p>
-              {data?.transportationData?.mode_of_transportation?.map(
-                (mode, index) => (
-                  <p key={index} className="space-y-2">
-                    {mode?.includes("_")
-                      ? t(mode?.split("_").join(" "))
-                      : t(mode)}
-                  </p>
-                )
-              )}
+              <p>{data?.transportationData?.mode_of_transportation?.includes("_")
+                  ? t(data?.transportationData?.mode_of_transportation)
+                      ?.split("_")
+                      .join(" ")
+                  : t(data?.transportationData?.mode_of_transportation)}</p>
             </div>
             <div>
               <p className="font-medium  mb-3">{t("transport_with")}</p>
@@ -266,10 +262,6 @@ function OrderDetails({ singleRecurring = false }) {
                   <div className="flex items-center gap-3 mb-8">
                     <p>{t("time")} :</p>
                     <p>{data?.destinationDetailsData?.return_approx_time}</p>
-                  </div>
-                  <div className="flex items-center gap-3 mb-8">
-                    <p>{t("floor_department")} :</p>
-                    <p>{data?.destinationDetailsData?.return_floor}</p>
                   </div>
                 </div>
               )}

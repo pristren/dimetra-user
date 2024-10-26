@@ -46,8 +46,8 @@ const TransportationDetails = ({
   const form_schema = z.object({
     type_of_transport: z.string().min(1, "Transport type is required"),
     mode_of_transportation: z
-      .array(z.string())
-      .nonempty("At least one mode must be selected"),
+      .string()
+      .min(1, "At least one mode must be selected"),
     transport_with: z
       .array(z.string())
       .nonempty("At least one transport with option must be selected"),
@@ -63,7 +63,7 @@ const TransportationDetails = ({
     resolver: zodResolver(form_schema),
     defaultValues: {
       type_of_transport: transportationData?.type_of_transport || "",
-      mode_of_transportation: transportationData?.mode_of_transportation || [],
+      mode_of_transportation: transportationData?.mode_of_transportation || "",
       transport_with: transportationData?.transport_with || [],
       duration: recurringData?.ends || "",
       start_date: recurringData?.start_date || null,
@@ -169,7 +169,7 @@ const TransportationDetails = ({
       recurringData?.recurring_type === "week"
         ? [
             transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation.length > 0,
+            transportationData?.mode_of_transportation,
             transportationData?.transport_with?.length > 0
               ? transportationData?.transport_with.includes("oxygen_quantity")
                 ? transportationData?.oxygen_quantity > 0
@@ -183,7 +183,7 @@ const TransportationDetails = ({
           recurringData?.recurring_type === "free"
         ? [
             transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation?.length > 0,
+            transportationData?.mode_of_transportation,
             transportationData?.transport_with?.length > 0
               ? transportationData?.transport_with.includes("oxygen_quantity")
                 ? transportationData?.oxygen_quantity > 0
@@ -194,7 +194,7 @@ const TransportationDetails = ({
           ]
         : [
             transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation?.length > 0,
+            transportationData?.mode_of_transportation,
             transportationData?.transport_with?.length > 0
               ? transportationData?.transport_with.includes("oxygen_quantity")
                 ? transportationData?.oxygen_quantity > 0
@@ -309,27 +309,47 @@ const TransportationDetails = ({
               <div className="pr-5">
                 <h6 className="mb-6">
                   {t("mode_of_transportation")}{" "}
-                  <span className="highlight">({t("multiple_selection")})</span>
+                  <span className="highlight">({t("single_selection")})</span>
                 </h6>
-                {transportModesOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-4">
-                    <Checkbox
-                      id={option.value}
-                      checked={transportationData.mode_of_transportation?.includes(
-                        option.value
-                      )}
-                      onClick={() =>
-                        handleCheckBox("mode_of_transportation", option.value)
-                      }
-                    />
-                    <Label
-                      className="font-normal text-[16px] ml-2"
-                      htmlFor={option.value}
-                    >
-                      {t(option.label)}
-                    </Label>
-                  </div>
-                ))}
+                <FormField
+                  control={form.control}
+                  name="mode_of_transportation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroup
+                          value={transportationData?.mode_of_transportation}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            updateCreateOrderData(
+                              "mode_of_transportation",
+                              value
+                            );
+                          }}
+                        >
+                          {transportModesOptions.map((option) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center space-x-2 mb-2"
+                            >
+                              <RadioGroupItem
+                                value={option.value}
+                                id={option.value}
+                              />
+                              <Label
+                                htmlFor={option.value}
+                                className="font-normal text-[16px]"
+                              >
+                                {t(option.label)}
+                              </Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               <div>
@@ -337,51 +357,63 @@ const TransportationDetails = ({
                   {t("transport_with")}{" "}
                   <span className="highlight">({t("multiple_selection")})</span>
                 </h6>
-                {transportWithOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className={`${
-                      option.value !== "oxygen_quantity"
-                        ? "flex items-center"
-                        : ""
-                    }  mb-4 `}
-                  >
-                    <Checkbox
-                      id={option.value}
-                      checked={transportationData.transport_with?.includes(
-                        option.value
-                      )}
-                      onClick={() => {
-                        handleCheckBox("transport_with", option.value);
-                      }}
-                    />
-                    <Label
-                      className="font-normal text-[16px] ml-2 text-nowrap"
-                      htmlFor={option.value}
+                {transportWithOptions.map((option) => {
+                  const isNoneOfThatSelected =
+                    transportationData.transport_with?.includes("none_of_that");
+                  const isOptionDisabled =
+                    isNoneOfThatSelected && option.value !== "none_of_that";
+
+                  return (
+                    <div
+                      key={option.value}
+                      className={`${
+                        option.value !== "oxygen_quantity"
+                          ? "flex items-center"
+                          : ""
+                      } mb-4`}
                     >
-                      {t(option.label)}
-                    </Label>
-                    <div className="w-full mt-2">
+                      <Checkbox
+                        id={option.value}
+                        checked={transportationData.transport_with?.includes(
+                          option.value
+                        )}
+                        onClick={() =>
+                          handleCheckBox("transport_with", option.value)
+                        }
+                        disabled={isOptionDisabled}
+                      />
+                      <Label
+                        className={`font-normal text-[16px] ml-2 text-nowrap ${
+                          isOptionDisabled ? "text-gray-400" : ""
+                        }`}
+                        htmlFor={option.value}
+                      >
+                        {t(option.label)}
+                      </Label>
+
                       {option.value === "oxygen_quantity" &&
                         transportationData.transport_with?.includes(
                           "oxygen_quantity"
                         ) && (
-                          <Input
-                            placeholder=""
-                            className=" h-10"
-                            type="number"
-                            onChange={(e) => {
-                              updateCreateOrderData(
-                                "oxygen_quantity",
-                                Number(e.target.value)
-                              );
-                            }}
-                            value={transportationData?.oxygen_quantity}
-                          />
+                          <div className="w-full mt-2">
+                            <Input
+                              placeholder="Enter oxygen quantity"
+                              className="h-10"
+                              type="number"
+                              onChange={(e) =>
+                                updateCreateOrderData(
+                                  "oxygen_quantity",
+                                  Number(e.target.value)
+                                )
+                              }
+                              value={transportationData?.oxygen_quantity || ""}
+                              disabled={isNoneOfThatSelected}
+                            />
+                          </div>
                         )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
             {transportationData?.type_of_transport === "recurring" && (

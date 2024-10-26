@@ -18,7 +18,6 @@ export const GET_AN_ORDER = gql`
         drop_off_pick_up_date
         drop_off_pick_up_time
         drop_off_postal_code
-        return_floor
         return_date
         return_approx_time
         pick_up_postal_code
@@ -36,12 +35,12 @@ export const GET_AN_ORDER = gql`
         mode_of_transportation
       }
       patientData {
-        surname
-        special_note
+        surname        
         patient_above_90kg
         name
         isolation
         how_much
+        which
         date_of_birth
         cost_center
         area_room
