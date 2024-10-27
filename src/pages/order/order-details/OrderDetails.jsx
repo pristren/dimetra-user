@@ -200,6 +200,12 @@ function OrderDetails({ singleRecurring = false }) {
                   <p className="text-nowrap">{t("working_employee_name")} :</p>
                   <p>{data?.destinationDetailsData?.pick_up_employee_name}</p>
                 </div>
+                <div className="flex items-center gap-3 mb-8">
+                  <p>{t("phone")} :</p>
+                  <p>
+                    {data?.destinationDetailsData?.pickup_phone || "not yet"}
+                  </p>
+                </div>
               </div>
               <div className="">
                 <p className="font-medium text-lg mb-5">{t("drop_off")}</p>
@@ -246,7 +252,7 @@ function OrderDetails({ singleRecurring = false }) {
                 <div className="flex items-center gap-3 mb-8">
                   <p>{t("phone")} :</p>
                   <p>
-                    {data?.destinationDetailsData?.pick_up_country || "not yet"}
+                    {data?.destinationDetailsData?.drop_off_phone || "not yet"}
                   </p>
                 </div>
               </div>
@@ -303,6 +309,10 @@ function OrderDetails({ singleRecurring = false }) {
               <div className="flex items-center gap-10">
                 <p>{t("contact")} :</p>
                 <p>{data?.billingDetailsData?.contact || "N/A"}</p>
+              </div>
+              <div className="flex items-center gap-10">
+                <p>{t("contact_phone")} :</p>
+                <p>{data?.billingDetailsData?.contact_phone || "N/A"}</p>
               </div>
             </div>
           </div>

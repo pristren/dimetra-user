@@ -29,6 +29,7 @@ const EditBillingDetails = ({
     street = "",
     place = "",
     contact = "",
+    contact_phone = "",
   } = editOrderData.billingDetailsData || {};
   const formSchema = z.object({
     preName: z.string().min(1, t("prename_required")),
@@ -47,6 +48,7 @@ const EditBillingDetails = ({
       street,
       place,
       contact,
+      contact_phone,
     },
   });
 
@@ -167,6 +169,27 @@ const EditBillingDetails = ({
                     <FormControl>
                       <Input
                         className={errors.contact ? "border-red-500" : ""}
+                        placeholder={t("type_contact_number")}
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="contact_phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("contact_phone")}</FormLabel>
+                    <FormControl>
+                      <Input
+                        className={errors.contact_phone ? "border-red-500" : ""}
                         placeholder={t("type_contact_number")}
                         {...field}
                         onChange={(e) => {

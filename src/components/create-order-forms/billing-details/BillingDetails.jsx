@@ -14,31 +14,24 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
-import { calculateFormProgress } from "@/utils";
 import { useTranslation } from "react-i18next";
 
 const BillingDetails = ({
   handleFormChange,
   createOrderData,
   setCreateOrderData,
-  setBillingProgress,
-  billingProgress,
   setShowPreview,
 }) => {
   const { t } = useTranslation();
   const {
     pre_name = "",
+    contact_phone = "",    
     name = "",
     street = "",
     place = "",
     contact = "",
   } = createOrderData.billingDetailsData || {};
-
-  const fieldsFilled = [pre_name, name, street, place, contact];
-
-  //   useEffect(() => {
-  //     setBillingProgress(calculateFormProgress(fieldsFilled));
-  //   }, [...fieldsFilled]);
+  
 
   const formSchema = z.object({
     preName: z.string().min(1, t("prename_institution_is_required")),
@@ -52,6 +45,7 @@ const BillingDetails = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       pre_name,
+      contact_phone,
       name,
       street,
       place,
@@ -76,7 +70,7 @@ const BillingDetails = ({
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
-        <CardTitle className="title">{t("billing_address")}</CardTitle>
+        <CardTitle className="title">{t("billing_address")} (optional)</CardTitle>
       </CardHeader>
       <CardContent className="lg:px-10">
         <Form {...form}>
@@ -175,6 +169,29 @@ const BillingDetails = ({
                   <FormItem>
                     <FormLabel className="font-normal">
                       {t("contact")}
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        className={errors.contact ? "border-red-500" : ""}
+                        placeholder={t("type_your_contact_number")}
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e);
+                          handleInputChange(e);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="contact_phone"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-normal">
+                      {t("contact_phone")}
                     </FormLabel>
                     <FormControl>
                       <Input

@@ -19,6 +19,7 @@ import {
 import { createOrderDefaultState } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
 import { useSelector } from "react-redux";
+import { calculateFormProgress } from "@/utils";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -33,6 +34,56 @@ const CreateOrder = () => {
   );
 
   const prevCreateOrderDataRef = useRef(createOrderData);
+
+  const {
+    destinationDetailsData: {
+      pick_up_name,
+      pick_up_address,
+      pick_up_postal_code,
+      pick_up_city,
+      pick_up_country,
+      pick_up_employee_name = "",
+      drop_off_pick_up_time = "",
+      drop_off_name = "",
+      drop_off_address,
+      drop_off_postal_code,
+      drop_off_city = "",
+      drop_off_country = "",
+      drop_off_phone = "",
+      pickup_phone = "",
+      drop_off_pick_up_date,
+    } = {},
+  } = createOrderData;
+
+  const fieldsFilled = [
+    pick_up_name,
+    pick_up_address,
+    pick_up_postal_code,
+    pick_up_city,
+    pick_up_employee_name,
+    drop_off_pick_up_time,
+    drop_off_name,
+    drop_off_address,
+    drop_off_postal_code,
+    drop_off_city,
+    pickup_phone,
+    drop_off_pick_up_date,
+  ];
+
+  const fieldsFilledRecurring = [
+    pick_up_name,
+    pick_up_address,
+    pick_up_postal_code,
+    pick_up_city,
+    pick_up_country,
+    pick_up_employee_name,
+    drop_off_name,
+    drop_off_address,
+    drop_off_postal_code,
+    drop_off_city,
+    drop_off_country,
+    drop_off_phone,
+  ];
 
   useEffect(() => {
     if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
@@ -94,6 +145,39 @@ const CreateOrder = () => {
       {t(text)}
     </div>
   );
+  const { patientData } = createOrderData;
+
+  useEffect(() => {
+    if (
+      createOrderData.transportationData?.type_of_transport ===
+      "collection_order"
+    ) {
+      const fieldsFilled = [
+        patientData.name,
+        patientData.surname,
+        patientData.area_room,
+      ];
+      setPatientProgress(calculateFormProgress(fieldsFilled));
+    } else {
+      const fieldsFilled = [
+        patientData.name,
+        patientData.surname,
+        patientData.date_of_birth,
+        patientData.area_room,
+      ];
+      setPatientProgress(calculateFormProgress(fieldsFilled));
+    }
+  }, [patientData, setPatientProgress]);
+
+  useEffect(() => {
+    if (
+      createOrderData?.transportationData?.type_of_transport !== "recurring"
+    ) {
+      setDestinationProgress(calculateFormProgress(fieldsFilled));
+    } else {
+      setDestinationProgress(calculateFormProgress(fieldsFilledRecurring));
+    }
+  }, [...fieldsFilled]);
 
   const props = {
     transportationProgress,
@@ -116,81 +200,84 @@ const CreateOrder = () => {
     <div className="relative overflow-y-auto">
       <Navbar />
       <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
-        <div className="flex gap-1 lg:gap-5 mb-5">
-          <StepIcon
-            step="transportDetails"
-            text="transport"
-            icon={<Pencil className="size-4 lg:size-6" />}
-            progressValue={transportationProgress}
-            isDisabled={false}
-          />
-          <Progress
-            value={transportationProgress}
-            className="mt-3 lg:mt-5 h-2 lg:h-4"
-          />
+          <div className="flex gap-1 lg:gap-5 mb-5">
+            <StepIcon
+              step="transportDetails"
+              text="transport"
+              icon={<Pencil className="size-4 lg:size-6" />}
+              progressValue={transportationProgress}
+              isDisabled={false}
+            />
+            <Progress
+              value={transportationProgress}
+              className="mt-3 lg:mt-5 h-2 lg:h-4"
+            />
 
-          <StepIcon
-            step="patientDetails"
-            text="patient"
-            icon={<User className="size-4 lg:size-6" />}
-            disabled={transportationProgress !== 100}
-            progressValue={patientProgress}
-            isDisabled={transportationProgress < 100}
-          />
-          <Progress
-            value={patientProgress}
-            className="mt-3 lg:mt-5 h-2 lg:h-4"
-          />
+            <StepIcon
+              step="patientDetails"
+              text="patient"
+              icon={<User className="size-4 lg:size-6" />}
+              disabled={transportationProgress !== 100}
+              progressValue={patientProgress}
+              isDisabled={transportationProgress < 100}
+            />
+            <Progress
+              value={patientProgress}
+              className="mt-3 lg:mt-5 h-2 lg:h-4"
+            />
 
-          <StepIcon
-            step="destinationDetails"
-            text="destination"
-            icon={<Truck className="size-4 lg:size-6" />}
-            disabled={patientProgress !== 100}
-            progressValue={destinationProgress}
-            isDisabled={patientProgress < 100}
-          />
-          <Progress
-            value={destinationProgress}
-            className="mt-3 lg:mt-5 h-2 lg:h-4"
-          />
+            <StepIcon
+              step="destinationDetails"
+              text="destination"
+              icon={<Truck className="size-4 lg:size-6" />}
+              disabled={patientProgress !== 100}
+              progressValue={destinationProgress}
+              isDisabled={patientProgress < 100}
+            />
+            <Progress
+              value={destinationProgress}
+              className="mt-3 lg:mt-5 h-2 lg:h-4"
+            />
 
-          <StepIcon
-            step="billingDetails"
-            text="billing"
-            icon={<Send className="size-4 lg:size-6" />}
-            disabled={destinationProgress !== 100}
-            progressValue={billingProgress}
-            isDisabled={destinationProgress < 100}
-          />
+            <StepIcon
+              step="billingDetails"
+              text="billing"
+              icon={<Send className="size-4 lg:size-6" />}
+              disabled={destinationProgress !== 100}
+              progressValue={billingProgress}
+              isDisabled={destinationProgress < 100}
+            />
+          </div>
+
+          <div className="lg:w-[70%] px-3 lg:px-0">
+            {currentStep === "transportDetails" ? (
+              <TransportationDetails {...props} />
+            ) : currentStep === "patientDetails" ? (
+              <PatientDetails {...props} />
+            ) : currentStep === "destinationDetails" ? (
+              <DestinationDetails {...props} />
+            ) : (
+              currentStep === "billingDetails" && <BillingDetails {...props} />
+            )}
+          </div>
+          <Dialog open={showPreview} onOpenChange={setShowPreview}>
+            <DialogContent
+              className="w-[90%] max-w-[80rem] px-0 border-none max-h-[98vh] overflow-y-auto"
+              isCrossHidden={true}
+            >
+              <DialogHeader>
+                <DialogTitle />
+                <div>
+                  <PreviewDetails {...props} />
+                </div>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+          <div className="mt-20">
+            <p className="text-lg mb-5 text-center">{t("powered_by")}</p>
+            <Logo />
+          </div>
         </div>
-
-        <div className="lg:w-[70%] px-3 lg:px-0">
-          {currentStep === "transportDetails" ? (
-            <TransportationDetails {...props} />
-          ) : currentStep === "patientDetails" ? (
-            <PatientDetails {...props} />
-          ) : currentStep === "destinationDetails" ? (
-            <DestinationDetails {...props} />
-          ) : (
-            currentStep === "billingDetails" && <BillingDetails {...props} />
-          )}
-        </div>
-        <Dialog open={showPreview} onOpenChange={setShowPreview}>
-          <DialogContent className="w-[90%] max-w-[60rem] px-0 border-none max-h-[98vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle />
-              <div>
-                <PreviewDetails {...props} />
-              </div>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
-        <div className="mt-20">
-          <p className="text-lg mb-5 text-center">{t("powered_by")}</p>
-          <Logo />
-        </div>
-      </div>
     </div>
   );
 };

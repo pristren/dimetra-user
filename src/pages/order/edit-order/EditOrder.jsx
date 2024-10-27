@@ -44,6 +44,7 @@ const EditOrder = () => {
       pick_up_city: "",
       pick_up_country: "",
       pick_up_employee_name: "",
+      pickup_phone: "",
 
       drop_off_pick_up_date: null,
       drop_off_pick_up_time: "",
@@ -63,6 +64,7 @@ const EditOrder = () => {
       street: "",
       place: "",
       contact: "",
+      contact_phone: "",
     },
   });
 

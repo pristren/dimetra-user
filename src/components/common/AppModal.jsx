@@ -7,12 +7,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { t } from "i18next";
+import { CircleCheck } from "lucide-react";
 const AppModal = ({
   icon,
   head,
   details,
   buttonText,
   onClose,
+  isSuccess,
   dialogTitle = "",
   openButton = "",
 }) => {
@@ -27,9 +30,14 @@ const AppModal = ({
         </DialogHeader>
         <div className="flex flex-col justify-center items-center gap-5 text-black px-10 text-center tracking-wide leading-6">
           {icon}
-          <h5> {head}</h5>
-          <p>{details}</p>
-          <Button onClick={onClose}>{buttonText}</Button>
+          <h5 className="flex flex-col items-center gap-2">
+            {isSuccess && (
+              <CircleCheck className="p-1 size-14 bg-green-400 text-white rounded-full" />
+            )}
+            {t(head)}{" "}
+          </h5>
+          <p>{t(details)}</p>
+          <Button onClick={onClose}>{t(buttonText)}</Button>
         </div>
       </DialogContent>
     </Dialog>

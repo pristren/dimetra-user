@@ -45,6 +45,7 @@ const EditRecurringOrder = () => {
       pick_up_country: "",
       pick_up_employee_name: "",
       pick_up_postal_code: "",
+      pickup_phone: "",
       drop_off_pick_up_date: null,
       drop_off_pick_up_time: "",
       pickup_appointment_time: "",
@@ -63,6 +64,7 @@ const EditRecurringOrder = () => {
       street: "",
       place: "",
       contact: "",
+      contact_phone: "",
     },
   });
 

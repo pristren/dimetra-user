@@ -8,6 +8,7 @@ export const GET_AN_ORDER = gql`
         name
         place
         pre_name
+        contact_phone
         street
       }
       destinationDetailsData {
@@ -27,6 +28,7 @@ export const GET_AN_ORDER = gql`
         pick_up_country
         pick_up_city
         pick_up_address
+        pickup_phone
         drop_off_phone
       }
       transportationData {

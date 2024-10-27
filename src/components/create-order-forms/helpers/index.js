@@ -128,6 +128,7 @@ export const createOrderDefaultState = {
     pick_up_postal_code: 0,
     pick_up_city: "",
     pick_up_country: "",
+    pickup_phone: "",
     pick_up_employee_name: "",
     drop_off_pick_up_date: null,
     drop_off_pick_up_time: "",
@@ -147,5 +148,6 @@ export const createOrderDefaultState = {
     street: "",
     place: "",
     contact: "",
+    contact_phone: "",
   },
 };

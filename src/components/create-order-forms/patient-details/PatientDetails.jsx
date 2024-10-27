@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { z } from "zod";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { calculateFormProgress } from "@/utils";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -39,7 +37,6 @@ import toast from "react-hot-toast";
 
 const PatientDetails = ({
   handleFormChange,
-  setPatientProgress,
   createOrderData,
   setCreateOrderData,
   patientProgress,
@@ -86,27 +83,7 @@ const PatientDetails = ({
     handleFormChange("destinationDetails");
   };
 
-  useEffect(() => {
-    if (
-      createOrderData.transportationData?.type_of_transport ===
-      "collection_order"
-    ) {
-      const fieldsFilled = [
-        patientData.name,
-        patientData.surname,
-        patientData.area_room,
-      ];
-      setPatientProgress(calculateFormProgress(fieldsFilled));
-    } else {
-      const fieldsFilled = [
-        patientData.name,
-        patientData.surname,
-        patientData.date_of_birth,
-        patientData.area_room,
-      ];
-      setPatientProgress(calculateFormProgress(fieldsFilled));
-    }
-  }, [patientData, setPatientProgress]);
+  
 
   return (
     <Card className="lg:px-5 lg:py-5">

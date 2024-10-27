@@ -34,6 +34,7 @@ const EditDestinationDetails = ({
       pick_up_city = "",
       pick_up_country = "",
       pick_up_employee_name = "",
+      pickup_phone = "",
       drop_off_pick_up_time = "",
       drop_off_pick_up_date = "",
       drop_off_name = "",
@@ -41,7 +42,6 @@ const EditDestinationDetails = ({
       drop_off_postal_code = "",
       drop_off_city = "",
       drop_off_country = "",
-      drop_off_phone = "",
       return_day_letter = "",
       return_approx_time = "",
     } = {},
@@ -51,8 +51,8 @@ const EditDestinationDetails = ({
     pick_up_address: z.string().min(1, t("address_required")),
     pick_up_postal_code: z.number().min(1, t("postal_code_required")),
     pick_up_city: z.string().min(1, t("city_required")),
-    pick_up_country: z.string().min(1, t("country_required")),
     pick_up_employee_name: z.string().min(1, t("employee_name_required")),
+    pickup_phone: z.string().min(1, t("pickup_phone")),
 
     drop_off_date: z.string().min(1, t("drop_off_date_required")),
     drop_off_pick_up_time: z.string().min(1, t("pick_up_time_required")),
@@ -61,7 +61,6 @@ const EditDestinationDetails = ({
     drop_off_address: z.string().min(1, t("drop_off_address_required")),
     drop_off_city: z.string().min(1, t("drop_off_city_required")),
     drop_off_country: z.string().min(1, t("drop_off_country_required")),
-    drop_off_phone: z.string().min(1, t("drop_off_phone_required")),
     drop_off_postal_code: z.number().min(1, t("drop_off_postal_code_required")),
     return_date: z.string().min(1, t("return_date_required")),
     return_day_letter: z.string().min(1, t("day_letter_required")),
@@ -77,6 +76,7 @@ const EditDestinationDetails = ({
       pick_up_city,
       pick_up_country,
       pick_up_employee_name,
+      pickup_phone,
       dropDate,
       drop_off_pick_up_time,
       drop_off_pick_up_date,
@@ -85,7 +85,6 @@ const EditDestinationDetails = ({
       drop_off_postal_code: Number(drop_off_postal_code), // Convert to number
       drop_off_city,
       drop_off_country,
-      drop_off_phone,
       returnDate,
       return_day_letter,
       return_approx_time,
@@ -255,7 +254,7 @@ const EditDestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
-                        {t("country")} <sup className="text-[13px]">*</sup>
+                        {t("country")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -506,7 +505,7 @@ const EditDestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
-                        {t("phone")} <sup className="text-[13px]">*</sup>
+                        {t("phone")}
                       </FormLabel>
                       <FormControl>
                         <Input

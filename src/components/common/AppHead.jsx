@@ -41,8 +41,17 @@ export default function AppHead({
     setQueryData((prev) => ({ ...prev, search_keyword: value || undefined }));
   }, 500);
   return (
-    <div className="flex lg:items-center justify-between flex-col lg:flex-row gap-5 w-full mb-10">
-      <div className="flex items-center gap-3">
+    <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-5 w-full mb-10">
+      <div className="flex flex-col items-center gap-3">
+      {isDateVisible && (
+          <DatePicker
+            className="hidden lg:flex"
+            date={queryData?.date}
+            setDate={(value) =>
+              setQueryData((prev) => ({ ...prev, date: value }))
+            }
+          />
+        )}
         <div className="flex items-center justify-between w-full">
           <h2
             className={`text-2xl border-black  font-bold text-nowrap ${
@@ -65,15 +74,7 @@ export default function AppHead({
           </div>
         )}
 
-        {isDateVisible && (
-          <DatePicker
-            className="hidden lg:flex"
-            date={queryData?.date}
-            setDate={(value) =>
-              setQueryData((prev) => ({ ...prev, date: value }))
-            }
-          />
-        )}
+        
       </div>
 
       <div className="flex lg:items-center flex-col lg:flex-row gap-4">

@@ -13,7 +13,6 @@ import { AppTable } from "@/components/common/AppTable";
 import { ArrowUpDown, Document, Pause, Pencil, Trash } from "@/assets/icons";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_ALL_ORDERS } from "../order-details/graphql/queries/getAllOrders.gql";
-import { DELETE_AN_ORDER } from "./graphql/mutations/deleteOrder.gql";
 import moment from "moment";
 import { UPDATE_ORDER_STATUS } from "./graphql/mutations/updateOrderStatus.gql";
 import { transportOptions } from "@/components/create-order-forms/helpers";
@@ -94,11 +93,28 @@ const AllOrders = () => {
       cell: ({ row }) => {
         const date =
           row.original?.destinationDetailsData?.drop_off_pick_up_date;
-        return <p>{moment(date).format("DD MMMM YYYY")}</p>;
+        return (
+          <p>
+            {moment(date).format("DD MMMM YYYY")}-
+            {moment(date).format("dddd").slice(0, 3)}
+          </p>
+        );
       },
     },
     {
-      accessorKey: "destinationDetailsData.pick_up_address",
+      accessorKey: "destinationDetailsData.drop_off_pick_up_time",
+      header: ({ column }) => (
+        <div
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="flex items-center cursor-pointer"
+        >
+          {t("time")}
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "destinationDetailsData.pick_up_name",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -110,7 +126,7 @@ const AllOrders = () => {
       ),
     },
     {
-      accessorKey: "destinationDetailsData.drop_off_address",
+      accessorKey: "destinationDetailsData.drop_off_name",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -120,21 +136,6 @@ const AllOrders = () => {
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
-    },
-    {
-      accessorKey: `driver`,
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
-        <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
-          className="flex items-center cursor-pointer"
-        >
-          {t("driver")}
-          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
-        </div>
-      ),
-      cell: ({ row }) => {
-        return <p className="capitalize">N/A</p>;
-      },
     },
     {
       accessorKey: "patientData.name",
@@ -147,6 +148,12 @@ const AllOrders = () => {
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
+      cell: ({ row }) => {
+        const patientName =
+          row?.original?.patientData?.name + " " +
+          row?.original?.patientData?.surname;
+        return <p className="capitalize">{patientName}</p>;
+      },
     },
     {
       accessorKey: "transportationData.type_of_transport",
