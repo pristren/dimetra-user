@@ -30,7 +30,7 @@ const EditDestinationDetails = ({
     destinationDetailsData: {
       pick_up_name = "",
       pick_up_address = "",
-      pick_up_postal_code = "",
+      pick_up_postal_code = 0,
       pick_up_city = "",
       pick_up_country = "",
       pick_up_employee_name = "",
@@ -52,9 +52,7 @@ const EditDestinationDetails = ({
     pick_up_postal_code: z.number().min(1, t("postal_code_required")),
     pick_up_city: z.string().min(1, t("city_required")),
     pick_up_country: z.string().min(1, t("country_required")),
-    pick_up_employee_name: z
-      .string()
-      .min(1, t("employee_name_required")),
+    pick_up_employee_name: z.string().min(1, t("employee_name_required")),
 
     drop_off_date: z.string().min(1, t("drop_off_date_required")),
     drop_off_pick_up_time: z.string().min(1, t("pick_up_time_required")),
@@ -68,7 +66,7 @@ const EditDestinationDetails = ({
     return_date: z.string().min(1, t("return_date_required")),
     return_day_letter: z.string().min(1, t("day_letter_required")),
     return_approx_time: z.string().min(1, t("approx_time_required")),
-});
+  });
 
   const form = useForm({
     resolver: zodResolver(form_schema),
@@ -106,18 +104,30 @@ const EditDestinationDetails = ({
     }));
   };
 
+  const formatTimeInput = (value) => {
+    const sanitizedValue = value.replace(/\D/g, "").slice(0, 4);
+
+    let formattedValue = sanitizedValue;
+    if (sanitizedValue.length > 2) {
+      formattedValue =
+        sanitizedValue.slice(0, 2) + ":" + sanitizedValue.slice(2);
+    }
+
+    if (sanitizedValue.length === 4) {
+      const hours = Math.min(parseInt(sanitizedValue.slice(0, 2), 10), 23);
+      const minutes = Math.min(parseInt(sanitizedValue.slice(2), 10), 59);
+      formattedValue = `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}`;
+    }
+
+    return formattedValue;
+  };
+
   useEffect(() => {
     form.reset(editOrderData.destinationDetailsData);
   }, [editOrderData.destinationDetailsData, form]);
-  const updateDestinationData = (key, value) => {
-    setEditOrderData((prev) => ({
-      ...prev,
-      destinationDetailsData: {
-        ...prev.destinationDetailsData,
-        [key]: value,
-      },
-    }));
-  };
+
   return (
     <Card className="p-6 border-none rounded-none">
       <h4 className="px-3">{t("destination_details")}</h4>
@@ -320,27 +330,31 @@ const EditDestinationDetails = ({
                 />
 
                 {/* Drop-Off Pickup Time */}
+
                 <FormField
                   control={form.control}
                   name="drop_off_pick_up_time"
-                  render={() => (
+                  render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <AppSelect
-                          items={timeOptions}
-                          placeholder="00:00"
-                          onValueChange={(value) =>
-                            updateDestinationData(
-                              "drop_off_pick_up_time",
-                              value
-                            )
-                          }
-                          isTimeSelected={true}
-                          value={drop_off_pick_up_time}
-                          className="cursor-pointer"
+                        <Input
+                          {...field}
+                          maxLength={5}
+                          onChange={(e) => {
+                            const rawValue = e.target.value;
+                            const formattedValue = formatTimeInput(rawValue);
+                            handleInputChange({
+                              target: {
+                                name: field.name,
+                                value: formattedValue,
+                              },
+                            });
+                            field.onChange(formattedValue);
+                          }}
+                          placeholder="HH:MM"
                         />
                       </FormControl>
                       <FormMessage />
@@ -539,21 +553,27 @@ const EditDestinationDetails = ({
                   <FormField
                     control={form.control}
                     name="return_approx_time"
-                    render={() => (
+                    render={({ field }) => (
                       <FormItem className="mb-7">
                         <FormLabel className="mb-2">
                           {t("approx_time")}
                         </FormLabel>
                         <FormControl>
-                          <AppSelect
-                            items={timeOptions}
-                            placeholder="00:00"
-                            isTime={true}
-                            onValueChange={(value) =>
-                              updateDestinationData("return_approx_time", value)
-                            }
-                            value={return_approx_time}
-                            isTimeSelected={true}
+                          <Input
+                            {...field}
+                            maxLength={5}
+                            onChange={(e) => {
+                              const rawValue = e.target.value;
+                              const formattedValue = formatTimeInput(rawValue);
+                              handleInputChange({
+                                target: {
+                                  name: field.name,
+                                  value: formattedValue,
+                                },
+                              });
+                              field.onChange(formattedValue);
+                            }}
+                            placeholder="HH:MM"
                           />
                         </FormControl>
                         <FormMessage />

@@ -221,6 +221,13 @@ function OrderDetails({ singleRecurring = false }) {
                   </p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
+                  <p>{t("appointment_time")} :</p>
+                  <p>
+                    {data?.destinationDetailsData?.pickup_appointment_time ||
+                      "not yet"}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 mb-8">
                   <p>{t("name_institution")} :</p>
                   <p>{data?.destinationDetailsData?.pick_up_name}</p>
                 </div>

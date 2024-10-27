@@ -547,6 +547,20 @@ const PreviewDetails = ({
                         />
                       </div>
                     )}
+                    {transportationData?.type_of_transport !== "recurring" && (
+                      <div className="mb-5">
+                        <Label className="block mb-2 font-medium">
+                          {t("appointment_time")}{" "}
+                          <sup className="text-[13px]">*</sup>
+                        </Label>
+                        <Input
+                          disabled
+                          value={destinationDetailsData?.pickup_appointment_time}
+                          placeholder={t("pick_up_time")}
+                          className="border-gray-300"
+                        />
+                      </div>
+                    )}
                     <div className="mb-5">
                       <Label className="block mb-2 font-medium">
                         {t("drop_off_name")}{" "}

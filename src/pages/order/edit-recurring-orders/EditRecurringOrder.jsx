@@ -47,6 +47,7 @@ const EditRecurringOrder = () => {
       pick_up_postal_code: "",
       drop_off_pick_up_date: null,
       drop_off_pick_up_time: "",
+      pickup_appointment_time: "",
       drop_off_name: "",
       drop_off_address: "",
       drop_off_city: "",

@@ -95,7 +95,7 @@
   "contact": "kontakt",
   "type_your_contact_number": "geben sie ihre kontaktnummer ein",
   "in_own_wheelchair": "Im eigenen Rollstuhl",
-  "destination_details": "Ziel Details",
+  "destination_details": "Fahrtdetails",
   "name_institution": "institution/ vorname",
   "type_your_name_or_institution": "Geben Sie Ihren Namen oder Institution ein",
   "address": "Adresse",
@@ -177,8 +177,8 @@
   "dispatcher": "Dispatcher",
   "vehicle": "Fahrzeug",
   "pick_a_date": "Datum auswählen",
-  "transport": "Transport",
-  "patient": "Patient",
+  "transport": "Transportangaben",
+  "patient": "Patientenangaben",
   "billing": "Rechnung",
   "powered_by": "Angetrieben Von",
   "request": "Anfrage",
@@ -333,5 +333,7 @@
   "type_the_stock_or_department": "Geben Sie das Stockwerk oder die Abteilung ein",
   "submit": "Einreichen",
   "order_sent_successfully": "Bestellung erfolgreich gesendet",
-  "your_order_has_been_placed_successfully": "Ihre Bestellung wurde erfolgreich aufgegeben! Vielen Dank für die Bestellung"
+  "your_order_has_been_placed_successfully": "Ihre Bestellung wurde erfolgreich aufgegeben! Vielen Dank für die Bestellung",
+  "appointment_time": "Terminzeit"
+
 }

@@ -49,7 +49,7 @@ const CreateOrder = () => {
           ...prevState.destinationDetailsData,
           pick_up_name: `${userInfo?.first_name} ${userInfo?.last_name}`,
           pick_up_address: userInfo?.address,
-          pick_up_postal_code: userInfo?.code,
+          pick_up_postal_code: Number(userInfo?.code),
           pick_up_city: userInfo?.billing_address,
           pick_up_country: userInfo?.address,
         },
