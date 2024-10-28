@@ -63,6 +63,7 @@ export const GET_AN_ORDER = gql`
         contact_phone
       }
       createdAt
+      updatedAt
     }
   }
 `;

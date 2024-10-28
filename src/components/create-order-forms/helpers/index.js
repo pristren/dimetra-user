@@ -4,7 +4,6 @@ export const transportOptions = [
   { value: "private_trips", label: "private_trips" },
   { value: "recurring", label: "recurring" },
   { value: "relocation", label: "relocation" },
-
 ];
 
 export const transportModesOptions = [
@@ -25,13 +24,13 @@ export const transportWithOptions = [
 ];
 
 export const weekdaysOptions = [
-  { value: "monday", label: "monday" },
-  { value: "tuesday", label: "tuesday" },
-  { value: "wednesday", label: "wednesday" },
-  { value: "thursday", label: "thursday" },
-  { value: "friday", label: "friday" },
-  { value: "saturday", label: "saturday" },
-  { value: "sunday", label: "sunday" },
+  { value: "monday", label: "mo" },
+  { value: "tuesday", label: "tu" },
+  { value: "wednesday", label: "we" },
+  { value: "thursday", label: "th" },
+  { value: "friday", label: "fr" },
+  { value: "saturday", label: "sa" },
+  { value: "sunday", label: "su" },
 ];
 
 export const durationOptions = [

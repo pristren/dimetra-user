@@ -465,7 +465,8 @@ const TransportationDetails = ({
                       <span className="highlight">({t("optional")})</span>
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker
+                      {/* commented because qudrati vai said it's not need */}
+                      {/* <DatePicker
                         date={recurringData?.return_date || null}
                         setDate={(value) =>
                           handleDateChange("return_date", value)
@@ -474,7 +475,7 @@ const TransportationDetails = ({
                           before: new Date(recurringData?.start_date),
                           after: new Date(recurringData?.start_date),
                         }}
-                      />
+                      /> */}
                       <AppSelect
                         items={timeOptions}
                         placeholder="00:00"
@@ -495,7 +496,7 @@ const TransportationDetails = ({
                       </span>
                       :
                     </h3>
-                    <div className="grid grid-cols-3 gap-3 mt-2">
+                    <div className="flex flex-wrap gap-3 mt-2">
                       {weekdaysOptions.map((option) => (
                         <div
                           key={option.value}
@@ -506,9 +507,10 @@ const TransportationDetails = ({
                             checked={recurringData?.multiple_week_days?.includes(
                               option.value
                             )}
+                            className="size-6"
                             onClick={() => handleWeekdayChange(option)}
                           />
-                          <Label className="ml-2" htmlFor={option.value}>
+                          <Label className="ml-2 text-lg" htmlFor={option.value}>
                             {option.label}
                           </Label>
                         </div>
@@ -530,6 +532,7 @@ const TransportationDetails = ({
                                 updateCreateRecurringOrderData("ends", value);
                               }}
                               value={recurringData?.ends}
+                              className='flex items-center gap-3'
                             >
                               {durationOptions.map((option) => (
                                 <div

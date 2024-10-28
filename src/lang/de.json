@@ -337,5 +337,6 @@
   "appointment_time": "Terminzeit",
   "contact_phone": "Kontakt Telefon",
   "check_preview": "Vorschau überprüfen",
-    "your_order_has_been_placed_successfully_thank_you_for_order": "Ihre Bestellung wurde erfolgreich aufgegeben! Vielen Dank für Ihre Bestellung"
+    "your_order_has_been_placed_successfully_thank_you_for_order": "Ihre Bestellung wurde erfolgreich aufgegeben! Vielen Dank für Ihre Bestellung",
+  "transport_type": "Transportart"
 }

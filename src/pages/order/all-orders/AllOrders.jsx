@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { EllipsisVertical, List } from "lucide-react";
+import { Copy, EllipsisVertical, List } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -150,7 +150,8 @@ const AllOrders = () => {
       ),
       cell: ({ row }) => {
         const patientName =
-          row?.original?.patientData?.name + " " +
+          row?.original?.patientData?.name +
+          " " +
           row?.original?.patientData?.surname;
         return <p className="capitalize">{patientName}</p>;
       },
@@ -233,6 +234,15 @@ const AllOrders = () => {
                 >
                   <Trash className="size-5" />
                   <span className="text-gray-700 text-sm">{t("storno")}</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem className="mb-2 py-2">
+                  <Link
+                    to={`/recreate-order/${orderId}`}
+                    className="flex items-center gap-3 text-[16px] cursor-pointer"
+                  >
+                    <Copy className="size-5" />
+                    <span className="text-gray-700 text-sm">Copy</span>
+                  </Link>
                 </DropdownMenuItem>
 
                 {isRecurring ? (

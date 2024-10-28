@@ -136,26 +136,6 @@ const RecurringOrders = () => {
       ),
     },
     {
-      accessorKey: "vehicle",
-      header: () => (
-        <div className="flex items-center gap-2">
-          {t("vehicle")}
-          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
-        </div>
-      ),
-      cell: (row) => <div className="">N/A</div>,
-    },
-    {
-      accessorKey: "driver",
-      header: () => (
-        <div className="flex items-center gap-2">
-          {t("driver")}
-          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
-        </div>
-      ),
-      cell: (row) => <div className="">N/A</div>,
-    },
-    {
       accessorKey: "patientData.name",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
@@ -163,6 +143,18 @@ const RecurringOrders = () => {
           className="flex items-center cursor-pointer"
         >
           {t("patient_name")}
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "transportationData.type_of_transport",
+      header: ({ column: { toggleSorting, getIsSorted } }) => (
+        <div
+          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          className="flex items-center cursor-pointer"
+        >
+          {t("transport_type")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),

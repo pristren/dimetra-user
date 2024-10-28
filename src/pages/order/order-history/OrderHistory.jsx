@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ArrowUpDown } from "@/assets/icons";
-import { EllipsisVertical } from "lucide-react";
+import { EllipsisVertical, LockOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { useLazyQuery } from "@apollo/client";
@@ -263,6 +263,11 @@ const OrderHistory = () => {
                       <span className="text-gray-700 text-sm">
                         {t("print")}
                       </span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="py-2 cursor-pointer px-3">
+                      <Link to={`/recreate-order/${orderId}`}>
+                        <span className="text-gray-700 text-sm">Reopen</span>
+                      </Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem className="py-2 px-3 cursor-pointer">

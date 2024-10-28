@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from "react";
-import { Pencil, Send, Truck, User } from "lucide-react";
+import { Loader, Pencil, Send, Truck, User } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import BillingDetails from "@/components/create-order-forms/billing-details/BillingDetails";
 import DestinationDetails from "@/components/create-order-forms/destination-details/DestinationDetails";
@@ -20,6 +20,9 @@ import { createOrderDefaultState } from "@/components/create-order-forms/helpers
 import { t } from "i18next";
 import { useSelector } from "react-redux";
 import { calculateFormProgress } from "@/utils";
+import { useParams } from "react-router-dom";
+import { GET_AN_ORDER } from "../edit-order/graphql/queries/getAnOrder.gql";
+import { useLazyQuery } from "@apollo/client";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -29,10 +32,11 @@ const CreateOrder = () => {
   const [currentStep, setCurrentStep] = useState("transportDetails");
   const [showPreview, setShowPreview] = useState(false);
   const { userInfo } = useSelector((state) => state.user);
+  const { id } = useParams();
   const [createOrderData, setCreateOrderData] = useState(
     createOrderDefaultState
   );
-
+  const { patientData } = createOrderData;
   const prevCreateOrderDataRef = useRef(createOrderData);
 
   const {
@@ -85,6 +89,45 @@ const CreateOrder = () => {
     drop_off_phone,
   ];
 
+
+function removeTypename(obj) {
+  if (Array.isArray(obj)) {
+    return obj.map(removeTypename);
+  } else if (obj !== null && typeof obj === 'object') {
+    const newObj = {};
+    for (const key in obj) {
+      if (key !== '__typename') {
+        newObj[key] = removeTypename(obj[key]);
+      }
+    }
+    return newObj;
+  }
+  return obj;
+}
+
+const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
+  GET_AN_ORDER,
+  {
+    variables: { queryData: { id: id } },
+    errorPolicy: "all",
+    fetchPolicy: "no-cache",
+    onCompleted: (response) => {
+      // Remove __typename before setting the data
+      const cleanedData = removeTypename(response.getAnOrder);
+      setCreateOrderData(cleanedData);
+    },
+    onError: (error) => {
+      console.error({ error });
+    },
+  }
+);
+
+  useEffect(() => {
+    if (id) {
+      getAnOrder();
+    }
+  }, [id]);
+
   useEffect(() => {
     if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
       localStorage.setItem("createOrderData", JSON.stringify(createOrderData));
@@ -115,37 +158,6 @@ const CreateOrder = () => {
       setCreateOrderData(parsedData);
     }
   }, []);
-
-  const handleFormChange = (step) => {
-    setCurrentStep(step);
-  };
-
-  const StepIcon = ({ step, icon, progressValue, isDisabled, text }) => (
-    <div
-      className={`flex items-center justify-center flex-col w-20 lg:w-40 h-max text-xs lg:text-[16px] lg:leading-7 ${
-        isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-      }`}
-    >
-      <div
-        className={`${
-          progressValue === 100
-            ? "bg-[#B4DB1A] text-white"
-            : currentStep === step && progressValue !== 100
-            ? "bg-[#FBA63C] text-white"
-            : "bg-[#DFE5ED] text-black"
-        } p-2 lg:p-3 rounded-full w-max border border-gray-400`}
-        onClick={() => {
-          if (!isDisabled) {
-            handleFormChange(step);
-          }
-        }}
-      >
-        {icon}
-      </div>
-      {t(text)}
-    </div>
-  );
-  const { patientData } = createOrderData;
 
   useEffect(() => {
     if (
@@ -178,6 +190,35 @@ const CreateOrder = () => {
       setDestinationProgress(calculateFormProgress(fieldsFilledRecurring));
     }
   }, [...fieldsFilled]);
+  const handleFormChange = (step) => {
+    setCurrentStep(step);
+  };
+
+  const StepIcon = ({ step, icon, progressValue, isDisabled, text }) => (
+    <div
+      className={`flex items-center justify-center flex-col w-20 lg:w-40 h-max text-xs lg:text-[16px] lg:leading-7 ${
+        isDisabled ? "cursor-not-allowed" : "cursor-pointer"
+      }`}
+    >
+      <div
+        className={`${
+          progressValue === 100
+            ? "bg-[#B4DB1A] text-white"
+            : currentStep === step && progressValue !== 100
+            ? "bg-[#FBA63C] text-white"
+            : "bg-[#DFE5ED] text-black"
+        } p-2 lg:p-3 rounded-full w-max border border-gray-400`}
+        onClick={() => {
+          if (!isDisabled) {
+            handleFormChange(step);
+          }
+        }}
+      >
+        {icon}
+      </div>
+      {t(text)}
+    </div>
+  );
 
   const props = {
     transportationProgress,
@@ -199,7 +240,8 @@ const CreateOrder = () => {
   return (
     <div className="relative overflow-y-auto">
       <Navbar />
-      <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
+      {
+        <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
           <div className="flex gap-1 lg:gap-5 mb-5">
             <StepIcon
               step="transportDetails"
@@ -250,7 +292,9 @@ const CreateOrder = () => {
           </div>
 
           <div className="lg:w-[70%] px-3 lg:px-0">
-            {currentStep === "transportDetails" ? (
+            {getAnOrderLoading ? (
+              <Loader className="animate-spin flex items-center justify-center w-full size-14" />
+            ) : currentStep === "transportDetails" ? (
               <TransportationDetails {...props} />
             ) : currentStep === "patientDetails" ? (
               <PatientDetails {...props} />
@@ -278,6 +322,7 @@ const CreateOrder = () => {
             <Logo />
           </div>
         </div>
+      }
     </div>
   );
 };

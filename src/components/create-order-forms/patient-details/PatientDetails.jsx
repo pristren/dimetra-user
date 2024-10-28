@@ -23,16 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { t } from "i18next";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
 import toast from "react-hot-toast";
 
 const PatientDetails = ({
@@ -83,7 +73,41 @@ const PatientDetails = ({
     handleFormChange("destinationDetails");
   };
 
-  
+  const handleDateInput = (e, field, setCreateOrderData) => {
+    let input = e.target.value.replace(/\D/g, "");
+    let formattedDate = input;
+
+    if (input.length > 2)
+      formattedDate = `${input.slice(0, 2)}/${input.slice(2)}`;
+    if (input.length > 4)
+      formattedDate = `${input.slice(0, 2)}/${input.slice(2, 4)}/${input.slice(
+        4
+      )}`;
+
+    field.onChange(formattedDate);
+    if (formattedDate.length === 10) {
+      const [day, month, year] = formattedDate.split("/").map(Number);
+
+      if (
+        day >= 1 &&
+        day <= 31 &&
+        month >= 1 &&
+        month <= 12 &&
+        year >= 1900 &&
+        year <= 2024
+      ) {
+        const parsedDate = new Date(year, month - 1, day);
+        setCreateOrderData((prev) => ({
+          ...prev,
+          patientData: {
+            ...prev.patientData,
+            date_of_birth: parsedDate,
+          },
+        }));
+        form.setValue("date_of_birth", parsedDate);
+      }
+    }
+  };
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -175,95 +199,16 @@ const PatientDetails = ({
                         <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full justify-between gap-4 text-left font-normal",
-                                  !field.value && "text-muted-foreground "
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>{t("pick_a_date")}</span>
-                                )}
-                                <div className="w-6 h-6 rounded-full p-1  flex justify-center items-center bg-primary text-white">
-                                  <CalendarIcon className="w-4 h-4" />
-                                </div>
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
-                            <div className="p-3">
-                              <Select
-                                onValueChange={(value) => {
-                                  const newDate = new Date(
-                                    field.value || new Date()
-                                  );
-                                  newDate.setFullYear(parseInt(value));
-                                  form.setValue("date_of_birth", newDate);
-                                }}
-                                value={
-                                  field.value
-                                    ? new Date(field.value)
-                                        .getFullYear()
-                                        .toString()
-                                    : ""
-                                }
-                              >
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select year" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {Array.from(
-                                    {
-                                      length:
-                                        new Date().getFullYear() - 1900 + 1,
-                                    },
-                                    (_, i) => (
-                                      <SelectItem
-                                        key={i}
-                                        value={(
-                                          new Date().getFullYear() - i
-                                        ).toString()}
-                                      >
-                                        {new Date().getFullYear() - i}
-                                      </SelectItem>
-                                    )
-                                  )}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div className="p-3 pt-0">
-                              <Calendar
-                                key={field.value}
-                                mode="single"
-                                selected={
-                                  field.value ? new Date(field.value) : null
-                                }
-                                onSelect={(date) => {
-                                  field.onChange(date);
-                                  setCreateOrderData((prev) => ({
-                                    ...prev,
-                                    patientData: {
-                                      ...prev.patientData,
-                                      date_of_birth: date,
-                                    },
-                                  }));
-                                }}
-                                defaultMonth={field.value}
-                                disabled={(date) =>
-                                  date > new Date() ||
-                                  date < new Date("1900-01-01")
-                                }
-                                initialFocus
-                              />
-                            </div>
-                          </PopoverContent>
-                        </Popover>
+                        <Input
+                          type="text"
+                          placeholder="dd/mm/yyyy"
+                          maxLength={10}
+                          value={field.value || ""}
+                          onChange={(e) =>
+                            handleDateInput(e, field, setCreateOrderData)
+                          }
+                          className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -362,7 +307,8 @@ const PatientDetails = ({
                     render={({ field }) => (
                       <FormItem className="w-9/12 -mt-1">
                         <FormLabel className="font-normal">
-                          {t("how_much")}<sup className="text-[13px]">*</sup>
+                          {t("how_much")}
+                          <sup className="text-[13px]">*</sup>
                         </FormLabel>
                         <FormControl>
                           <Input
@@ -413,9 +359,7 @@ const PatientDetails = ({
                                 },
                               })
                             }
-                            checked={
-                              createOrderData.patientData.isolation
-                            }
+                            checked={createOrderData.patientData.isolation}
                           />
                         </FormControl>
                         <Label
@@ -436,7 +380,8 @@ const PatientDetails = ({
                     render={({ field }) => (
                       <FormItem className="w-9/12 -mt-1">
                         <FormLabel className="font-normal">
-                          {t("which")}<sup className="text-[13px]">*</sup>
+                          {t("which")}
+                          <sup className="text-[13px]">*</sup>
                         </FormLabel>
                         <FormControl>
                           <Input

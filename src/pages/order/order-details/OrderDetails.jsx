@@ -73,11 +73,13 @@ function OrderDetails({ singleRecurring = false }) {
               <p className="font-medium mb-2 last:mb-0">
                 {t("mode_of_transportation")}
               </p>
-              <p>{data?.transportationData?.mode_of_transportation?.includes("_")
+              <p>
+                {data?.transportationData?.mode_of_transportation?.includes("_")
                   ? t(data?.transportationData?.mode_of_transportation)
                       ?.split("_")
                       .join(" ")
-                  : t(data?.transportationData?.mode_of_transportation)}</p>
+                  : t(data?.transportationData?.mode_of_transportation)}
+              </p>
             </div>
             <div>
               <p className="font-medium  mb-3">{t("transport_with")}</p>
@@ -318,24 +320,28 @@ function OrderDetails({ singleRecurring = false }) {
           </div>
 
           <Separator />
-          <div className="my-14">
-            <h5>{t("mts_detail")}</h5>
-            <div className="flex items-center gap-6 mb-6 mt-10">
-              <p>{t("additionally")}:</p>
-              <p>{t("here_is_name")}</p>
+          <div className="grid grid-cols-2 gap-6 my-14">
+            <div>
+              <h5>{t("mts_detail")}</h5>
+              <div className="flex items-center gap-6 mb-6 mt-10">
+                <p>{t("additionally")}:</p>
+                <p>{t("here_is_name")}</p>
+              </div>
+              <div className="flex items-center gap-6 mb-6">
+                <p>{t("driver_1")} :</p>
+                <p>Smith</p>
+              </div>
+              <div className="flex items-center gap-6 mb-6">
+                <p>{t("driver_2")} :</p>
+                <p>Mayur</p>
+              </div>
+              <div className="flex items-center gap-6 mb-6">
+                <p>{t("vehicle_number")} :</p>
+                <p>17</p>
+              </div>
             </div>
-            <div className="flex items-center gap-6 mb-6">
-              <p>{t("driver_1")} :</p>
-              <p>Smith</p>
-            </div>
-            <div className="flex items-center gap-6 mb-6">
-              <p>{t("driver_2")} :</p>
-              <p>Mayur</p>
-            </div>
-            <div className="flex items-center gap-6 mb-6">
-              <p>{t("vehicle_number")} :</p>
-              <p>17</p>
-            </div>
+
+            <p>Updated At: {moment(data?.updatedAT).format("DD MMMM YYYY")}</p>
           </div>
 
           <div className="flex items-center justify-center gap-6">

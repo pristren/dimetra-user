@@ -347,5 +347,6 @@
   "appointment_time": "Appointment Time",
   "contact_phone": "Contact Phone",
   "check_preview": "Check Preview",
-  "your_order_has_been_placed_successfully_thank_you_for_order": "Your order has been placed successfully! Thank you for your order"
+  "your_order_has_been_placed_successfully_thank_you_for_order": "Your order has been placed successfully! Thank you for your order",
+  "transport_type": "Transport Type"
 }
