@@ -14,6 +14,7 @@ export const GET_AN_ORDER = gql`
         address
         billing_address
         code
+        place
         internal_cost_center
         createdAt
         updatedAt

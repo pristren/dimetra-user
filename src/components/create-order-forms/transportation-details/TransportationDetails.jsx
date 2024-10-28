@@ -38,7 +38,8 @@ const TransportationDetails = ({
   transportationProgress,
 }) => {
   const { transportationData, recurringData } = createOrderData;
-
+  const [returnTime, setReturnTime] = useState("");
+  const [recurringStartTime, setRecurringStartTime] = useState("");
   const [returnJourney, setReturnJourney] = useState(
     recurringData?.free_dates_return_time ? true : false
   );
@@ -254,6 +255,32 @@ const TransportationDetails = ({
     handleFormChange("patientDetails");
   };
 
+  const formatTimeInput = (value) => {
+    const checkvalue = value.replace(/\D/g, "").slice(0, 4);
+
+    let formattedValue = checkvalue;
+    if (checkvalue.length > 2) {
+      formattedValue = `${checkvalue.slice(0, 2)}:${checkvalue.slice(2)}`;
+    }
+
+    if (checkvalue.length === 4) {
+      const hours = Math.min(parseInt(checkvalue.slice(0, 2), 10), 23);
+      const minutes = Math.min(parseInt(checkvalue.slice(2), 10), 59);
+      formattedValue = `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}`;
+    }
+
+    return formattedValue;
+  };
+
+  const handleTimeChange = (e, dataName, setValue) => {
+    const rawValue = e.target.value;
+    const formattedValue = formatTimeInput(rawValue);
+    setValue(formattedValue);
+    updateCreateRecurringOrderData(dataName, formattedValue);
+  };
+
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
@@ -448,16 +475,17 @@ const TransportationDetails = ({
                           before: new Date(),
                         }}
                       />
-                      <AppSelect
-                        items={timeOptions}
-                        placeholder="00:00"
-                        isTime={true}
-                        onValueChange={(val) =>
-                          updateCreateRecurringOrderData("start_time", val)
+                      <Input
+                        maxLength={5}
+                        value={recurringStartTime}
+                        onChange={(e) =>
+                          handleTimeChange(
+                            e,
+                            "start_time",
+                            setRecurringStartTime
+                          )
                         }
-                        defaultValue={recurringData?.start_time}
-                        isTimeSelected={true}
-                        value={recurringData?.start_time}
+                        placeholder="HH:MM"
                       />
                     </div>
                     <h3 className="text-lg font-medium  mb-5">
@@ -476,16 +504,13 @@ const TransportationDetails = ({
                           after: new Date(recurringData?.start_date),
                         }}
                       /> */}
-                      <AppSelect
-                        items={timeOptions}
-                        placeholder="00:00"
-                        defaultValue={recurringData?.return_time}
-                        isTime={true}
-                        onValueChange={(val) =>
-                          updateCreateRecurringOrderData("return_time", val)
+                      <Input
+                        maxLength={5}
+                        value={returnTime}
+                        onChange={(e) =>
+                          handleTimeChange(e, "return_time", setReturnTime)
                         }
-                        isTimeSelected={true}
-                        value={recurringData?.return_time}
+                        placeholder="HH:MM"
                       />
                     </div>
 
@@ -510,7 +535,10 @@ const TransportationDetails = ({
                             className="size-6"
                             onClick={() => handleWeekdayChange(option)}
                           />
-                          <Label className="ml-2 text-lg" htmlFor={option.value}>
+                          <Label
+                            className="ml-2 text-lg"
+                            htmlFor={option.value}
+                          >
                             {option.label}
                           </Label>
                         </div>
@@ -532,7 +560,7 @@ const TransportationDetails = ({
                                 updateCreateRecurringOrderData("ends", value);
                               }}
                               value={recurringData?.ends}
-                              className='flex items-center gap-3'
+                              className="flex items-center gap-3"
                             >
                               {durationOptions.map((option) => (
                                 <div

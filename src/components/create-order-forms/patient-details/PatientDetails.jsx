@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import { t } from "i18next";
 import toast from "react-hot-toast";
+import moment from "moment";
 
 const PatientDetails = ({
   handleFormChange,
@@ -104,7 +105,10 @@ const PatientDetails = ({
             date_of_birth: parsedDate,
           },
         }));
-        form.setValue("date_of_birth", parsedDate);
+        form.setValue(
+          "date_of_birth",
+          moment(parsedDate).format("DD MMMM YYYY")
+        );
       }
     }
   };

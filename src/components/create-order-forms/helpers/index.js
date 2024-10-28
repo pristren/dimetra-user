@@ -2,8 +2,8 @@ export const transportOptions = [
   { value: "transfer_trip", label: "transfer_trip" },
   { value: "investigation_trip", label: "investigation_trip" },
   { value: "private_trips", label: "private_trips" },
-  { value: "recurring", label: "recurring" },
   { value: "relocation", label: "relocation" },
+  { value: "recurring", label: "recurring" },
 ];
 
 export const transportModesOptions = [

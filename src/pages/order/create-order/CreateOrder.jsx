@@ -216,7 +216,7 @@ const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
       >
         {icon}
       </div>
-      {t(text)}
+      <p className="text-lg">{t(text)}</p>
     </div>
   );
 

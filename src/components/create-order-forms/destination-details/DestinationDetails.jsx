@@ -39,8 +39,8 @@ const DestinationDetails = ({
   } = createOrderData;
   const checkTrueFalse =
     createOrderData?.transportationData?.type_of_transport ===
-      "transfer_trip" ||
-    createOrderData?.transportationData?.type_of_transport === "relocation";
+      "investigation_trip" ||
+    createOrderData?.transportationData?.type_of_transport === "private_trips";
   const [isReturnJourneyHide, setIsReturnJourneyHide] =
     useState(checkTrueFalse);
   function timeStringToMinutes(timeString) {
@@ -123,7 +123,6 @@ const DestinationDetails = ({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setCreateOrderData((prev) => ({
       ...prev,
       destinationDetailsData: {
@@ -151,7 +150,6 @@ const DestinationDetails = ({
 
     return formattedValue;
   };
-
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -464,14 +462,14 @@ const DestinationDetails = ({
                       }
                     />
                     <Label htmlFor="returnJourneyCheckbox">
-                      Show Return Journey
+                      Return Journey ?
                     </Label>
                   </div>
                 )}
 
                 {/* Return Journey Section */}
                 {createOrderData?.transportationData?.type_of_transport !==
-                  "recurring" && (
+                  "recurring" && checkTrueFalse && (
                   <div
                     className={`mt-10 ${isReturnJourneyHide ? "hidden" : ""}`}
                   >

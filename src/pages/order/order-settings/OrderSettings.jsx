@@ -42,6 +42,7 @@ const OrderSettings = () => {
       address: "",
       billing_address: "",
       code: "",
+      place: "",
       internal_cost_center: "",
       profile_image: "",
     },
@@ -53,6 +54,7 @@ const OrderSettings = () => {
       address: userInfo?.address,
       billing_address: userInfo?.billing_address,
       code: userInfo?.code,
+      place: userInfo?.place,
       internal_cost_center: userInfo?.internal_cost_center,
       profile_image: userInfo?.profile_image || "",
     },
@@ -244,6 +246,10 @@ const OrderSettings = () => {
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
             <p className=" ml-3 text-gray-500 w-40">{t("code")}</p>
             <p className="font-medium lg:font-normal">{userInfo?.code}</p>
+          </div>
+          <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
+            <p className=" ml-3 text-gray-500 w-40">{t("place")}</p>
+            <p className="font-medium lg:font-normal">{userInfo?.place}</p>
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 pb-5 px-5">
             <p className=" ml-3 text-gray-500 w-40">

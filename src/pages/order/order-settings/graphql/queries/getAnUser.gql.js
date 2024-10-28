@@ -5,6 +5,7 @@ export const GET_AN_USER = gql`
     getAnUser {
       email
       code
+      place
       id
       first_name
       last_name
