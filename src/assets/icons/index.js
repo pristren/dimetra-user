@@ -28,3 +28,4 @@ export { default as GoldenStar } from "./GoldenStar.jsx";
 export { default as Calender } from "./Calender.jsx";
 export { default as Eye } from "./Eye.jsx";
 export { default as Bin } from "./Bin.jsx";
+export { default as NewsIcon } from "./NewsIcon.jsx";

@@ -350,6 +350,7 @@
   "your_order_has_been_placed_successfully_thank_you_for_order": "Your order has been placed successfully! Thank you for your order",
   "transport_type": "Transport Type",
   "which": "Which",
-  "DD/MM/YYYY": "DD/MM/YYYY",
-  "news": "News"
+  "dd_mm_yyyy": "DD/MM/YYYY",
+  "news": "News",
+  "invalid_date": "Please enter a valid date in DD/MM/YYYY format"
 }

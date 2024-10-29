@@ -212,7 +212,7 @@ const PatientDetails = ({
                       <FormControl>
                         <Input
                           type="text"
-                          placeholder="dd/mm/yyyy"
+                          placeholder={t("dd_mm_yyyy")}
                           maxLength={10}
                           name={field.name}
                           value={

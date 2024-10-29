@@ -1,7 +1,7 @@
 {
   "all_orders": "Alle Bestellungen",
   "all_order": "Alle Bestellungen",
-  "history": "Abgeschlossen/Stornos",
+  "history": "Abgeschlossen / Stornos",
   "settings": "Einstellungen",
   "sent_requests": "Gesendete Anfragen",
   "logout": "Abmelden",
@@ -340,6 +340,7 @@
   "your_order_has_been_placed_successfully_thank_you_for_order": "Ihre Bestellung wurde erfolgreich aufgegeben! Vielen Dank für Ihre Bestellung",
   "transport_type": "Transportart",
   "which": "Welche",
-  "DD/MM/YYYY": "TT/MM/JJJJ",
-  "news": "Nachrichten"
+  "dd_mm_yyyy": "TT/MM/JJJJ",
+  "news": "Nachrichten",
+  "invalid_date": "Bitte geben Sie ein gültiges Datum im Format TT/MM/JJJJ ein"
 }

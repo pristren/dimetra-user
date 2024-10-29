@@ -1,5 +1,5 @@
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { Logo, Logout } from "@/assets/icons";
+import { Logo, Logout, NewsIcon } from "@/assets/icons";
 import { CarFront, ClipboardList, MessageCircle, Settings } from "lucide-react";
 import { t } from "i18next";
 
@@ -14,7 +14,7 @@ const LeftSideNav = () => {
   };
 
   return (
-    <div className="hidden lg:block w-60 h-screen border-r text-gray-500 p-4 pt-8 sticky top-0">
+    <div className="hidden lg:block w-60 h-screen border-r text-gray-500 p-4 pt-8 sticky top-0 text-wrap">
       <Link to="/orders/all-orders">
         <Logo className="mx-auto" />
       </Link>
@@ -66,7 +66,7 @@ const LeftSideNav = () => {
             : ""
         }`}
       >
-        <MessageCircle />
+        <NewsIcon />
         <p>{t("news")}</p>
       </Link>
       <div
