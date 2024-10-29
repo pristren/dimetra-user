@@ -109,7 +109,7 @@
   "drop_off": "Drop-Off",
   "drop_off_date": "Drop-Off Date",
   "pickup_time": "Pickup Time",
-  "name_institution_drop_off": "Name / Institution",
+  "name_institution_drop_off": "Institution / Name",
   "type_name": "Type name",
   "address_drop_off": "Address",
   "type_address": "Type address",
@@ -286,7 +286,7 @@
   "type_the_employees_name": "Type the employee's name",
   "dropoff": "Drop-Off",
   "dropoff_date": "Drop-Off Date",
-  "dropoff_name": "Name / Institution",
+  "dropoff_name": "Institution / Name",
   "dropoff_street": "Street",
   "dropoff_postal_code": "Postal Code",
   "dropoff_city": "City",
@@ -348,5 +348,7 @@
   "contact_phone": "Contact Phone",
   "check_preview": "Check Preview",
   "your_order_has_been_placed_successfully_thank_you_for_order": "Your order has been placed successfully! Thank you for your order",
-  "transport_type": "Transport Type"
+  "transport_type": "Transport Type",
+  "which": "Which",
+  "DD/MM/YYYY": "DD/MM/YYYY"
 }

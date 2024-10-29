@@ -90,7 +90,7 @@
   "type_your_name": "Geben sie ihren namen ein",
   "street": "Strasse",
   "type_your_street": "Geben sie ihre strasse ein",
-  "place": "PLZ / Ort",
+  "place": "Ort",
   "type_your_place": "Geben sie ihren ort ein",
   "contact": "Kontaktperson",
   "type_your_contact_number": "Geben sie ihre kontaktnummer ein",
@@ -337,6 +337,8 @@
   "appointment_time": "Terminzeit",
   "contact_phone": "Kontakt Telefon",
   "check_preview": "Vorschau überprüfen",
-    "your_order_has_been_placed_successfully_thank_you_for_order": "Ihre Bestellung wurde erfolgreich aufgegeben! Vielen Dank für Ihre Bestellung",
-  "transport_type": "Transportart"
+  "your_order_has_been_placed_successfully_thank_you_for_order": "Ihre Bestellung wurde erfolgreich aufgegeben! Vielen Dank für Ihre Bestellung",
+  "transport_type": "Transportart",
+  "which": "Welche",
+  "DD/MM/YYYY": "TT/MM/JJJJ"
 }

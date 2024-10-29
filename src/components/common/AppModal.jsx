@@ -28,11 +28,11 @@ const AppModal = ({
         <DialogHeader>
           <DialogTitle>{dialogTitle}</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col justify-center items-center gap-5 text-black px-10 text-center tracking-wide leading-6">
+        <div className="flex justify-center items-center gap-2 text-black px-10 text-center tracking-wide leading-6">
           {icon}
           <h5 className="flex flex-col items-center gap-2">
             {isSuccess && (
-              <CircleCheck className="p-1 size-14 bg-green-400 text-white rounded-full" />
+              <CircleCheck className="size-8 text-green-40 rounded-full" />
             )}
             {t(head)}{" "}
           </h5>

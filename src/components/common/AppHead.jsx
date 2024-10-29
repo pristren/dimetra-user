@@ -16,6 +16,7 @@ import { useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
 import { t } from "i18next";
 import moment from "moment";
+import { format } from "date-fns";
 
 export default function AppHead({
   pageTitle,
@@ -75,7 +76,26 @@ export default function AppHead({
 
   return (
     <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-5 w-full mb-10">
-      <div className="flex flex-col-reverse items-center gap-3">
+      <div className="flex flex-col gap-3">
+        <div className="flex items-center justify-between w-full">
+          <h2
+            className={`text-2xl border-black flex items-center  gap-2 font-bold text-nowrap ${
+              isRecurring ? "border-r-2 pr-4" : ""
+            }`}
+          >
+            {t(pageTitle)}
+            {isDateVisible && (
+              <span className="font-normal text-[16px]">
+                {format(new Date(), "dd,MMMM, yyyy")}
+              </span>
+            )}
+          </h2>
+          {addButton.visibility && (
+            <Link to={`${addButton.url}`} className="lg:hidden">
+              <Button>{addButton.name}</Button>
+            </Link>
+          )}
+        </div>
         {isDateVisible && (
           <div className="relative">
             <Input
@@ -97,20 +117,6 @@ export default function AppHead({
             />
           </div>
         )}
-        <div className="flex items-center justify-between w-full">
-          <h2
-            className={`text-2xl border-black  font-bold text-nowrap ${
-              isRecurring ? "border-r-2 pr-4" : ""
-            }`}
-          >
-            {t(pageTitle)}
-          </h2>
-          {addButton.visibility && (
-            <Link to={`${addButton.url}`} className="lg:hidden">
-              <Button>{addButton.name}</Button>
-            </Link>
-          )}
-        </div>
 
         {isRecurring !== false && (
           <div className=" flex gap-3 items-center">

@@ -207,7 +207,11 @@ const PatientDetails = ({
                           type="text"
                           placeholder="dd/mm/yyyy"
                           maxLength={10}
-                          value={field.value || ""}
+                          value={
+                            field?.value?.length >= 10
+                              ? moment(field?.value).format("DD MMMM YYYY")
+                              : field?.value || ""
+                          }
                           onChange={(e) =>
                             handleDateInput(e, field, setCreateOrderData)
                           }
@@ -255,7 +259,7 @@ const PatientDetails = ({
                   name="patient_above_90kg"
                   render={({ field }) => (
                     <FormItem className="hidden lg:block">
-                      <FormLabel className="block mb-5 font-normal">
+                      <FormLabel className="block text-nowrap mb-5 font-normal">
                         {t("patient_above_90kg")}
                       </FormLabel>
                       <div className="flex items-center">

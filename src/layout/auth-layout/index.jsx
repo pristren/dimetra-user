@@ -7,11 +7,11 @@ import { Link } from "react-router-dom";
 export default function AuthLayout({ children, childContainer, ...props }) {
   return (
     <div className="min-h-screen md:h-screen" {...props}>
-      <nav className="flex justify-between items-center  px-4 border-b h-16">
+      <nav className="flex justify-between items-center px-10 border-b h-16">
         <Link to="/orders/all-orders">
           <Logo />
         </Link>
-        {/* <Language /> */}
+        <Language />
       </nav>
       <div
         className={cn(

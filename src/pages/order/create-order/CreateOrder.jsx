@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dialog";
 import { createOrderDefaultState } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
-import { useSelector } from "react-redux";
 import { calculateFormProgress } from "@/utils";
 import { useParams } from "react-router-dom";
 import { GET_AN_ORDER } from "../edit-order/graphql/queries/getAnOrder.gql";
@@ -31,7 +30,6 @@ const CreateOrder = () => {
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
   const [showPreview, setShowPreview] = useState(false);
-  const { userInfo } = useSelector((state) => state.user);
   const { id } = useParams();
   const [createOrderData, setCreateOrderData] = useState(
     createOrderDefaultState
@@ -134,22 +132,6 @@ const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
       prevCreateOrderDataRef.current = createOrderData;
     }
   }, [createOrderData]);
-
-  useEffect(() => {
-    if (userInfo) {
-      setCreateOrderData((prevState) => ({
-        ...prevState,
-        destinationDetailsData: {
-          ...prevState.destinationDetailsData,
-          pick_up_name: `${userInfo?.first_name} ${userInfo?.last_name}`,
-          pick_up_address: userInfo?.address,
-          pick_up_postal_code: Number(userInfo?.code),
-          pick_up_city: userInfo?.billing_address,
-          pick_up_country: userInfo?.address,
-        },
-      }));
-    }
-  }, [userInfo]);
 
   useEffect(() => {
     const storedData = localStorage.getItem("createOrderData");

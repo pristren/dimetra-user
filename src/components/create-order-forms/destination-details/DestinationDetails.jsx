@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@/components/ui/DatePicker";
-import { calculateFormProgress } from "@/utils";
+import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import moment from "moment";
 import { t } from "i18next";
@@ -47,6 +47,23 @@ const DestinationDetails = ({
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
   }
+  const { userInfo } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (userInfo) {
+      setCreateOrderData((prevState) => ({
+        ...prevState,
+        destinationDetailsData: {
+          ...prevState.destinationDetailsData,
+          pick_up_name: `${userInfo?.first_name} ${userInfo?.last_name}`,
+          pick_up_address: userInfo?.address,
+          pick_up_postal_code: Number(userInfo?.code),
+          pick_up_city: userInfo?.billing_address,
+          pick_up_country: userInfo?.address,
+        },
+      }));
+    }
+  }, [userInfo]);
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -462,82 +479,83 @@ const DestinationDetails = ({
                       }
                     />
                     <Label htmlFor="returnJourneyCheckbox">
-                      Return Journey ?
+                      {t("return_journey")} ? (optional)
                     </Label>
                   </div>
                 )}
 
                 {/* Return Journey Section */}
                 {createOrderData?.transportationData?.type_of_transport !==
-                  "recurring" && checkTrueFalse && (
-                  <div
-                    className={`mt-10 ${isReturnJourneyHide ? "hidden" : ""}`}
-                  >
-                    <h6 className="text-xl font-semibold mb-4">
-                      {t("return_journey")}
-                    </h6>
-                    <div>
-                      <FormField
-                        control={form.control}
-                        name="return_date"
-                        render={({ field }) => (
-                          <FormItem className="mb-7">
-                            <FormLabel className="mb-2 font-normal">
-                              {t("return_date")}
-                            </FormLabel>
-                            <FormControl>
-                              <DatePicker
-                                date={return_date}
-                                setDate={(value) =>
-                                  setCreateOrderData((prev) => ({
-                                    ...prev,
-                                    destinationDetailsData: {
-                                      ...prev.destinationDetailsData,
-                                      return_date: value,
-                                    },
-                                  }))
-                                }
-                                disabled={{
-                                  before: drop_off_pick_up_date
-                                    ? new Date(drop_off_pick_up_date)
-                                    : new Date(),
-                                }}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                  "recurring" &&
+                  checkTrueFalse && (
+                    <div
+                      className={`mt-10 ${isReturnJourneyHide ? "hidden" : ""}`}
+                    >
+                      <h6 className="text-xl font-semibold mb-4">
+                        {t("return_journey")}
+                      </h6>
+                      <div>
+                        <FormField
+                          control={form.control}
+                          name="return_date"
+                          render={({ field }) => (
+                            <FormItem className="mb-7">
+                              <FormLabel className="mb-2 font-normal">
+                                {t("return_date")}
+                              </FormLabel>
+                              <FormControl>
+                                <DatePicker
+                                  date={return_date}
+                                  setDate={(value) =>
+                                    setCreateOrderData((prev) => ({
+                                      ...prev,
+                                      destinationDetailsData: {
+                                        ...prev.destinationDetailsData,
+                                        return_date: value,
+                                      },
+                                    }))
+                                  }
+                                  disabled={{
+                                    before: drop_off_pick_up_date
+                                      ? new Date(drop_off_pick_up_date)
+                                      : new Date(),
+                                  }}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
-                      <FormField
-                        control={form.control}
-                        name="return_approx_time"
-                        render={({ field }) => (
-                          <FormItem className="mb-7">
-                            <FormLabel className="mb-2 font-normal">
-                              {t("return_approx_time")}
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                {...field}
-                                maxLength={5}
-                                onChange={(e) => {
-                                  const rawValue = e.target.value;
-                                  const formattedValue =
-                                    formatTimeInput(rawValue);
-                                  field.onChange(formattedValue);
-                                  handleInputChange(e);
-                                }}
-                                placeholder="HH:MM"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                        <FormField
+                          control={form.control}
+                          name="return_approx_time"
+                          render={({ field }) => (
+                            <FormItem className="mb-7">
+                              <FormLabel className="mb-2 font-normal">
+                                {t("return_approx_time")}
+                              </FormLabel>
+                              <FormControl>
+                                <Input
+                                  {...field}
+                                  maxLength={5}
+                                  onChange={(e) => {
+                                    const rawValue = e.target.value;
+                                    const formattedValue =
+                                      formatTimeInput(rawValue);
+                                    field.onChange(formattedValue);
+                                    handleInputChange(e);
+                                  }}
+                                  placeholder="HH:MM"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
               </div>
 
               <div className="pl-5">

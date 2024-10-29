@@ -647,7 +647,7 @@ const TransportationDetails = ({
                         className="text-base font-medium"
                         htmlFor="return_journey"
                       >
-                        {t("return_journey")} ?
+                        {t("return_journey")} ? (optional)
                       </Label>
                     </div>
                     {returnJourney && (
