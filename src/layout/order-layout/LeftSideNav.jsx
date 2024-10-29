@@ -58,6 +58,17 @@ const LeftSideNav = () => {
         <MessageCircle />
         <p>{t("sent_requests")}</p>
       </Link>
+      <Link
+        to="/orders/news"
+        className={`flex items-center gap-2 mb-4 px-2 py-2 cursor-pointer ${
+          isActive("/orders/sent-requests")
+            ? "bg-primary text-white  rounded-md"
+            : ""
+        }`}
+      >
+        <MessageCircle />
+        <p>{t("news")}</p>
+      </Link>
       <div
         onClick={handleLogout}
         className="flex justify-center text-lg items-center gap-2 absolute bottom-5 cursor-pointer px-2 py-2"

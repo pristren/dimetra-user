@@ -25,3 +25,6 @@ export { default as WarningImage } from "./WarningImage.jsx";
 export { default as Search } from "./Search.jsx";
 export { default as Notification } from "./Notification.jsx";
 export { default as GoldenStar } from "./GoldenStar.jsx";
+export { default as Calender } from "./Calender.jsx";
+export { default as Eye } from "./Eye.jsx";
+export { default as Bin } from "./Bin.jsx";
