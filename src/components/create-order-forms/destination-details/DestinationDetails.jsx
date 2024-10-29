@@ -22,6 +22,7 @@ import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { formatTimeInput } from "@/utils";
 
 const DestinationDetails = ({
   handleFormChange,
@@ -148,25 +149,6 @@ const DestinationDetails = ({
       },
     }));
   };
-  const formatTimeInput = (value) => {
-    const sanitizedValue = value.replace(/\D/g, "").slice(0, 4);
-
-    let formattedValue = sanitizedValue;
-    if (sanitizedValue.length > 2) {
-      formattedValue =
-        sanitizedValue.slice(0, 2) + ":" + sanitizedValue.slice(2);
-    }
-
-    if (sanitizedValue.length === 4) {
-      const hours = Math.min(parseInt(sanitizedValue.slice(0, 2), 10), 23);
-      const minutes = Math.min(parseInt(sanitizedValue.slice(2), 10), 59);
-      formattedValue = `${hours.toString().padStart(2, "0")}:${minutes
-        .toString()
-        .padStart(2, "0")}`;
-    }
-
-    return formattedValue;
-  };
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -189,7 +171,7 @@ const DestinationDetails = ({
                         {t("dropoff_date")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <DatePicker
+                      <DatePicker
                           date={
                             drop_off_pick_up_date
                               ? new Date(drop_off_pick_up_date)
@@ -504,7 +486,7 @@ const DestinationDetails = ({
                                 {t("return_date")}
                               </FormLabel>
                               <FormControl>
-                                <DatePicker
+                              <DatePicker
                                   date={return_date}
                                   setDate={(value) =>
                                     setCreateOrderData((prev) => ({

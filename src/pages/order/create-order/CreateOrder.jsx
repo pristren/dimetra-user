@@ -87,38 +87,37 @@ const CreateOrder = () => {
     drop_off_phone,
   ];
 
-
-function removeTypename(obj) {
-  if (Array.isArray(obj)) {
-    return obj.map(removeTypename);
-  } else if (obj !== null && typeof obj === 'object') {
-    const newObj = {};
-    for (const key in obj) {
-      if (key !== '__typename') {
-        newObj[key] = removeTypename(obj[key]);
+  function removeTypename(obj) {
+    if (Array.isArray(obj)) {
+      return obj.map(removeTypename);
+    } else if (obj !== null && typeof obj === "object") {
+      const newObj = {};
+      for (const key in obj) {
+        if (key !== "__typename") {
+          newObj[key] = removeTypename(obj[key]);
+        }
       }
+      return newObj;
     }
-    return newObj;
+    return obj;
   }
-  return obj;
-}
 
-const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
-  GET_AN_ORDER,
-  {
-    variables: { queryData: { id: id } },
-    errorPolicy: "all",
-    fetchPolicy: "no-cache",
-    onCompleted: (response) => {
-      // Remove __typename before setting the data
-      const cleanedData = removeTypename(response.getAnOrder);
-      setCreateOrderData(cleanedData);
-    },
-    onError: (error) => {
-      console.error({ error });
-    },
-  }
-);
+  const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
+    GET_AN_ORDER,
+    {
+      variables: { queryData: { id: id } },
+      errorPolicy: "all",
+      fetchPolicy: "no-cache",
+      onCompleted: (response) => {
+        // Remove __typename before setting the data
+        const cleanedData = removeTypename(response.getAnOrder);
+        setCreateOrderData(cleanedData);
+      },
+      onError: (error) => {
+        console.error({ error });
+      },
+    }
+  );
 
   useEffect(() => {
     if (id) {
@@ -275,7 +274,44 @@ const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
 
           <div className="lg:w-[70%] px-3 lg:px-0">
             {getAnOrderLoading ? (
-              <Loader className="animate-spin flex items-center justify-center w-full size-14" />
+              <div className="flex items-center justify-center min-h-96">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="xMidYMid"
+                  width="20"
+                  height="20"
+                  style={{
+                    shapeRendering: "auto",
+                    display: "block",
+                    background: "rgba(255, 255, 255, 0)",
+                  }}
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <g>
+                    <circle
+                      strokeDasharray="164.93361431346415 56.97787143782138"
+                      r="35"
+                      strokeWidth="10"
+                      stroke="#145374"
+                      fill="none"
+                      cy="50"
+                      cx="50"
+                    >
+                      <animateTransform
+                        keyTimes="0;1"
+                        values="0 50 50;360 50 50"
+                        dur="1s"
+                        repeatCount="indefinite"
+                        type="rotate"
+                        attributeName="transform"
+                      ></animateTransform>
+                    </circle>
+                    <g></g>
+                  </g>
+                </svg>
+                <p>Loading...</p>
+              </div>
             ) : currentStep === "transportDetails" ? (
               <TransportationDetails {...props} />
             ) : currentStep === "patientDetails" ? (

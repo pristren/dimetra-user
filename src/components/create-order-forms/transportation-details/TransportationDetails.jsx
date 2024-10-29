@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable react/prop-types */
 import { z } from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -22,10 +23,9 @@ import {
   transportWithOptions,
   weekdaysOptions,
   durationOptions,
-  timeOptions,
 } from "@/components/create-order-forms/helpers";
 import { useEffect, useState } from "react";
-import { calculateFormProgress } from "@/utils";
+import { calculateFormProgress, formatTimeInput } from "@/utils";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
@@ -38,8 +38,6 @@ const TransportationDetails = ({
   transportationProgress,
 }) => {
   const { transportationData, recurringData } = createOrderData;
-  const [returnTime, setReturnTime] = useState("");
-  const [recurringStartTime, setRecurringStartTime] = useState("");
   const [returnJourney, setReturnJourney] = useState(
     recurringData?.free_dates_return_time ? true : false
   );
@@ -139,15 +137,34 @@ const TransportationDetails = ({
   };
 
   const handleCheckBox = (type, value) => {
-    setCreateOrderData((prev) => ({
-      ...prev,
-      transportationData: {
-        ...prev.transportationData,
-        [type]: prev.transportationData?.[type]?.includes(value)
+    setCreateOrderData((prev) => {
+      const isNoneOfThatSelected = value === "none_of_that";
+      const isValueAlreadySelected =
+        prev.transportationData?.[type]?.includes(value);
+
+      let updatedTransportWith;
+
+      if (isNoneOfThatSelected) {
+        updatedTransportWith = isValueAlreadySelected ? [] : [value];
+      } else {
+        updatedTransportWith = isValueAlreadySelected
           ? prev.transportationData[type].filter((item) => item !== value)
-          : [...(prev.transportationData?.[type] || []), value],
-      },
-    }));
+          : [
+              ...(prev.transportationData?.[type]?.filter(
+                (item) => item !== "none_of_that"
+              ) || []),
+              value,
+            ];
+      }
+
+      return {
+        ...prev,
+        transportationData: {
+          ...prev.transportationData,
+          [type]: updatedTransportWith,
+        },
+      };
+    });
   };
 
   const calculateMonthlyOccurrences = (weekdays) => {
@@ -255,29 +272,9 @@ const TransportationDetails = ({
     handleFormChange("patientDetails");
   };
 
-  const formatTimeInput = (value) => {
-    const checkvalue = value.replace(/\D/g, "").slice(0, 4);
-
-    let formattedValue = checkvalue;
-    if (checkvalue.length > 2) {
-      formattedValue = `${checkvalue.slice(0, 2)}:${checkvalue.slice(2)}`;
-    }
-
-    if (checkvalue.length === 4) {
-      const hours = Math.min(parseInt(checkvalue.slice(0, 2), 10), 23);
-      const minutes = Math.min(parseInt(checkvalue.slice(2), 10), 59);
-      formattedValue = `${hours.toString().padStart(2, "0")}:${minutes
-        .toString()
-        .padStart(2, "0")}`;
-    }
-
-    return formattedValue;
-  };
-
-  const handleTimeChange = (e, dataName, setValue) => {
+  const handleTimeChange = (e, dataName) => {
     const rawValue = e.target.value;
     const formattedValue = formatTimeInput(rawValue);
-    setValue(formattedValue);
     updateCreateRecurringOrderData(dataName, formattedValue);
   };
 
@@ -477,14 +474,8 @@ const TransportationDetails = ({
                       />
                       <Input
                         maxLength={5}
-                        value={recurringStartTime}
-                        onChange={(e) =>
-                          handleTimeChange(
-                            e,
-                            "start_time",
-                            setRecurringStartTime
-                          )
-                        }
+                        value={recurringData?.start_time}
+                        onChange={(e) => handleTimeChange(e, "start_time")}
                         placeholder="HH:MM"
                       />
                     </div>
@@ -506,10 +497,8 @@ const TransportationDetails = ({
                       /> */}
                       <Input
                         maxLength={5}
-                        value={returnTime}
-                        onChange={(e) =>
-                          handleTimeChange(e, "return_time", setReturnTime)
-                        }
+                        value={recurringData?.return_time}
+                        onChange={(e) => handleTimeChange(e, "return_time")}
                         placeholder="HH:MM"
                       />
                     </div>
@@ -582,13 +571,6 @@ const TransportationDetails = ({
                         </FormItem>
                       )}
                     />
-
-                    <h2 className="text-lg font-semibold mt-5">
-                      {t("summary_monthly_on_day")}{" "}
-                      {calculateMonthlyOccurrences(
-                        recurringData?.multiple_week_days
-                      )}
-                    </h2>
                   </div>
                 ) : recurringData?.recurring_type === "free" ? (
                   <div className="">
@@ -615,19 +597,13 @@ const TransportationDetails = ({
                           }}
                           max={60}
                         />
-                        <AppSelect
-                          items={timeOptions}
-                          placeholder="Select a time"
-                          isTime={true}
-                          onValueChange={(val) =>
-                            updateCreateRecurringOrderData(
-                              "free_dates_start_time",
-                              val
-                            )
-                          }
-                          defaultValue={recurringData?.free_dates_start_time}
-                          isTimeSelected={true}
+                        <Input
+                          maxLength={5}
                           value={recurringData?.free_dates_start_time}
+                          onChange={(e) =>
+                            handleTimeChange(e, "free_dates_start_time")
+                          }
+                          placeholder="HH:MM"
                         />
                       </div>
                     </div>
@@ -667,19 +643,13 @@ const TransportationDetails = ({
                             }
                             disabled
                           />
-                          <AppSelect
-                            items={timeOptions}
-                            placeholder="Select a time"
-                            isTime={true}
-                            onValueChange={(val) =>
-                              updateCreateRecurringOrderData(
-                                "free_dates_return_time",
-                                val
-                              )
-                            }
-                            defaultValue={recurringData?.free_dates_return_time}
-                            isTimeSelected={true}
+                          <Input
+                            maxLength={5}
                             value={recurringData?.free_dates_return_time}
+                            onChange={(e) =>
+                              handleTimeChange(e, "free_dates_return_time")
+                            }
+                            placeholder="HH:MM"
                           />
                         </div>
                       </div>

@@ -74,18 +74,22 @@ const PatientDetails = ({
     handleFormChange("destinationDetails");
   };
 
-  const handleDateInput = (e, field, setCreateOrderData) => {
+  const handleDateInput = (e, field, setCreateOrderData, form, path) => {
     let input = e.target.value.replace(/\D/g, "");
     let formattedDate = input;
+    const fieldName = e.target.name;
 
-    if (input.length > 2)
+    if (input.length > 2) {
       formattedDate = `${input.slice(0, 2)}/${input.slice(2)}`;
-    if (input.length > 4)
+    }
+    if (input.length > 4) {
       formattedDate = `${input.slice(0, 2)}/${input.slice(2, 4)}/${input.slice(
         4
       )}`;
+    }
 
-    field.onChange(formattedDate);
+    field?.onChange(formattedDate);
+
     if (formattedDate.length === 10) {
       const [day, month, year] = formattedDate.split("/").map(Number);
 
@@ -98,16 +102,19 @@ const PatientDetails = ({
         year <= 2024
       ) {
         const parsedDate = new Date(year, month - 1, day);
+
         setCreateOrderData((prev) => ({
           ...prev,
-          patientData: {
-            ...prev.patientData,
-            date_of_birth: parsedDate,
+          [path]: {
+            ...prev[path],
+            [fieldName]: parsedDate,
           },
         }));
-        form.setValue(
-          "date_of_birth",
-          moment(parsedDate).format("DD MMMM YYYY")
+
+        form.setValue(fieldName, moment(parsedDate).format("DD/MM/YYYY"));
+      } else {
+        toast.error(
+          "Invalid date. Please enter a valid date between 1900 and 2024."
         );
       }
     }
@@ -207,13 +214,20 @@ const PatientDetails = ({
                           type="text"
                           placeholder="dd/mm/yyyy"
                           maxLength={10}
+                          name={field.name}
                           value={
-                            field?.value?.length >= 10
-                              ? moment(field?.value).format("DD MMMM YYYY")
-                              : field?.value || ""
+                            field?.value?.includes("T18:00:00.000Z")
+                              ? moment(field.value).format("DD/MM/YYYY")
+                              : field.value || ""
                           }
                           onChange={(e) =>
-                            handleDateInput(e, field, setCreateOrderData)
+                            handleDateInput(
+                              e,
+                              field,
+                              setCreateOrderData,
+                              form,
+                              "patientData"
+                            )
                           }
                           className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
                         />

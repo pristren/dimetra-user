@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { formatTimeInput } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { t } from "i18next";
 import { useEffect } from "react";
@@ -101,26 +102,6 @@ const EditDestinationDetails = ({
         [name]: name.includes("postal_code") ? Number(value) : value, // Convert postal codes to numbers
       },
     }));
-  };
-
-  const formatTimeInput = (value) => {
-    const sanitizedValue = value.replace(/\D/g, "").slice(0, 4);
-
-    let formattedValue = sanitizedValue;
-    if (sanitizedValue.length > 2) {
-      formattedValue =
-        sanitizedValue.slice(0, 2) + ":" + sanitizedValue.slice(2);
-    }
-
-    if (sanitizedValue.length === 4) {
-      const hours = Math.min(parseInt(sanitizedValue.slice(0, 2), 10), 23);
-      const minutes = Math.min(parseInt(sanitizedValue.slice(2), 10), 59);
-      formattedValue = `${hours.toString().padStart(2, "0")}:${minutes
-        .toString()
-        .padStart(2, "0")}`;
-    }
-
-    return formattedValue;
   };
 
   useEffect(() => {
