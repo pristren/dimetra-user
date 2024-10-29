@@ -20,7 +20,7 @@ import EditOrder from "@/pages/order/edit-order/EditOrder";
 import VerifyEmailSent from "@/pages/authentication/verify-email-sent/VerifyEmailSent";
 import VerifyEmail from "@/pages/authentication/verify-email/VerifyEmail";
 import EditRecurringOrder from "@/pages/order/edit-recurring-orders/EditRecurringOrder";
-import News from "./pages/order/news/News";
+import News from "@/pages/order/news/News";
 
 function App() {
   axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
