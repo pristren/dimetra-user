@@ -43,6 +43,14 @@ function App() {
           </PrivateRoute>
         }
       />
+      <Route
+        path="/recreate-order/:id"
+        element={
+          <PrivateRoute>
+            <CreateOrder />
+          </PrivateRoute>
+        }
+      />
 
       <Route
         path="/orders"

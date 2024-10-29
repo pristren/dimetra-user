@@ -33,6 +33,7 @@ const formSchema = z
     address: z.string().min(1, { message: "Address is required" }),
     billing_address: z.string().optional(),
     code: z.string().min(1, { message: "Code is required" }),
+    place: z.string().min(1, { message: "Code is required" }),
     internal_cost_center: z.string().optional(),
     password: z
       .string()
@@ -61,6 +62,7 @@ const RegisterForm = () => {
       address: "",
       billing_address: "",
       code: "",
+      place: "",
       internal_cost_center: "",
       password: "",
       confirmPassword: "",

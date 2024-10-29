@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { formatTimeInput } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { t } from "i18next";
 import { useEffect } from "react";
@@ -30,10 +31,11 @@ const EditDestinationDetails = ({
     destinationDetailsData: {
       pick_up_name = "",
       pick_up_address = "",
-      pick_up_postal_code = "",
+      pick_up_postal_code = 0,
       pick_up_city = "",
       pick_up_country = "",
       pick_up_employee_name = "",
+      pickup_phone = "",
       drop_off_pick_up_time = "",
       drop_off_pick_up_date = "",
       drop_off_name = "",
@@ -41,10 +43,8 @@ const EditDestinationDetails = ({
       drop_off_postal_code = "",
       drop_off_city = "",
       drop_off_country = "",
-      drop_off_phone = "",
       return_day_letter = "",
       return_approx_time = "",
-      return_floor = "",
     } = {},
   } = editOrderData;
   const form_schema = z.object({
@@ -52,10 +52,8 @@ const EditDestinationDetails = ({
     pick_up_address: z.string().min(1, t("address_required")),
     pick_up_postal_code: z.number().min(1, t("postal_code_required")),
     pick_up_city: z.string().min(1, t("city_required")),
-    pick_up_country: z.string().min(1, t("country_required")),
-    pick_up_employee_name: z
-      .string()
-      .min(1, t("employee_name_required")),
+    pick_up_employee_name: z.string().min(1, t("employee_name_required")),
+    pickup_phone: z.string().min(1, t("pickup_phone")),
 
     drop_off_date: z.string().min(1, t("drop_off_date_required")),
     drop_off_pick_up_time: z.string().min(1, t("pick_up_time_required")),
@@ -64,13 +62,11 @@ const EditDestinationDetails = ({
     drop_off_address: z.string().min(1, t("drop_off_address_required")),
     drop_off_city: z.string().min(1, t("drop_off_city_required")),
     drop_off_country: z.string().min(1, t("drop_off_country_required")),
-    drop_off_phone: z.string().min(1, t("drop_off_phone_required")),
     drop_off_postal_code: z.number().min(1, t("drop_off_postal_code_required")),
     return_date: z.string().min(1, t("return_date_required")),
     return_day_letter: z.string().min(1, t("day_letter_required")),
     return_approx_time: z.string().min(1, t("approx_time_required")),
-    return_floor: z.string().optional(),
-});
+  });
 
   const form = useForm({
     resolver: zodResolver(form_schema),
@@ -81,6 +77,7 @@ const EditDestinationDetails = ({
       pick_up_city,
       pick_up_country,
       pick_up_employee_name,
+      pickup_phone,
       dropDate,
       drop_off_pick_up_time,
       drop_off_pick_up_date,
@@ -89,11 +86,9 @@ const EditDestinationDetails = ({
       drop_off_postal_code: Number(drop_off_postal_code), // Convert to number
       drop_off_city,
       drop_off_country,
-      drop_off_phone,
       returnDate,
       return_day_letter,
       return_approx_time,
-      return_floor,
     },
   });
   const { formState } = form;
@@ -112,15 +107,7 @@ const EditDestinationDetails = ({
   useEffect(() => {
     form.reset(editOrderData.destinationDetailsData);
   }, [editOrderData.destinationDetailsData, form]);
-  const updateDestinationData = (key, value) => {
-    setEditOrderData((prev) => ({
-      ...prev,
-      destinationDetailsData: {
-        ...prev.destinationDetailsData,
-        [key]: value,
-      },
-    }));
-  };
+
   return (
     <Card className="p-6 border-none rounded-none">
       <h4 className="px-3">{t("destination_details")}</h4>
@@ -248,7 +235,7 @@ const EditDestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
-                        {t("country")} <sup className="text-[13px]">*</sup>
+                        {t("country")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -323,27 +310,31 @@ const EditDestinationDetails = ({
                 />
 
                 {/* Drop-Off Pickup Time */}
+
                 <FormField
                   control={form.control}
                   name="drop_off_pick_up_time"
-                  render={() => (
+                  render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <AppSelect
-                          items={timeOptions}
-                          placeholder="00:00"
-                          onValueChange={(value) =>
-                            updateDestinationData(
-                              "drop_off_pick_up_time",
-                              value
-                            )
-                          }
-                          isTimeSelected={true}
-                          value={drop_off_pick_up_time}
-                          className="cursor-pointer"
+                        <Input
+                          {...field}
+                          maxLength={5}
+                          onChange={(e) => {
+                            const rawValue = e.target.value;
+                            const formattedValue = formatTimeInput(rawValue);
+                            handleInputChange({
+                              target: {
+                                name: field.name,
+                                value: formattedValue,
+                              },
+                            });
+                            field.onChange(formattedValue);
+                          }}
+                          placeholder="HH:MM"
                         />
                       </FormControl>
                       <FormMessage />
@@ -495,7 +486,7 @@ const EditDestinationDetails = ({
                   render={({ field }) => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
-                        {t("phone")} <sup className="text-[13px]">*</sup>
+                        {t("phone")}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -542,44 +533,27 @@ const EditDestinationDetails = ({
                   <FormField
                     control={form.control}
                     name="return_approx_time"
-                    render={() => (
+                    render={({ field }) => (
                       <FormItem className="mb-7">
                         <FormLabel className="mb-2">
                           {t("approx_time")}
                         </FormLabel>
                         <FormControl>
-                          <AppSelect
-                            items={timeOptions}
-                            placeholder="00:00"
-                            isTime={true}
-                            onValueChange={(value) =>
-                              updateDestinationData("return_approx_time", value)
-                            }
-                            value={return_approx_time}
-                            isTimeSelected={true}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="return_floor"
-                    render={({ field }) => (
-                      <FormItem className="mb-7">
-                        <FormLabel className="mb-2">
-                          {t("floor_department")}
-                        </FormLabel>
-                        <FormControl>
                           <Input
-                            placeholder={t("floor_number_optional")}
                             {...field}
+                            maxLength={5}
                             onChange={(e) => {
-                              field.onChange(e);
-                              handleInputChange(e);
+                              const rawValue = e.target.value;
+                              const formattedValue = formatTimeInput(rawValue);
+                              handleInputChange({
+                                target: {
+                                  name: field.name,
+                                  value: formattedValue,
+                                },
+                              });
+                              field.onChange(formattedValue);
                             }}
+                            placeholder="HH:MM"
                           />
                         </FormControl>
                         <FormMessage />

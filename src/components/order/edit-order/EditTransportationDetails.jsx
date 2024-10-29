@@ -30,8 +30,8 @@ const EditTransportationDetails = ({
   const form_schema = z.object({
     type_of_transport: z.string().min(1, "Transport type is required"),
     mode_of_transportation: z
-      .array(z.string())
-      .nonempty("At least one mode must be selected"),
+      .string()
+      .min("At least one mode must be selected"),
     transport_with: z
       .array(z.string())
       .nonempty("At least one transport with option must be selected"),
@@ -47,7 +47,7 @@ const EditTransportationDetails = ({
     resolver: zodResolver(form_schema),
     defaultValues: {
       type_of_transport: transportationData?.type_of_transport || "",
-      mode_of_transportation: transportationData?.mode_of_transportation || [],
+      mode_of_transportation: transportationData?.mode_of_transportation || "",
       transport_with: transportationData?.transport_with || [],
       duration: transportationData?.ends || "",
       start_date: startDate || null,
@@ -128,30 +128,57 @@ const EditTransportationDetails = ({
               <div className="pr-5">
                 <p className="mb-4 font-semibold">
                   {t("mode_of_transportation")}
-                  <span className="text-[15px]">({t("multiple_selection")})</span>
+                  <span className="text-[15px]">
+                    ({t("multiple_selection")})
+                  </span>
                 </p>
-                {transportModesOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-4">
-                    <Checkbox
-                      id={option.value}
-                      checked={transportationData?.mode_of_transportation?.includes(
-                        option.value
-                      )}
-                      onClick={() =>
-                        handleCheckBox("mode_of_transportation", option.value)
-                      }
-                    />
-                    <Label className="ml-2" htmlFor={option.value}>
-                      {t(option.label)}
-                    </Label>
-                  </div>
-                ))}
+                <FormField
+                  control={form.control}
+                  name="mode_of_transportation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroup
+                          value={transportationData?.mode_of_transportation}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            updateEditOrderData(
+                              "mode_of_transportation",
+                              value
+                            );
+                          }}
+                        >
+                          {transportModesOptions.map((option) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center space-x-2 mb-2"
+                            >
+                              <RadioGroupItem
+                                value={option.value}
+                                id={option.value}
+                              />
+                              <Label
+                                htmlFor={option.value}
+                                className="font-normal text-[16px]"
+                              >
+                                {t(option.label)}
+                              </Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               <div>
                 <p className="mb-4 font-semibold">
                   {t("transport_with")}
-                  <span className="text-[15px]">({t("multiple_selection")})</span>
+                  <span className="text-[15px]">
+                    ({t("multiple_selection")})
+                  </span>
                 </p>
                 {transportWithOptions.map((option) => (
                   <div key={option.value} className="flex items-center mb-4">

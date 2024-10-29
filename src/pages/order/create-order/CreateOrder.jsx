@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from "react";
-import { Pencil, Send, Truck, User } from "lucide-react";
+import { Loader, Pencil, Send, Truck, User } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import BillingDetails from "@/components/create-order-forms/billing-details/BillingDetails";
 import DestinationDetails from "@/components/create-order-forms/destination-details/DestinationDetails";
@@ -18,6 +18,10 @@ import {
 } from "@/components/ui/dialog";
 import { createOrderDefaultState } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
+import { calculateFormProgress } from "@/utils";
+import { useParams } from "react-router-dom";
+import { GET_AN_ORDER } from "../edit-order/graphql/queries/getAnOrder.gql";
+import { useLazyQuery } from "@apollo/client";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -26,11 +30,100 @@ const CreateOrder = () => {
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
   const [showPreview, setShowPreview] = useState(false);
+  const { id } = useParams();
   const [createOrderData, setCreateOrderData] = useState(
     createOrderDefaultState
   );
-
+  const { patientData } = createOrderData;
   const prevCreateOrderDataRef = useRef(createOrderData);
+
+  const {
+    destinationDetailsData: {
+      pick_up_name,
+      pick_up_address,
+      pick_up_postal_code,
+      pick_up_city,
+      pick_up_country,
+      pick_up_employee_name = "",
+      drop_off_pick_up_time = "",
+      drop_off_name = "",
+      drop_off_address,
+      drop_off_postal_code,
+      drop_off_city = "",
+      drop_off_country = "",
+      drop_off_phone = "",
+      pickup_phone = "",
+      drop_off_pick_up_date,
+    } = {},
+  } = createOrderData;
+
+  const fieldsFilled = [
+    pick_up_name,
+    pick_up_address,
+    pick_up_postal_code,
+    pick_up_city,
+    pick_up_employee_name,
+    drop_off_pick_up_time,
+    drop_off_name,
+    drop_off_address,
+    drop_off_postal_code,
+    drop_off_city,
+    pickup_phone,
+    drop_off_pick_up_date,
+  ];
+
+  const fieldsFilledRecurring = [
+    pick_up_name,
+    pick_up_address,
+    pick_up_postal_code,
+    pick_up_city,
+    pick_up_country,
+    pick_up_employee_name,
+    drop_off_name,
+    drop_off_address,
+    drop_off_postal_code,
+    drop_off_city,
+    drop_off_country,
+    drop_off_phone,
+  ];
+
+  function removeTypename(obj) {
+    if (Array.isArray(obj)) {
+      return obj.map(removeTypename);
+    } else if (obj !== null && typeof obj === "object") {
+      const newObj = {};
+      for (const key in obj) {
+        if (key !== "__typename") {
+          newObj[key] = removeTypename(obj[key]);
+        }
+      }
+      return newObj;
+    }
+    return obj;
+  }
+
+  const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
+    GET_AN_ORDER,
+    {
+      variables: { queryData: { id: id } },
+      errorPolicy: "all",
+      fetchPolicy: "no-cache",
+      onCompleted: (response) => {
+        // Remove __typename before setting the data
+        const cleanedData = removeTypename(response.getAnOrder);
+        setCreateOrderData(cleanedData);
+      },
+      onError: (error) => {
+        console.error({ error });
+      },
+    }
+  );
+
+  useEffect(() => {
+    if (id) {
+      getAnOrder();
+    }
+  }, [id]);
 
   useEffect(() => {
     if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
@@ -47,6 +140,37 @@ const CreateOrder = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (
+      createOrderData.transportationData?.type_of_transport ===
+      "collection_order"
+    ) {
+      const fieldsFilled = [
+        patientData.name,
+        patientData.surname,
+        patientData.area_room,
+      ];
+      setPatientProgress(calculateFormProgress(fieldsFilled));
+    } else {
+      const fieldsFilled = [
+        patientData.name,
+        patientData.surname,
+        patientData.date_of_birth,
+        patientData.area_room,
+      ];
+      setPatientProgress(calculateFormProgress(fieldsFilled));
+    }
+  }, [patientData, setPatientProgress]);
+
+  useEffect(() => {
+    if (
+      createOrderData?.transportationData?.type_of_transport !== "recurring"
+    ) {
+      setDestinationProgress(calculateFormProgress(fieldsFilled));
+    } else {
+      setDestinationProgress(calculateFormProgress(fieldsFilledRecurring));
+    }
+  }, [...fieldsFilled]);
   const handleFormChange = (step) => {
     setCurrentStep(step);
   };
@@ -73,7 +197,7 @@ const CreateOrder = () => {
       >
         {icon}
       </div>
-      {t(text)}
+      <p className="text-lg">{t(text)}</p>
     </div>
   );
 
@@ -97,82 +221,126 @@ const CreateOrder = () => {
   return (
     <div className="relative overflow-y-auto">
       <Navbar />
-      <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
-        <div className="flex gap-1 lg:gap-5 mb-5">
-          <StepIcon
-            step="transportDetails"
-            text="transport"
-            icon={<Pencil className="size-4 lg:size-6" />}
-            progressValue={transportationProgress}
-            isDisabled={false}
-          />
-          <Progress
-            value={transportationProgress}
-            className="mt-3 lg:mt-5 h-2 lg:h-4"
-          />
+      {
+        <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
+          <div className="flex gap-1 lg:gap-5 mb-5">
+            <StepIcon
+              step="transportDetails"
+              text="transport"
+              icon={<Pencil className="size-4 lg:size-6" />}
+              progressValue={transportationProgress}
+              isDisabled={false}
+            />
+            <Progress
+              value={transportationProgress}
+              className="mt-3 lg:mt-5 h-2 lg:h-4"
+            />
 
-          <StepIcon
-            step="patientDetails"
-            text="patient"
-            icon={<User className="size-4 lg:size-6" />}
-            disabled={transportationProgress !== 100}
-            progressValue={patientProgress}
-            isDisabled={transportationProgress < 100}
-          />
-          <Progress
-            value={patientProgress}
-            className="mt-3 lg:mt-5 h-2 lg:h-4"
-          />
+            <StepIcon
+              step="patientDetails"
+              text="patient"
+              icon={<User className="size-4 lg:size-6" />}
+              disabled={transportationProgress !== 100}
+              progressValue={patientProgress}
+              isDisabled={transportationProgress < 100}
+            />
+            <Progress
+              value={patientProgress}
+              className="mt-3 lg:mt-5 h-2 lg:h-4"
+            />
 
-          <StepIcon
-            step="destinationDetails"
-            text="destination"
-            icon={<Truck className="size-4 lg:size-6" />}
-            disabled={patientProgress !== 100}
-            progressValue={destinationProgress}
-            isDisabled={patientProgress < 100}
-          />
-          <Progress
-            value={destinationProgress}
-            className="mt-3 lg:mt-5 h-2 lg:h-4"
-          />
+            <StepIcon
+              step="destinationDetails"
+              text="destination"
+              icon={<Truck className="size-4 lg:size-6" />}
+              disabled={patientProgress !== 100}
+              progressValue={destinationProgress}
+              isDisabled={patientProgress < 100}
+            />
+            <Progress
+              value={destinationProgress}
+              className="mt-3 lg:mt-5 h-2 lg:h-4"
+            />
 
-          <StepIcon
-            step="billingDetails"
-            text="billing"
-            icon={<Send className="size-4 lg:size-6" />}
-            disabled={destinationProgress !== 100}
-            progressValue={billingProgress}
-            isDisabled={destinationProgress < 100}
-          />
-        </div>
+            <StepIcon
+              step="billingDetails"
+              text="billing"
+              icon={<Send className="size-4 lg:size-6" />}
+              disabled={destinationProgress !== 100}
+              progressValue={billingProgress}
+              isDisabled={destinationProgress < 100}
+            />
+          </div>
 
-        <div className="lg:w-[70%] px-3 lg:px-0">
-          {currentStep === "transportDetails" ? (
-            <TransportationDetails {...props} />
-          ) : currentStep === "patientDetails" ? (
-            <PatientDetails {...props} />
-          ) : currentStep === "destinationDetails" ? (
-            <DestinationDetails {...props} />
-          ) : (
-            currentStep === "billingDetails" && <BillingDetails {...props} />
-          )}
-        </div>
-        <Dialog open={showPreview} onOpenChange={setShowPreview}>
-          <DialogContent className="w-[90%] max-w-[60rem] px-0 border-none max-h-[98vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle />
-              <div>
-                <PreviewDetails {...props} />
+          <div className="lg:w-[70%] px-3 lg:px-0">
+            {getAnOrderLoading ? (
+              <div className="flex items-center justify-center min-h-96">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="xMidYMid"
+                  width="20"
+                  height="20"
+                  style={{
+                    shapeRendering: "auto",
+                    display: "block",
+                    background: "rgba(255, 255, 255, 0)",
+                  }}
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <g>
+                    <circle
+                      strokeDasharray="164.93361431346415 56.97787143782138"
+                      r="35"
+                      strokeWidth="10"
+                      stroke="#145374"
+                      fill="none"
+                      cy="50"
+                      cx="50"
+                    >
+                      <animateTransform
+                        keyTimes="0;1"
+                        values="0 50 50;360 50 50"
+                        dur="1s"
+                        repeatCount="indefinite"
+                        type="rotate"
+                        attributeName="transform"
+                      ></animateTransform>
+                    </circle>
+                    <g></g>
+                  </g>
+                </svg>
+                <p>Loading...</p>
               </div>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
-        <div className="mt-20">
-          <p className="text-lg mb-5 text-center">{t("powered_by")}</p>
-          <Logo />
+            ) : currentStep === "transportDetails" ? (
+              <TransportationDetails {...props} />
+            ) : currentStep === "patientDetails" ? (
+              <PatientDetails {...props} />
+            ) : currentStep === "destinationDetails" ? (
+              <DestinationDetails {...props} />
+            ) : (
+              currentStep === "billingDetails" && <BillingDetails {...props} />
+            )}
+          </div>
+          <Dialog open={showPreview} onOpenChange={setShowPreview}>
+            <DialogContent
+              className="w-[90%] max-w-[80rem] px-0 border-none max-h-[98vh] overflow-y-auto"
+              isCrossHidden={true}
+            >
+              <DialogHeader>
+                <DialogTitle />
+                <div>
+                  <PreviewDetails {...props} />
+                </div>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+          <div className="mt-20">
+            <p className="text-lg mb-5 text-center">{t("powered_by")}</p>
+            <Logo />
+          </div>
         </div>
-      </div>
+      }
     </div>
   );
 };

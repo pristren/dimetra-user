@@ -9,13 +9,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import AddRequest from "@/components/order/AddRequest";
-import { DatePicker } from "@/components/ui/DatePicker";
 import AppSelect from "@/components/common/AppSelect";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import useDebounce from "@/hooks/useDebounce";
 import { t } from "i18next";
+import { format } from "date-fns";
+import { DatePicker } from "../ui/DatePicker";
 
 export default function AppHead({
   pageTitle,
@@ -40,16 +41,23 @@ export default function AppHead({
   const handleSearchInputChange = useDebounce((value) => {
     setQueryData((prev) => ({ ...prev, search_keyword: value || undefined }));
   }, 500);
+
+
   return (
-    <div className="flex lg:items-center justify-between flex-col lg:flex-row gap-5 w-full mb-10">
-      <div className="flex items-center gap-3">
+    <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-5 w-full mb-10">
+      <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between w-full">
           <h2
-            className={`text-2xl border-black  font-bold text-nowrap ${
+            className={`text-2xl border-black flex items-center  gap-2 font-bold text-nowrap ${
               isRecurring ? "border-r-2 pr-4" : ""
             }`}
           >
             {t(pageTitle)}
+            {isDateVisible && (
+              <span className="font-normal text-[16px]">
+                {format(new Date(), "dd,MMMM, yyyy")}
+              </span>
+            )}
           </h2>
           {addButton.visibility && (
             <Link to={`${addButton.url}`} className="lg:hidden">
@@ -57,14 +65,6 @@ export default function AppHead({
             </Link>
           )}
         </div>
-
-        {isRecurring !== false && (
-          <div className=" flex gap-3 items-center">
-            <h4 className="text-xl text-nowrap">{t("order_id")} : :</h4>
-            <span className=" text-gray-500">#{isRecurring?.slice(-8)}</span>
-          </div>
-        )}
-
         {isDateVisible && (
           <DatePicker
             className="hidden lg:flex"
@@ -73,6 +73,13 @@ export default function AppHead({
               setQueryData((prev) => ({ ...prev, date: value }))
             }
           />
+        )}
+
+        {isRecurring !== false && (
+          <div className=" flex gap-3 items-center">
+            <h4 className="text-xl text-nowrap">{t("order_id")} : :</h4>
+            <span className=" text-gray-500">#{isRecurring?.slice(-8)}</span>
+          </div>
         )}
       </div>
 

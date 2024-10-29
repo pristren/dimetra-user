@@ -9,6 +9,7 @@ export const UPDATE_AN_USER = gql`
       address
       billing_address
       code
+      place
       phone
       internal_cost_center
       profile_image

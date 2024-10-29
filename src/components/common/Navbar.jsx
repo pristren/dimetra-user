@@ -28,7 +28,7 @@ export default function Navbar() {
       </div>
       <div className="flex items-center gap-3 lg:gap-6">
         <Language />
-        <div className="flex items-center gap-2">
+        <Link to="/orders/setting" className="flex items-center gap-2">
           {userInfo?.profile_image ? (
             <div className="flex items-center">
               {!profileImageLoaded && (
@@ -52,7 +52,7 @@ export default function Navbar() {
             <DefaultAvatar />
           )}
           <p className="text-sm hidden lg:block">{userInfo?.first_name}</p>
-        </div>
+        </Link>
       </div>
     </nav>
   );

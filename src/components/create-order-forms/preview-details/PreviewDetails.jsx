@@ -25,16 +25,7 @@ import { Loading, SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 
-const PreviewDetails = ({
-  createOrderData,
-  endDate,
-  startDate,
-  setEndDate,
-  setStartDate,
-  selectedWeekdays,
-  returnDate,
-  dropDate,
-}) => {
+const PreviewDetails = ({ createOrderData, setCurrentStep,setShowPreview }) => {
   const {
     transportationData,
     patientData,
@@ -122,23 +113,23 @@ const PreviewDetails = ({
                   {t("mode_of_transportation")}
                   <span className="highlight">({t("multiple_selection")})</span>
                 </h6>
-                {transportModesOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-4">
-                    <Checkbox
-                      disabled
-                      id={option.value}
-                      checked={transportationData.mode_of_transportation?.includes(
-                        option.value
-                      )}
-                    />
-                    <Label
-                      className="font-normal text-[16px] ml-2"
-                      htmlFor={option.value}
+
+                <RadioGroup value={transportationData?.mode_of_transportation}>
+                  {transportModesOptions.map((option) => (
+                    <div
+                      key={option.value}
+                      className="flex items-center space-x-2 mb-2"
                     >
-                      {t(option.label)}
-                    </Label>
-                  </div>
-                ))}
+                      <RadioGroupItem value={option.value} id={option.value} />
+                      <Label
+                        htmlFor={option.value}
+                        className="font-normal text-[16px]"
+                      >
+                        {t(option.label)}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
               </div>
 
               <div>
@@ -407,6 +398,8 @@ const PreviewDetails = ({
                     />
                   </div>
                 )}
+                <div />
+
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
                     {t("isolation")}
@@ -418,18 +411,19 @@ const PreviewDetails = ({
                     </Label>
                   </div>
                 </div>
-
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("special")}
-                  </Label>
-                  <Input
-                    disabled
-                    value={patientData?.special_note}
-                    placeholder="Requires special_note attention"
-                    className="border-gray-300"
-                  />
-                </div>
+                {patientData?.isolation && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("which")}
+                    </Label>
+                    <Input
+                      disabled
+                      value={patientData?.which}
+                      placeholder={t("type_which")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -505,6 +499,17 @@ const PreviewDetails = ({
                       className="border-gray-300"
                     />
                   </div>
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("phone")}
+                    </Label>
+                    <Input
+                      disabled
+                      value={destinationDetailsData?.pickup_phone}
+                      placeholder={t("type_the_phone_number")}
+                      className="border-gray-300"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -538,6 +543,22 @@ const PreviewDetails = ({
                         <Input
                           disabled
                           value={destinationDetailsData?.drop_off_pick_up_time}
+                          placeholder={t("pick_up_time")}
+                          className="border-gray-300"
+                        />
+                      </div>
+                    )}
+                    {transportationData?.type_of_transport !== "recurring" && (
+                      <div className="mb-5">
+                        <Label className="block mb-2 font-medium">
+                          {t("appointment_time")}{" "}
+                          <sup className="text-[13px]">*</sup>
+                        </Label>
+                        <Input
+                          disabled
+                          value={
+                            destinationDetailsData?.pickup_appointment_time
+                          }
                           placeholder={t("pick_up_time")}
                           className="border-gray-300"
                         />
@@ -647,17 +668,6 @@ const PreviewDetails = ({
                           className="border-gray-300"
                         />
                       </div>
-                      <div className="mb-5">
-                        <Label className="block mb-2 font-medium">
-                          {t("floor_department")}
-                        </Label>
-                        <Input
-                          disabled
-                          value={destinationDetailsData?.return_floor}
-                          placeholder={t("type_the_stock_or_department")}
-                          className="border-gray-300"
-                        />
-                      </div>
                     </div>
                   )}
                 </div>
@@ -719,11 +729,32 @@ const PreviewDetails = ({
                     className="border-gray-300"
                   />
                 </div>
+                <div className="mb-5">
+                  <Label className="block mb-2 font-medium">
+                    {t("contact_phone")}
+                  </Label>
+                  <Input
+                    disabled
+                    value={billingDetailsData?.contact_phone}
+                    placeholder={t("type_your_contact_number")}
+                    className="border-gray-300"
+                  />
+                </div>
               </div>
             </div>
           </div>
-          <div className="flex items-center justify-center">
-            <Button onClick={handleCreateAnOrder} className="px-14 mt-5">
+          <div className="flex items-center justify-center gap-5 mt-5">
+            <Button
+              className="px-14"
+              variant="outline"
+              onClick={() => {
+                setShowPreview(false)
+                setCurrentStep("transportDetails")
+              }}
+            >
+              Edit
+            </Button>
+            <Button onClick={handleCreateAnOrder} className="px-14">
               {loading ? (
                 <Loading className="w-6 h-6 mx-auto text-white" />
               ) : (
@@ -734,9 +765,10 @@ const PreviewDetails = ({
           {showModal && (
             <AppModal
               icon={<SuccessfullyCreatedOrderModalImage />}
-              head="Order sent successfully"
-              details="Your order has been placed successfully! Thank you for Order"
-              buttonText="Continue"
+              isSuccess={true}
+              head="order_sent_successfully"
+              details="your_order_has_been_placed_successfully_thank_you_for_order"
+              buttonText="continue"
               onClose={closeModal}
             />
           )}

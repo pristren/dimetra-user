@@ -233,7 +233,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                  {t("code")} <sup className="text-[13px]">*</sup>
+                  {t("Code")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -241,6 +241,27 @@ const AppUserDetails = ({
                         form.formState.errors.code ? "border-red-500" : ""
                       }
                       placeholder="Code"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="place"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                  {t("Place")} <sup className="text-[13px]">*</sup>
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      className={
+                        form.formState.errors.code ? "border-red-500" : ""
+                      }
+                      placeholder="Place"
                       {...field}
                     />
                   </FormControl>

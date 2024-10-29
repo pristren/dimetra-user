@@ -2,18 +2,15 @@ export const transportOptions = [
   { value: "transfer_trip", label: "transfer_trip" },
   { value: "investigation_trip", label: "investigation_trip" },
   { value: "private_trips", label: "private_trips" },
-  { value: "collection_order", label: "collection_order" },
+  { value: "relocation", label: "relocation" },
   { value: "recurring", label: "recurring" },
 ];
 
 export const transportModesOptions = [
-  { value: "relocation", label: "relocation" },
   { value: "wheelchair_mts", label: "wheelchair_mts" },
   { value: "own_wheelchair", label: "in_own_wheelchair" },
   { value: "lying_down", label: "lying_down" },
   { value: "pedestrian", label: "pedestrian" },
-  { value: "second_transport_helper", label: "second_transport_helper" },
-  { value: "carrying_chair", label: "carrying_chair" },
 ];
 
 export const transportWithOptions = [
@@ -22,16 +19,18 @@ export const transportWithOptions = [
   { value: "infusomat", label: "infusomat" },
   { value: "accompanying_reason", label: "accompanying_reason" },
   { value: "oxygen_quantity", label: "oxygen_liters_per_min" },
+  { value: "second_transport_helper", label: "second_transport_helper" },
+  { value: "carrying_chair", label: "carrying_chair" },
 ];
 
 export const weekdaysOptions = [
-  { value: "monday", label: "monday" },
-  { value: "tuesday", label: "tuesday" },
-  { value: "wednesday", label: "wednesday" },
-  { value: "thursday", label: "thursday" },
-  { value: "friday", label: "friday" },
-  { value: "saturday", label: "saturday" },
-  { value: "sunday", label: "sunday" },
+  { value: "monday", label: "mo" },
+  { value: "tuesday", label: "tu" },
+  { value: "wednesday", label: "we" },
+  { value: "thursday", label: "th" },
+  { value: "friday", label: "fr" },
+  { value: "saturday", label: "sa" },
+  { value: "sunday", label: "su" },
 ];
 
 export const durationOptions = [
@@ -95,7 +94,7 @@ export const timeOptions = [
 export const createOrderDefaultState = {
   transportationData: {
     type_of_transport: "",
-    mode_of_transportation: [],
+    mode_of_transportation: "",
     transport_with: [],
     oxygen_quantity: null,
   },
@@ -118,19 +117,21 @@ export const createOrderDefaultState = {
     area_room: "",
     cost_center: "",
     how_much: "",
-    special_note: "",
+    which: "",
     isolation: false,
     patient_above_90kg: false,
   },
   destinationDetailsData: {
     pick_up_name: "",
     pick_up_address: "",
-    pick_up_postal_code: "",
+    pick_up_postal_code: 0,
     pick_up_city: "",
     pick_up_country: "",
+    pickup_phone: "",
     pick_up_employee_name: "",
     drop_off_pick_up_date: null,
     drop_off_pick_up_time: "",
+    pickup_appointment_time: "",
     drop_off_name: "",
     drop_off_address: "",
     drop_off_postal_code: "",
@@ -139,7 +140,6 @@ export const createOrderDefaultState = {
     drop_off_phone: "",
     return_date: null,
     return_approx_time: "",
-    return_floor: "",
   },
   billingDetailsData: {
     pre_name: "",
@@ -147,5 +147,6 @@ export const createOrderDefaultState = {
     street: "",
     place: "",
     contact: "",
+    contact_phone: "",
   },
 };

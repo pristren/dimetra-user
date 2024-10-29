@@ -73,15 +73,13 @@ function OrderDetails({ singleRecurring = false }) {
               <p className="font-medium mb-2 last:mb-0">
                 {t("mode_of_transportation")}
               </p>
-              {data?.transportationData?.mode_of_transportation?.map(
-                (mode, index) => (
-                  <p key={index} className="space-y-2">
-                    {mode?.includes("_")
-                      ? t(mode?.split("_").join(" "))
-                      : t(mode)}
-                  </p>
-                )
-              )}
+              <p>
+                {data?.transportationData?.mode_of_transportation?.includes("_")
+                  ? t(data?.transportationData?.mode_of_transportation)
+                      ?.split("_")
+                      .join(" ")
+                  : t(data?.transportationData?.mode_of_transportation)}
+              </p>
             </div>
             <div>
               <p className="font-medium  mb-3">{t("transport_with")}</p>
@@ -204,6 +202,12 @@ function OrderDetails({ singleRecurring = false }) {
                   <p className="text-nowrap">{t("working_employee_name")} :</p>
                   <p>{data?.destinationDetailsData?.pick_up_employee_name}</p>
                 </div>
+                <div className="flex items-center gap-3 mb-8">
+                  <p>{t("phone")} :</p>
+                  <p>
+                    {data?.destinationDetailsData?.pickup_phone || "not yet"}
+                  </p>
+                </div>
               </div>
               <div className="">
                 <p className="font-medium text-lg mb-5">{t("drop_off")}</p>
@@ -221,6 +225,13 @@ function OrderDetails({ singleRecurring = false }) {
                   <p>{t("pickup_time")} :</p>
                   <p>
                     {data?.destinationDetailsData?.drop_off_pick_up_time ||
+                      "not yet"}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 mb-8">
+                  <p>{t("appointment_time")} :</p>
+                  <p>
+                    {data?.destinationDetailsData?.pickup_appointment_time ||
                       "not yet"}
                   </p>
                 </div>
@@ -243,7 +254,7 @@ function OrderDetails({ singleRecurring = false }) {
                 <div className="flex items-center gap-3 mb-8">
                   <p>{t("phone")} :</p>
                   <p>
-                    {data?.destinationDetailsData?.pick_up_country || "not yet"}
+                    {data?.destinationDetailsData?.drop_off_phone || "not yet"}
                   </p>
                 </div>
               </div>
@@ -266,10 +277,6 @@ function OrderDetails({ singleRecurring = false }) {
                   <div className="flex items-center gap-3 mb-8">
                     <p>{t("time")} :</p>
                     <p>{data?.destinationDetailsData?.return_approx_time}</p>
-                  </div>
-                  <div className="flex items-center gap-3 mb-8">
-                    <p>{t("floor_department")} :</p>
-                    <p>{data?.destinationDetailsData?.return_floor}</p>
                   </div>
                 </div>
               )}
@@ -305,28 +312,36 @@ function OrderDetails({ singleRecurring = false }) {
                 <p>{t("contact")} :</p>
                 <p>{data?.billingDetailsData?.contact || "N/A"}</p>
               </div>
+              <div className="flex items-center gap-10">
+                <p>{t("contact_phone")} :</p>
+                <p>{data?.billingDetailsData?.contact_phone || "N/A"}</p>
+              </div>
             </div>
           </div>
 
           <Separator />
-          <div className="my-14">
-            <h5>{t("mts_detail")}</h5>
-            <div className="flex items-center gap-6 mb-6 mt-10">
-              <p>{t("additionally")}:</p>
-              <p>{t("here_is_name")}</p>
+          <div className="grid grid-cols-2 gap-6 my-14">
+            <div>
+              <h5>{t("mts_detail")}</h5>
+              <div className="flex items-center gap-6 mb-6 mt-10">
+                <p>{t("additionally")}:</p>
+                <p>{t("here_is_name")}</p>
+              </div>
+              <div className="flex items-center gap-6 mb-6">
+                <p>{t("driver_1")} :</p>
+                <p>Smith</p>
+              </div>
+              <div className="flex items-center gap-6 mb-6">
+                <p>{t("driver_2")} :</p>
+                <p>Mayur</p>
+              </div>
+              <div className="flex items-center gap-6 mb-6">
+                <p>{t("vehicle_number")} :</p>
+                <p>17</p>
+              </div>
             </div>
-            <div className="flex items-center gap-6 mb-6">
-              <p>{t("driver_1")} :</p>
-              <p>Smith</p>
-            </div>
-            <div className="flex items-center gap-6 mb-6">
-              <p>{t("driver_2")} :</p>
-              <p>Mayur</p>
-            </div>
-            <div className="flex items-center gap-6 mb-6">
-              <p>{t("vehicle_number")} :</p>
-              <p>17</p>
-            </div>
+
+            <p>Updated At: {moment(data?.updatedAT).format("DD MMMM YYYY")}</p>
           </div>
 
           <div className="flex items-center justify-center gap-6">

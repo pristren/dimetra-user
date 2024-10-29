@@ -15,11 +15,13 @@ export const GET_ALL_ORDERS = gql`
         }
         patientData {
           name
+          surname
         }
         destinationDetailsData {
-          pick_up_address
-          drop_off_address
+          pick_up_name
+          drop_off_name
           drop_off_pick_up_date
+          drop_off_pick_up_time
         }
         createdAt
       }

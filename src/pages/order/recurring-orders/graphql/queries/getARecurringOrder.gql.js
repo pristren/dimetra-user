@@ -14,6 +14,7 @@ export const GET_A_RECURRING_ORDER = gql`
         address
         billing_address
         code
+        place
         internal_cost_center
         createdAt
         updatedAt
@@ -32,7 +33,7 @@ export const GET_A_RECURRING_ORDER = gql`
         area_room
         cost_center
         how_much
-        special_note
+        which        
         isolation
         patient_above_90kg
       }
@@ -42,7 +43,9 @@ export const GET_A_RECURRING_ORDER = gql`
         pick_up_city
         pick_up_country
         pick_up_employee_name
+        pickup_phone
         drop_off_pick_up_time
+        pickup_appointment_time
         drop_off_pick_up_date
         drop_off_name
         drop_off_address
@@ -51,7 +54,6 @@ export const GET_A_RECURRING_ORDER = gql`
         drop_off_phone
         return_date
         return_approx_time
-        return_floor
       }
       billingDetailsData {
         pre_name
@@ -59,6 +61,7 @@ export const GET_A_RECURRING_ORDER = gql`
         street
         place
         contact
+        contact_phone
       }
       createdAt
     }

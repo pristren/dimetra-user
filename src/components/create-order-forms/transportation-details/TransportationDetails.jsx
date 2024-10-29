@@ -1,3 +1,4 @@
+/* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable react/prop-types */
 import { z } from "zod";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -22,10 +23,9 @@ import {
   transportWithOptions,
   weekdaysOptions,
   durationOptions,
-  timeOptions,
 } from "@/components/create-order-forms/helpers";
 import { useEffect, useState } from "react";
-import { calculateFormProgress } from "@/utils";
+import { calculateFormProgress, formatTimeInput } from "@/utils";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
@@ -38,7 +38,6 @@ const TransportationDetails = ({
   transportationProgress,
 }) => {
   const { transportationData, recurringData } = createOrderData;
-
   const [returnJourney, setReturnJourney] = useState(
     recurringData?.free_dates_return_time ? true : false
   );
@@ -46,8 +45,8 @@ const TransportationDetails = ({
   const form_schema = z.object({
     type_of_transport: z.string().min(1, "Transport type is required"),
     mode_of_transportation: z
-      .array(z.string())
-      .nonempty("At least one mode must be selected"),
+      .string()
+      .min(1, "At least one mode must be selected"),
     transport_with: z
       .array(z.string())
       .nonempty("At least one transport with option must be selected"),
@@ -63,7 +62,7 @@ const TransportationDetails = ({
     resolver: zodResolver(form_schema),
     defaultValues: {
       type_of_transport: transportationData?.type_of_transport || "",
-      mode_of_transportation: transportationData?.mode_of_transportation || [],
+      mode_of_transportation: transportationData?.mode_of_transportation || "",
       transport_with: transportationData?.transport_with || [],
       duration: recurringData?.ends || "",
       start_date: recurringData?.start_date || null,
@@ -138,15 +137,34 @@ const TransportationDetails = ({
   };
 
   const handleCheckBox = (type, value) => {
-    setCreateOrderData((prev) => ({
-      ...prev,
-      transportationData: {
-        ...prev.transportationData,
-        [type]: prev.transportationData?.[type]?.includes(value)
+    setCreateOrderData((prev) => {
+      const isNoneOfThatSelected = value === "none_of_that";
+      const isValueAlreadySelected =
+        prev.transportationData?.[type]?.includes(value);
+
+      let updatedTransportWith;
+
+      if (isNoneOfThatSelected) {
+        updatedTransportWith = isValueAlreadySelected ? [] : [value];
+      } else {
+        updatedTransportWith = isValueAlreadySelected
           ? prev.transportationData[type].filter((item) => item !== value)
-          : [...(prev.transportationData?.[type] || []), value],
-      },
-    }));
+          : [
+              ...(prev.transportationData?.[type]?.filter(
+                (item) => item !== "none_of_that"
+              ) || []),
+              value,
+            ];
+      }
+
+      return {
+        ...prev,
+        transportationData: {
+          ...prev.transportationData,
+          [type]: updatedTransportWith,
+        },
+      };
+    });
   };
 
   const calculateMonthlyOccurrences = (weekdays) => {
@@ -169,7 +187,7 @@ const TransportationDetails = ({
       recurringData?.recurring_type === "week"
         ? [
             transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation.length > 0,
+            transportationData?.mode_of_transportation,
             transportationData?.transport_with?.length > 0
               ? transportationData?.transport_with.includes("oxygen_quantity")
                 ? transportationData?.oxygen_quantity > 0
@@ -183,7 +201,7 @@ const TransportationDetails = ({
           recurringData?.recurring_type === "free"
         ? [
             transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation?.length > 0,
+            transportationData?.mode_of_transportation,
             transportationData?.transport_with?.length > 0
               ? transportationData?.transport_with.includes("oxygen_quantity")
                 ? transportationData?.oxygen_quantity > 0
@@ -194,7 +212,7 @@ const TransportationDetails = ({
           ]
         : [
             transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation?.length > 0,
+            transportationData?.mode_of_transportation,
             transportationData?.transport_with?.length > 0
               ? transportationData?.transport_with.includes("oxygen_quantity")
                 ? transportationData?.oxygen_quantity > 0
@@ -254,6 +272,12 @@ const TransportationDetails = ({
     handleFormChange("patientDetails");
   };
 
+  const handleTimeChange = (e, dataName) => {
+    const rawValue = e.target.value;
+    const formattedValue = formatTimeInput(rawValue);
+    updateCreateRecurringOrderData(dataName, formattedValue);
+  };
+
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
@@ -309,27 +333,47 @@ const TransportationDetails = ({
               <div className="pr-5">
                 <h6 className="mb-6">
                   {t("mode_of_transportation")}{" "}
-                  <span className="highlight">({t("multiple_selection")})</span>
+                  <span className="highlight">({t("single_selection")})</span>
                 </h6>
-                {transportModesOptions.map((option) => (
-                  <div key={option.value} className="flex items-center mb-4">
-                    <Checkbox
-                      id={option.value}
-                      checked={transportationData.mode_of_transportation?.includes(
-                        option.value
-                      )}
-                      onClick={() =>
-                        handleCheckBox("mode_of_transportation", option.value)
-                      }
-                    />
-                    <Label
-                      className="font-normal text-[16px] ml-2"
-                      htmlFor={option.value}
-                    >
-                      {t(option.label)}
-                    </Label>
-                  </div>
-                ))}
+                <FormField
+                  control={form.control}
+                  name="mode_of_transportation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <RadioGroup
+                          value={transportationData?.mode_of_transportation}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            updateCreateOrderData(
+                              "mode_of_transportation",
+                              value
+                            );
+                          }}
+                        >
+                          {transportModesOptions.map((option) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center space-x-2 mb-2"
+                            >
+                              <RadioGroupItem
+                                value={option.value}
+                                id={option.value}
+                              />
+                              <Label
+                                htmlFor={option.value}
+                                className="font-normal text-[16px]"
+                              >
+                                {t(option.label)}
+                              </Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
 
               <div>
@@ -337,51 +381,63 @@ const TransportationDetails = ({
                   {t("transport_with")}{" "}
                   <span className="highlight">({t("multiple_selection")})</span>
                 </h6>
-                {transportWithOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className={`${
-                      option.value !== "oxygen_quantity"
-                        ? "flex items-center"
-                        : ""
-                    }  mb-4 `}
-                  >
-                    <Checkbox
-                      id={option.value}
-                      checked={transportationData.transport_with?.includes(
-                        option.value
-                      )}
-                      onClick={() => {
-                        handleCheckBox("transport_with", option.value);
-                      }}
-                    />
-                    <Label
-                      className="font-normal text-[16px] ml-2 text-nowrap"
-                      htmlFor={option.value}
+                {transportWithOptions.map((option) => {
+                  const isNoneOfThatSelected =
+                    transportationData.transport_with?.includes("none_of_that");
+                  const isOptionDisabled =
+                    isNoneOfThatSelected && option.value !== "none_of_that";
+
+                  return (
+                    <div
+                      key={option.value}
+                      className={`${
+                        option.value !== "oxygen_quantity"
+                          ? "flex items-center"
+                          : ""
+                      } mb-4`}
                     >
-                      {t(option.label)}
-                    </Label>
-                    <div className="w-full mt-2">
+                      <Checkbox
+                        id={option.value}
+                        checked={transportationData.transport_with?.includes(
+                          option.value
+                        )}
+                        onClick={() =>
+                          handleCheckBox("transport_with", option.value)
+                        }
+                        disabled={isOptionDisabled}
+                      />
+                      <Label
+                        className={`font-normal text-[16px] ml-2 text-nowrap ${
+                          isOptionDisabled ? "text-gray-400" : ""
+                        }`}
+                        htmlFor={option.value}
+                      >
+                        {t(option.label)}
+                      </Label>
+
                       {option.value === "oxygen_quantity" &&
                         transportationData.transport_with?.includes(
                           "oxygen_quantity"
                         ) && (
-                          <Input
-                            placeholder=""
-                            className=" h-10"
-                            type="number"
-                            onChange={(e) => {
-                              updateCreateOrderData(
-                                "oxygen_quantity",
-                                Number(e.target.value)
-                              );
-                            }}
-                            value={transportationData?.oxygen_quantity}
-                          />
+                          <div className="w-full mt-2">
+                            <Input
+                              placeholder="Enter oxygen quantity"
+                              className="h-10"
+                              type="number"
+                              onChange={(e) =>
+                                updateCreateOrderData(
+                                  "oxygen_quantity",
+                                  Number(e.target.value)
+                                )
+                              }
+                              value={transportationData?.oxygen_quantity || ""}
+                              disabled={isNoneOfThatSelected}
+                            />
+                          </div>
                         )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
             {transportationData?.type_of_transport === "recurring" && (
@@ -416,16 +472,11 @@ const TransportationDetails = ({
                           before: new Date(),
                         }}
                       />
-                      <AppSelect
-                        items={timeOptions}
-                        placeholder="00:00"
-                        isTime={true}
-                        onValueChange={(val) =>
-                          updateCreateRecurringOrderData("start_time", val)
-                        }
-                        defaultValue={recurringData?.start_time}
-                        isTimeSelected={true}
+                      <Input
+                        maxLength={5}
                         value={recurringData?.start_time}
+                        onChange={(e) => handleTimeChange(e, "start_time")}
+                        placeholder="HH:MM"
                       />
                     </div>
                     <h3 className="text-lg font-medium  mb-5">
@@ -433,7 +484,8 @@ const TransportationDetails = ({
                       <span className="highlight">({t("optional")})</span>
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker
+                      {/* commented because qudrati vai said it's not need */}
+                      {/* <DatePicker
                         date={recurringData?.return_date || null}
                         setDate={(value) =>
                           handleDateChange("return_date", value)
@@ -442,17 +494,12 @@ const TransportationDetails = ({
                           before: new Date(recurringData?.start_date),
                           after: new Date(recurringData?.start_date),
                         }}
-                      />
-                      <AppSelect
-                        items={timeOptions}
-                        placeholder="00:00"
-                        defaultValue={recurringData?.return_time}
-                        isTime={true}
-                        onValueChange={(val) =>
-                          updateCreateRecurringOrderData("return_time", val)
-                        }
-                        isTimeSelected={true}
+                      /> */}
+                      <Input
+                        maxLength={5}
                         value={recurringData?.return_time}
+                        onChange={(e) => handleTimeChange(e, "return_time")}
+                        placeholder="HH:MM"
                       />
                     </div>
 
@@ -463,7 +510,7 @@ const TransportationDetails = ({
                       </span>
                       :
                     </h3>
-                    <div className="grid grid-cols-3 gap-3 mt-2">
+                    <div className="flex flex-wrap gap-3 mt-2">
                       {weekdaysOptions.map((option) => (
                         <div
                           key={option.value}
@@ -474,9 +521,13 @@ const TransportationDetails = ({
                             checked={recurringData?.multiple_week_days?.includes(
                               option.value
                             )}
+                            className="size-6"
                             onClick={() => handleWeekdayChange(option)}
                           />
-                          <Label className="ml-2" htmlFor={option.value}>
+                          <Label
+                            className="ml-2 text-lg"
+                            htmlFor={option.value}
+                          >
                             {option.label}
                           </Label>
                         </div>
@@ -498,6 +549,7 @@ const TransportationDetails = ({
                                 updateCreateRecurringOrderData("ends", value);
                               }}
                               value={recurringData?.ends}
+                              className="flex items-center gap-3"
                             >
                               {durationOptions.map((option) => (
                                 <div
@@ -519,13 +571,6 @@ const TransportationDetails = ({
                         </FormItem>
                       )}
                     />
-
-                    <h2 className="text-lg font-semibold mt-5">
-                      {t("summary_monthly_on_day")}{" "}
-                      {calculateMonthlyOccurrences(
-                        recurringData?.multiple_week_days
-                      )}
-                    </h2>
                   </div>
                 ) : recurringData?.recurring_type === "free" ? (
                   <div className="">
@@ -552,19 +597,13 @@ const TransportationDetails = ({
                           }}
                           max={60}
                         />
-                        <AppSelect
-                          items={timeOptions}
-                          placeholder="Select a time"
-                          isTime={true}
-                          onValueChange={(val) =>
-                            updateCreateRecurringOrderData(
-                              "free_dates_start_time",
-                              val
-                            )
-                          }
-                          defaultValue={recurringData?.free_dates_start_time}
-                          isTimeSelected={true}
+                        <Input
+                          maxLength={5}
                           value={recurringData?.free_dates_start_time}
+                          onChange={(e) =>
+                            handleTimeChange(e, "free_dates_start_time")
+                          }
+                          placeholder="HH:MM"
                         />
                       </div>
                     </div>
@@ -584,7 +623,7 @@ const TransportationDetails = ({
                         className="text-base font-medium"
                         htmlFor="return_journey"
                       >
-                        {t("return_journey")} ?
+                        {t("return_journey")} ? (optional)
                       </Label>
                     </div>
                     {returnJourney && (
@@ -604,19 +643,13 @@ const TransportationDetails = ({
                             }
                             disabled
                           />
-                          <AppSelect
-                            items={timeOptions}
-                            placeholder="Select a time"
-                            isTime={true}
-                            onValueChange={(val) =>
-                              updateCreateRecurringOrderData(
-                                "free_dates_return_time",
-                                val
-                              )
-                            }
-                            defaultValue={recurringData?.free_dates_return_time}
-                            isTimeSelected={true}
+                          <Input
+                            maxLength={5}
                             value={recurringData?.free_dates_return_time}
+                            onChange={(e) =>
+                              handleTimeChange(e, "free_dates_return_time")
+                            }
+                            placeholder="HH:MM"
                           />
                         </div>
                       </div>

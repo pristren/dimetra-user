@@ -23,7 +23,7 @@ const EditRecurringOrder = () => {
   const [editOrderData, setEditOrderData] = useState({
     transportationData: {
       type_of_transport: "",
-      mode_of_transportation: [],
+      mode_of_transportation: "",
       transport_with: [],
       oxygen_quantity: null,
     },
@@ -34,7 +34,7 @@ const EditRecurringOrder = () => {
       area_room: "",
       cost_center: "",
       how_much: "",
-      special_note: "",
+      which: "",
       isolation: false,
       patient_above_90kg: false,
     },
@@ -45,8 +45,10 @@ const EditRecurringOrder = () => {
       pick_up_country: "",
       pick_up_employee_name: "",
       pick_up_postal_code: "",
+      pickup_phone: "",
       drop_off_pick_up_date: null,
       drop_off_pick_up_time: "",
+      pickup_appointment_time: "",
       drop_off_name: "",
       drop_off_address: "",
       drop_off_city: "",
@@ -55,7 +57,6 @@ const EditRecurringOrder = () => {
       drop_off_postal_code: "",
       return_date: null,
       return_approx_time: "",
-      return_floor: "",
     },
     billingDetailsData: {
       pre_name: "",
@@ -63,6 +64,7 @@ const EditRecurringOrder = () => {
       street: "",
       place: "",
       contact: "",
+      contact_phone: "",
     },
   });
 

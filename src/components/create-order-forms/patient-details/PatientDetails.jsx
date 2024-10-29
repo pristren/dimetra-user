@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { z } from "zod";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,7 +14,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { calculateFormProgress } from "@/utils";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -25,21 +23,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { t } from "i18next";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
 import toast from "react-hot-toast";
+import moment from "moment";
 
 const PatientDetails = ({
   handleFormChange,
-  setPatientProgress,
   createOrderData,
   setCreateOrderData,
   patientProgress,
@@ -51,9 +39,8 @@ const PatientDetails = ({
     surname: z.string().min(1, t("surname_required")),
     date_of_birth: z.string().min(1, t("date_of_birth_required")),
     area_room: z.string().min(1, t("area_room_required")),
-    cost_center: z.string().min(1, t("cost_center_required")),
     how_much: z.string().optional(),
-    special_note: z.string().optional(),
+    which: z.string().optional(),
     isolation: z.boolean().optional(),
     patient_above_90kg: z.boolean().optional(),
   });
@@ -80,32 +67,58 @@ const PatientDetails = ({
       toast.error(t("how_much_required"));
       return;
     }
+    if (patientData.isolation && !patientData.which) {
+      toast.error(t("which_required"));
+      return;
+    }
     handleFormChange("destinationDetails");
   };
 
-  useEffect(() => {
-    if (
-      createOrderData.transportationData?.type_of_transport ===
-      "collection_order"
-    ) {
-      const fieldsFilled = [
-        patientData.name,
-        patientData.surname,
-        patientData.area_room,
-        patientData.cost_center,
-      ];
-      setPatientProgress(calculateFormProgress(fieldsFilled));
-    } else {
-      const fieldsFilled = [
-        patientData.name,
-        patientData.surname,
-        patientData.date_of_birth,
-        patientData.area_room,
-        patientData.cost_center,
-      ];
-      setPatientProgress(calculateFormProgress(fieldsFilled));
+  const handleDateInput = (e, field, setCreateOrderData, form, path) => {
+    let input = e.target.value.replace(/\D/g, "");
+    let formattedDate = input;
+    const fieldName = e.target.name;
+
+    if (input.length > 2) {
+      formattedDate = `${input.slice(0, 2)}/${input.slice(2)}`;
     }
-  }, [patientData, setPatientProgress]);
+    if (input.length > 4) {
+      formattedDate = `${input.slice(0, 2)}/${input.slice(2, 4)}/${input.slice(
+        4
+      )}`;
+    }
+
+    field?.onChange(formattedDate);
+
+    if (formattedDate.length === 10) {
+      const [day, month, year] = formattedDate.split("/").map(Number);
+
+      if (
+        day >= 1 &&
+        day <= 31 &&
+        month >= 1 &&
+        month <= 12 &&
+        year >= 1900 &&
+        year <= 2024
+      ) {
+        const parsedDate = new Date(year, month - 1, day);
+
+        setCreateOrderData((prev) => ({
+          ...prev,
+          [path]: {
+            ...prev[path],
+            [fieldName]: parsedDate,
+          },
+        }));
+
+        form.setValue(fieldName, moment(parsedDate).format("DD/MM/YYYY"));
+      } else {
+        toast.error(
+          "Invalid date. Please enter a valid date between 1900 and 2024."
+        );
+      }
+    }
+  };
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -197,95 +210,27 @@ const PatientDetails = ({
                         <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={"outline"}
-                                className={cn(
-                                  "w-full justify-between gap-4 text-left font-normal",
-                                  !field.value && "text-muted-foreground "
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, "PPP")
-                                ) : (
-                                  <span>{t("pick_a_date")}</span>
-                                )}
-                                <div className="w-6 h-6 rounded-full p-1  flex justify-center items-center bg-primary text-white">
-                                  <CalendarIcon className="w-4 h-4" />
-                                </div>
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0">
-                            <div className="p-3">
-                              <Select
-                                onValueChange={(value) => {
-                                  const newDate = new Date(
-                                    field.value || new Date()
-                                  );
-                                  newDate.setFullYear(parseInt(value));
-                                  form.setValue("date_of_birth", newDate);
-                                }}
-                                value={
-                                  field.value
-                                    ? new Date(field.value)
-                                        .getFullYear()
-                                        .toString()
-                                    : ""
-                                }
-                              >
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select year" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  {Array.from(
-                                    {
-                                      length:
-                                        new Date().getFullYear() - 1900 + 1,
-                                    },
-                                    (_, i) => (
-                                      <SelectItem
-                                        key={i}
-                                        value={(
-                                          new Date().getFullYear() - i
-                                        ).toString()}
-                                      >
-                                        {new Date().getFullYear() - i}
-                                      </SelectItem>
-                                    )
-                                  )}
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <div className="p-3 pt-0">
-                              <Calendar
-                                key={field.value}
-                                mode="single"
-                                selected={
-                                  field.value ? new Date(field.value) : null
-                                }
-                                onSelect={(date) => {
-                                  field.onChange(date);
-                                  setCreateOrderData((prev) => ({
-                                    ...prev,
-                                    patientData: {
-                                      ...prev.patientData,
-                                      date_of_birth: date,
-                                    },
-                                  }));
-                                }}
-                                defaultMonth={field.value}
-                                disabled={(date) =>
-                                  date > new Date() ||
-                                  date < new Date("1900-01-01")
-                                }
-                                initialFocus
-                              />
-                            </div>
-                          </PopoverContent>
-                        </Popover>
+                        <Input
+                          type="text"
+                          placeholder="dd/mm/yyyy"
+                          maxLength={10}
+                          name={field.name}
+                          value={
+                            field?.value?.includes("T18:00:00.000Z")
+                              ? moment(field.value).format("DD/MM/YYYY")
+                              : field.value || ""
+                          }
+                          onChange={(e) =>
+                            handleDateInput(
+                              e,
+                              field,
+                              setCreateOrderData,
+                              form,
+                              "patientData"
+                            )
+                          }
+                          className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -322,158 +267,165 @@ const PatientDetails = ({
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="cost_center"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-normal">
-                      {t("cost_center")}
-                      <sup className="text-[13px]">*</sup>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className={
-                          form.formState.errors.cost_center
-                            ? "border-red-500"
-                            : ""
-                        }
-                        placeholder={t("enter_cost_center")}
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          handleInputChange(e);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="patient_above_90kg"
-                render={({ field }) => (
-                  <FormItem className="hidden lg:block">
-                    <FormLabel className="block mb-5 font-normal">
-                      {t("patient_above_90kg")}
-                    </FormLabel>
-                    <div className="flex items-center">
-                      <FormControl>
-                        <Checkbox
-                          className={
-                            form.formState.errors.patient_above_90kg
-                              ? "border-red-500"
-                              : ""
-                          }
-                          id="patient_above_90kg"
-                          {...field}
-                          onCheckedChange={(checked) => {
-                            handleInputChange({
-                              target: {
-                                name: "patient_above_90kg",
-                                type: "checkbox",
-                                checked,
-                              },
-                            });
-                            if (checked === true) {
-                              form.setValue("how_much", "");
-                              setCreateOrderData((prev) => ({
-                                ...prev,
-                                patientData: {
-                                  ...prev.patientData,
-                                  how_much: "",
-                                },
-                              }));
-                            }
-                          }}
-                          checked={
-                            createOrderData.patientData.patient_above_90kg
-                          }
-                        />
-                      </FormControl>
-                      <Label
-                        htmlFor="patient_above_90kg"
-                        className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
-                      >
-                        {t("yes")}
-                      </Label>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="isolation"
-                render={({ field }) => (
-                  <FormItem className="hidden lg:block">
-                    <FormLabel className="block mb-5 font-normal">
-                      {t("isolation")}
-                    </FormLabel>
-                    <div className="flex items-center">
-                      <FormControl>
-                        <Checkbox
-                          className={
-                            form.formState.errors.isolation
-                              ? "border-red-500"
-                              : ""
-                          }
-                          id="isolation"
-                          {...field}
-                          onCheckedChange={(checked) =>
-                            handleInputChange({
-                              target: {
-                                name: "isolation",
-                                type: "checkbox",
-                                checked,
-                              },
-                            })
-                          }
-                        />
-                      </FormControl>
-                      <Label
-                        htmlFor="isolation"
-                        className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
-                      >
-                        {t("yes")}
-                      </Label>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {createOrderData.patientData.patient_above_90kg && (
+              <div className="flex items-start justify-start gap-5">
                 <FormField
                   control={form.control}
-                  name="how_much"
+                  name="patient_above_90kg"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="font-normal">
-                        {t("how_much")}
+                    <FormItem className="hidden lg:block">
+                      <FormLabel className="block text-nowrap mb-5 font-normal">
+                        {t("patient_above_90kg")}
                       </FormLabel>
-                      <FormControl>
-                        <Input
-                          className={
-                            form.formState.errors.how_much
-                              ? "border-red-500"
-                              : ""
-                          }
-                          placeholder={t("enter_amount")}
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            handleInputChange(e);
-                          }}
-                        />
-                      </FormControl>
+                      <div className="flex items-center">
+                        <FormControl>
+                          <Checkbox
+                            className={
+                              form.formState.errors.patient_above_90kg
+                                ? "border-red-500"
+                                : ""
+                            }
+                            id="patient_above_90kg"
+                            {...field}
+                            onCheckedChange={(checked) => {
+                              handleInputChange({
+                                target: {
+                                  name: "patient_above_90kg",
+                                  type: "checkbox",
+                                  checked,
+                                },
+                              });
+                              if (checked === true) {
+                                form.setValue("how_much", "");
+                                setCreateOrderData((prev) => ({
+                                  ...prev,
+                                  patientData: {
+                                    ...prev.patientData,
+                                    how_much: "",
+                                  },
+                                }));
+                              }
+                            }}
+                            checked={
+                              createOrderData.patientData.patient_above_90kg
+                            }
+                          />
+                        </FormControl>
+                        <Label
+                          htmlFor="patient_above_90kg"
+                          className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
+                        >
+                          {t("yes")}
+                        </Label>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-              )}
+
+                {createOrderData.patientData.patient_above_90kg && (
+                  <FormField
+                    control={form.control}
+                    name="how_much"
+                    render={({ field }) => (
+                      <FormItem className="w-9/12 -mt-1">
+                        <FormLabel className="font-normal">
+                          {t("how_much")}
+                          <sup className="text-[13px]">*</sup>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className={
+                              form.formState.errors.how_much
+                                ? "border-red-500"
+                                : ""
+                            }
+                            placeholder={t("enter_amount")}
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              handleInputChange(e);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </div>
+              <div className="flex items-start justify-start gap-5">
+                <FormField
+                  control={form.control}
+                  name="isolation"
+                  render={({ field }) => (
+                    <FormItem className="hidden lg:block">
+                      <FormLabel className="block mb-5 font-normal">
+                        {t("isolation")}
+                      </FormLabel>
+                      <div className="flex items-center">
+                        <FormControl>
+                          <Checkbox
+                            className={
+                              form.formState.errors.isolation
+                                ? "border-red-500"
+                                : ""
+                            }
+                            id="isolation"
+                            {...field}
+                            onCheckedChange={(checked) =>
+                              handleInputChange({
+                                target: {
+                                  name: "isolation",
+                                  type: "checkbox",
+                                  checked,
+                                },
+                              })
+                            }
+                            checked={createOrderData.patientData.isolation}
+                          />
+                        </FormControl>
+                        <Label
+                          htmlFor="isolation"
+                          className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2"
+                        >
+                          {t("yes")}
+                        </Label>
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {createOrderData.patientData.isolation && (
+                  <FormField
+                    control={form.control}
+                    name="which"
+                    render={({ field }) => (
+                      <FormItem className="w-9/12 -mt-1">
+                        <FormLabel className="font-normal">
+                          {t("which")}
+                          <sup className="text-[13px]">*</sup>
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            className={
+                              form.formState.errors.which
+                                ? "border-red-500"
+                                : ""
+                            }
+                            placeholder={t("which")}
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              handleInputChange(e);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
+              </div>
 
               <FormField
                 control={form.control}
@@ -538,34 +490,6 @@ const PatientDetails = ({
                         <SelectItem value="no">{t("no")}</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="special_note"
-                render={({ field }) => (
-                  <FormItem className="lg:col-span-2">
-                    <FormLabel className="font-normal">
-                      {t("special_note")}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className={`${
-                          form.formState.errors.special_note
-                            ? "border-red-500"
-                            : ""
-                        }`}
-                        placeholder={t("enter_note")}
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          handleInputChange(e);
-                        }}
-                      />
-                    </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
