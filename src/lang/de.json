@@ -342,5 +342,12 @@
   "which": "Welche",
   "dd_mm_yyyy": "TT/MM/JJJJ",
   "news": "Nachrichten",
-  "invalid_date": "Bitte geben Sie ein gültiges Datum im Format TT/MM/JJJJ ein"
+  "invalid_date": "Bitte geben Sie ein gültiges Datum im Format TT/MM/JJJJ ein",
+  "confirmed": "bestätigt",
+  "pending": "ausstehend",
+  "on_ride": "unterwegs",
+  "paused": "pausiert",
+  "completed": "abgeschlossen",
+  "rejected": "abgelehnt",
+  "deleted": "gelöscht"
 }

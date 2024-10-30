@@ -193,7 +193,7 @@ const AllOrders = () => {
             className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs capitalize"
             style={{ backgroundColor: statusColor }}
           >
-            {status}
+            {t(status)}
           </Button>
         );
       },
