@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from "react";
-import {  Pencil, Send, Truck, User } from "lucide-react";
+import { Pencil, Send, Truck, User } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import Navbar from "@/components/common/Navbar";
 import { isEqual } from "lodash";
@@ -11,7 +11,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { copiedOrderDefaultState } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
 import { calculateFormProgress } from "@/utils";
 import { useParams } from "react-router-dom";
@@ -22,6 +21,7 @@ import CopyPatientDetails from "@/components/copy-order-forms/copy-patient-detai
 import CopyDestinationDetails from "@/components/copy-order-forms/copy-destination-details/CopyDestinationDetails";
 import CopyBillingDetails from "@/components/copy-order-forms/copy-billing-details/CopyBillingDetails";
 import CopyPreviewDetails from "@/components/copy-order-forms/copy-preview-details/CopyPreviewDetails";
+import { copiedOrderDefaultState } from "@/components/copy-order-forms/helpers";
 
 const CopyOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -318,7 +318,9 @@ const CopyOrder = () => {
             ) : currentStep === "destinationDetails" ? (
               <CopyDestinationDetails {...props} />
             ) : (
-              currentStep === "billingDetails" && <CopyBillingDetails {...props} />
+              currentStep === "billingDetails" && (
+                <CopyBillingDetails {...props} />
+              )
             )}
           </div>
           <Dialog open={showPreview} onOpenChange={setShowPreview}>
