@@ -21,6 +21,7 @@ import VerifyEmailSent from "@/pages/authentication/verify-email-sent/VerifyEmai
 import VerifyEmail from "@/pages/authentication/verify-email/VerifyEmail";
 import EditRecurringOrder from "@/pages/order/edit-recurring-orders/EditRecurringOrder";
 import News from "@/pages/order/news/News";
+import CopyOrder from "@/pages/order/copy-order/CopyOrder";
 
 function App() {
   axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
@@ -44,10 +45,10 @@ function App() {
         }
       />
       <Route
-        path="/recreate-order/:id"
+        path="/copy-order/:id"
         element={
           <PrivateRoute>
-            <CreateOrder />
+            <CopyOrder />
           </PrivateRoute>
         }
       />
