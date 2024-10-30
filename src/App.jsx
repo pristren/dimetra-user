@@ -21,6 +21,7 @@ import VerifyEmailSent from "@/pages/authentication/verify-email-sent/VerifyEmai
 import VerifyEmail from "@/pages/authentication/verify-email/VerifyEmail";
 import EditRecurringOrder from "@/pages/order/edit-recurring-orders/EditRecurringOrder";
 import News from "@/pages/order/news/News";
+import ReopenOrder from "@/pages/order/reopen-order/ReopenOrder";
 import CopyOrder from "@/pages/order/copy-order/CopyOrder";
 
 function App() {
@@ -45,6 +46,10 @@ function App() {
         }
       />
       <Route
+        path="/reopen-order/:id"
+        element={
+          <PrivateRoute>
+            <ReopenOrder />
         path="/copy-order/:id"
         element={
           <PrivateRoute>
