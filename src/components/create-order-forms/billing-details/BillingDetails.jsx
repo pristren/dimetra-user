@@ -82,7 +82,7 @@ const BillingDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-normal">
-                      {t("prename_institution")}
+                      {t("first_name")}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -104,7 +104,7 @@ const BillingDetails = ({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">{t("name_institution")}</FormLabel>
+                    <FormLabel className="font-normal">{t("last_name")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.name ? "border-red-500" : ""}
