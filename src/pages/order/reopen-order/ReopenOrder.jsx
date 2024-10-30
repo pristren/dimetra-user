@@ -2,11 +2,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Pencil, Send, Truck, User } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import BillingDetails from "@/components/create-order-forms/billing-details/BillingDetails";
-import DestinationDetails from "@/components/create-order-forms/destination-details/DestinationDetails";
-import PatientDetails from "@/components/create-order-forms/patient-details/PatientDetails";
-import TransportationDetails from "@/components/create-order-forms/transportation-details/TransportationDetails";
-import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 import Navbar from "@/components/common/Navbar";
 import { isEqual } from "lodash";
 import { Logo } from "@/assets/icons";
@@ -16,14 +11,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { createOrderDefaultState } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
 import { calculateFormProgress } from "@/utils";
 import { useParams } from "react-router-dom";
 import { GET_AN_ORDER } from "../edit-order/graphql/queries/getAnOrder.gql";
 import { useLazyQuery } from "@apollo/client";
+import ReopenTransportationDetails from "@/components/reopen-order-forms/reopen-transportation-details/ReopenTransportationDetails";
+import ReopenPatientDetails from "@/components/reopen-order-forms/reopen-patient-details/ReopenPatientDetails";
+import ReopenDestinationDetails from "@/components/reopen-order-forms/reopen-destination-details/ReopenDestinationDetails";
+import ReopenBillingDetails from "@/components/reopen-order-forms/reopen-billing-details/ReopenBillingDetails";
+import ReopenPreviewDetails from "@/components/reopen-order-forms/reopen-preview-details/ReopenPreviewDetails";
+import { reopenOrderDefaultState } from "@/components/reopen-order-forms/helpers";
 
-const CreateOrder = () => {
+const ReopenOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
   const [patientProgress, setPatientProgress] = useState(0);
   const [destinationProgress, setDestinationProgress] = useState(0);
@@ -31,11 +31,11 @@ const CreateOrder = () => {
   const [currentStep, setCurrentStep] = useState("transportDetails");
   const [showPreview, setShowPreview] = useState(false);
   const { id } = useParams();
-  const [createOrderData, setCreateOrderData] = useState(
-    createOrderDefaultState
+  const [reopenOrderData, setReopenOrderData] = useState(
+    reopenOrderDefaultState
   );
-  const { patientData } = createOrderData;
-  const prevCreateOrderDataRef = useRef(createOrderData);
+  const { patientData } = reopenOrderData;
+  const prevReopenOrderDataRef = useRef(reopenOrderData);
 
   const {
     destinationDetailsData: {
@@ -55,7 +55,7 @@ const CreateOrder = () => {
       pickup_phone = "",
       drop_off_pick_up_date,
     } = {},
-  } = createOrderData;
+  } = reopenOrderData;
 
   const fieldsFilled = [
     pick_up_name,
@@ -111,7 +111,7 @@ const CreateOrder = () => {
       onCompleted: (response) => {
         // Remove __typename before setting the data
         const cleanedData = removeTypename(response.getAnOrder);
-        setCreateOrderData(cleanedData);
+        setReopenOrderData(cleanedData);
       },
       onError: (error) => {
         console.error({ error });
@@ -126,23 +126,23 @@ const CreateOrder = () => {
   }, [id]);
 
   useEffect(() => {
-    if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
-      localStorage.setItem("createOrderData", JSON.stringify(createOrderData));
-      prevCreateOrderDataRef.current = createOrderData;
+    if (!isEqual(prevReopenOrderDataRef.current, reopenOrderData)) {
+      localStorage.setItem("reopenOrderData", JSON.stringify(reopenOrderData));
+      prevReopenOrderDataRef.current = reopenOrderData;
     }
-  }, [createOrderData]);
+  }, [reopenOrderData]);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("createOrderData");
+    const storedData = localStorage.getItem("reopenOrderData");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
-      setCreateOrderData(parsedData);
+      setReopenOrderData(parsedData);
     }
   }, []);
 
   useEffect(() => {
     if (
-      createOrderData.transportationData?.type_of_transport ===
+      reopenOrderData.transportationData?.type_of_transport ===
       "collection_order"
     ) {
       const fieldsFilled = [
@@ -164,7 +164,7 @@ const CreateOrder = () => {
 
   useEffect(() => {
     if (
-      createOrderData?.transportationData?.type_of_transport !== "recurring"
+      reopenOrderData?.transportationData?.type_of_transport !== "recurring"
     ) {
       setDestinationProgress(calculateFormProgress(fieldsFilled));
     } else {
@@ -203,14 +203,14 @@ const CreateOrder = () => {
 
   const props = {
     transportationProgress,
-    createOrderData,
+    reopenOrderData,
     billingProgress,
     currentStep,
     patientProgress,
     destinationProgress,
     showPreview,
     setShowPreview,
-    setCreateOrderData,
+    setReopenOrderData,
     setCurrentStep,
     setBillingProgress,
     handleFormChange,
@@ -313,13 +313,13 @@ const CreateOrder = () => {
                 <p>Loading...</p>
               </div>
             ) : currentStep === "transportDetails" ? (
-              <TransportationDetails {...props} />
+              <ReopenTransportationDetails {...props} />
             ) : currentStep === "patientDetails" ? (
-              <PatientDetails {...props} />
+              <ReopenPatientDetails {...props} />
             ) : currentStep === "destinationDetails" ? (
-              <DestinationDetails {...props} />
+              <ReopenDestinationDetails {...props} />
             ) : (
-              currentStep === "billingDetails" && <BillingDetails {...props} />
+              currentStep === "billingDetails" && <ReopenBillingDetails {...props} />
             )}
           </div>
           <Dialog open={showPreview} onOpenChange={setShowPreview}>
@@ -330,7 +330,7 @@ const CreateOrder = () => {
               <DialogHeader>
                 <DialogTitle />
                 <div>
-                  <PreviewDetails {...props} />
+                  <ReopenPreviewDetails {...props} />
                 </div>
               </DialogHeader>
             </DialogContent>
@@ -345,4 +345,4 @@ const CreateOrder = () => {
   );
 };
 
-export default CreateOrder;
+export default ReopenOrder;
