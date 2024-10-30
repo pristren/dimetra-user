@@ -48,23 +48,6 @@ const CopyDestinationDetails = ({
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
   }
-  const { userInfo } = useSelector((state) => state.user);
-
-  useEffect(() => {
-    if (userInfo) {
-      setCopiedOrderData((prevState) => ({
-        ...prevState,
-        destinationDetailsData: {
-          ...prevState.destinationDetailsData,
-          pick_up_name: `${userInfo?.first_name} ${userInfo?.last_name}`,
-          pick_up_address: userInfo?.address,
-          pick_up_postal_code: Number(userInfo?.code),
-          pick_up_city: userInfo?.billing_address,
-          pick_up_country: userInfo?.address,
-        },
-      }));
-    }
-  }, [userInfo]);
 
   const handleNext = (e) => {
     e.preventDefault();
