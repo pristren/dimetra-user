@@ -1,12 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from "react";
-import { Pencil, Send, Truck, User } from "lucide-react";
+import {  Pencil, Send, Truck, User } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import BillingDetails from "@/components/create-order-forms/billing-details/BillingDetails";
-import DestinationDetails from "@/components/create-order-forms/destination-details/DestinationDetails";
-import PatientDetails from "@/components/create-order-forms/patient-details/PatientDetails";
-import TransportationDetails from "@/components/create-order-forms/transportation-details/TransportationDetails";
-import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 import Navbar from "@/components/common/Navbar";
 import { isEqual } from "lodash";
 import { Logo } from "@/assets/icons";
@@ -16,22 +11,31 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { createOrderDefaultState } from "@/components/create-order-forms/helpers";
+import { copiedOrderDefaultState } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
 import { calculateFormProgress } from "@/utils";
+import { useParams } from "react-router-dom";
+import { GET_AN_ORDER } from "../edit-order/graphql/queries/getAnOrder.gql";
+import { useLazyQuery } from "@apollo/client";
+import CopyTransportationDetails from "@/components/copy-order-forms/copy-transportation-details/CopyTransportationDetails";
+import CopyPatientDetails from "@/components/copy-order-forms/copy-patient-details/CopyPatientDetails";
+import CopyDestinationDetails from "@/components/copy-order-forms/copy-destination-details/CopyDestinationDetails";
+import CopyBillingDetails from "@/components/copy-order-forms/copy-billing-details/CopyBillingDetails";
+import CopyPreviewDetails from "@/components/copy-order-forms/copy-preview-details/CopyPreviewDetails";
 
-const CreateOrder = () => {
+const CopyOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
   const [patientProgress, setPatientProgress] = useState(0);
   const [destinationProgress, setDestinationProgress] = useState(0);
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
   const [showPreview, setShowPreview] = useState(false);
-  const [createOrderData, setCreateOrderData] = useState(
-    createOrderDefaultState
+  const { id } = useParams();
+  const [copiedOrderData, setCopiedOrderData] = useState(
+    copiedOrderDefaultState
   );
-  const { patientData } = createOrderData;
-  const prevCreateOrderDataRef = useRef(createOrderData);
+  const { patientData } = copiedOrderData;
+  const prevCopiedOrderDataRef = useRef(copiedOrderData);
 
   const {
     destinationDetailsData: {
@@ -51,7 +55,7 @@ const CreateOrder = () => {
       pickup_phone = "",
       drop_off_pick_up_date,
     } = {},
-  } = createOrderData;
+  } = copiedOrderData;
 
   const fieldsFilled = [
     pick_up_name,
@@ -83,24 +87,61 @@ const CreateOrder = () => {
     drop_off_phone,
   ];
 
-  useEffect(() => {
-    if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
-      localStorage.setItem("createOrderData", JSON.stringify(createOrderData));
-      prevCreateOrderDataRef.current = createOrderData;
+  function removeTypename(obj) {
+    if (Array.isArray(obj)) {
+      return obj.map(removeTypename);
+    } else if (obj !== null && typeof obj === "object") {
+      const newObj = {};
+      for (const key in obj) {
+        if (key !== "__typename") {
+          newObj[key] = removeTypename(obj[key]);
+        }
+      }
+      return newObj;
     }
-  }, [createOrderData]);
+    return obj;
+  }
+
+  const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
+    GET_AN_ORDER,
+    {
+      variables: { queryData: { id: id } },
+      errorPolicy: "all",
+      fetchPolicy: "no-cache",
+      onCompleted: (response) => {
+        const cleanedData = removeTypename(response.getAnOrder);
+        setCopiedOrderData(cleanedData);
+      },
+      onError: (error) => {
+        console.error({ error });
+      },
+    }
+  );
 
   useEffect(() => {
-    const storedData = localStorage.getItem("createOrderData");
+    if (id) {
+      getAnOrder();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (!isEqual(prevCopiedOrderDataRef.current, copiedOrderData)) {
+      localStorage.setItem("copiedOrderData", JSON.stringify(copiedOrderData));
+      prevCopiedOrderDataRef.current = copiedOrderData;
+    }
+  }, [copiedOrderData]);
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("copiedOrderData");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
-      setCreateOrderData(parsedData);
+      setCopiedOrderData(parsedData);
     }
   }, []);
 
   useEffect(() => {
     if (
-      createOrderData.transportationData?.type_of_transport ===
+      copiedOrderData.transportationData?.type_of_transport ===
       "collection_order"
     ) {
       const fieldsFilled = [
@@ -122,7 +163,7 @@ const CreateOrder = () => {
 
   useEffect(() => {
     if (
-      createOrderData?.transportationData?.type_of_transport !== "recurring"
+      copiedOrderData?.transportationData?.type_of_transport !== "recurring"
     ) {
       setDestinationProgress(calculateFormProgress(fieldsFilled));
     } else {
@@ -161,14 +202,14 @@ const CreateOrder = () => {
 
   const props = {
     transportationProgress,
-    createOrderData,
+    copiedOrderData,
     billingProgress,
     currentStep,
     patientProgress,
     destinationProgress,
     showPreview,
     setShowPreview,
-    setCreateOrderData,
+    setCopiedOrderData,
     setCurrentStep,
     setBillingProgress,
     handleFormChange,
@@ -231,14 +272,53 @@ const CreateOrder = () => {
           </div>
 
           <div className="lg:w-[70%] px-3 lg:px-0">
-            {currentStep === "transportDetails" ? (
-              <TransportationDetails {...props} />
+            {getAnOrderLoading ? (
+              <div className="flex items-center justify-center min-h-96">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="xMidYMid"
+                  width="20"
+                  height="20"
+                  style={{
+                    shapeRendering: "auto",
+                    display: "block",
+                    background: "rgba(255, 255, 255, 0)",
+                  }}
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <g>
+                    <circle
+                      strokeDasharray="164.93361431346415 56.97787143782138"
+                      r="35"
+                      strokeWidth="10"
+                      stroke="#145374"
+                      fill="none"
+                      cy="50"
+                      cx="50"
+                    >
+                      <animateTransform
+                        keyTimes="0;1"
+                        values="0 50 50;360 50 50"
+                        dur="1s"
+                        repeatCount="indefinite"
+                        type="rotate"
+                        attributeName="transform"
+                      ></animateTransform>
+                    </circle>
+                    <g></g>
+                  </g>
+                </svg>
+                <p>Loading...</p>
+              </div>
+            ) : currentStep === "transportDetails" ? (
+              <CopyTransportationDetails {...props} />
             ) : currentStep === "patientDetails" ? (
-              <PatientDetails {...props} />
+              <CopyPatientDetails {...props} />
             ) : currentStep === "destinationDetails" ? (
-              <DestinationDetails {...props} />
+              <CopyDestinationDetails {...props} />
             ) : (
-              currentStep === "billingDetails" && <BillingDetails {...props} />
+              currentStep === "billingDetails" && <CopyBillingDetails {...props} />
             )}
           </div>
           <Dialog open={showPreview} onOpenChange={setShowPreview}>
@@ -249,7 +329,7 @@ const CreateOrder = () => {
               <DialogHeader>
                 <DialogTitle />
                 <div>
-                  <PreviewDetails {...props} />
+                  <CopyPreviewDetails {...props} />
                 </div>
               </DialogHeader>
             </DialogContent>
@@ -264,4 +344,4 @@ const CreateOrder = () => {
   );
 };
 
-export default CreateOrder;
+export default CopyOrder;
