@@ -201,23 +201,31 @@ const ReopenOrder = () => {
     </div>
   );
 
-  const props = {
+  const transportationProps = {
     transportationProgress,
-    reopenOrderData,
-    billingProgress,
-    currentStep,
-    patientProgress,
-    destinationProgress,
-    showPreview,
-    setShowPreview,
-    setReopenOrderData,
-    setCurrentStep,
-    setBillingProgress,
-    handleFormChange,
     setTransportationProgress,
+  };
+  const patientProps = {
+    patientProgress,
     setPatientProgress,
+  };
+  const destinationProps = {
+    destinationProgress,
     setDestinationProgress,
   };
+  const billingProps = {
+    billingProgress,
+    setBillingProgress,
+  };
+
+  const commonProps = {
+    reopenOrderData,
+    handleFormChange,
+    setShowPreview,
+    setCurrentStep,
+    setReopenOrderData,
+  };
+
   return (
     <div className="relative overflow-y-auto">
       <Navbar />
@@ -313,13 +321,15 @@ const ReopenOrder = () => {
                 <p>Loading...</p>
               </div>
             ) : currentStep === "transportDetails" ? (
-              <ReopenTransportationDetails {...props} />
+              <ReopenTransportationDetails {...transportationProps} {...commonProps} />
             ) : currentStep === "patientDetails" ? (
-              <ReopenPatientDetails {...props} />
+              <ReopenPatientDetails {...patientProps} {...commonProps} />
             ) : currentStep === "destinationDetails" ? (
-              <ReopenDestinationDetails {...props} />
+              <ReopenDestinationDetails {...destinationProps} {...commonProps} />
             ) : (
-              currentStep === "billingDetails" && <ReopenBillingDetails {...props} />
+              currentStep === "billingDetails" && (
+                <ReopenBillingDetails {...billingProps} {...commonProps} />
+              )
             )}
           </div>
           <Dialog open={showPreview} onOpenChange={setShowPreview}>
@@ -330,7 +340,7 @@ const ReopenOrder = () => {
               <DialogHeader>
                 <DialogTitle />
                 <div>
-                  <ReopenPreviewDetails {...props} />
+                  <ReopenPreviewDetails {...commonProps} />
                 </div>
               </DialogHeader>
             </DialogContent>
