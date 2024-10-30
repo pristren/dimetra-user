@@ -211,7 +211,6 @@ const CopyBillingDetails = ({
             <BackAndNextBtn
               isFillForm={true}
               isLastPage={true}
-              //   isDisabled={billingProgress < 100}
               handleGoPrev={() => handleFormChange("destinationDetails")}
               handleGoNext={(e) => {
                 e.preventDefault();
