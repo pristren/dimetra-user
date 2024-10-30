@@ -70,7 +70,7 @@ const EditBillingDetails = ({
   }, [editOrderData.billingDetailsData, form]);
   return (
     <Card className="p-6 border-none rounded-none">
-      <h4 className="px-3">{t("billing_address")}</h4>
+      <h4 className="px-3">{t("billing_address")} (optional)</h4>
       <CardContent className="px-3 mt-4">
         <Form {...form}>
           <form>
@@ -101,7 +101,7 @@ const EditBillingDetails = ({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{t("name")}</FormLabel>
+                    <FormLabel>{t("name_institution")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.name ? "border-red-500" : ""}

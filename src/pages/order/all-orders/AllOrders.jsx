@@ -95,8 +95,8 @@ const AllOrders = () => {
           row.original?.destinationDetailsData?.drop_off_pick_up_date;
         return (
           <p>
-            {moment(date).format("DD MMMM YYYY")}-
-            {moment(date).format("dddd").slice(0, 3)}
+            {moment(date).format("DD MMMM YYYY")}(
+            {moment(date).format("dddd").slice(0, 3)})
           </p>
         );
       },

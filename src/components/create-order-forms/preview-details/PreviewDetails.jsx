@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import AppSelect from "@/components/common/AppSelect";
 import {
   durationOptions,
-  timeOptions,
   transportModesOptions,
   transportOptions,
   transportWithOptions,
@@ -25,7 +24,11 @@ import { Loading, SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 
-const PreviewDetails = ({ createOrderData, setCurrentStep,setShowPreview }) => {
+const PreviewDetails = ({
+  createOrderData,
+  setCurrentStep,
+  setShowPreview,
+}) => {
   const {
     transportationData,
     patientData,
@@ -179,30 +182,32 @@ const PreviewDetails = ({ createOrderData, setCurrentStep,setShowPreview }) => {
                       {t("select_start_date_and_time")}
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker disabled date={recurringData?.start_date} />
-                      <AppSelect
-                        items={timeOptions}
-                        className="cursor-pointer"
-                        placeholder="00:00"
+                      <Input
                         disabled
-                        value={recurringData?.start_time}
-                        isTime={true}
+                        value={
+                          recurringData?.start_date
+                            ? moment(recurringData.start_date).format(
+                                "DD/MM/YYYY"
+                              )
+                            : ""
+                        }
                       />
+                      <Input disabled value={recurringData?.start_time} />
                     </div>
 
                     <h3 className="text-lg font-medium mt-10 mb-5">
                       {t("select_return_time")}* :
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker disabled date={recurringData?.return_date} />
-                      <AppSelect
-                        items={timeOptions}
-                        placeholder="00:00"
-                        isTime={true}
-                        value={recurringData?.return_time}
-                        disabled
-                        className="cursor-pointer"
-                      />
+                      {recurringData?.return_date && (
+                        <Input
+                          disabled
+                          value={moment(recurringData?.return_date).format(
+                            "DD/MM/YYYY"
+                          )}
+                        />
+                      )}
+                      <Input disabled placeholder="00:00" value={recurringData?.return_time} />
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
@@ -264,21 +269,13 @@ const PreviewDetails = ({ createOrderData, setCurrentStep,setShowPreview }) => {
                         {t("select_start_date_and_time_free")}
                       </h3>
                       <div className="flex w-max gap-4 items-center">
+                        {/* should know the functionality */}
                         <DatePicker
                           mode="multiple"
                           date={recurringData.free_dates}
                           disabled
                         />
-                        {console.log(recurringData.free_dates_start_time)}
-                        <AppSelect
-                          items={timeOptions}
-                          placeholder="Select a time"
-                          isTime={true}
-                          isTimeSelected={true}
-                          disabled
-                          className="cursor-pointer"
-                          value={recurringData.free_dates_start_time}
-                        />
+                        <Input disabled value={recurringData.free_dates_start_time} />
                       </div>
                     </div>
                     <div className="mt-5 mb-5 ">
@@ -291,15 +288,7 @@ const PreviewDetails = ({ createOrderData, setCurrentStep,setShowPreview }) => {
                           date={recurringData.free_dates}
                           disabled
                         />
-
-                        <AppSelect
-                          items={timeOptions}
-                          placeholder="No time selected"
-                          isTime={true}
-                          disabled
-                          className="cursor-pointer"
-                          defaultValue={recurringData.free_dates_return_time}
-                        />
+                        <Input disabled placeholder="No time selected" value={recurringData.free_dates_return_time} />
                       </div>
                     </div>
                   </div>
@@ -311,7 +300,7 @@ const PreviewDetails = ({ createOrderData, setCurrentStep,setShowPreview }) => {
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
-                    {t("name")} <sup className="text-[13px]">*</sup>
+                    {t("name_institution")} <sup className="text-[13px]">*</sup>
                   </Label>
                   <Input
                     disabled
@@ -640,23 +629,23 @@ const PreviewDetails = ({ createOrderData, setCurrentStep,setShowPreview }) => {
                     "recurring" && (
                     <div>
                       <h6 className="mb-8 mt-14">{t("return_journey")}</h6>
-                      <div className="mb-5">
-                        <Label className="block mb-2 font-medium">
-                          {t("return_date")}
-                        </Label>
-                        <Input
-                          disabled
-                          value={
-                            destinationDetailsData?.drop_off_return_date
-                              ? moment(
-                                  destinationDetailsData?.drop_off_return_date
-                                ).format("DD MMMM YYYY")
-                              : "Not provided"
-                          }
-                          placeholder={t("type_your_return_date")}
-                          className="border-gray-300"
-                        />
-                      </div>
+                        {/* <div className="mb-5">
+                          <Label className="block mb-2 font-medium">
+                            {t("return_date")}
+                          </Label>
+                          <Input
+                            disabled
+                            value={
+                              destinationDetailsData?.drop_off_return_date
+                                ? moment(
+                                    destinationDetailsData?.drop_off_return_date
+                                  ).format("DD MMMM YYYY")
+                                : "Not provided"
+                            }
+                            placeholder={t("type_your_return_date")}
+                            className="border-gray-300"
+                          />
+                        </div> */}
                       <div className="mb-5">
                         <Label className="block mb-2 font-medium">
                           {t("return_time")}
@@ -690,7 +679,9 @@ const PreviewDetails = ({ createOrderData, setCurrentStep,setShowPreview }) => {
                   />
                 </div>
                 <div className="mb-5">
-                  <Label className="block mb-2 font-medium">{t("name")}</Label>
+                  <Label className="block mb-2 font-medium">
+                    {t("name_institution")}
+                  </Label>
                   <Input
                     disabled
                     value={billingDetailsData?.name}
@@ -748,8 +739,8 @@ const PreviewDetails = ({ createOrderData, setCurrentStep,setShowPreview }) => {
               className="px-14"
               variant="outline"
               onClick={() => {
-                setShowPreview(false)
-                setCurrentStep("transportDetails")
+                setShowPreview(false);
+                setCurrentStep("transportDetails");
               }}
             >
               Edit
