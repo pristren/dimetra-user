@@ -172,11 +172,11 @@ const PreviewDetails = ({
                   ]}
                   placeholder="Week"
                   className="cursor-pointer"
-                  defaultValue={recurringData.recurring_type}
+                  defaultValue={recurringData?.recurring_type}
                   disabled
                 />
 
-                {recurringData.recurring_type === "week" ? (
+                {recurringData?.recurring_type === "week" ? (
                   <div className="">
                     <h3 className="text-lg font-medium mt-10 mb-5">
                       {t("select_start_date_and_time")}
@@ -186,7 +186,7 @@ const PreviewDetails = ({
                         disabled
                         value={
                           recurringData?.start_date
-                            ? moment(recurringData.start_date).format(
+                            ? moment(recurringData?.start_date).format(
                                 "DD/MM/YYYY"
                               )
                             : ""
@@ -262,7 +262,7 @@ const PreviewDetails = ({
                       )}
                     </h6>
                   </div>
-                ) : recurringData.recurring_type === "free" ? (
+                ) : recurringData?.recurring_type === "free" ? (
                   <div className="">
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
@@ -272,10 +272,10 @@ const PreviewDetails = ({
                         {/* should know the functionality */}
                         <DatePicker
                           mode="multiple"
-                          date={recurringData.free_dates}
+                          date={recurringData?.free_dates}
                           disabled
                         />
-                        <Input disabled value={recurringData.free_dates_start_time} />
+                        <Input disabled value={recurringData?.free_dates_start_time} />
                       </div>
                     </div>
                     <div className="mt-5 mb-5 ">
@@ -285,10 +285,10 @@ const PreviewDetails = ({
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
                           mode="multiple"
-                          date={recurringData.free_dates}
+                          date={recurringData?.free_dates}
                           disabled
                         />
-                        <Input disabled placeholder="No time selected" value={recurringData.free_dates_return_time} />
+                        <Input disabled placeholder="No time selected" value={recurringData?.free_dates_return_time} />
                       </div>
                     </div>
                   </div>

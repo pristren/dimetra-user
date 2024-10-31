@@ -96,7 +96,7 @@ const AllOrders = () => {
         return (
           <p>
             {moment(date).format("DD MMMM YYYY")}(
-            {moment(date).format("dddd").slice(0, 3)})
+            {moment(date).format("ddd")})
           </p>
         );
       },

@@ -70,7 +70,7 @@ const BillingDetails = ({
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
-        <CardTitle className="title">{t("billing_address")} (optional)</CardTitle>
+        <CardTitle className="title">{t("billing_address")} ({t("optional")})</CardTitle>
       </CardHeader>
       <CardContent className="lg:px-10">
         <Form {...form}>
