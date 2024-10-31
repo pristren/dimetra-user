@@ -78,6 +78,25 @@ const AllOrders = () => {
     });
   };
 
+  useEffect(() => {
+    data.forEach((order) => {
+      if (order.status === "deleting") {
+        const updatedAtDate = parseInt(order.updatedAt, 10);
+        const deletingDate = moment(updatedAtDate);
+        const oneDayAgo = moment().subtract(1, "day");
+
+        if (deletingDate.isBefore(oneDayAgo)) {
+          updateOrderStatus({
+            variables: {
+              queryData: { id: order.id },
+              inputData: { status: "deleted" },
+            },
+          });
+        }
+      }
+    });
+  }, [data]);
+
   const columns = [
     {
       accessorKey: "destinationDetailsData.drop_off_pick_up_date",
@@ -230,7 +249,7 @@ const AllOrders = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
-                  onClick={() => updateAnOrderStatus(orderId, "deleted")}
+                  onClick={() => updateAnOrderStatus(orderId, "deleting")}
                 >
                   <Trash className="size-5" />
                   <span className="text-gray-700 text-sm">{t("storno")}</span>
