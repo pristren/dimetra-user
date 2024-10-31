@@ -207,7 +207,11 @@ const PreviewDetails = ({
                           )}
                         />
                       )}
-                      <Input disabled placeholder="00:00" value={recurringData?.return_time} />
+                      <Input
+                        disabled
+                        placeholder="00:00"
+                        value={recurringData?.return_time}
+                      />
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
@@ -275,7 +279,10 @@ const PreviewDetails = ({
                           date={recurringData?.free_dates}
                           disabled
                         />
-                        <Input disabled value={recurringData?.free_dates_start_time} />
+                        <Input
+                          disabled
+                          value={recurringData?.free_dates_start_time}
+                        />
                       </div>
                     </div>
                     <div className="mt-5 mb-5 ">
@@ -288,7 +295,11 @@ const PreviewDetails = ({
                           date={recurringData?.free_dates}
                           disabled
                         />
-                        <Input disabled placeholder="No time selected" value={recurringData?.free_dates_return_time} />
+                        <Input
+                          disabled
+                          placeholder="No time selected"
+                          value={recurringData?.free_dates_return_time}
+                        />
                       </div>
                     </div>
                   </div>
@@ -629,7 +640,7 @@ const PreviewDetails = ({
                     "recurring" && (
                     <div>
                       <h6 className="mb-8 mt-14">{t("return_journey")}</h6>
-                        {/* <div className="mb-5">
+                      {/* <div className="mb-5">
                           <Label className="block mb-2 font-medium">
                             {t("return_date")}
                           </Label>
@@ -669,7 +680,7 @@ const PreviewDetails = ({
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
-                    {t("prename_institution")}
+                    {t("first_name")}
                   </Label>
                   <Input
                     disabled

@@ -24,13 +24,12 @@ const ReopenBillingDetails = ({
   const { t } = useTranslation();
   const {
     pre_name = "",
-    contact_phone = "",    
+    contact_phone = "",
     name = "",
     street = "",
     place = "",
     contact = "",
   } = reopenOrderData.billingDetailsData || {};
-  
 
   const formSchema = z.object({
     preName: z.string().min(1, t("prename_institution_is_required")),
@@ -69,7 +68,9 @@ const ReopenBillingDetails = ({
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
-        <CardTitle className="title">{t("billing_address")} (optional)</CardTitle>
+        <CardTitle className="title">
+          {t("billing_address")} ({t("optional")})
+        </CardTitle>
       </CardHeader>
       <CardContent className="lg:px-10">
         <Form {...form}>
@@ -81,7 +82,7 @@ const ReopenBillingDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-normal">
-                      {t("prename_institution")}
+                      {t("first_name")}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -103,7 +104,7 @@ const ReopenBillingDetails = ({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">{t("name")}</FormLabel>
+                    <FormLabel className="font-normal">{t("last_name")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.name ? "border-red-500" : ""}

@@ -289,7 +289,7 @@ function OrderDetails({ singleRecurring = false }) {
             <h5>{t("billing_details")}</h5>
             <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
               <div className="flex items-center gap-10">
-                <p>{t("prename_institution")} : </p>
+                <p>{t("first_name")} : </p>
                 <p>{data?.billingDetailsData?.pre_name || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
