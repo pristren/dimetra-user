@@ -2,11 +2,6 @@
 import { useEffect, useState, useRef } from "react";
 import { Pencil, Send, Truck, User } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import BillingDetails from "@/components/create-order-forms/billing-details/BillingDetails";
-import DestinationDetails from "@/components/create-order-forms/destination-details/DestinationDetails";
-import PatientDetails from "@/components/create-order-forms/patient-details/PatientDetails";
-import TransportationDetails from "@/components/create-order-forms/transportation-details/TransportationDetails";
-import PreviewDetails from "@/components/create-order-forms/preview-details/PreviewDetails";
 import Navbar from "@/components/common/Navbar";
 import { isEqual } from "lodash";
 import { Logo } from "@/assets/icons";
@@ -16,22 +11,31 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { createOrderDefaultState } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
 import { calculateFormProgress } from "@/utils";
+import { useParams } from "react-router-dom";
+import { GET_AN_ORDER } from "../edit-order/graphql/queries/getAnOrder.gql";
+import { useLazyQuery } from "@apollo/client";
+import ReopenTransportationDetails from "@/components/reopen-order-forms/reopen-transportation-details/ReopenTransportationDetails";
+import ReopenPatientDetails from "@/components/reopen-order-forms/reopen-patient-details/ReopenPatientDetails";
+import ReopenDestinationDetails from "@/components/reopen-order-forms/reopen-destination-details/ReopenDestinationDetails";
+import ReopenBillingDetails from "@/components/reopen-order-forms/reopen-billing-details/ReopenBillingDetails";
+import ReopenPreviewDetails from "@/components/reopen-order-forms/reopen-preview-details/ReopenPreviewDetails";
+import { reopenOrderDefaultState } from "@/components/reopen-order-forms/helpers";
 
-const CreateOrder = () => {
+const ReopenOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
   const [patientProgress, setPatientProgress] = useState(0);
   const [destinationProgress, setDestinationProgress] = useState(0);
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
   const [showPreview, setShowPreview] = useState(false);
-  const [createOrderData, setCreateOrderData] = useState(
-    createOrderDefaultState
+  const { id } = useParams();
+  const [reopenOrderData, setReopenOrderData] = useState(
+    reopenOrderDefaultState
   );
-  const { patientData } = createOrderData;
-  const prevCreateOrderDataRef = useRef(createOrderData);
+  const { patientData } = reopenOrderData;
+  const prevReopenOrderDataRef = useRef(reopenOrderData);
 
   const {
     destinationDetailsData: {
@@ -51,7 +55,7 @@ const CreateOrder = () => {
       pickup_phone = "",
       drop_off_pick_up_date,
     } = {},
-  } = createOrderData;
+  } = reopenOrderData;
 
   const fieldsFilled = [
     pick_up_name,
@@ -83,24 +87,62 @@ const CreateOrder = () => {
     drop_off_phone,
   ];
 
-  useEffect(() => {
-    if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
-      localStorage.setItem("createOrderData", JSON.stringify(createOrderData));
-      prevCreateOrderDataRef.current = createOrderData;
+  function removeTypename(obj) {
+    if (Array.isArray(obj)) {
+      return obj.map(removeTypename);
+    } else if (obj !== null && typeof obj === "object") {
+      const newObj = {};
+      for (const key in obj) {
+        if (key !== "__typename") {
+          newObj[key] = removeTypename(obj[key]);
+        }
+      }
+      return newObj;
     }
-  }, [createOrderData]);
+    return obj;
+  }
+
+  const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
+    GET_AN_ORDER,
+    {
+      variables: { queryData: { id: id } },
+      errorPolicy: "all",
+      fetchPolicy: "no-cache",
+      onCompleted: (response) => {
+        // Remove __typename before setting the data
+        const cleanedData = removeTypename(response.getAnOrder);
+        setReopenOrderData(cleanedData);
+      },
+      onError: (error) => {
+        console.error({ error });
+      },
+    }
+  );
 
   useEffect(() => {
-    const storedData = localStorage.getItem("createOrderData");
+    if (id) {
+      getAnOrder();
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (!isEqual(prevReopenOrderDataRef.current, reopenOrderData)) {
+      localStorage.setItem("reopenOrderData", JSON.stringify(reopenOrderData));
+      prevReopenOrderDataRef.current = reopenOrderData;
+    }
+  }, [reopenOrderData]);
+
+  useEffect(() => {
+    const storedData = localStorage.getItem("reopenOrderData");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
-      setCreateOrderData(parsedData);
+      setReopenOrderData(parsedData);
     }
   }, []);
 
   useEffect(() => {
     if (
-      createOrderData.transportationData?.type_of_transport ===
+      reopenOrderData.transportationData?.type_of_transport ===
       "collection_order"
     ) {
       const fieldsFilled = [
@@ -122,7 +164,7 @@ const CreateOrder = () => {
 
   useEffect(() => {
     if (
-      createOrderData?.transportationData?.type_of_transport !== "recurring"
+      reopenOrderData?.transportationData?.type_of_transport !== "recurring"
     ) {
       setDestinationProgress(calculateFormProgress(fieldsFilled));
     } else {
@@ -159,23 +201,31 @@ const CreateOrder = () => {
     </div>
   );
 
-  const props = {
+  const transportationProps = {
     transportationProgress,
-    createOrderData,
-    billingProgress,
-    currentStep,
-    patientProgress,
-    destinationProgress,
-    showPreview,
-    setShowPreview,
-    setCreateOrderData,
-    setCurrentStep,
-    setBillingProgress,
-    handleFormChange,
     setTransportationProgress,
+  };
+  const patientProps = {
+    patientProgress,
     setPatientProgress,
+  };
+  const destinationProps = {
+    destinationProgress,
     setDestinationProgress,
   };
+  const billingProps = {
+    billingProgress,
+    setBillingProgress,
+  };
+
+  const commonProps = {
+    reopenOrderData,
+    handleFormChange,
+    setShowPreview,
+    setCurrentStep,
+    setReopenOrderData,
+  };
+
   return (
     <div className="relative overflow-y-auto">
       <Navbar />
@@ -231,14 +281,55 @@ const CreateOrder = () => {
           </div>
 
           <div className="lg:w-[70%] px-3 lg:px-0">
-            {currentStep === "transportDetails" ? (
-              <TransportationDetails {...props} />
+            {getAnOrderLoading ? (
+              <div className="flex items-center justify-center min-h-96">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="xMidYMid"
+                  width="20"
+                  height="20"
+                  style={{
+                    shapeRendering: "auto",
+                    display: "block",
+                    background: "rgba(255, 255, 255, 0)",
+                  }}
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                >
+                  <g>
+                    <circle
+                      strokeDasharray="164.93361431346415 56.97787143782138"
+                      r="35"
+                      strokeWidth="10"
+                      stroke="#145374"
+                      fill="none"
+                      cy="50"
+                      cx="50"
+                    >
+                      <animateTransform
+                        keyTimes="0;1"
+                        values="0 50 50;360 50 50"
+                        dur="1s"
+                        repeatCount="indefinite"
+                        type="rotate"
+                        attributeName="transform"
+                      ></animateTransform>
+                    </circle>
+                    <g></g>
+                  </g>
+                </svg>
+                <p>Loading...</p>
+              </div>
+            ) : currentStep === "transportDetails" ? (
+              <ReopenTransportationDetails {...transportationProps} {...commonProps} />
             ) : currentStep === "patientDetails" ? (
-              <PatientDetails {...props} />
+              <ReopenPatientDetails {...patientProps} {...commonProps} />
             ) : currentStep === "destinationDetails" ? (
-              <DestinationDetails {...props} />
+              <ReopenDestinationDetails {...destinationProps} {...commonProps} />
             ) : (
-              currentStep === "billingDetails" && <BillingDetails {...props} />
+              currentStep === "billingDetails" && (
+                <ReopenBillingDetails {...billingProps} {...commonProps} />
+              )
             )}
           </div>
           <Dialog open={showPreview} onOpenChange={setShowPreview}>
@@ -249,7 +340,7 @@ const CreateOrder = () => {
               <DialogHeader>
                 <DialogTitle />
                 <div>
-                  <PreviewDetails {...props} />
+                  <ReopenPreviewDetails {...commonProps} />
                 </div>
               </DialogHeader>
             </DialogContent>
@@ -264,4 +355,4 @@ const CreateOrder = () => {
   );
 };
 
-export default CreateOrder;
+export default ReopenOrder;

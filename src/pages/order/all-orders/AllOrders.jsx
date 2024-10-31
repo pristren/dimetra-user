@@ -237,7 +237,7 @@ const AllOrders = () => {
                 </DropdownMenuItem>
                 <DropdownMenuItem className="mb-2 py-2">
                   <Link
-                    to={`/recreate-order/${orderId}`}
+                    to={`/copy-order/${orderId}`}
                     className="flex items-center gap-3 text-[16px] cursor-pointer"
                   >
                     <Copy className="size-5" />
