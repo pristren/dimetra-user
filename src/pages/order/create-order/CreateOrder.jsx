@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState, useRef } from "react";
-import { Loader, Pencil, Send, Truck, User } from "lucide-react";
+import { Pencil, Send, Truck, User } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import BillingDetails from "@/components/create-order-forms/billing-details/BillingDetails";
 import DestinationDetails from "@/components/create-order-forms/destination-details/DestinationDetails";
@@ -19,9 +19,6 @@ import {
 import { createOrderDefaultState } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
 import { calculateFormProgress } from "@/utils";
-import { useParams } from "react-router-dom";
-import { GET_AN_ORDER } from "../edit-order/graphql/queries/getAnOrder.gql";
-import { useLazyQuery } from "@apollo/client";
 
 const CreateOrder = () => {
   const [transportationProgress, setTransportationProgress] = useState(0);
@@ -30,7 +27,6 @@ const CreateOrder = () => {
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
   const [showPreview, setShowPreview] = useState(false);
-  const { id } = useParams();
   const [createOrderData, setCreateOrderData] = useState(
     createOrderDefaultState
   );
@@ -86,44 +82,6 @@ const CreateOrder = () => {
     drop_off_country,
     drop_off_phone,
   ];
-
-  function removeTypename(obj) {
-    if (Array.isArray(obj)) {
-      return obj.map(removeTypename);
-    } else if (obj !== null && typeof obj === "object") {
-      const newObj = {};
-      for (const key in obj) {
-        if (key !== "__typename") {
-          newObj[key] = removeTypename(obj[key]);
-        }
-      }
-      return newObj;
-    }
-    return obj;
-  }
-
-  const [getAnOrder, { loading: getAnOrderLoading }] = useLazyQuery(
-    GET_AN_ORDER,
-    {
-      variables: { queryData: { id: id } },
-      errorPolicy: "all",
-      fetchPolicy: "no-cache",
-      onCompleted: (response) => {
-        // Remove __typename before setting the data
-        const cleanedData = removeTypename(response.getAnOrder);
-        setCreateOrderData(cleanedData);
-      },
-      onError: (error) => {
-        console.error({ error });
-      },
-    }
-  );
-
-  useEffect(() => {
-    if (id) {
-      getAnOrder();
-    }
-  }, [id]);
 
   useEffect(() => {
     if (!isEqual(prevCreateOrderDataRef.current, createOrderData)) {
@@ -281,46 +239,7 @@ const CreateOrder = () => {
           </div>
 
           <div className="lg:w-[70%] px-3 lg:px-0">
-            {getAnOrderLoading ? (
-              <div className="flex items-center justify-center min-h-96">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 100 100"
-                  preserveAspectRatio="xMidYMid"
-                  width="20"
-                  height="20"
-                  style={{
-                    shapeRendering: "auto",
-                    display: "block",
-                    background: "rgba(255, 255, 255, 0)",
-                  }}
-                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                >
-                  <g>
-                    <circle
-                      strokeDasharray="164.93361431346415 56.97787143782138"
-                      r="35"
-                      strokeWidth="10"
-                      stroke="#145374"
-                      fill="none"
-                      cy="50"
-                      cx="50"
-                    >
-                      <animateTransform
-                        keyTimes="0;1"
-                        values="0 50 50;360 50 50"
-                        dur="1s"
-                        repeatCount="indefinite"
-                        type="rotate"
-                        attributeName="transform"
-                      ></animateTransform>
-                    </circle>
-                    <g></g>
-                  </g>
-                </svg>
-                <p>Loading...</p>
-              </div>
-            ) : currentStep === "transportDetails" ? (
+            {currentStep === "transportDetails" ? (
               <TransportationDetails {...props} />
             ) : currentStep === "patientDetails" ? (
               <PatientDetails {...props} />
