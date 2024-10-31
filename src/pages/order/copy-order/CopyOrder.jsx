@@ -200,23 +200,31 @@ const CopyOrder = () => {
     </div>
   );
 
-  const props = {
+  const transportationProps = {
     transportationProgress,
-    copiedOrderData,
-    billingProgress,
-    currentStep,
-    patientProgress,
-    destinationProgress,
-    showPreview,
-    setShowPreview,
-    setCopiedOrderData,
-    setCurrentStep,
-    setBillingProgress,
-    handleFormChange,
     setTransportationProgress,
+  };
+  const patientProps = {
+    patientProgress,
     setPatientProgress,
+  };
+  const destinationProps = {
+    destinationProgress,
     setDestinationProgress,
   };
+  const billingProps = {
+    billingProgress,
+    setBillingProgress,
+  };
+
+  const commonProps = {
+    copiedOrderData,
+    handleFormChange,
+    setShowPreview,
+    setCurrentStep,
+    setCopiedOrderData,
+  };
+
   return (
     <div className="relative overflow-y-auto">
       <Navbar />
@@ -320,14 +328,17 @@ const CopyOrder = () => {
                 <p>Loading...</p>
               </div>
             ) : currentStep === "transportDetails" ? (
-              <CopyTransportationDetails {...props} />
+              <CopyTransportationDetails
+                {...transportationProps}
+                {...commonProps}
+              />
             ) : currentStep === "patientDetails" ? (
-              <CopyPatientDetails {...props} />
+              <CopyPatientDetails {...patientProps} {...commonProps} />
             ) : currentStep === "destinationDetails" ? (
-              <CopyDestinationDetails {...props} />
+              <CopyDestinationDetails {...destinationProps} {...commonProps} />
             ) : (
               currentStep === "billingDetails" && (
-                <CopyBillingDetails {...props} />
+                <CopyBillingDetails {...billingProps} {...commonProps} />
               )
             )}
           </div>
@@ -339,7 +350,7 @@ const CopyOrder = () => {
               <DialogHeader>
                 <DialogTitle />
                 <div>
-                  <CopyPreviewDetails {...props} />
+                  <CopyPreviewDetails {...commonProps} />
                 </div>
               </DialogHeader>
             </DialogContent>
