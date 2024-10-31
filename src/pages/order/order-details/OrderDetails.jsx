@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GET_AN_ORDER } from "./graphql/queries/getAnOrder.gql";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -105,7 +105,7 @@ function OrderDetails({ singleRecurring = false }) {
                 "collection_order" ? (
                   <p>{t("name_collection")}: </p>
                 ) : (
-                  <p>{t("name")}: </p>
+                  <p>{t("name_institution")}: </p>
                 )}
                 <p>{data?.patientData?.name}</p>
               </div>
@@ -289,7 +289,7 @@ function OrderDetails({ singleRecurring = false }) {
             <h5>{t("billing_details")}</h5>
             <div className="grid grid-cols-2 gap-6 text-nowrap mt-10">
               <div className="flex items-center gap-10">
-                <p>{t("prename_institution")} : </p>
+                <p>{t("first_name")} : </p>
                 <p>{data?.billingDetailsData?.pre_name || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
@@ -297,7 +297,7 @@ function OrderDetails({ singleRecurring = false }) {
                 <p>{data?.billingDetailsData?.dispatcher || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">
-                <p>{t("name")} :</p>
+                <p>{t("name_institution")} :</p>
                 <p>{data?.billingDetailsData?.name || "N/A"}</p>
               </div>
               <div className="flex items-center gap-10">

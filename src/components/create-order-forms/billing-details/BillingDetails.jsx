@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { z } from "zod";
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -70,7 +69,7 @@ const BillingDetails = ({
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
-        <CardTitle className="title">{t("billing_address")} (optional)</CardTitle>
+        <CardTitle className="title">{t("billing_address")} ({t("optional")})</CardTitle>
       </CardHeader>
       <CardContent className="lg:px-10">
         <Form {...form}>
@@ -82,7 +81,7 @@ const BillingDetails = ({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="font-normal">
-                      {t("prename_institution")}
+                      {t("first_name")}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -104,7 +103,7 @@ const BillingDetails = ({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">{t("name")}</FormLabel>
+                    <FormLabel className="font-normal">{t("last_name")}</FormLabel>
                     <FormControl>
                       <Input
                         className={errors.name ? "border-red-500" : ""}

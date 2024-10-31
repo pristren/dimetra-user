@@ -492,7 +492,7 @@ const ReopenDestinationDetails = ({
                       }
                     />
                     <Label htmlFor="returnJourneyCheckbox">
-                      {t("return_journey")} ? (optional)
+                      {t("return_journey")} ? ({t("optional")})
                     </Label>
                   </div>
                 )}

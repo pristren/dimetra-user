@@ -694,7 +694,7 @@ const ReopenTransportationDetails = ({
                         className="text-base font-medium"
                         htmlFor="return_journey"
                       >
-                        {t("return_journey")} ? (optional)
+                        {t("return_journey")} ? ({t("optional")})
                       </Label>
                     </div>
                     {returnJourney && (

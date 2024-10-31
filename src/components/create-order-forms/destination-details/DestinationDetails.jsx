@@ -93,18 +93,6 @@ const DestinationDetails = ({
       return;
     }
 
-    if (return_approx_time && !return_date) {
-      toast("Return date is required if return approx time is provided.", {
-        icon: "⚠️",
-      });
-      return;
-    } else if (return_date && !return_approx_time) {
-      toast("Return approx time is required if return date is provided.", {
-        icon: "⚠️",
-      });
-      return;
-    }
-
     handleFormChange("billingDetails");
   };
 
@@ -509,7 +497,7 @@ const DestinationDetails = ({
                       }
                     />
                     <Label htmlFor="returnJourneyCheckbox">
-                      {t("return_journey")} ? (optional)
+                      {t("return_journey")} ? ({t("optional")})
                     </Label>
                   </div>
                 )}
@@ -525,7 +513,7 @@ const DestinationDetails = ({
                         {t("return_journey")}
                       </h6>
                       <div>
-                        <FormField
+                        {/* <FormField
                           control={form.control}
                           name="return_date"
                           render={({ field }) => (
@@ -555,7 +543,7 @@ const DestinationDetails = ({
                               <FormMessage />
                             </FormItem>
                           )}
-                        />
+                        /> */}
 
                         <FormField
                           control={form.control}

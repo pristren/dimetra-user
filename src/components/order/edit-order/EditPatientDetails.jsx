@@ -71,7 +71,7 @@ const EditPatientDetails = ({
                       {editOrderData.transportationData?.type_of_transport ===
                       "collection_order"
                         ? t("name_collection")
-                        : t("name")}
+                        : t("name_institution")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
