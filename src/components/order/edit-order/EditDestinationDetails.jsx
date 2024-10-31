@@ -1,6 +1,4 @@
 /* eslint-disable react/prop-types */
-import AppSelect from "@/components/common/AppSelect";
-import { timeOptions } from "@/components/create-order-forms/helpers";
 import { Card, CardContent } from "@/components/ui/card";
 import { DatePicker } from "@/components/ui/DatePicker";
 import {
@@ -12,11 +10,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { formatTimeInput } from "@/utils";
+import { updateFormattedTime } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { t } from "i18next";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useTimescape } from "timescape/react";
 import { z } from "zod";
 
 const EditDestinationDetails = ({
@@ -107,6 +106,46 @@ const EditDestinationDetails = ({
   useEffect(() => {
     form.reset(editOrderData.destinationDetailsData);
   }, [editOrderData.destinationDetailsData, form]);
+
+  const { getInputProps: getDropOffInputProps, options: dropOffOptions } =
+    useTimescape({
+      date: new Date(),
+    });
+
+  const { getInputProps: getPickupInputProps, options: pickupOptions } =
+    useTimescape({
+      date: new Date(),
+    });
+  const { getInputProps: getReturnInputProps, options: returnOptions } =
+    useTimescape({
+      date: new Date(),
+    });
+
+  useEffect(() => {
+    updateFormattedTime(
+      dropOffOptions,
+      setEditOrderData,
+      "destinationDetailsData",
+      "drop_off_pick_up_time"
+    );
+  }, [dropOffOptions, setEditOrderData]);
+
+  useEffect(() => {
+    updateFormattedTime(
+      pickupOptions,
+      setEditOrderData,
+      "destinationDetailsData",
+      "pickup_appointment_time"
+    );
+  }, [pickupOptions, setEditOrderData]);
+  useEffect(() => {
+    updateFormattedTime(
+      returnOptions,
+      setEditOrderData,
+      "destinationDetailsData",
+      "return_approx_time"
+    );
+  }, [returnOptions, setEditOrderData]);
 
   return (
     <Card className="p-6 border-none rounded-none">
@@ -234,9 +273,7 @@ const EditDestinationDetails = ({
                   name="pick_up_country"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
-                        {t("country")}
-                      </FormLabel>
+                      <FormLabel className="mb-2">{t("country")}</FormLabel>
                       <FormControl>
                         <Input
                           className={
@@ -314,28 +351,55 @@ const EditDestinationDetails = ({
                 <FormField
                   control={form.control}
                   name="drop_off_pick_up_time"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem className="mb-7">
                       <FormLabel className="mb-2">
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          maxLength={5}
-                          onChange={(e) => {
-                            const rawValue = e.target.value;
-                            const formattedValue = formatTimeInput(rawValue);
-                            handleInputChange({
-                              target: {
-                                name: field.name,
-                                value: formattedValue,
-                              },
-                            });
-                            field.onChange(formattedValue);
-                          }}
-                          placeholder="HH:MM"
-                        />
+                        <div className="border py-3 px-2 rounded-lg">
+                          <input
+                            className="timescape-input"
+                            {...getDropOffInputProps("hours")}
+                            placeholder="hh"
+                          />
+                          <span className="separator">:</span>
+                          <input
+                            className="timescape-input"
+                            {...getDropOffInputProps("minutes")}
+                            placeholder="mm"
+                            step={10}
+                          />
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="pickup_appointment_time"
+                  render={() => (
+                    <FormItem className="mb-7 w-full">
+                      <FormLabel className="mb-2 font-normal">
+                        {t("appointment_time")}
+                      </FormLabel>
+                      <FormControl>
+                        <div className="border py-3 px-2 rounded-lg">
+                          <input
+                            className="timescape-input"
+                            {...getPickupInputProps("hours")}
+                            placeholder="hh"
+                          />
+                          <span className="separator">:</span>
+                          <input
+                            className="timescape-input"
+                            {...getPickupInputProps("minutes")}
+                            placeholder="mm"
+                            step={10}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -485,9 +549,7 @@ const EditDestinationDetails = ({
                   name="drop_off_phone"
                   render={({ field }) => (
                     <FormItem className="mb-7">
-                      <FormLabel className="mb-2">
-                        {t("phone")}
-                      </FormLabel>
+                      <FormLabel className="mb-2">{t("phone")}</FormLabel>
                       <FormControl>
                         <Input
                           className={
@@ -533,28 +595,26 @@ const EditDestinationDetails = ({
                   <FormField
                     control={form.control}
                     name="return_approx_time"
-                    render={({ field }) => (
+                    render={() => (
                       <FormItem className="mb-7">
                         <FormLabel className="mb-2">
                           {t("approx_time")}
                         </FormLabel>
                         <FormControl>
-                          <Input
-                            {...field}
-                            maxLength={5}
-                            onChange={(e) => {
-                              const rawValue = e.target.value;
-                              const formattedValue = formatTimeInput(rawValue);
-                              handleInputChange({
-                                target: {
-                                  name: field.name,
-                                  value: formattedValue,
-                                },
-                              });
-                              field.onChange(formattedValue);
-                            }}
-                            placeholder="HH:MM"
-                          />
+                          <div className="border py-3 px-2 rounded-lg">
+                            <input
+                              className="timescape-input"
+                              {...getReturnInputProps("hours")}
+                              placeholder="hh"
+                            />
+                            <span className="separator">:</span>
+                            <input
+                              className="timescape-input"
+                              {...getReturnInputProps("minutes")}
+                              placeholder="mm"
+                              step={10}
+                            />
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>

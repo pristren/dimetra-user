@@ -81,7 +81,7 @@ const AllOrders = () => {
   useEffect(() => {
     data.forEach((order) => {
       if (order.status === "deleting") {
-        const updatedAtDate = parseInt(order.updatedAt, 10);
+        const updatedAtDate = parseInt(order.deletingAt, 10);
         const deletingDate = moment(updatedAtDate);
         const oneDayAgo = moment().subtract(1, "day");
 

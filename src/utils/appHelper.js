@@ -58,3 +58,21 @@ export const formatTimeInput = (value) => {
 
   return formattedValue;
 };
+
+export const updateFormattedTime = (options, setData, dataKey, timeKey) => {
+  if (options?.date) {
+    const hours = options.date.getHours();
+    const minutes = options.date.getMinutes();
+    const formattedTime = `${String(hours).padStart(2, "0")}:${String(
+      minutes
+    ).padStart(2, "0")}`;
+
+    setData((prev) => ({
+      ...prev,
+      [dataKey]: {
+        ...prev[dataKey],
+        [timeKey]: formattedTime,
+      },
+    }));
+  }
+};

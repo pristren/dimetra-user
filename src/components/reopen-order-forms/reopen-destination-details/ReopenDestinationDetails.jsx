@@ -16,13 +16,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@/components/ui/DatePicker";
-import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { formatTimeInput } from "@/utils";
+import { updateFormattedTime } from "@/utils";
+import { useTimescape } from "timescape/react";
 
 const ReopenDestinationDetails = ({
   handleFormChange,
@@ -133,6 +133,48 @@ const ReopenDestinationDetails = ({
     }));
   };
 
+  const { getInputProps: getDropOffInputProps, options: dropOffOptions } =
+    useTimescape({
+      date: new Date(),
+    });
+
+  const { getInputProps: getPickupInputProps, options: pickupOptions } =
+    useTimescape({
+      date: new Date(),
+    });
+  const { getInputProps: getReturnInputProps, options: returnOptions } =
+    useTimescape({
+      date: new Date(),
+    });
+
+  useEffect(() => {
+    updateFormattedTime(
+      dropOffOptions,
+      setReopenOrderData,
+      "destinationDetailsData",
+      "drop_off_pick_up_time"
+    );
+  }, [dropOffOptions, setReopenOrderData]);
+
+  useEffect(() => {
+    updateFormattedTime(
+      pickupOptions,
+      setReopenOrderData,
+      "destinationDetailsData",
+      "pickup_appointment_time"
+    );
+  }, [pickupOptions, setReopenOrderData]);
+  useEffect(() => {
+    if (checkTrueFalse && !isReturnJourneyHide) {
+      updateFormattedTime(
+        returnOptions,
+        setReopenOrderData,
+        "destinationDetailsData",
+        "return_approx_time"
+      );
+    }
+  }, [returnOptions, setReopenOrderData]);
+
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
@@ -154,7 +196,7 @@ const ReopenDestinationDetails = ({
                         {t("dropoff_date")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                      <DatePicker
+                        <DatePicker
                           date={
                             drop_off_pick_up_date
                               ? new Date(drop_off_pick_up_date)
@@ -193,17 +235,20 @@ const ReopenDestinationDetails = ({
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          maxLength={5}
-                          onChange={(e) => {
-                            const rawValue = e.target.value;
-                            const formattedValue = formatTimeInput(rawValue);
-                            field.onChange(formattedValue);
-                            handleInputChange(e);
-                          }}
-                          placeholder="HH:MM"
-                        />
+                        <div className="border py-3 px-2 rounded-lg">
+                          <input
+                            className="timescape-input"
+                            {...getDropOffInputProps("hours")}
+                            placeholder="hh"
+                          />
+                          <span className="separator">:</span>
+                          <input
+                            className="timescape-input"
+                            {...getDropOffInputProps("minutes")}
+                            placeholder="mm"
+                            step={10}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -221,17 +266,20 @@ const ReopenDestinationDetails = ({
                         {t("appointment_time")}
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          maxLength={5}
-                          onChange={(e) => {
-                            const rawValue = e.target.value;
-                            const formattedValue = formatTimeInput(rawValue);
-                            field.onChange(formattedValue);
-                            handleInputChange(e);
-                          }}
-                          placeholder="HH:MM"
-                        />
+                        <div className="border py-3 px-2 rounded-lg">
+                          <input
+                            className="timescape-input"
+                            {...getPickupInputProps("hours")}
+                            placeholder="hh"
+                          />
+                          <span className="separator">:</span>
+                          <input
+                            className="timescape-input"
+                            {...getPickupInputProps("minutes")}
+                            placeholder="mm"
+                            step={10}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -469,7 +517,7 @@ const ReopenDestinationDetails = ({
                                 {t("return_date")}
                               </FormLabel>
                               <FormControl>
-                              <DatePicker
+                                <DatePicker
                                   date={return_date}
                                   setDate={(value) =>
                                     setReopenOrderData((prev) => ({
@@ -501,18 +549,20 @@ const ReopenDestinationDetails = ({
                                 {t("return_approx_time")}
                               </FormLabel>
                               <FormControl>
-                                <Input
-                                  {...field}
-                                  maxLength={5}
-                                  onChange={(e) => {
-                                    const rawValue = e.target.value;
-                                    const formattedValue =
-                                      formatTimeInput(rawValue);
-                                    field.onChange(formattedValue);
-                                    handleInputChange(e);
-                                  }}
-                                  placeholder="HH:MM"
-                                />
+                                <div className="border py-3 px-2 rounded-lg">
+                                  <input
+                                    className="timescape-input"
+                                    {...getReturnInputProps("hours")}
+                                    placeholder="hh"
+                                  />
+                                  <span className="separator">:</span>
+                                  <input
+                                    className="timescape-input"
+                                    {...getReturnInputProps("minutes")}
+                                    placeholder="mm"
+                                    step={10}
+                                  />
+                                </div>
                               </FormControl>
                               <FormMessage />
                             </FormItem>

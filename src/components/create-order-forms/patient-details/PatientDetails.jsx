@@ -214,7 +214,7 @@ const PatientDetails = ({
                           type="text"
                           placeholder={t("dd_mm_yyyy")}
                           maxLength={10}
-                          name={field.name}
+                          name={field?.name}
                           value={
                             field?.value?.includes("T18:00:00.000Z")
                               ? moment(field.value).format("DD/MM/YYYY")
