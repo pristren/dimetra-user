@@ -25,7 +25,11 @@ import { Loading, SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 
-const ReopenPreviewDetails = ({ reopenOrderData, setCurrentStep,setShowPreview }) => {
+const ReopenPreviewDetails = ({
+  reopenOrderData,
+  setCurrentStep,
+  setShowPreview,
+}) => {
   const {
     transportationData,
     patientData,
@@ -169,11 +173,11 @@ const ReopenPreviewDetails = ({ reopenOrderData, setCurrentStep,setShowPreview }
                   ]}
                   placeholder="Week"
                   className="cursor-pointer"
-                  defaultValue={recurringData.recurring_type}
+                  defaultValue={recurringData?.recurring_type}
                   disabled
                 />
 
-                {recurringData.recurring_type === "week" ? (
+                {recurringData?.recurring_type === "week" ? (
                   <div className="">
                     <h3 className="text-lg font-medium mt-10 mb-5">
                       {t("select_start_date_and_time")}
@@ -257,7 +261,7 @@ const ReopenPreviewDetails = ({ reopenOrderData, setCurrentStep,setShowPreview }
                       )}
                     </h6>
                   </div>
-                ) : recurringData.recurring_type === "free" ? (
+                ) : recurringData?.recurring_type === "free" ? (
                   <div className="">
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
@@ -266,10 +270,10 @@ const ReopenPreviewDetails = ({ reopenOrderData, setCurrentStep,setShowPreview }
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
                           mode="multiple"
-                          date={recurringData.free_dates}
+                          date={recurringData?.free_dates}
                           disabled
                         />
-                        {console.log(recurringData.free_dates_start_time)}
+                        {console.log(recurringData?.free_dates_start_time)}
                         <AppSelect
                           items={timeOptions}
                           placeholder="Select a time"
@@ -277,7 +281,7 @@ const ReopenPreviewDetails = ({ reopenOrderData, setCurrentStep,setShowPreview }
                           isTimeSelected={true}
                           disabled
                           className="cursor-pointer"
-                          value={recurringData.free_dates_start_time}
+                          value={recurringData?.free_dates_start_time}
                         />
                       </div>
                     </div>
@@ -288,7 +292,7 @@ const ReopenPreviewDetails = ({ reopenOrderData, setCurrentStep,setShowPreview }
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
                           mode="multiple"
-                          date={recurringData.free_dates}
+                          date={recurringData?.free_dates}
                           disabled
                         />
 
@@ -298,7 +302,7 @@ const ReopenPreviewDetails = ({ reopenOrderData, setCurrentStep,setShowPreview }
                           isTime={true}
                           disabled
                           className="cursor-pointer"
-                          defaultValue={recurringData.free_dates_return_time}
+                          defaultValue={recurringData?.free_dates_return_time}
                         />
                       </div>
                     </div>
@@ -680,7 +684,7 @@ const ReopenPreviewDetails = ({ reopenOrderData, setCurrentStep,setShowPreview }
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
-                    {t("prename_institution")}
+                    {t("first_name")}
                   </Label>
                   <Input
                     disabled
@@ -748,8 +752,8 @@ const ReopenPreviewDetails = ({ reopenOrderData, setCurrentStep,setShowPreview }
               className="px-14"
               variant="outline"
               onClick={() => {
-                setShowPreview(false)
-                setCurrentStep("transportDetails")
+                setShowPreview(false);
+                setCurrentStep("transportDetails");
               }}
             >
               Edit

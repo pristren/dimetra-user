@@ -50,6 +50,10 @@ function App() {
         element={
           <PrivateRoute>
             <ReopenOrder />
+          </PrivateRoute>
+        }
+      />
+      <Route
         path="/copy-order/:id"
         element={
           <PrivateRoute>
