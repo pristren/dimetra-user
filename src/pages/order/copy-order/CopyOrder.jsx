@@ -176,7 +176,7 @@ const CopyOrder = () => {
 
   const StepIcon = ({ step, icon, progressValue, isDisabled, text }) => (
     <div
-      className={`flex items-center justify-center flex-col w-20 lg:w-40 h-max text-xs lg:text-[16px] lg:leading-7 ${
+      className={`flex items-center justify-center flex-col w-20 h-max text-xs lg:text-[16px] lg:leading-7 ${
         isDisabled ? "cursor-not-allowed" : "cursor-pointer"
       }`}
     >
@@ -196,7 +196,7 @@ const CopyOrder = () => {
       >
         {icon}
       </div>
-      <p className="text-lg">{t(text)}</p>
+      <p className="md:text-sm lg:text-[16px] xl:text-lg">{t(text)}</p>
     </div>
   );
 
@@ -223,52 +223,60 @@ const CopyOrder = () => {
       {
         <div className="bg-authBackground w-full bg-cover bg-no-repeat min-h-screen flex flex-col justify-center items-center py-24">
           <div className="flex gap-1 lg:gap-5 mb-5">
-            <StepIcon
-              step="transportDetails"
-              text="transport"
-              icon={<Pencil className="size-4 lg:size-6" />}
-              progressValue={transportationProgress}
-              isDisabled={false}
-            />
+            <div className="w-32 xl:w-44">
+              <StepIcon
+                step="transportDetails"
+                text="transport"
+                icon={<Pencil className="size-4 lg:size-6" />}
+                progressValue={transportationProgress}
+                isDisabled={false}
+              />
+            </div>
             <Progress
               value={transportationProgress}
               className="mt-3 lg:mt-5 h-2 lg:h-4"
             />
 
-            <StepIcon
-              step="patientDetails"
-              text="patient"
-              icon={<User className="size-4 lg:size-6" />}
-              disabled={transportationProgress !== 100}
-              progressValue={patientProgress}
-              isDisabled={transportationProgress < 100}
-            />
+            <div className="w-32 xl:w-44">
+              <StepIcon
+                step="patientDetails"
+                text="patient"
+                icon={<User className="size-4 lg:size-6" />}
+                disabled={transportationProgress !== 100}
+                progressValue={patientProgress}
+                isDisabled={transportationProgress < 100}
+              />
+            </div>
             <Progress
               value={patientProgress}
               className="mt-3 lg:mt-5 h-2 lg:h-4"
             />
 
-            <StepIcon
-              step="destinationDetails"
-              text="destination"
-              icon={<Truck className="size-4 lg:size-6" />}
-              disabled={patientProgress !== 100}
-              progressValue={destinationProgress}
-              isDisabled={patientProgress < 100}
-            />
+            <div className="w-32 xl:w-44">
+              <StepIcon
+                step="destinationDetails"
+                text="destination"
+                icon={<Truck className="size-4 lg:size-6" />}
+                disabled={patientProgress !== 100}
+                progressValue={destinationProgress}
+                isDisabled={patientProgress < 100}
+              />
+            </div>
             <Progress
               value={destinationProgress}
               className="mt-3 lg:mt-5 h-2 lg:h-4"
             />
 
-            <StepIcon
-              step="billingDetails"
-              text="billing"
-              icon={<Send className="size-4 lg:size-6" />}
-              disabled={destinationProgress !== 100}
-              progressValue={billingProgress}
-              isDisabled={destinationProgress < 100}
-            />
+            <div className="w-32 xl:w-44">
+              <StepIcon
+                step="billingDetails"
+                text="billing"
+                icon={<Send className="size-4 lg:size-6" />}
+                disabled={destinationProgress !== 100}
+                progressValue={billingProgress}
+                isDisabled={destinationProgress < 100}
+              />
+            </div>
           </div>
 
           <div className="lg:w-[70%] px-3 lg:px-0">
