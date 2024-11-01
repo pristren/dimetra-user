@@ -14,6 +14,8 @@ import { Label } from "@/components/ui/label";
 import { X } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { t } from "i18next";
+import ChatFeedback from "./ChatFeedback";
+import { Separator } from "@/components/ui/separator";
 
 const sampleMessages = [
   {
@@ -175,7 +177,7 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
 
   const renderMessages = () => {
     if (!messages || !Array.isArray(messages)) {
-      return <div>{t('no_messages_yet')}.</div>;
+      return <div>{t("no_messages_yet")}.</div>;
     }
 
     return messages.map((msg, index) => {
@@ -298,6 +300,14 @@ const Message = ({ messages = sampleMessages, userId = 1 }) => {
               ))}
             </div>
           ) : null}
+          {/* when the chat is completed, the message will be shown here */}
+          <div className="mt-12">
+            <Separator className="my-4" />
+            <p className="text-center text-muted-foreground mb-6 mt-4">
+              Chat session has ended
+            </p>
+            <ChatFeedback />
+          </div>
         </div>
 
         {imagesToShowInModal && (
