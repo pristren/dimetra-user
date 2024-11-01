@@ -128,3 +128,12 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.timescape {
+  border: 1px solid #e2e8f0;
+}
+
+.timescape-input {
+  @apply !h-fit !border-none !outline-none !cursor-text !select-none !box-content !caret-transparent  !text-inherit  p-[5px_2px] !text-center !relative !z-[1] focus:bg-[#f3f4f6] rounded-md;
+  font-variant-numeric: tabular-nums;
+}
