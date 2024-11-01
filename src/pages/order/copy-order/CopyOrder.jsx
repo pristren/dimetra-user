@@ -224,6 +224,7 @@ const CopyOrder = () => {
     setCurrentStep,
     setCopiedOrderData,
   };
+
   return (
     <div className="relative overflow-y-auto">
       <Navbar />

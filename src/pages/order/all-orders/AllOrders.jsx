@@ -95,8 +95,8 @@ const AllOrders = () => {
           row.original?.destinationDetailsData?.drop_off_pick_up_date;
         return (
           <p>
-            {moment(date).format("DD MMMM YYYY")}-
-            {moment(date).format("dddd").slice(0, 3)}
+            {moment(date).format("DD MMMM YYYY")}(
+            {moment(date).format("ddd")})
           </p>
         );
       },
@@ -193,7 +193,7 @@ const AllOrders = () => {
             className="py-1.5 h-min px-2 rounded-md w-max text-black text-xs capitalize"
             style={{ backgroundColor: statusColor }}
           >
-            {status}
+            {t(status)}
           </Button>
         );
       },
