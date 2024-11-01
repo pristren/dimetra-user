@@ -82,9 +82,9 @@ const RegisterForm = () => {
       }).then((res) => {
         console.log(res);
         // when email will work uncomment below code
-        // navigate(`/verify-email-sent?token=${res.data.token}`);
-        toast.success("Registration successful.Please login to continue!");
-        navigate("/login");
+        navigate(`/verify-email-sent?token=${res.data.token}`);
+        // toast.success("Registration successful.Please login to continue!");
+        // navigate("/login");
       });
     } catch (err) {
       toast.error(
