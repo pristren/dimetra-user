@@ -23,6 +23,8 @@ import { useState } from "react";
 import { Loading, SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
 import { t } from "i18next";
 import toast from "react-hot-toast";
+import SubmitProgress from "@/components/create-order-forms/submit-progress/SubmitProgress"; // Import the SubmitProgress component
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const PreviewDetails = ({
   createOrderData,
@@ -39,13 +41,16 @@ const PreviewDetails = ({
 
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showProgress, setShowProgress] = useState(false);
   const calculateMonthlyOccurrences = (weekdays) => {
     return weekdays.length * 4;
   };
   const [createAnOrder] = useMutation(CREATE_AN_ORDER);
   const navigate = useNavigate();
+
   const handleCreateAnOrder = async () => {
     setLoading(true);
+    setShowProgress(true);
     const updatedData = { ...createOrderData };
 
     if (updatedData?.transportationData?.type_of_transport !== "recurring") {
@@ -68,8 +73,10 @@ const PreviewDetails = ({
       toast.error(message || "Something went wrong");
     } finally {
       setLoading(false);
+      setShowProgress(false); // Hide progress modal
     }
   };
+
   const closeModal = () => {
     setShowModal(false);
     navigate("/orders/all-orders");
@@ -776,6 +783,18 @@ const PreviewDetails = ({
           )}
         </CardContent>
       </Card>
+
+      {/* Progress Modal */}
+      {showProgress && (
+        <Dialog open={showProgress}>
+          <DialogContent>
+            <SubmitProgress
+              setShowProgress={setShowProgress}
+              loading={loading}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };
