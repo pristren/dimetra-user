@@ -76,7 +76,7 @@ const PatientDetails = ({
   };
 
   const { getRootProps, getInputProps } = useTimescape({
-    date: null,
+    date: new Date(createOrderData?.patientData?.date_of_birth),
     onChangeDate: (nextDate) => {
       const formattedDate = moment(nextDate).format("DD/MM/YYYY");
       form.setValue("date_of_birth", formattedDate);
