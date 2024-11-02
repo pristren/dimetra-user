@@ -695,7 +695,7 @@ const CopyTransportationDetails = ({
                     {returnJourney && (
                       <div className=" mb-5 ">
                         <h3 className="text-lg font-medium mt-10 mb-5">
-                          {t("select_return_date_and_time")}{" "}
+                          {t("select_return_time")}{" "}
                           <span className="text-sm text-gray-600">
                             {t("(optional)")}
                           </span>
