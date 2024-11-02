@@ -23,7 +23,7 @@ import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { updateFormattedTime } from "@/utils";
+import { formatTimeInput } from "@/utils";
 
 const DestinationDetails = ({
   handleFormChange,
@@ -138,47 +138,44 @@ const DestinationDetails = ({
       },
     }));
   };
-  const { getInputProps: getDropOffInputProps, options: dropOffOptions } =
-    useTimescape({
-      date: new Date(),
-    });
-
-  const { getInputProps: getPickupInputProps, options: pickupOptions } =
-    useTimescape({
-      date: new Date(),
-    });
-  const { getInputProps: getReturnInputProps, options: returnOptions } =
-    useTimescape({
-      date: new Date(),
-    });
-
-  useEffect(() => {
-    updateFormattedTime(
-      dropOffOptions,
-      setCreateOrderData,
-      "destinationDetailsData",
-      "drop_off_pick_up_time"
-    );
-  }, [dropOffOptions, setCreateOrderData]);
-
-  useEffect(() => {
-    updateFormattedTime(
-      pickupOptions,
-      setCreateOrderData,
-      "destinationDetailsData",
-      "pickup_appointment_time"
-    );
-  }, [pickupOptions, setCreateOrderData]);
-  useEffect(() => {
-    if (checkTrueFalse && !isReturnJourneyHide) {
-      updateFormattedTime(
-        returnOptions,
+  // Drop-off time
+  const { getInputProps: getDropOffInputProps } = useTimescape({
+    date: new Date(),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
         setCreateOrderData,
         "destinationDetailsData",
-        "return_approx_time"
-      );
-    }
-  }, [returnOptions, setCreateOrderData]);
+        "drop_off_pick_up_time"
+      ),
+  });
+
+  // Pickup time
+  const { getInputProps: getPickupInputProps } = useTimescape({
+    date: new Date(),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "destinationDetailsData",
+        "pickup_appointment_time"
+      ),
+  });
+
+  // Return approximate time, conditionally applied
+  const { getInputProps: getReturnInputProps } = useTimescape({
+    date: new Date(),
+    onChangeDate: (nextDate) => {
+      if (checkTrueFalse && !isReturnJourneyHide) {
+        formatTimeInput(
+          nextDate,
+          setCreateOrderData,
+          "destinationDetailsData",
+          "return_approx_time"
+        );
+      }
+    },
+  });
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -240,15 +237,15 @@ const DestinationDetails = ({
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <div className="border py-3 px-2 rounded-lg">
-                          <input
-                            className="timescape-input"
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                          <Input
+                            className="timescape-input !w-6"
                             {...getDropOffInputProps("hours")}
                             placeholder="hh"
                           />
                           <span className="separator">:</span>
-                          <input
-                            className="timescape-input"
+                          <Input
+                            className="timescape-input !w-6"
                             {...getDropOffInputProps("minutes")}
                             placeholder="mm"
                             step={10}
@@ -271,15 +268,15 @@ const DestinationDetails = ({
                         {t("appointment_time")}
                       </FormLabel>
                       <FormControl>
-                        <div className="border py-3 px-2 rounded-lg">
-                          <input
-                            className="timescape-input"
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                          <Input
+                            className="timescape-input !w-6"
                             {...getPickupInputProps("hours")}
                             placeholder="hh"
                           />
                           <span className="separator">:</span>
-                          <input
-                            className="timescape-input"
+                          <Input
+                            className="timescape-input !w-6"
                             {...getPickupInputProps("minutes")}
                             placeholder="mm"
                             step={10}
@@ -554,15 +551,15 @@ const DestinationDetails = ({
                                 {t("return_approx_time")}
                               </FormLabel>
                               <FormControl>
-                                <div className="border py-3 px-2 rounded-lg">
-                                  <input
-                                    className="timescape-input"
+                                <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                                  <Input
+                                    className="timescape-input !w-6"
                                     {...getReturnInputProps("hours")}
                                     placeholder="hh"
                                   />
                                   <span className="separator">:</span>
-                                  <input
-                                    className="timescape-input"
+                                  <Input
+                                    className="timescape-input !w-6"
                                     {...getReturnInputProps("minutes")}
                                     placeholder="mm"
                                     step={10}

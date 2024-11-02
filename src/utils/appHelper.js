@@ -1,5 +1,4 @@
 import axios from "axios";
-import { toast } from "react-hot-toast";
 
 export const getApiBaseUrl = () => import.meta.env.VITE_API_BASE_URL;
 export const getAccessToken = () =>
@@ -32,47 +31,22 @@ export const uploadFile = async (file) => {
   }
 };
 
-export const formatTimeInput = (value) => {
-  const sanitizedValue = value.replace(/\D/g, "").slice(0, 4);
+export const formatTimeInput = (
+  nextDate,
+  setData,
+  parentPropertyName,
+  childPropertyName
+) => {
+  const formattedTime = `${String(nextDate?.getHours()).padStart(
+    2,
+    "0"
+  )}:${String(nextDate?.getMinutes()).padStart(2, "0")}`;
 
-  let formattedValue = sanitizedValue;
-  if (sanitizedValue.length > 2) {
-    formattedValue = sanitizedValue.slice(0, 2) + ":" + sanitizedValue.slice(2);
-  }
-
-  if (sanitizedValue.length === 4) {
-    const hours = parseInt(sanitizedValue.slice(0, 2), 10);
-    const minutes = parseInt(sanitizedValue.slice(2), 10);
-
-    if (hours > 23 || minutes > 59) {
-      toast.error(
-        "Invalid time. Please enter a valid time between 00:00 and 23:59."
-      );
-      return "";
-    }
-
-    formattedValue = `${hours.toString().padStart(2, "0")}:${minutes
-      .toString()
-      .padStart(2, "0")}`;
-  }
-
-  return formattedValue;
-};
-
-export const updateFormattedTime = (options, setData, dataKey, timeKey) => {
-  if (options?.date) {
-    const hours = options.date.getHours();
-    const minutes = options.date.getMinutes();
-    const formattedTime = `${String(hours).padStart(2, "0")}:${String(
-      minutes
-    ).padStart(2, "0")}`;
-
-    setData((prev) => ({
-      ...prev,
-      [dataKey]: {
-        ...prev[dataKey],
-        [timeKey]: formattedTime,
-      },
-    }));
-  }
+  setData((prev) => ({
+    ...prev,
+    [parentPropertyName]: {
+      ...prev[parentPropertyName],
+      [childPropertyName]: formattedTime,
+    },
+  }));
 };

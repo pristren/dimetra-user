@@ -10,7 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { updateFormattedTime } from "@/utils";
+import { formatTimeInput } from "@/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { t } from "i18next";
 import { useEffect } from "react";
@@ -107,45 +107,46 @@ const EditDestinationDetails = ({
     form.reset(editOrderData.destinationDetailsData);
   }, [editOrderData.destinationDetailsData, form]);
 
-  const { getInputProps: getDropOffInputProps, options: dropOffOptions } =
-    useTimescape({
-      date: new Date(),
-    });
+  // Drop-off time
+  const { getInputProps: getDropOffInputProps } = useTimescape({
+    date: new Date(
+      editOrderData?.destinationDetailsData?.drop_off_pick_up_time
+    ),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setEditOrderData,
+        "destinationDetailsData",
+        "drop_off_pick_up_time"
+      ),
+  });
 
-  const { getInputProps: getPickupInputProps, options: pickupOptions } =
-    useTimescape({
-      date: new Date(),
-    });
-  const { getInputProps: getReturnInputProps, options: returnOptions } =
-    useTimescape({
-      date: new Date(),
-    });
+  // Pickup time
+  const { getInputProps: getPickupInputProps } = useTimescape({
+    date: new Date(
+      editOrderData?.destinationDetailsData?.pickup_appointment_time
+    ),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setEditOrderData,
+        "destinationDetailsData",
+        "pickup_appointment_time"
+      ),
+  });
 
-  useEffect(() => {
-    updateFormattedTime(
-      dropOffOptions,
-      setEditOrderData,
-      "destinationDetailsData",
-      "drop_off_pick_up_time"
-    );
-  }, [dropOffOptions, setEditOrderData]);
-
-  useEffect(() => {
-    updateFormattedTime(
-      pickupOptions,
-      setEditOrderData,
-      "destinationDetailsData",
-      "pickup_appointment_time"
-    );
-  }, [pickupOptions, setEditOrderData]);
-  useEffect(() => {
-    updateFormattedTime(
-      returnOptions,
-      setEditOrderData,
-      "destinationDetailsData",
-      "return_approx_time"
-    );
-  }, [returnOptions, setEditOrderData]);
+  // Return approximate time, conditionally applied
+  const { getInputProps: getReturnInputProps } = useTimescape({
+    date: new Date(editOrderData?.destinationDetailsData?.return_approx_time),
+    onChangeDate: (nextDate) => {
+      formatTimeInput(
+        nextDate,
+        setEditOrderData,
+        "destinationDetailsData",
+        "return_approx_time"
+      );
+    },
+  });
 
   return (
     <Card className="p-6 border-none rounded-none">
@@ -357,15 +358,15 @@ const EditDestinationDetails = ({
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <div className="border py-3 px-2 rounded-lg">
-                          <input
-                            className="timescape-input"
+                      <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                          <Input
+                            className="timescape-input !w-6"
                             {...getDropOffInputProps("hours")}
                             placeholder="hh"
                           />
                           <span className="separator">:</span>
-                          <input
-                            className="timescape-input"
+                          <Input
+                            className="timescape-input !w-6"
                             {...getDropOffInputProps("minutes")}
                             placeholder="mm"
                             step={10}
@@ -386,15 +387,15 @@ const EditDestinationDetails = ({
                         {t("appointment_time")}
                       </FormLabel>
                       <FormControl>
-                        <div className="border py-3 px-2 rounded-lg">
-                          <input
-                            className="timescape-input"
+                      <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                          <Input
+                            className="timescape-input !w-6"
                             {...getPickupInputProps("hours")}
                             placeholder="hh"
                           />
                           <span className="separator">:</span>
-                          <input
-                            className="timescape-input"
+                          <Input
+                            className="timescape-input !w-6"
                             {...getPickupInputProps("minutes")}
                             placeholder="mm"
                             step={10}
@@ -601,20 +602,20 @@ const EditDestinationDetails = ({
                           {t("approx_time")}
                         </FormLabel>
                         <FormControl>
-                          <div className="border py-3 px-2 rounded-lg">
-                            <input
-                              className="timescape-input"
-                              {...getReturnInputProps("hours")}
-                              placeholder="hh"
-                            />
-                            <span className="separator">:</span>
-                            <input
-                              className="timescape-input"
-                              {...getReturnInputProps("minutes")}
-                              placeholder="mm"
-                              step={10}
-                            />
-                          </div>
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                                  <Input
+                                    className="timescape-input !w-6"
+                                    {...getReturnInputProps("hours")}
+                                    placeholder="hh"
+                                  />
+                                  <span className="separator">:</span>
+                                  <Input
+                                    className="timescape-input !w-6"
+                                    {...getReturnInputProps("minutes")}
+                                    placeholder="mm"
+                                    step={10}
+                                  />
+                                </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
