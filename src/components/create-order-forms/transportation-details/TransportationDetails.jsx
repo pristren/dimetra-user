@@ -167,7 +167,6 @@ const TransportationDetails = ({
       };
     });
   };
-
   const handleWeekdayChange = (option) => {
     const { value } = option;
     updateCreateRecurringOrderData(
@@ -419,8 +418,15 @@ const TransportationDetails = ({
                 {transportWithOptions.map((option) => {
                   const isNoneOfThatSelected =
                     transportationData.transport_with?.includes("none_of_that");
+                  const isOtherOptionSelected =
+                    transportationData.transport_with &&
+                    transportationData.transport_with.some(
+                      (selectedOption) => selectedOption !== "none_of_that"
+                    );
+
                   const isOptionDisabled =
-                    isNoneOfThatSelected && option.value !== "none_of_that";
+                    (isNoneOfThatSelected && option.value !== "none_of_that") ||
+                    (isOtherOptionSelected && option.value === "none_of_that");
 
                   return (
                     <div
@@ -492,7 +498,7 @@ const TransportationDetails = ({
                   placeholder="Select a type"
                 />
                 {recurringData?.recurring_type === "week" ? (
-                  <div className="">
+                  <div>
                     <h3 className="text-lg font-medium mt-10 mb-5">
                       {t("select_start_date_and_time")} *
                     </h3>
@@ -503,13 +509,10 @@ const TransportationDetails = ({
                           handleDateChange("start_date", value)
                         }
                         startMonth={new Date()}
-                        disabled={{
-                          before: new Date(),
-                        }}
+                        disabled={{ before: new Date() }}
                       />
                       <div
-                        className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
-                            `}
+                        className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                       >
                         <Input
                           className="timescape-input !w-6"
@@ -525,116 +528,133 @@ const TransportationDetails = ({
                         />
                       </div>
                     </div>
-                    <h3 className="text-lg font-medium  mb-5">
-                      {t("select_return_date_time")}{" "}
-                      <span className="highlight">({t("optional")})</span>
-                    </h3>
-                    <div className="mb-5 flex w-max gap-4 items-center">
-                      {/* commented because qudrati vai said it's not need */}
-                      {/* <DatePicker
-                        date={recurringData?.return_date || null}
-                        setDate={(value) =>
-                          handleDateChange("return_date", value)
-                        }
-                        disabled={{
-                          before: new Date(recurringData?.start_date),
-                          after: new Date(recurringData?.start_date),
-                        }}
-                      /> */}
-                      <div
-                        className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
-                            `}
+                    <div className="mt-8 flex items-center gap-2">
+                      <Checkbox
+                        id="return_journey"
+                        checked={returnJourney}
+                        onClick={() => setReturnJourney(!returnJourney)}
+                      />
+                      <Label
+                        className="text-base font-medium"
+                        htmlFor="return_journey"
                       >
-                        <Input
-                          className="timescape-input !w-6"
-                          {...recurringReturnTimeInput("hours")}
-                          placeholder="HH"
-                        />
-                        <span className="separator">:</span>
-                        <Input
-                          className="timescape-input !w-6"
-                          {...recurringReturnTimeInput("minutes")}
-                          placeholder="mm"
-                          step={5}
+                        {t("return_journey")} ? ({t("optional")})
+                      </Label>
+                    </div>
+                    {returnJourney && (
+                      <div>
+                        <h3 className="text-lg font-medium mt-5 mb-5">
+                          {t("select_return_time")}{" "}
+                          <span className="highlight">({t("optional")})</span>
+                        </h3>
+                        <div className="mb-5 flex w-max gap-4 items-center">
+                          {/* Uncomment if needed */}
+                          {/* <DatePicker
+            date={recurringData?.return_date || null}
+            setDate={(value) => handleDateChange("return_date", value)}
+            disabled={{
+              before: new Date(recurringData?.start_date),
+              after: new Date(recurringData?.start_date),
+            }}
+          /> */}
+                        </div>
+                        <div
+                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
+                        >
+                          <Input
+                            className="timescape-input !w-6"
+                            {...recurringReturnTimeInput("hours")}
+                            placeholder="HH"
+                          />
+                          <span className="separator">:</span>
+                          <Input
+                            className="timescape-input !w-6"
+                            {...recurringReturnTimeInput("minutes")}
+                            placeholder="mm"
+                            step={5}
+                          />
+                        </div>
+
+                        <h3 className="text-lg font-medium mb-3 mt-5">
+                          {t("select_weekdays")}{" "}
+                          <span className="highlight">
+                            ({t("multiple_selection")})
+                          </span>
+                          :
+                        </h3>
+                        <div className="flex flex-wrap gap-3 mt-2">
+                          {weekdaysOptions.map((option) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center mb-2"
+                            >
+                              <Checkbox
+                                id={option.value}
+                                checked={recurringData?.multiple_week_days?.includes(
+                                  option.value
+                                )}
+                                className="size-6 capitalize"
+                                onClick={() => handleWeekdayChange(option)}
+                              />
+                              <Label
+                                className="ml-2 text-lg capitalize"
+                                htmlFor={option.value}
+                              >
+                                {option.label}
+                              </Label>
+                            </div>
+                          ))}
+                        </div>
+
+                        <h3 className="text-lg font-medium mb-3 mt-5">
+                          {t("ends")}{" "}
+                        </h3>
+                        <FormField
+                          control={form.control}
+                          name="duration"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <RadioGroup
+                                  onValueChange={(value) => {
+                                    field.onChange(value);
+                                    updateCreateRecurringOrderData(
+                                      "ends",
+                                      value
+                                    );
+                                  }}
+                                  value={recurringData?.ends}
+                                  className="flex items-center gap-3"
+                                >
+                                  {durationOptions.map((option) => (
+                                    <div
+                                      key={option.value}
+                                      className="flex items-center space-x-2 mb-2"
+                                    >
+                                      <RadioGroupItem
+                                        value={option.value}
+                                        id={option.value}
+                                      />
+                                      <Label htmlFor={option.value}>
+                                        {option.label}
+                                      </Label>
+                                    </div>
+                                  ))}
+                                </RadioGroup>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
                         />
                       </div>
-                    </div>
-
-                    <h3 className="text-lg font-medium mb-3 mt-5">
-                      {t("select_weekdays")}{" "}
-                      <span className="highlight">
-                        ({t("multiple_selection")})
-                      </span>
-                      :
-                    </h3>
-                    <div className="flex flex-wrap gap-3 mt-2">
-                      {weekdaysOptions.map((option) => (
-                        <div
-                          key={option.value}
-                          className="flex items-center mb-2"
-                        >
-                          <Checkbox
-                            id={option.value}
-                            checked={recurringData?.multiple_week_days?.includes(
-                              option.value
-                            )}
-                            className="size-6 capitalize"
-                            onClick={() => handleWeekdayChange(option)}
-                          />
-                          <Label
-                            className="ml-2 text-lg capitalize"
-                            htmlFor={option.value}
-                          >
-                            {option.label}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-
-                    <h3 className="text-lg font-medium mb-3 mt-5">
-                      {t("ends")}{" "}
-                    </h3>
-                    <FormField
-                      control={form.control}
-                      name="duration"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                                updateCreateRecurringOrderData("ends", value);
-                              }}
-                              value={recurringData?.ends}
-                              className="flex items-center gap-3"
-                            >
-                              {durationOptions.map((option) => (
-                                <div
-                                  key={option.value}
-                                  className="flex items-center space-x-2 mb-2"
-                                >
-                                  <RadioGroupItem
-                                    value={option.value}
-                                    id={option.value}
-                                  />
-                                  <Label htmlFor={option.value}>
-                                    {option.label}
-                                  </Label>
-                                </div>
-                              ))}
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    )}
                   </div>
                 ) : recurringData?.recurring_type === "free" ? (
-                  <div className="">
+                  <div>
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                        {t("select_start_date_and_time")} *
-                        <span className="text-sm text-gray-500"> (max 60)</span>
+                        {t("select_start_date_and_time")} *{" "}
+                        <span className="text-sm text-gray-500">(max 60)</span>
                       </h3>
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
@@ -649,14 +669,11 @@ const TransportationDetails = ({
                           setDate={(value) =>
                             handleDateChange("free_dates", value)
                           }
-                          disabled={{
-                            before: new Date(),
-                          }}
+                          disabled={{ before: new Date() }}
                           max={60}
                         />
                         <div
-                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
-                            `}
+                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                         >
                           <Input
                             className="timescape-input !w-6"
@@ -693,25 +710,16 @@ const TransportationDetails = ({
                       </Label>
                     </div>
                     {returnJourney && (
-                      <div className=" mb-5 ">
+                      <div className="mb-5">
                         <h3 className="text-lg font-medium mt-10 mb-5">
-                          {t("select_return_date_and_time")}{" "}
+                          {t("select_return_time")}{" "}
                           <span className="text-sm text-gray-600">
                             {t("(optional)")}
                           </span>
                         </h3>
                         <div className="flex w-max gap-4 items-center">
-                          {/* <DatePicker
-                            mode="multiple"
-                            date={recurringData?.free_dates}
-                            setDate={(value) =>
-                              handleDateChange("free_dates", value)
-                            }
-                            disabled
-                          /> */}
                           <div
-                            className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
-                            `}
+                            className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                           >
                             <Input
                               className="timescape-input !w-6"
