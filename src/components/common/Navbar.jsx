@@ -9,8 +9,6 @@ export default function Navbar() {
   const url = window.location.pathname;
   const { userInfo, profileImageLoaded } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-  const savedLanguageCode = localStorage.getItem("languageCode");
-  console.log(savedLanguageCode);
   return (
     <nav
       className={`

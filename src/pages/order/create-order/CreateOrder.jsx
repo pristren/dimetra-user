@@ -80,7 +80,6 @@ const CreateOrder = () => {
     drop_off_postal_code,
     drop_off_city,
     drop_off_country,
-    drop_off_phone,
   ];
 
   useEffect(() => {
@@ -218,7 +217,9 @@ const CreateOrder = () => {
                 icon={<Truck className="size-4 lg:size-6" />}
                 disabled={patientProgress !== 100}
                 progressValue={destinationProgress}
-                isDisabled={patientProgress < 100}
+                isDisabled={
+                  transportationProgress < 100 || patientProgress < 100
+                }
               />
             </div>
             <Progress
@@ -233,7 +234,11 @@ const CreateOrder = () => {
                 icon={<Send className="size-4 lg:size-6" />}
                 disabled={destinationProgress !== 100}
                 progressValue={billingProgress}
-                isDisabled={destinationProgress < 100}
+                isDisabled={
+                  transportationProgress < 100 ||
+                  patientProgress < 100 ||
+                  destinationProgress < 100
+                }
               />
             </div>
           </div>

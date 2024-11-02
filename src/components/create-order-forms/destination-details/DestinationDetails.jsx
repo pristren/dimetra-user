@@ -49,7 +49,6 @@ const DestinationDetails = ({
     return hours * 60 + minutes;
   }
   const { userInfo } = useSelector((state) => state.user);
-
   useEffect(() => {
     if (userInfo) {
       setCreateOrderData((prevState) => ({
@@ -58,13 +57,13 @@ const DestinationDetails = ({
           ...prevState.destinationDetailsData,
           pick_up_name: `${userInfo?.first_name} ${userInfo?.last_name}`,
           pick_up_address: userInfo?.address,
-          pick_up_postal_code: Number(userInfo?.code),
+          pick_up_postal_code: userInfo?.code,
           pick_up_city: userInfo?.billing_address,
           pick_up_country: userInfo?.address,
         },
       }));
     }
-  }, [userInfo]);
+  }, [userInfo, setCreateOrderData]);
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -98,7 +97,7 @@ const DestinationDetails = ({
   const form_schema = z.object({
     pick_up_name: z.string().min(1, t("name_is_required")),
     pick_up_address: z.string().min(1, t("street_is_required")),
-    pick_up_postal_code: z.number().min(1, t("postal_is_required")),
+    pick_up_postal_code: z.string().min(1, t("postal_is_required")),
     pick_up_city: z.string().min(1, t("city_is_required")),
     pickup_phone: z.string().min(1, t("phone_is_required")),
     pick_up_employee_name: z
@@ -124,8 +123,12 @@ const DestinationDetails = ({
     defaultValues: createOrderData.destinationDetailsData,
   });
 
-  const { formState } = form;
+  const { formState, reset } = form;
   const { errors } = formState;
+
+  useEffect(() => {
+    reset(createOrderData.destinationDetailsData);
+  }, [createOrderData.destinationDetailsData, reset]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -317,7 +320,6 @@ const DestinationDetails = ({
                           }
                           placeholder={t("type_your_postal_code")}
                           {...field}
-                          type="number"
                           onChange={(e) => {
                             field.onChange(e);
                             handleInputChange(e);
