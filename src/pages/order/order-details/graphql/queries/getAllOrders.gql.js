@@ -24,7 +24,6 @@ export const GET_ALL_ORDERS = gql`
           drop_off_pick_up_time
         }
         createdAt
-        deletingAt
       }
       total
       totalPages
