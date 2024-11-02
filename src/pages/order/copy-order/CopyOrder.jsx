@@ -328,10 +328,7 @@ const CopyOrder = () => {
                 <p>Loading...</p>
               </div>
             ) : currentStep === "transportDetails" ? (
-              <CopyTransportationDetails
-                {...transportationProps}
-                {...commonProps}
-              />
+              <CopyTransportationDetails {...transportationProps} {...commonProps} />
             ) : currentStep === "patientDetails" ? (
               <CopyPatientDetails {...patientProps} {...commonProps} />
             ) : currentStep === "destinationDetails" ? (

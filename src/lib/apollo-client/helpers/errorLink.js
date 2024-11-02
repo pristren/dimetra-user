@@ -10,9 +10,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     });
   }
 
-  if (size(networkError)) {
+  if (networkError) {
     const { statusCode } = networkError;
-    console.log(statusCode);
+    if (statusCode === 401) {
+      window.location.href = "/login";
+    }
   }
 });
 

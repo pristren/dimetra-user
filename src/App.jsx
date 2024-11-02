@@ -23,6 +23,8 @@ import EditRecurringOrder from "@/pages/order/edit-recurring-orders/EditRecurrin
 import News from "@/pages/order/news/News";
 import ReopenOrder from "@/pages/order/reopen-order/ReopenOrder";
 import CopyOrder from "@/pages/order/copy-order/CopyOrder";
+import TermsConditionPage from "./pages/terms-condition/TermsConditionPage";
+import PrivacyPolicyPage from "./pages/privacy-policy/PrivacyPolicyPage";
 
 function App() {
   axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
@@ -37,6 +39,8 @@ function App() {
       <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/verify-email-sent" element={<VerifyEmailSent />} />
       <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="/terms-and-conditions" element={<TermsConditionPage />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
       <Route
         path="/create-order"
         element={

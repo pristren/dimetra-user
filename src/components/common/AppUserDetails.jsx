@@ -19,6 +19,8 @@ import AuthFooter from "@/components/helper-ui/AuthFooter";
 import { cn } from "@/lib/utils";
 import { Loading } from "@/assets/icons";
 import { t } from "i18next";
+import { Link } from "react-router-dom";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const AppUserDetails = ({
   onSubmit,
@@ -128,7 +130,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t('last_name')} <sup className="text-[13px]">*</sup>
+                    {t("last_name")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -233,7 +235,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                  {t("Code")} <sup className="text-[13px]">*</sup>
+                    {t("Code")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -254,7 +256,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                  {t("Place")} <sup className="text-[13px]">*</sup>
+                    {t("Place")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -322,7 +324,8 @@ const AppUserDetails = ({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        {t("confirm_password")} <sup className="text-[13px]">*</sup>
+                        {t("confirm_password")}{" "}
+                        <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -340,11 +343,56 @@ const AppUserDetails = ({
                     </FormItem>
                   )}
                 />
+                <FormField
+                  control={form.control}
+                  name="termsAccepted"
+                  render={({ field }) => (
+                    <FormItem className="col-span-2 flex items-start space-x-3 space-y-0 mt-4">
+                      <FormControl>
+                        <Checkbox
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                          className={
+                            form.formState.errors.termsAccepted
+                              ? "border-red-500"
+                              : ""
+                          }
+                        />
+                      </FormControl>
+                      <div className="space-y-1 leading-none">
+                        <FormLabel className="text-sm font-normal">
+                          {t("I accept the")}{" "}
+                          <Link
+                            to="/terms-and-conditions"
+                            className="text-primary hover:underline"
+                            target="_blank"
+                          >
+                            {t("terms and conditions")}
+                          </Link>{" "}
+                          {t("and")}{" "}
+                          <Link
+                            to="/privacy-policy"
+                            className="text-primary hover:underline"
+                            target="_blank"
+                          >
+                            {t("privacy policy")}
+                          </Link>
+                          <sup className="text-[13px]">*</sup>
+                        </FormLabel>
+                        <FormMessage />
+                      </div>
+                    </FormItem>
+                  )}
+                />
               </>
             )}
           </div>
           {isRegister && (
-            <Button type="submit" className="block w-2/4 mx-auto mt-10">
+            <Button
+              type="submit"
+              className="block w-2/4 mx-auto mt-10"
+              disabled={!form.getValues().termsAccepted}
+            >
               {loading ? (
                 <Loading className="w-6 h-6 mx-auto text-white" />
               ) : (
@@ -352,44 +400,6 @@ const AppUserDetails = ({
               )}
             </Button>
           )}
-          {/* this will have to recheck  */}
-
-          {/* <div className=" flex justify-center">
-            {!isRegister && (
-              <AppDialog
-                className="w-[90%] lg:w-[25%] px-6 pb-6 pt-10"
-                trigger={
-                  <Button type="button" className="mt-10 px-12 w-max mx-auto">
-                    Save
-                  </Button>
-                }
-                title="Sure you want to Save changes?"
-                content={
-                  <div>
-                    <p className="my-2">
-                      Are you sure you want to accept this?
-                    </p>
-                    <div className="flex items-center justify-start gap-2 my-5">
-                      <Checkbox id="doNotShow" />
-                      <Label htmlFor="doNotShow">Don’t show this again</Label>
-                    </div>
-                    <div className="flex items-center justify-center w-full gap-3 mt-5">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="w-full"
-                      >
-                        No, Cancel
-                      </Button>
-                      <Button type="submit" className="w-full">
-                        Yes, Confirm
-                      </Button>
-                    </div>
-                  </div>
-                }
-              />
-            )}
-          </div> */}
           {!isRegister && (
             <div className="flex justify-center">
               <Button type="submit" className="mt-10 px-12 w-max mx-auto">
