@@ -240,7 +240,7 @@ const CopyDestinationDetails = ({
                           <Input
                             className="timescape-input !w-6"
                             {...getDropOffInputProps("hours")}
-                            placeholder="hh"
+                            placeholder="HH"
                           />
                           <span className="separator">:</span>
                           <Input
@@ -274,7 +274,7 @@ const CopyDestinationDetails = ({
                           <Input
                             className="timescape-input !w-6"
                             {...getPickupInputProps("hours")}
-                            placeholder="hh"
+                            placeholder="HH"
                           />
                           <span className="separator">:</span>
                           <Input
@@ -560,7 +560,7 @@ const CopyDestinationDetails = ({
                                   <Input
                                     className="timescape-input !w-6"
                                     {...getReturnInputProps("hours")}
-                                    placeholder="hh"
+                                    placeholder="HH"
                                   />
                                   <span className="separator">:</span>
                                   <Input

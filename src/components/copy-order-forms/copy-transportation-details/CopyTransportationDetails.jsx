@@ -514,7 +514,7 @@ const CopyTransportationDetails = ({
                         <Input
                           className="timescape-input !w-6"
                           {...recurringStartTimeInput("hours")}
-                          placeholder="hh"
+                          placeholder="HH"
                         />
                         <span className="separator">:</span>
                         <Input
@@ -548,7 +548,7 @@ const CopyTransportationDetails = ({
                         <Input
                           className="timescape-input !w-6"
                           {...recurringReturnTimeInput("hours")}
-                          placeholder="hh"
+                          placeholder="HH"
                         />
                         <span className="separator">:</span>
                         <Input
@@ -661,7 +661,7 @@ const CopyTransportationDetails = ({
                           <Input
                             className="timescape-input !w-6"
                             {...recurringFreeDateStartTimeInput("hours")}
-                            placeholder="hh"
+                            placeholder="HH"
                           />
                           <span className="separator">:</span>
                           <Input
@@ -716,7 +716,7 @@ const CopyTransportationDetails = ({
                             <Input
                               className="timescape-input !w-6"
                               {...recurringFreeDateEndTimeInput("hours")}
-                              placeholder="hh"
+                              placeholder="HH"
                             />
                             <span className="separator">:</span>
                             <Input
