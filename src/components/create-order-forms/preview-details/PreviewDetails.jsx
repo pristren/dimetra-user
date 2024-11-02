@@ -42,9 +42,6 @@ const PreviewDetails = ({
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showProgress, setShowProgress] = useState(false);
-  const calculateMonthlyOccurrences = (weekdays) => {
-    return weekdays.length * 4;
-  };
   const [createAnOrder] = useMutation(CREATE_AN_ORDER);
   const navigate = useNavigate();
 

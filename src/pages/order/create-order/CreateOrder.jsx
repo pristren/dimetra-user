@@ -47,7 +47,6 @@ const CreateOrder = () => {
       drop_off_postal_code,
       drop_off_city = "",
       drop_off_country = "",
-      drop_off_phone = "",
       pickup_phone = "",
       drop_off_pick_up_date,
     } = {},
