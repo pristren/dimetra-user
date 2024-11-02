@@ -38,7 +38,6 @@ export function AppTable({
   totalPage,
   isLoading,
 }) {
-  const [sorting, setSorting] = React.useState([]);
   const [columnFilters, setColumnFilters] = React.useState([]);
   const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
@@ -49,7 +48,6 @@ export function AppTable({
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -59,7 +57,6 @@ export function AppTable({
     onRowSelectionChange: setRowSelection,
     onGlobalFilterChange: setGlobalFilter,
     state: {
-      sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
@@ -70,7 +67,6 @@ export function AppTable({
   const handleRowClick = (id) => {
     navigate(`/orders/message/${id}`);
   };
-
   return (
     <div className="w-full">
       <AppHead
