@@ -25,10 +25,7 @@ import {
   durationOptions,
 } from "@/components/create-order-forms/helpers";
 import { useEffect, useState } from "react";
-import {
-  calculateFormProgress,
-  formatTimeInput,
-} from "@/utils";
+import { calculateFormProgress, formatTimeInput } from "@/utils";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
@@ -524,7 +521,7 @@ const TransportationDetails = ({
                           className="timescape-input !w-6"
                           {...recurringStartTimeInput("minutes")}
                           placeholder="mm"
-                          step={10}
+                          steop={5}
                         />
                       </div>
                     </div>
@@ -558,7 +555,7 @@ const TransportationDetails = ({
                           className="timescape-input !w-6"
                           {...recurringReturnTimeInput("minutes")}
                           placeholder="mm"
-                          step={10}
+                          steop={5}
                         />
                       </div>
                     </div>
@@ -671,7 +668,7 @@ const TransportationDetails = ({
                             className="timescape-input !w-6"
                             {...recurringFreeDateStartTimeInput("minutes")}
                             placeholder="mm"
-                            step={10}
+                            steop={5}
                           />
                         </div>
                       </div>
@@ -726,7 +723,7 @@ const TransportationDetails = ({
                               className="timescape-input !w-6"
                               {...recurringFreeDateEndTimeInput("minutes")}
                               placeholder="mm"
-                              step={10}
+                              steop={5}
                             />
                           </div>
                         </div>

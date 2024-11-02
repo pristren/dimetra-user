@@ -521,7 +521,7 @@ const CopyTransportationDetails = ({
                           className="timescape-input !w-6"
                           {...recurringStartTimeInput("minutes")}
                           placeholder="mm"
-                          step={10}
+                          steop={5}
                         />
                       </div>
                     </div>
@@ -541,7 +541,7 @@ const CopyTransportationDetails = ({
                           after: new Date(recurringData?.start_date),
                         }}
                       /> */}
-                       <div
+                      <div
                         className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
                             `}
                       >
@@ -555,7 +555,7 @@ const CopyTransportationDetails = ({
                           className="timescape-input !w-6"
                           {...recurringReturnTimeInput("minutes")}
                           placeholder="mm"
-                          step={10}
+                          steop={5}
                         />
                       </div>
                     </div>
@@ -668,7 +668,7 @@ const CopyTransportationDetails = ({
                             className="timescape-input !w-6"
                             {...recurringFreeDateStartTimeInput("minutes")}
                             placeholder="mm"
-                            step={10}
+                            steop={5}
                           />
                         </div>
                       </div>
@@ -723,7 +723,7 @@ const CopyTransportationDetails = ({
                               className="timescape-input !w-6"
                               {...recurringFreeDateEndTimeInput("minutes")}
                               placeholder="mm"
-                              step={10}
+                              steop={5}
                             />
                           </div>
                         </div>

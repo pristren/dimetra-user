@@ -248,7 +248,7 @@ const DestinationDetails = ({
                             className="timescape-input !w-6"
                             {...getDropOffInputProps("minutes")}
                             placeholder="mm"
-                            step={10}
+                            steop={5}
                           />
                         </div>
                       </FormControl>
@@ -279,7 +279,7 @@ const DestinationDetails = ({
                             className="timescape-input !w-6"
                             {...getPickupInputProps("minutes")}
                             placeholder="mm"
-                            step={10}
+                            steop={5}
                           />
                         </div>
                       </FormControl>
@@ -562,7 +562,7 @@ const DestinationDetails = ({
                                     className="timescape-input !w-6"
                                     {...getReturnInputProps("minutes")}
                                     placeholder="mm"
-                                    step={10}
+                                    steop={5}
                                   />
                                 </div>
                               </FormControl>

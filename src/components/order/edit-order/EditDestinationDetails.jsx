@@ -358,7 +358,7 @@ const EditDestinationDetails = ({
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                      <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                           <Input
                             className="timescape-input !w-6"
                             {...getDropOffInputProps("hours")}
@@ -369,7 +369,7 @@ const EditDestinationDetails = ({
                             className="timescape-input !w-6"
                             {...getDropOffInputProps("minutes")}
                             placeholder="mm"
-                            step={10}
+                            steop={5}
                           />
                         </div>
                       </FormControl>
@@ -387,7 +387,7 @@ const EditDestinationDetails = ({
                         {t("appointment_time")}
                       </FormLabel>
                       <FormControl>
-                      <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                           <Input
                             className="timescape-input !w-6"
                             {...getPickupInputProps("hours")}
@@ -398,7 +398,7 @@ const EditDestinationDetails = ({
                             className="timescape-input !w-6"
                             {...getPickupInputProps("minutes")}
                             placeholder="mm"
-                            step={10}
+                            steop={5}
                           />
                         </div>
                       </FormControl>
@@ -602,20 +602,20 @@ const EditDestinationDetails = ({
                           {t("approx_time")}
                         </FormLabel>
                         <FormControl>
-                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
-                                  <Input
-                                    className="timescape-input !w-6"
-                                    {...getReturnInputProps("hours")}
-                                    placeholder="hh"
-                                  />
-                                  <span className="separator">:</span>
-                                  <Input
-                                    className="timescape-input !w-6"
-                                    {...getReturnInputProps("minutes")}
-                                    placeholder="mm"
-                                    step={10}
-                                  />
-                                </div>
+                          <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                            <Input
+                              className="timescape-input !w-6"
+                              {...getReturnInputProps("hours")}
+                              placeholder="hh"
+                            />
+                            <span className="separator">:</span>
+                            <Input
+                              className="timescape-input !w-6"
+                              {...getReturnInputProps("minutes")}
+                              placeholder="mm"
+                              steop={5}
+                            />
+                          </div>
                         </FormControl>
                         <FormMessage />
                       </FormItem>
