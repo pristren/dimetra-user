@@ -1,5 +1,5 @@
 import { useLocation, Link, useNavigate } from "react-router-dom";
-import { DimetraMobileLogo, Logout } from "@/assets/icons";
+import { DimetraMobileLogo, Logout, NewsIcon } from "@/assets/icons";
 import {
   CarFront,
   ClipboardList,
@@ -14,6 +14,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { t } from "i18next";
 
 const MobileNav = () => {
   const location = useLocation();
@@ -53,7 +54,7 @@ const MobileNav = () => {
             }`}
           >
             <ClipboardList />
-            <p>All Orders</p>
+            <p>{t("all_orders")}</p>
           </Link>
 
           <Link
@@ -65,7 +66,7 @@ const MobileNav = () => {
             }`}
           >
             <CarFront />
-            <p>History</p>
+            <p>{t("history")}</p>
           </Link>
 
           <Link
@@ -77,7 +78,7 @@ const MobileNav = () => {
             }`}
           >
             <Settings />
-            <p>Settings</p>
+            <p>{t("settings")}</p>
           </Link>
 
           <Link
@@ -89,7 +90,18 @@ const MobileNav = () => {
             }`}
           >
             <MessageCircle />
-            <p>Sent Request</p>
+            <p>{t("sent_requests")}</p>
+          </Link>
+          <Link
+            to="/orders/news"
+            className={`flex items-center gap-2 mb-4 px-2 py-2 cursor-pointer ${
+              isActive("/orders/news")
+                ? "bg-primary text-white  rounded-md"
+                : ""
+            }`}
+          >
+            <NewsIcon />
+            <p>{t("news")}</p>
           </Link>
         </nav>
 

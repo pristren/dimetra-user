@@ -25,6 +25,8 @@ import ReopenOrder from "@/pages/order/reopen-order/ReopenOrder";
 import CopyOrder from "@/pages/order/copy-order/CopyOrder";
 import TermsConditionPage from "./pages/terms-condition/TermsConditionPage";
 import PrivacyPolicyPage from "./pages/privacy-policy/PrivacyPolicyPage";
+import ForgotPasswordSent from "./pages/authentication/forgot-password-sent/ForgotPasswordSent";
+import VerifyForgotPassword from "./pages/authentication/verify-forgot-password/VerifyForgotPassword";
 
 function App() {
   axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
@@ -36,8 +38,12 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route path="/reset-password" element={<ResetPassword />} />
       <Route path="/verify-email-sent" element={<VerifyEmailSent />} />
+      <Route path="/forgot-password-sent" element={<ForgotPasswordSent />} />
+      <Route
+        path="/verify-forgot-password"
+        element={<VerifyForgotPassword />}
+      />
       <Route path="/verify-email" element={<VerifyEmail />} />
       <Route path="/terms-and-conditions" element={<TermsConditionPage />} />
       <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
