@@ -30,6 +30,8 @@ const CreateOrder = () => {
   const [createOrderData, setCreateOrderData] = useState(
     createOrderDefaultState
   );
+  const [isReturnJourneyHide, setIsReturnJourneyHide] =
+  useState(false);
   const { patientData } = createOrderData;
   const prevCreateOrderDataRef = useRef(createOrderData);
 
@@ -93,6 +95,7 @@ const CreateOrder = () => {
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       setCreateOrderData(parsedData);
+      setIsReturnJourneyHide(!!(parsedData?.destinationDetailsData?.return_date || parsedData?.destinationDetailsData?.return_approx_time))
     }
   }, []);
 
@@ -165,6 +168,8 @@ const CreateOrder = () => {
     patientProgress,
     destinationProgress,
     showPreview,
+    isReturnJourneyHide,
+    setIsReturnJourneyHide,
     setShowPreview,
     setCreateOrderData,
     setCurrentStep,

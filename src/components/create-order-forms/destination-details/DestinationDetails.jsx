@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,6 +29,8 @@ const DestinationDetails = ({
   createOrderData,
   setCreateOrderData,
   destinationProgress,
+  isReturnJourneyHide,
+  setIsReturnJourneyHide,
 }) => {
   const {
     destinationDetailsData: {
@@ -38,12 +40,14 @@ const DestinationDetails = ({
       return_date,
     } = {},
   } = createOrderData;
-  const checkTrueFalse =
-    createOrderData?.transportationData?.type_of_transport ===
-      "investigation_trip" ||
-    createOrderData?.transportationData?.type_of_transport === "private_trips";
-  const [isReturnJourneyHide, setIsReturnJourneyHide] =
-    useState(checkTrueFalse);
+  const checkTrueFalse = useMemo(
+    () =>
+      createOrderData?.transportationData?.type_of_transport ===
+        "investigation_trip" ||
+      createOrderData?.transportationData?.type_of_transport ===
+        "private_trips",
+    [createOrderData?.transportationData?.type_of_transport]
+  );
   function timeStringToMinutes(timeString) {
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
@@ -445,7 +449,7 @@ const DestinationDetails = ({
                   <div className="flex items-center gap-3">
                     <Checkbox
                       id="returnJourneyCheckbox"
-                      checked={!isReturnJourneyHide}
+                      checked={isReturnJourneyHide}
                       onClick={() => {
                         setIsReturnJourneyHide(!isReturnJourneyHide);
                         setCreateOrderData((prev) => ({
@@ -468,7 +472,7 @@ const DestinationDetails = ({
                   "recurring" &&
                   checkTrueFalse && (
                     <div
-                      className={`mt-10 ${isReturnJourneyHide ? "hidden" : ""}`}
+                      className={`mt-10 ${!isReturnJourneyHide ? "hidden" : ""}`}
                     >
                       <h6 className="text-xl font-semibold mb-4">
                         {t("return_journey")}
