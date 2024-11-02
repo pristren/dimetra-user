@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
+import { useTimescape } from "timescape/react";
 import { useForm } from "react-hook-form";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -29,6 +30,8 @@ const DestinationDetails = ({
   createOrderData,
   setCreateOrderData,
   destinationProgress,
+  isReturnJourneyHide,
+  setIsReturnJourneyHide,
 }) => {
   const {
     destinationDetailsData: {
@@ -38,18 +41,19 @@ const DestinationDetails = ({
       return_date,
     } = {},
   } = createOrderData;
-  const checkTrueFalse =
-    createOrderData?.transportationData?.type_of_transport ===
-      "investigation_trip" ||
-    createOrderData?.transportationData?.type_of_transport === "private_trips";
-  const [isReturnJourneyHide, setIsReturnJourneyHide] =
-    useState(checkTrueFalse);
+  const checkTrueFalse = useMemo(
+    () =>
+      createOrderData?.transportationData?.type_of_transport ===
+        "investigation_trip" ||
+      createOrderData?.transportationData?.type_of_transport ===
+        "private_trips",
+    [createOrderData?.transportationData?.type_of_transport]
+  );
   function timeStringToMinutes(timeString) {
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
   }
   const { userInfo } = useSelector((state) => state.user);
-
   useEffect(() => {
     if (userInfo) {
       setCreateOrderData((prevState) => ({
@@ -58,13 +62,13 @@ const DestinationDetails = ({
           ...prevState.destinationDetailsData,
           pick_up_name: `${userInfo?.first_name} ${userInfo?.last_name}`,
           pick_up_address: userInfo?.address,
-          pick_up_postal_code: Number(userInfo?.code),
+          pick_up_postal_code: userInfo?.code,
           pick_up_city: userInfo?.billing_address,
           pick_up_country: userInfo?.address,
         },
       }));
     }
-  }, [userInfo]);
+  }, [userInfo, setCreateOrderData]);
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -98,7 +102,7 @@ const DestinationDetails = ({
   const form_schema = z.object({
     pick_up_name: z.string().min(1, t("name_is_required")),
     pick_up_address: z.string().min(1, t("street_is_required")),
-    pick_up_postal_code: z.number().min(1, t("postal_is_required")),
+    pick_up_postal_code: z.string().min(1, t("postal_is_required")),
     pick_up_city: z.string().min(1, t("city_is_required")),
     pickup_phone: z.string().min(1, t("phone_is_required")),
     pick_up_employee_name: z
@@ -124,8 +128,12 @@ const DestinationDetails = ({
     defaultValues: createOrderData.destinationDetailsData,
   });
 
-  const { formState } = form;
+  const { formState, reset } = form;
   const { errors } = formState;
+
+  useEffect(() => {
+    reset(createOrderData.destinationDetailsData);
+  }, [createOrderData.destinationDetailsData, reset]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -137,6 +145,44 @@ const DestinationDetails = ({
       },
     }));
   };
+  // Drop-off time
+  const { getInputProps: getDropOffInputProps } = useTimescape({
+    date: new Date(),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "destinationDetailsData",
+        "drop_off_pick_up_time"
+      ),
+  });
+
+  // Pickup time
+  const { getInputProps: getPickupInputProps } = useTimescape({
+    date: new Date(),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "destinationDetailsData",
+        "pickup_appointment_time"
+      ),
+  });
+
+  // Return approximate time, conditionally applied
+  const { getInputProps: getReturnInputProps } = useTimescape({
+    date: new Date(),
+    onChangeDate: (nextDate) => {
+      if (checkTrueFalse && !isReturnJourneyHide) {
+        formatTimeInput(
+          nextDate,
+          setCreateOrderData,
+          "destinationDetailsData",
+          "return_approx_time"
+        );
+      }
+    },
+  });
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -159,7 +205,7 @@ const DestinationDetails = ({
                         {t("dropoff_date")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                      <DatePicker
+                        <DatePicker
                           date={
                             drop_off_pick_up_date
                               ? new Date(drop_off_pick_up_date)
@@ -198,17 +244,20 @@ const DestinationDetails = ({
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          maxLength={5}
-                          onChange={(e) => {
-                            const rawValue = e.target.value;
-                            const formattedValue = formatTimeInput(rawValue);
-                            field.onChange(formattedValue);
-                            handleInputChange(e);
-                          }}
-                          placeholder="HH:MM"
-                        />
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                          <Input
+                            className="timescape-input !w-6"
+                            {...getDropOffInputProps("hours")}
+                            placeholder="HH"
+                          />
+                          <span className="separator">:</span>
+                          <Input
+                            className="timescape-input !w-6"
+                            {...getDropOffInputProps("minutes")}
+                            placeholder="mm"
+                            step={5}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -226,17 +275,20 @@ const DestinationDetails = ({
                         {t("appointment_time")}
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          maxLength={5}
-                          onChange={(e) => {
-                            const rawValue = e.target.value;
-                            const formattedValue = formatTimeInput(rawValue);
-                            field.onChange(formattedValue);
-                            handleInputChange(e);
-                          }}
-                          placeholder="HH:MM"
-                        />
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                          <Input
+                            className="timescape-input !w-6"
+                            {...getPickupInputProps("hours")}
+                            placeholder="HH"
+                          />
+                          <span className="separator">:</span>
+                          <Input
+                            className="timescape-input !w-6"
+                            {...getPickupInputProps("minutes")}
+                            placeholder="mm"
+                            step={5}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -317,7 +369,6 @@ const DestinationDetails = ({
                           }
                           placeholder={t("type_your_postal_code")}
                           {...field}
-                          type="number"
                           onChange={(e) => {
                             field.onChange(e);
                             handleInputChange(e);
@@ -443,10 +494,17 @@ const DestinationDetails = ({
                   <div className="flex items-center gap-3">
                     <Checkbox
                       id="returnJourneyCheckbox"
-                      checked={!isReturnJourneyHide}
-                      onClick={() =>
-                        setIsReturnJourneyHide(!isReturnJourneyHide)
-                      }
+                      checked={isReturnJourneyHide}
+                      onClick={() => {
+                        setIsReturnJourneyHide(!isReturnJourneyHide);
+                        setCreateOrderData((prev) => ({
+                          ...prev,
+                          destinationDetailsData: {
+                            ...prev.destinationDetailsData,
+                            return_date: "",
+                          },
+                        }));
+                      }}
                     />
                     <Label htmlFor="returnJourneyCheckbox">
                       {t("return_journey")} ? ({t("optional")})
@@ -459,13 +517,13 @@ const DestinationDetails = ({
                   "recurring" &&
                   checkTrueFalse && (
                     <div
-                      className={`mt-10 ${isReturnJourneyHide ? "hidden" : ""}`}
+                      className={`mt-10 ${!isReturnJourneyHide ? "hidden" : ""}`}
                     >
                       <h6 className="text-xl font-semibold mb-4">
                         {t("return_journey")}
                       </h6>
                       <div>
-                        {/* <FormField
+                        <FormField
                           control={form.control}
                           name="return_date"
                           render={({ field }) => (
@@ -474,7 +532,7 @@ const DestinationDetails = ({
                                 {t("return_date")}
                               </FormLabel>
                               <FormControl>
-                              <DatePicker
+                                <DatePicker
                                   date={return_date}
                                   setDate={(value) =>
                                     setCreateOrderData((prev) => ({
@@ -495,7 +553,7 @@ const DestinationDetails = ({
                               <FormMessage />
                             </FormItem>
                           )}
-                        /> */}
+                        />
 
                         <FormField
                           control={form.control}
@@ -506,18 +564,20 @@ const DestinationDetails = ({
                                 {t("return_approx_time")}
                               </FormLabel>
                               <FormControl>
-                                <Input
-                                  {...field}
-                                  maxLength={5}
-                                  onChange={(e) => {
-                                    const rawValue = e.target.value;
-                                    const formattedValue =
-                                      formatTimeInput(rawValue);
-                                    field.onChange(formattedValue);
-                                    handleInputChange(e);
-                                  }}
-                                  placeholder="HH:MM"
-                                />
+                                <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
+                                  <Input
+                                    className="timescape-input !w-6"
+                                    {...getReturnInputProps("hours")}
+                                    placeholder="HH"
+                                  />
+                                  <span className="separator">:</span>
+                                  <Input
+                                    className="timescape-input !w-6"
+                                    {...getReturnInputProps("minutes")}
+                                    placeholder="mm"
+                                    step={5}
+                                  />
+                                </div>
                               </FormControl>
                               <FormMessage />
                             </FormItem>

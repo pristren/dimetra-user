@@ -9,7 +9,6 @@ export default function Navbar() {
   const url = window.location.pathname;
   const { userInfo, profileImageLoaded } = useSelector((state) => state.user);
   const dispatch = useDispatch();
-
   return (
     <nav
       className={`
