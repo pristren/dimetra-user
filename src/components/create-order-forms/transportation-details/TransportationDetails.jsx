@@ -29,6 +29,7 @@ import { calculateFormProgress, formatTimeInput } from "@/utils";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
+import { useTimescape } from "timescape/react";
 
 const TransportationDetails = ({
   handleFormChange,
@@ -167,10 +168,6 @@ const TransportationDetails = ({
     });
   };
 
-  const calculateMonthlyOccurrences = (weekdays) => {
-    return weekdays.length * 4;
-  };
-
   const handleWeekdayChange = (option) => {
     const { value } = option;
     updateCreateRecurringOrderData(
@@ -272,11 +269,49 @@ const TransportationDetails = ({
     handleFormChange("patientDetails");
   };
 
-  const handleTimeChange = (e, dataName) => {
-    const rawValue = e.target.value;
-    const formattedValue = formatTimeInput(rawValue);
-    updateCreateRecurringOrderData(dataName, formattedValue);
-  };
+  const { getInputProps: recurringStartTimeInput } = useTimescape({
+    date: new Date(createOrderData?.recurringData?.start_time),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "recurringData",
+        "start_time"
+      ),
+  });
+
+  const { getInputProps: recurringReturnTimeInput } = useTimescape({
+    date: new Date(createOrderData?.recurringData?.return_time),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "recurringData",
+        "return_time"
+      ),
+  });
+
+  const { getInputProps: recurringFreeDateStartTimeInput } = useTimescape({
+    date: new Date(createOrderData?.recurringData?.free_dates_start_time),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "recurringData",
+        "free_dates_start_time"
+      ),
+  });
+
+  const { getInputProps: recurringFreeDateEndTimeInput } = useTimescape({
+    date: new Date(createOrderData?.recurringData?.free_dates_return_time),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "recurringData",
+        "free_dates_return_time"
+      ),
+  });
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -472,12 +507,23 @@ const TransportationDetails = ({
                           before: new Date(),
                         }}
                       />
-                      <Input
-                        maxLength={5}
-                        value={recurringData?.start_time}
-                        onChange={(e) => handleTimeChange(e, "start_time")}
-                        placeholder="HH:MM"
-                      />
+                      <div
+                        className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
+                            `}
+                      >
+                        <Input
+                          className="timescape-input !w-6"
+                          {...recurringStartTimeInput("hours")}
+                          placeholder="HH"
+                        />
+                        <span className="separator">:</span>
+                        <Input
+                          className="timescape-input !w-6"
+                          {...recurringStartTimeInput("minutes")}
+                          placeholder="mm"
+                          step={5}
+                        />
+                      </div>
                     </div>
                     <h3 className="text-lg font-medium  mb-5">
                       {t("select_return_date_time")}{" "}
@@ -495,12 +541,23 @@ const TransportationDetails = ({
                           after: new Date(recurringData?.start_date),
                         }}
                       /> */}
-                      <Input
-                        maxLength={5}
-                        value={recurringData?.return_time}
-                        onChange={(e) => handleTimeChange(e, "return_time")}
-                        placeholder="HH:MM"
-                      />
+                      <div
+                        className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
+                            `}
+                      >
+                        <Input
+                          className="timescape-input !w-6"
+                          {...recurringReturnTimeInput("hours")}
+                          placeholder="HH"
+                        />
+                        <span className="separator">:</span>
+                        <Input
+                          className="timescape-input !w-6"
+                          {...recurringReturnTimeInput("minutes")}
+                          placeholder="mm"
+                          step={5}
+                        />
+                      </div>
                     </div>
 
                     <h3 className="text-lg font-medium mb-3 mt-5">
@@ -521,11 +578,11 @@ const TransportationDetails = ({
                             checked={recurringData?.multiple_week_days?.includes(
                               option.value
                             )}
-                            className="size-6"
+                            className="size-6 capitalize"
                             onClick={() => handleWeekdayChange(option)}
                           />
                           <Label
-                            className="ml-2 text-lg"
+                            className="ml-2 text-lg capitalize"
                             htmlFor={option.value}
                           >
                             {option.label}
@@ -597,14 +654,23 @@ const TransportationDetails = ({
                           }}
                           max={60}
                         />
-                        <Input
-                          maxLength={5}
-                          value={recurringData?.free_dates_start_time}
-                          onChange={(e) =>
-                            handleTimeChange(e, "free_dates_start_time")
-                          }
-                          placeholder="HH:MM"
-                        />
+                        <div
+                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
+                            `}
+                        >
+                          <Input
+                            className="timescape-input !w-6"
+                            {...recurringFreeDateStartTimeInput("hours")}
+                            placeholder="HH"
+                          />
+                          <span className="separator">:</span>
+                          <Input
+                            className="timescape-input !w-6"
+                            {...recurringFreeDateStartTimeInput("minutes")}
+                            placeholder="mm"
+                            step={5}
+                          />
+                        </div>
                       </div>
                     </div>
                     <div className="mt-8 flex items-center gap-2">
@@ -635,22 +701,31 @@ const TransportationDetails = ({
                           </span>
                         </h3>
                         <div className="flex w-max gap-4 items-center">
-                          <DatePicker
+                          {/* <DatePicker
                             mode="multiple"
                             date={recurringData?.free_dates}
                             setDate={(value) =>
                               handleDateChange("free_dates", value)
                             }
                             disabled
-                          />
-                          <Input
-                            maxLength={5}
-                            value={recurringData?.free_dates_return_time}
-                            onChange={(e) =>
-                              handleTimeChange(e, "free_dates_return_time")
-                            }
-                            placeholder="HH:MM"
-                          />
+                          /> */}
+                          <div
+                            className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
+                            `}
+                          >
+                            <Input
+                              className="timescape-input !w-6"
+                              {...recurringFreeDateEndTimeInput("hours")}
+                              placeholder="HH"
+                            />
+                            <span className="separator">:</span>
+                            <Input
+                              className="timescape-input !w-6"
+                              {...recurringFreeDateEndTimeInput("minutes")}
+                              placeholder="mm"
+                              step={5}
+                            />
+                          </div>
                         </div>
                       </div>
                     )}
