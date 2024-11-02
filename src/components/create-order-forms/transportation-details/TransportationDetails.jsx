@@ -521,7 +521,7 @@ const TransportationDetails = ({
                           className="timescape-input !w-6"
                           {...recurringStartTimeInput("minutes")}
                           placeholder="mm"
-                          steop={5}
+                          step={5}
                         />
                       </div>
                     </div>
@@ -555,7 +555,7 @@ const TransportationDetails = ({
                           className="timescape-input !w-6"
                           {...recurringReturnTimeInput("minutes")}
                           placeholder="mm"
-                          steop={5}
+                          step={5}
                         />
                       </div>
                     </div>
@@ -668,7 +668,7 @@ const TransportationDetails = ({
                             className="timescape-input !w-6"
                             {...recurringFreeDateStartTimeInput("minutes")}
                             placeholder="mm"
-                            steop={5}
+                            step={5}
                           />
                         </div>
                       </div>
@@ -723,7 +723,7 @@ const TransportationDetails = ({
                               className="timescape-input !w-6"
                               {...recurringFreeDateEndTimeInput("minutes")}
                               placeholder="mm"
-                              steop={5}
+                              step={5}
                             />
                           </div>
                         </div>
