@@ -206,14 +206,14 @@ const PreviewDetails = ({
                       {t("select_return_time")}* :
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      {recurringData?.return_date && (
+                      {/* {recurringData?.return_date && (
                         <Input
                           disabled
                           value={moment(recurringData?.return_date).format(
                             "DD/MM/YYYY"
                           )}
                         />
-                      )}
+                      )} */}
                       <Input
                         disabled
                         placeholder="00:00"
@@ -294,14 +294,14 @@ const PreviewDetails = ({
                     </div>
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                        {t("select_return_date_and_time")}
+                        {t("select_return_time")}
                       </h3>
                       <div className="flex w-max gap-4 items-center">
-                        <DatePicker
+                        {/* <DatePicker
                           mode="multiple"
                           date={recurringData?.free_dates}
                           disabled
-                        />
+                        /> */}
                         <Input
                           disabled
                           placeholder="No time selected"

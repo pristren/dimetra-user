@@ -159,7 +159,7 @@ const DestinationDetails = ({
                         {t("dropoff_date")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                      <DatePicker
+                        <DatePicker
                           date={
                             drop_off_pick_up_date
                               ? new Date(drop_off_pick_up_date)
@@ -444,9 +444,16 @@ const DestinationDetails = ({
                     <Checkbox
                       id="returnJourneyCheckbox"
                       checked={!isReturnJourneyHide}
-                      onClick={() =>
-                        setIsReturnJourneyHide(!isReturnJourneyHide)
-                      }
+                      onClick={() => {
+                        setIsReturnJourneyHide(!isReturnJourneyHide);
+                        setCreateOrderData((prev) => ({
+                          ...prev,
+                          destinationDetailsData: {
+                            ...prev.destinationDetailsData,
+                            return_date: "",
+                          },
+                        }));
+                      }}
                     />
                     <Label htmlFor="returnJourneyCheckbox">
                       {t("return_journey")} ? ({t("optional")})
@@ -465,7 +472,7 @@ const DestinationDetails = ({
                         {t("return_journey")}
                       </h6>
                       <div>
-                        {/* <FormField
+                        <FormField
                           control={form.control}
                           name="return_date"
                           render={({ field }) => (
@@ -474,7 +481,7 @@ const DestinationDetails = ({
                                 {t("return_date")}
                               </FormLabel>
                               <FormControl>
-                              <DatePicker
+                                <DatePicker
                                   date={return_date}
                                   setDate={(value) =>
                                     setCreateOrderData((prev) => ({
@@ -495,7 +502,7 @@ const DestinationDetails = ({
                               <FormMessage />
                             </FormItem>
                           )}
-                        /> */}
+                        />
 
                         <FormField
                           control={form.control}

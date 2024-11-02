@@ -61,7 +61,7 @@ const LeftSideNav = () => {
       <Link
         to="/orders/news"
         className={`flex items-center gap-2 mb-4 px-2 py-2 cursor-pointer ${
-          isActive("/orders/sent-requests")
+          isActive("/orders/news")
             ? "bg-primary text-white  rounded-md"
             : ""
         }`}

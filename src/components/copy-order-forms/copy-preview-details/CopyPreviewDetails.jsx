@@ -195,10 +195,10 @@ const CopyPreviewDetails = ({
                     </div>
 
                     <h3 className="text-lg font-medium mt-10 mb-5">
-                      {t("select_return_time")}* :
+                      {t("select_return_time")} :
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker disabled date={recurringData?.return_date} />
+                      {/* <DatePicker disabled date={recurringData?.return_date} /> */}
                       <AppSelect
                         items={timeOptions}
                         placeholder="00:00"
@@ -287,14 +287,14 @@ const CopyPreviewDetails = ({
                     </div>
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                        {t("select_return_date_and_time")}
+                        {t("select_return_time")}
                       </h3>
                       <div className="flex w-max gap-4 items-center">
-                        <DatePicker
+                        {/* <DatePicker
                           mode="multiple"
                           date={recurringData?.free_dates}
                           disabled
-                        />
+                        /> */}
 
                         <AppSelect
                           items={timeOptions}

@@ -166,11 +166,6 @@ const TransportationDetails = ({
       };
     });
   };
-
-  const calculateMonthlyOccurrences = (weekdays) => {
-    return weekdays.length * 4;
-  };
-
   const handleWeekdayChange = (option) => {
     const { value } = option;
     updateCreateRecurringOrderData(
@@ -384,8 +379,15 @@ const TransportationDetails = ({
                 {transportWithOptions.map((option) => {
                   const isNoneOfThatSelected =
                     transportationData.transport_with?.includes("none_of_that");
+                  const isOtherOptionSelected =
+                    transportationData.transport_with &&
+                    transportationData.transport_with.some(
+                      (selectedOption) => selectedOption !== "none_of_that"
+                    );
+
                   const isOptionDisabled =
-                    isNoneOfThatSelected && option.value !== "none_of_that";
+                    (isNoneOfThatSelected && option.value !== "none_of_that") ||
+                    (isOtherOptionSelected && option.value === "none_of_that");
 
                   return (
                     <div
@@ -479,13 +481,30 @@ const TransportationDetails = ({
                         placeholder="HH:MM"
                       />
                     </div>
-                    <h3 className="text-lg font-medium  mb-5">
-                      {t("select_return_date_time")}{" "}
-                      <span className="highlight">({t("optional")})</span>
-                    </h3>
-                    <div className="mb-5 flex w-max gap-4 items-center">
-                      {/* commented because qudrati vai said it's not need */}
-                      {/* <DatePicker
+                    <div className="mt-8 flex items-center gap-2">
+                      <Checkbox
+                        id="return_journey"
+                        checked={returnJourney}
+                        onClick={() => {
+                          setReturnJourney(!returnJourney);
+                        }}
+                      />
+                      <Label
+                        className="text-base font-medium"
+                        htmlFor="return_journey"
+                      >
+                        {t("return_journey")} ? ({t("optional")})
+                      </Label>
+                    </div>
+                    {returnJourney && (
+                      <>
+                        <h3 className="text-lg font-medium mt-5 mb-5">
+                          {t("select_return_time")}{" "}
+                          <span className="highlight">({t("optional")})</span>
+                        </h3>
+                        <div className="mb-5 flex w-max gap-4 items-center">
+                          {/* commented because qudrati vai said it's not need */}
+                          {/* <DatePicker
                         date={recurringData?.return_date || null}
                         setDate={(value) =>
                           handleDateChange("return_date", value)
@@ -495,14 +514,15 @@ const TransportationDetails = ({
                           after: new Date(recurringData?.start_date),
                         }}
                       /> */}
-                      <Input
-                        maxLength={5}
-                        value={recurringData?.return_time}
-                        onChange={(e) => handleTimeChange(e, "return_time")}
-                        placeholder="HH:MM"
-                      />
-                    </div>
-
+                          <Input
+                            maxLength={5}
+                            value={recurringData?.return_time}
+                            onChange={(e) => handleTimeChange(e, "return_time")}
+                            placeholder="HH:MM"
+                          />
+                        </div>
+                      </>
+                    )}
                     <h3 className="text-lg font-medium mb-3 mt-5">
                       {t("select_weekdays")}{" "}
                       <span className="highlight">
@@ -629,20 +649,20 @@ const TransportationDetails = ({
                     {returnJourney && (
                       <div className=" mb-5 ">
                         <h3 className="text-lg font-medium mt-10 mb-5">
-                          {t("select_return_date_and_time")}{" "}
+                          {t("select_return_time")}{" "}
                           <span className="text-sm text-gray-600">
                             {t("(optional)")}
                           </span>
                         </h3>
                         <div className="flex w-max gap-4 items-center">
-                          <DatePicker
+                          {/* <DatePicker
                             mode="multiple"
                             date={recurringData?.free_dates}
                             setDate={(value) =>
                               handleDateChange("free_dates", value)
                             }
                             disabled
-                          />
+                          /> */}
                           <Input
                             maxLength={5}
                             value={recurringData?.free_dates_return_time}
