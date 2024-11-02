@@ -29,6 +29,7 @@ import { calculateFormProgress, formatTimeInput } from "@/utils";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
+import { useTimescape } from "timescape/react";
 
 const TransportationDetails = ({
   handleFormChange,
@@ -267,11 +268,49 @@ const TransportationDetails = ({
     handleFormChange("patientDetails");
   };
 
-  const handleTimeChange = (e, dataName) => {
-    const rawValue = e.target.value;
-    const formattedValue = formatTimeInput(rawValue);
-    updateCreateRecurringOrderData(dataName, formattedValue);
-  };
+  const { getInputProps: recurringStartTimeInput } = useTimescape({
+    date: new Date(createOrderData?.recurringData?.start_time),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "recurringData",
+        "start_time"
+      ),
+  });
+
+  const { getInputProps: recurringReturnTimeInput } = useTimescape({
+    date: new Date(createOrderData?.recurringData?.return_time),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "recurringData",
+        "return_time"
+      ),
+  });
+
+  const { getInputProps: recurringFreeDateStartTimeInput } = useTimescape({
+    date: new Date(createOrderData?.recurringData?.free_dates_start_time),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "recurringData",
+        "free_dates_start_time"
+      ),
+  });
+
+  const { getInputProps: recurringFreeDateEndTimeInput } = useTimescape({
+    date: new Date(createOrderData?.recurringData?.free_dates_return_time),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCreateOrderData,
+        "recurringData",
+        "free_dates_return_time"
+      ),
+  });
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -459,7 +498,7 @@ const TransportationDetails = ({
                   placeholder="Select a type"
                 />
                 {recurringData?.recurring_type === "week" ? (
-                  <div className="">
+                  <div>
                     <h3 className="text-lg font-medium mt-10 mb-5">
                       {t("select_start_date_and_time")} *
                     </h3>
@@ -470,24 +509,30 @@ const TransportationDetails = ({
                           handleDateChange("start_date", value)
                         }
                         startMonth={new Date()}
-                        disabled={{
-                          before: new Date(),
-                        }}
+                        disabled={{ before: new Date() }}
                       />
-                      <Input
-                        maxLength={5}
-                        value={recurringData?.start_time}
-                        onChange={(e) => handleTimeChange(e, "start_time")}
-                        placeholder="HH:MM"
-                      />
+                      <div
+                        className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
+                      >
+                        <Input
+                          className="timescape-input !w-6"
+                          {...recurringStartTimeInput("hours")}
+                          placeholder="HH"
+                        />
+                        <span className="separator">:</span>
+                        <Input
+                          className="timescape-input !w-6"
+                          {...recurringStartTimeInput("minutes")}
+                          placeholder="mm"
+                          step={5}
+                        />
+                      </div>
                     </div>
                     <div className="mt-8 flex items-center gap-2">
                       <Checkbox
                         id="return_journey"
                         checked={returnJourney}
-                        onClick={() => {
-                          setReturnJourney(!returnJourney);
-                        }}
+                        onClick={() => setReturnJourney(!returnJourney)}
                       />
                       <Label
                         className="text-base font-medium"
@@ -497,107 +542,119 @@ const TransportationDetails = ({
                       </Label>
                     </div>
                     {returnJourney && (
-                      <>
+                      <div>
                         <h3 className="text-lg font-medium mt-5 mb-5">
                           {t("select_return_time")}{" "}
                           <span className="highlight">({t("optional")})</span>
                         </h3>
                         <div className="mb-5 flex w-max gap-4 items-center">
-                          {/* commented because qudrati vai said it's not need */}
+                          {/* Uncomment if needed */}
                           {/* <DatePicker
-                        date={recurringData?.return_date || null}
-                        setDate={(value) =>
-                          handleDateChange("return_date", value)
-                        }
-                        disabled={{
-                          before: new Date(recurringData?.start_date),
-                          after: new Date(recurringData?.start_date),
-                        }}
-                      /> */}
-                          <Input
-                            maxLength={5}
-                            value={recurringData?.return_time}
-                            onChange={(e) => handleTimeChange(e, "return_time")}
-                            placeholder="HH:MM"
-                          />
+            date={recurringData?.return_date || null}
+            setDate={(value) => handleDateChange("return_date", value)}
+            disabled={{
+              before: new Date(recurringData?.start_date),
+              after: new Date(recurringData?.start_date),
+            }}
+          /> */}
                         </div>
-                      </>
-                    )}
-                    <h3 className="text-lg font-medium mb-3 mt-5">
-                      {t("select_weekdays")}{" "}
-                      <span className="highlight">
-                        ({t("multiple_selection")})
-                      </span>
-                      :
-                    </h3>
-                    <div className="flex flex-wrap gap-3 mt-2">
-                      {weekdaysOptions.map((option) => (
                         <div
-                          key={option.value}
-                          className="flex items-center mb-2"
+                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                         >
-                          <Checkbox
-                            id={option.value}
-                            checked={recurringData?.multiple_week_days?.includes(
-                              option.value
-                            )}
-                            className="size-6"
-                            onClick={() => handleWeekdayChange(option)}
+                          <Input
+                            className="timescape-input !w-6"
+                            {...recurringReturnTimeInput("hours")}
+                            placeholder="HH"
                           />
-                          <Label
-                            className="ml-2 text-lg"
-                            htmlFor={option.value}
-                          >
-                            {option.label}
-                          </Label>
+                          <span className="separator">:</span>
+                          <Input
+                            className="timescape-input !w-6"
+                            {...recurringReturnTimeInput("minutes")}
+                            placeholder="mm"
+                            step={5}
+                          />
                         </div>
-                      ))}
-                    </div>
 
-                    <h3 className="text-lg font-medium mb-3 mt-5">
-                      {t("ends")}{" "}
-                    </h3>
-                    <FormField
-                      control={form.control}
-                      name="duration"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={(value) => {
-                                field.onChange(value);
-                                updateCreateRecurringOrderData("ends", value);
-                              }}
-                              value={recurringData?.ends}
-                              className="flex items-center gap-3"
+                        <h3 className="text-lg font-medium mb-3 mt-5">
+                          {t("select_weekdays")}{" "}
+                          <span className="highlight">
+                            ({t("multiple_selection")})
+                          </span>
+                          :
+                        </h3>
+                        <div className="flex flex-wrap gap-3 mt-2">
+                          {weekdaysOptions.map((option) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center mb-2"
                             >
-                              {durationOptions.map((option) => (
-                                <div
-                                  key={option.value}
-                                  className="flex items-center space-x-2 mb-2"
+                              <Checkbox
+                                id={option.value}
+                                checked={recurringData?.multiple_week_days?.includes(
+                                  option.value
+                                )}
+                                className="size-6 capitalize"
+                                onClick={() => handleWeekdayChange(option)}
+                              />
+                              <Label
+                                className="ml-2 text-lg capitalize"
+                                htmlFor={option.value}
+                              >
+                                {option.label}
+                              </Label>
+                            </div>
+                          ))}
+                        </div>
+
+                        <h3 className="text-lg font-medium mb-3 mt-5">
+                          {t("ends")}{" "}
+                        </h3>
+                        <FormField
+                          control={form.control}
+                          name="duration"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <RadioGroup
+                                  onValueChange={(value) => {
+                                    field.onChange(value);
+                                    updateCreateRecurringOrderData(
+                                      "ends",
+                                      value
+                                    );
+                                  }}
+                                  value={recurringData?.ends}
+                                  className="flex items-center gap-3"
                                 >
-                                  <RadioGroupItem
-                                    value={option.value}
-                                    id={option.value}
-                                  />
-                                  <Label htmlFor={option.value}>
-                                    {option.label}
-                                  </Label>
-                                </div>
-                              ))}
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                                  {durationOptions.map((option) => (
+                                    <div
+                                      key={option.value}
+                                      className="flex items-center space-x-2 mb-2"
+                                    >
+                                      <RadioGroupItem
+                                        value={option.value}
+                                        id={option.value}
+                                      />
+                                      <Label htmlFor={option.value}>
+                                        {option.label}
+                                      </Label>
+                                    </div>
+                                  ))}
+                                </RadioGroup>
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    )}
                   </div>
                 ) : recurringData?.recurring_type === "free" ? (
-                  <div className="">
+                  <div>
                     <div className="mt-5 mb-5 ">
                       <h3 className="text-lg font-medium mt-10 mb-5">
-                        {t("select_start_date_and_time")} *
-                        <span className="text-sm text-gray-500"> (max 60)</span>
+                        {t("select_start_date_and_time")} *{" "}
+                        <span className="text-sm text-gray-500">(max 60)</span>
                       </h3>
                       <div className="flex w-max gap-4 items-center">
                         <DatePicker
@@ -612,19 +669,25 @@ const TransportationDetails = ({
                           setDate={(value) =>
                             handleDateChange("free_dates", value)
                           }
-                          disabled={{
-                            before: new Date(),
-                          }}
+                          disabled={{ before: new Date() }}
                           max={60}
                         />
-                        <Input
-                          maxLength={5}
-                          value={recurringData?.free_dates_start_time}
-                          onChange={(e) =>
-                            handleTimeChange(e, "free_dates_start_time")
-                          }
-                          placeholder="HH:MM"
-                        />
+                        <div
+                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
+                        >
+                          <Input
+                            className="timescape-input !w-6"
+                            {...recurringFreeDateStartTimeInput("hours")}
+                            placeholder="HH"
+                          />
+                          <span className="separator">:</span>
+                          <Input
+                            className="timescape-input !w-6"
+                            {...recurringFreeDateStartTimeInput("minutes")}
+                            placeholder="mm"
+                            step={5}
+                          />
+                        </div>
                       </div>
                     </div>
                     <div className="mt-8 flex items-center gap-2">
@@ -647,7 +710,7 @@ const TransportationDetails = ({
                       </Label>
                     </div>
                     {returnJourney && (
-                      <div className=" mb-5 ">
+                      <div className="mb-5">
                         <h3 className="text-lg font-medium mt-10 mb-5">
                           {t("select_return_time")}{" "}
                           <span className="text-sm text-gray-600">
@@ -655,22 +718,22 @@ const TransportationDetails = ({
                           </span>
                         </h3>
                         <div className="flex w-max gap-4 items-center">
-                          {/* <DatePicker
-                            mode="multiple"
-                            date={recurringData?.free_dates}
-                            setDate={(value) =>
-                              handleDateChange("free_dates", value)
-                            }
-                            disabled
-                          /> */}
-                          <Input
-                            maxLength={5}
-                            value={recurringData?.free_dates_return_time}
-                            onChange={(e) =>
-                              handleTimeChange(e, "free_dates_return_time")
-                            }
-                            placeholder="HH:MM"
-                          />
+                          <div
+                            className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
+                          >
+                            <Input
+                              className="timescape-input !w-6"
+                              {...recurringFreeDateEndTimeInput("hours")}
+                              placeholder="HH"
+                            />
+                            <span className="separator">:</span>
+                            <Input
+                              className="timescape-input !w-6"
+                              {...recurringFreeDateEndTimeInput("minutes")}
+                              placeholder="mm"
+                              step={5}
+                            />
+                          </div>
                         </div>
                       </div>
                     )}

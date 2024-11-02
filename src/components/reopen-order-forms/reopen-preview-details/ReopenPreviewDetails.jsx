@@ -229,7 +229,7 @@ const ReopenPreviewDetails = ({
                               option.value
                             )}
                           />
-                          <Label className="ml-2" htmlFor={option.value}>
+                          <Label className="ml-2 capitalize" htmlFor={option.value}>
                             {option.label}
                           </Label>
                         </div>

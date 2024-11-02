@@ -16,13 +16,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@/components/ui/DatePicker";
-import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { formatTimeInput } from "@/utils";
+import { useTimescape } from "timescape/react";
 
 const CopyDestinationDetails = ({
   handleFormChange,
@@ -133,6 +133,46 @@ const CopyDestinationDetails = ({
     }));
   };
 
+  // Drop-off time
+  const { getInputProps: getDropOffInputProps } = useTimescape({
+    date: new Date(
+      copiedOrderData?.destinationDetailsData?.drop_off_pick_up_time
+    ),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCopiedOrderData,
+        "destinationDetailsData",
+        "drop_off_pick_up_time"
+      ),
+  });
+
+  // Pickup time
+  const { getInputProps: getPickupInputProps } = useTimescape({
+    date: new Date(
+      copiedOrderData?.destinationDetailsData?.pickup_appointment_time
+    ),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCopiedOrderData,
+        "destinationDetailsData",
+        "pickup_appointment_time"
+      ),
+  });
+
+  // Return approximate time
+  const { getInputProps: getReturnInputProps } = useTimescape({
+    date: new Date(copiedOrderData?.destinationDetailsData?.return_approx_time),
+    onChangeDate: (nextDate) =>
+      formatTimeInput(
+        nextDate,
+        setCopiedOrderData,
+        "destinationDetailsData",
+        "return_approx_time"
+      ),
+  });
+
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
@@ -154,7 +194,7 @@ const CopyDestinationDetails = ({
                         {t("dropoff_date")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                      <DatePicker
+                        <DatePicker
                           date={
                             drop_off_pick_up_date
                               ? new Date(drop_off_pick_up_date)
@@ -193,17 +233,23 @@ const CopyDestinationDetails = ({
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          maxLength={5}
-                          onChange={(e) => {
-                            const rawValue = e.target.value;
-                            const formattedValue = formatTimeInput(rawValue);
-                            field.onChange(formattedValue);
-                            handleInputChange(e);
-                          }}
-                          placeholder="HH:MM"
-                        />
+                        <div
+                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
+                            `}
+                        >
+                          <Input
+                            className="timescape-input !w-6"
+                            {...getDropOffInputProps("hours")}
+                            placeholder="HH"
+                          />
+                          <span className="separator">:</span>
+                          <Input
+                            className="timescape-input !w-6"
+                            {...getDropOffInputProps("minutes")}
+                            placeholder="mm"
+                            step={5}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -221,17 +267,23 @@ const CopyDestinationDetails = ({
                         {t("appointment_time")}
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          maxLength={5}
-                          onChange={(e) => {
-                            const rawValue = e.target.value;
-                            const formattedValue = formatTimeInput(rawValue);
-                            field.onChange(formattedValue);
-                            handleInputChange(e);
-                          }}
-                          placeholder="HH:MM"
-                        />
+                        <div
+                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
+                            `}
+                        >
+                          <Input
+                            className="timescape-input !w-6"
+                            {...getPickupInputProps("hours")}
+                            placeholder="HH"
+                          />
+                          <span className="separator">:</span>
+                          <Input
+                            className="timescape-input !w-6"
+                            {...getPickupInputProps("minutes")}
+                            placeholder="mm"
+                            step={5}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -469,7 +521,7 @@ const CopyDestinationDetails = ({
                                 {t("return_date")}
                               </FormLabel>
                               <FormControl>
-                              <DatePicker
+                                <DatePicker
                                   date={return_date}
                                   setDate={(value) =>
                                     setCopiedOrderData((prev) => ({
@@ -501,18 +553,23 @@ const CopyDestinationDetails = ({
                                 {t("return_approx_time")}
                               </FormLabel>
                               <FormControl>
-                                <Input
-                                  {...field}
-                                  maxLength={5}
-                                  onChange={(e) => {
-                                    const rawValue = e.target.value;
-                                    const formattedValue =
-                                      formatTimeInput(rawValue);
-                                    field.onChange(formattedValue);
-                                    handleInputChange(e);
-                                  }}
-                                  placeholder="HH:MM"
-                                />
+                                <div
+                                  className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
+                            `}
+                                >
+                                  <Input
+                                    className="timescape-input !w-6"
+                                    {...getReturnInputProps("hours")}
+                                    placeholder="HH"
+                                  />
+                                  <span className="separator">:</span>
+                                  <Input
+                                    className="timescape-input !w-6"
+                                    {...getReturnInputProps("minutes")}
+                                    placeholder="mm"
+                                    step={5}
+                                  />
+                                </div>
                               </FormControl>
                               <FormMessage />
                             </FormItem>
