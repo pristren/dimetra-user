@@ -229,7 +229,6 @@ const EditDestinationDetails = ({
                           }
                           placeholder="Type your postal code"
                           {...field}
-                          type="number"
                           onChange={(e) => {
                             field.onChange(e);
                             handleInputChange(e);

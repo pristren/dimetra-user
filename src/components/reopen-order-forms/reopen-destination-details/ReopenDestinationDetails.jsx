@@ -105,7 +105,9 @@ const ReopenDestinationDetails = ({
     drop_off_name: z.string().min(1, t("name_is_required")),
     drop_off_address: z.string().min(1, t("drop_off_street_is_required")),
     drop_off_city: z.string().min(1, t("city_is_required")),
-
+    drop_off_postal_code: z
+      .number()
+      .min(1, t("drop_off_postal_code_is_required")),
     return_date: z.string().min(1, t("date_is_required")),
     return_day_letter: z.string().min(1, t("this_field_is_required")),
     return_approx_time: z.string().min(1, t("approx_time_is_required")),
