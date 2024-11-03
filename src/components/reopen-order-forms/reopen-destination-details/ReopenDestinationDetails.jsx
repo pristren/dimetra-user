@@ -23,7 +23,7 @@ import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { formatTimeInput } from "@/utils";
+import { formatTimeInput, parseTimeString } from "@/utils";
 
 const DestinationDetails = ({
   handleFormChange,
@@ -53,7 +53,6 @@ const DestinationDetails = ({
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
   }
-  
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -130,8 +129,11 @@ const DestinationDetails = ({
     }));
   };
   // Drop-off time
+  const initialDropOffDate = parseTimeString(
+    reopenOrderData?.destinationDetailsData?.drop_off_pick_up_time
+  );
   const { getInputProps: getDropOffInputProps } = useTimescape({
-    date: new Date(),
+    date: initialDropOffDate,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -154,8 +156,11 @@ const DestinationDetails = ({
   });
 
   // Return approximate time, conditionally applied
+  const initialReturnDate = parseTimeString(
+    reopenOrderData?.destinationDetailsData?.return_approx_time
+  );
   const { getInputProps: getReturnInputProps } = useTimescape({
-    date: new Date(),
+    date: initialReturnDate,
     onChangeDate: (nextDate) => {
       if (checkTrueFalse && !isReturnJourneyHide) {
         formatTimeInput(
@@ -486,6 +491,7 @@ const DestinationDetails = ({
                           destinationDetailsData: {
                             ...prev.destinationDetailsData,
                             return_date: "",
+                            return_approx_time: ""
                           },
                         }));
                       }}
@@ -501,7 +507,9 @@ const DestinationDetails = ({
                   "recurring" &&
                   checkTrueFalse && (
                     <div
-                      className={`mt-10 ${!isReturnJourneyHide ? "hidden" : ""}`}
+                      className={`mt-10 ${
+                        !isReturnJourneyHide ? "hidden" : ""
+                      }`}
                     >
                       <h6 className="text-xl font-semibold mb-4">
                         {t("return_journey")}

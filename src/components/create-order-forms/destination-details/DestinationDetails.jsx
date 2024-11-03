@@ -23,7 +23,7 @@ import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { formatTimeInput } from "@/utils";
+import { formatTimeInput, parseTimeString } from "@/utils";
 
 const DestinationDetails = ({
   handleFormChange,
@@ -146,8 +146,11 @@ const DestinationDetails = ({
     }));
   };
   // Drop-off time
+  const initialDropOffDate = parseTimeString(
+    createOrderData?.destinationDetailsData?.drop_off_pick_up_time
+  );
   const { getInputProps: getDropOffInputProps } = useTimescape({
-    date: null,
+    date: initialDropOffDate,
     onChangeDate: (nextDate) => {
       if (nextDate) {
         formatTimeInput(
@@ -173,8 +176,11 @@ const DestinationDetails = ({
   });
 
   // Return approximate time, conditionally applied
+  const initialReturnDate = parseTimeString(
+    createOrderData?.destinationDetailsData?.return_approx_time
+  );
   const { getInputProps: getReturnInputProps } = useTimescape({
-    date: null,
+    date: initialReturnDate,
     onChangeDate: (nextDate) => {
       if (nextDate) {
         formatTimeInput(
@@ -505,6 +511,7 @@ const DestinationDetails = ({
                           destinationDetailsData: {
                             ...prev.destinationDetailsData,
                             return_date: "",
+                            return_approx_time: ""
                           },
                         }));
                       }}
