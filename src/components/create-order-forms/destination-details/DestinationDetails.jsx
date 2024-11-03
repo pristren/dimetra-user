@@ -53,6 +53,22 @@ const DestinationDetails = ({
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
   }
+  const { userInfo } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (userInfo) {
+      setCreateOrderData((prevState) => ({
+        ...prevState,
+        destinationDetailsData: {
+          ...prevState.destinationDetailsData,
+          pick_up_name: `${userInfo?.first_name} ${userInfo?.last_name}`,
+          pick_up_address: userInfo?.address,
+          pick_up_postal_code: userInfo?.code,
+          pick_up_city: userInfo?.billing_address,
+          pick_up_country: userInfo?.address,
+        },
+      }));
+    }
+  }, [userInfo, setCreateOrderData]);
 
   const handleNext = (e) => {
     e.preventDefault();
