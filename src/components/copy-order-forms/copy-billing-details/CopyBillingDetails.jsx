@@ -24,12 +24,13 @@ const CopyBillingDetails = ({
   const { t } = useTranslation();
   const {
     pre_name = "",
-    contact_phone = "",
+    contact_phone = "",    
     name = "",
     street = "",
     place = "",
     contact = "",
   } = copiedOrderData.billingDetailsData || {};
+  
 
   const formSchema = z.object({
     preName: z.string().min(1, t("prename_institution_is_required")),
@@ -68,9 +69,7 @@ const CopyBillingDetails = ({
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
-        <CardTitle className="title">
-          {t("billing_address")} ({t("optional")})
-        </CardTitle>
+        <CardTitle className="title">{t("billing_address")} ({t("optional")})</CardTitle>
       </CardHeader>
       <CardContent className="lg:px-10">
         <Form {...form}>

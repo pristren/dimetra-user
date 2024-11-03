@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
+import { useTimescape } from "timescape/react";
 import { useForm } from "react-hook-form";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,19 +17,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@/components/ui/DatePicker";
+import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { formatTimeInput } from "@/utils";
-import { useTimescape } from "timescape/react";
 
 const CopyDestinationDetails = ({
   handleFormChange,
   copiedOrderData,
   setCopiedOrderData,
   destinationProgress,
+  isReturnJourneyHide,
+  setIsReturnJourneyHide,
 }) => {
   const {
     destinationDetailsData: {
@@ -38,12 +41,14 @@ const CopyDestinationDetails = ({
       return_date,
     } = {},
   } = copiedOrderData;
-  const checkTrueFalse =
-    copiedOrderData?.transportationData?.type_of_transport ===
-      "investigation_trip" ||
-    copiedOrderData?.transportationData?.type_of_transport === "private_trips";
-  const [isReturnJourneyHide, setIsReturnJourneyHide] =
-    useState(checkTrueFalse);
+  const checkTrueFalse = useMemo(
+    () =>
+      copiedOrderData?.transportationData?.type_of_transport ===
+        "investigation_trip" ||
+      copiedOrderData?.transportationData?.type_of_transport ===
+        "private_trips",
+    [copiedOrderData?.transportationData?.type_of_transport]
+  );
   function timeStringToMinutes(timeString) {
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
@@ -75,25 +80,13 @@ const CopyDestinationDetails = ({
       return;
     }
 
-    if (return_approx_time && !return_date) {
-      toast("Return date is required if return approx time is provided.", {
-        icon: "⚠️",
-      });
-      return;
-    } else if (return_date && !return_approx_time) {
-      toast("Return approx time is required if return date is provided.", {
-        icon: "⚠️",
-      });
-      return;
-    }
-
     handleFormChange("billingDetails");
   };
 
   const form_schema = z.object({
     pick_up_name: z.string().min(1, t("name_is_required")),
     pick_up_address: z.string().min(1, t("street_is_required")),
-    pick_up_postal_code: z.number().min(1, t("postal_is_required")),
+    pick_up_postal_code: z.string().min(1, t("postal_is_required")),
     pick_up_city: z.string().min(1, t("city_is_required")),
     pickup_phone: z.string().min(1, t("phone_is_required")),
     pick_up_employee_name: z
@@ -119,8 +112,12 @@ const CopyDestinationDetails = ({
     defaultValues: copiedOrderData.destinationDetailsData,
   });
 
-  const { formState } = form;
+  const { formState, reset } = form;
   const { errors } = formState;
+
+  useEffect(() => {
+    reset(copiedOrderData.destinationDetailsData);
+  }, [copiedOrderData.destinationDetailsData, reset]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -132,12 +129,9 @@ const CopyDestinationDetails = ({
       },
     }));
   };
-
   // Drop-off time
   const { getInputProps: getDropOffInputProps } = useTimescape({
-    date: new Date(
-      copiedOrderData?.destinationDetailsData?.drop_off_pick_up_time
-    ),
+    date: new Date(),
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -149,9 +143,7 @@ const CopyDestinationDetails = ({
 
   // Pickup time
   const { getInputProps: getPickupInputProps } = useTimescape({
-    date: new Date(
-      copiedOrderData?.destinationDetailsData?.pickup_appointment_time
-    ),
+    date: new Date(),
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -161,16 +153,19 @@ const CopyDestinationDetails = ({
       ),
   });
 
-  // Return approximate time
+  // Return approximate time, conditionally applied
   const { getInputProps: getReturnInputProps } = useTimescape({
-    date: new Date(copiedOrderData?.destinationDetailsData?.return_approx_time),
-    onChangeDate: (nextDate) =>
-      formatTimeInput(
-        nextDate,
-        setCopiedOrderData,
-        "destinationDetailsData",
-        "return_approx_time"
-      ),
+    date: new Date(),
+    onChangeDate: (nextDate) => {
+      if (checkTrueFalse && !isReturnJourneyHide) {
+        formatTimeInput(
+          nextDate,
+          setCopiedOrderData,
+          "destinationDetailsData",
+          "return_approx_time"
+        );
+      }
+    },
   });
 
   return (
@@ -233,10 +228,7 @@ const CopyDestinationDetails = ({
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <div
-                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
-                            `}
-                        >
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                           <Input
                             className="timescape-input !w-6"
                             {...getDropOffInputProps("hours")}
@@ -267,10 +259,7 @@ const CopyDestinationDetails = ({
                         {t("appointment_time")}
                       </FormLabel>
                       <FormControl>
-                        <div
-                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
-                            `}
-                        >
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                           <Input
                             className="timescape-input !w-6"
                             {...getPickupInputProps("hours")}
@@ -364,7 +353,6 @@ const CopyDestinationDetails = ({
                           }
                           placeholder={t("type_your_postal_code")}
                           {...field}
-                          type="number"
                           onChange={(e) => {
                             field.onChange(e);
                             handleInputChange(e);
@@ -490,10 +478,17 @@ const CopyDestinationDetails = ({
                   <div className="flex items-center gap-3">
                     <Checkbox
                       id="returnJourneyCheckbox"
-                      checked={!isReturnJourneyHide}
-                      onClick={() =>
-                        setIsReturnJourneyHide(!isReturnJourneyHide)
-                      }
+                      checked={isReturnJourneyHide}
+                      onClick={() => {
+                        setIsReturnJourneyHide(!isReturnJourneyHide);
+                        setCopiedOrderData((prev) => ({
+                          ...prev,
+                          destinationDetailsData: {
+                            ...prev.destinationDetailsData,
+                            return_date: "",
+                          },
+                        }));
+                      }}
                     />
                     <Label htmlFor="returnJourneyCheckbox">
                       {t("return_journey")} ? ({t("optional")})
@@ -506,7 +501,7 @@ const CopyDestinationDetails = ({
                   "recurring" &&
                   checkTrueFalse && (
                     <div
-                      className={`mt-10 ${isReturnJourneyHide ? "hidden" : ""}`}
+                      className={`mt-10 ${!isReturnJourneyHide ? "hidden" : ""}`}
                     >
                       <h6 className="text-xl font-semibold mb-4">
                         {t("return_journey")}
@@ -553,10 +548,7 @@ const CopyDestinationDetails = ({
                                 {t("return_approx_time")}
                               </FormLabel>
                               <FormControl>
-                                <div
-                                  className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
-                            `}
-                                >
+                                <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                                   <Input
                                     className="timescape-input !w-6"
                                     {...getReturnInputProps("hours")}
