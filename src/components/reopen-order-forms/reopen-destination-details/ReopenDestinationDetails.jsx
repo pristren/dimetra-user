@@ -93,7 +93,7 @@ const ReopenDestinationDetails = ({
   const form_schema = z.object({
     pick_up_name: z.string().min(1, t("name_is_required")),
     pick_up_address: z.string().min(1, t("street_is_required")),
-    pick_up_postal_code: z.number().min(1, t("postal_is_required")),
+    pick_up_postal_code: z.string().min(1, t("postal_is_required")),
     pick_up_city: z.string().min(1, t("city_is_required")),
     pickup_phone: z.string().min(1, t("phone_is_required")),
     pick_up_employee_name: z
@@ -104,9 +104,6 @@ const ReopenDestinationDetails = ({
     drop_off_pick_up_time: z.string().min(1, t("pick_up_time_is_required")),
     drop_off_name: z.string().min(1, t("name_is_required")),
     drop_off_address: z.string().min(1, t("drop_off_street_is_required")),
-    drop_off_postal_code: z
-      .number()
-      .min(1, t("drop_off_postal_code_is_required")),
     drop_off_city: z.string().min(1, t("city_is_required")),
 
     return_date: z.string().min(1, t("date_is_required")),
@@ -364,7 +361,6 @@ const ReopenDestinationDetails = ({
                           }
                           placeholder={t("type_your_postal_code")}
                           {...field}
-                          type="number"
                           onChange={(e) => {
                             field.onChange(e);
                             handleInputChange(e);
@@ -653,7 +649,6 @@ const ReopenDestinationDetails = ({
                           className={
                             errors.drop_off_postal_code ? "border-red-500" : ""
                           }
-                          type="number"
                           placeholder="Type your postal code"
                           {...field}
                           onChange={(e) => {

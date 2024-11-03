@@ -32,7 +32,7 @@ export const copiedOrderDefaultState = {
   destinationDetailsData: {
     pick_up_name: "",
     pick_up_address: "",
-    pick_up_postal_code: 0,
+    pick_up_postal_code: '',
     pick_up_city: "",
     pick_up_country: "",
     pickup_phone: "",

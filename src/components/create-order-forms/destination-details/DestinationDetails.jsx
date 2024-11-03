@@ -113,9 +113,6 @@ const DestinationDetails = ({
     drop_off_pick_up_time: z.string().min(1, t("pick_up_time_is_required")),
     drop_off_name: z.string().min(1, t("name_is_required")),
     drop_off_address: z.string().min(1, t("drop_off_street_is_required")),
-    drop_off_postal_code: z
-      .number()
-      .min(1, t("drop_off_postal_code_is_required")),
     drop_off_city: z.string().min(1, t("city_is_required")),
 
     return_date: z.string().min(1, t("date_is_required")),
@@ -141,20 +138,23 @@ const DestinationDetails = ({
       ...prev,
       destinationDetailsData: {
         ...prev.destinationDetailsData,
-        [name]: name.includes("postal_code") ? Number(value) : value,
+        [name]: value,
       },
     }));
   };
   // Drop-off time
   const { getInputProps: getDropOffInputProps } = useTimescape({
-    date: new Date(),
-    onChangeDate: (nextDate) =>
-      formatTimeInput(
-        nextDate,
-        setCreateOrderData,
-        "destinationDetailsData",
-        "drop_off_pick_up_time"
-      ),
+    date: null,
+    onChangeDate: (nextDate) => {
+      if (nextDate) {
+        formatTimeInput(
+          nextDate,
+          setCreateOrderData,
+          "destinationDetailsData",
+          "drop_off_pick_up_time"
+        );
+      }
+    },
   });
 
   // Pickup time
@@ -171,9 +171,9 @@ const DestinationDetails = ({
 
   // Return approximate time, conditionally applied
   const { getInputProps: getReturnInputProps } = useTimescape({
-    date: new Date(),
+    date: null,
     onChangeDate: (nextDate) => {
-      if (checkTrueFalse && !isReturnJourneyHide) {
+      if (nextDate) {
         formatTimeInput(
           nextDate,
           setCreateOrderData,
@@ -517,7 +517,9 @@ const DestinationDetails = ({
                   "recurring" &&
                   checkTrueFalse && (
                     <div
-                      className={`mt-10 ${!isReturnJourneyHide ? "hidden" : ""}`}
+                      className={`mt-10 ${
+                        !isReturnJourneyHide ? "hidden" : ""
+                      }`}
                     >
                       <h6 className="text-xl font-semibold mb-4">
                         {t("return_journey")}
@@ -661,7 +663,7 @@ const DestinationDetails = ({
                           className={
                             errors.drop_off_postal_code ? "border-red-500" : ""
                           }
-                          type="number"
+                          type="text"
                           placeholder="Type your postal code"
                           {...field}
                           onChange={(e) => {
