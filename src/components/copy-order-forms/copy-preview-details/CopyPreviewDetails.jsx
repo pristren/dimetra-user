@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import AppSelect from "@/components/common/AppSelect";
 import {
   durationOptions,
-  timeOptions,
   transportModesOptions,
   transportOptions,
   transportWithOptions,
@@ -24,6 +23,8 @@ import { useState } from "react";
 import { Loading, SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
 import { t } from "i18next";
 import toast from "react-hot-toast";
+import SubmitProgress from "@/components/create-order-forms/submit-progress/SubmitProgress"; // Import the SubmitProgress component
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const CopyPreviewDetails = ({
   copiedOrderData,
@@ -40,13 +41,13 @@ const CopyPreviewDetails = ({
 
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const calculateMonthlyOccurrences = (weekdays) => {
-    return weekdays.length * 4;
-  };
+  const [showProgress, setShowProgress] = useState(false);
   const [createAnOrder] = useMutation(CREATE_AN_ORDER);
   const navigate = useNavigate();
+
   const handleCreateAnOrder = async () => {
     setLoading(true);
+    setShowProgress(true);
     const updatedData = { ...copiedOrderData };
 
     if (updatedData?.transportationData?.type_of_transport !== "recurring") {
@@ -69,8 +70,10 @@ const CopyPreviewDetails = ({
       toast.error(message || "Something went wrong");
     } finally {
       setLoading(false);
+      setShowProgress(false); // Hide progress modal
     }
   };
+
   const closeModal = () => {
     setShowModal(false);
     navigate("/orders/all-orders");
@@ -100,10 +103,14 @@ const CopyPreviewDetails = ({
                       key={option.value}
                       className="flex items-center space-x-2 mb-2"
                     >
-                      <RadioGroupItem value={option.value} id={option.value} />
+                      <RadioGroupItem
+                        disabled
+                        value={option.value}
+                        id={option.value}
+                      />
                       <Label
                         htmlFor={option.value}
-                        className="font-normal text-[16px]"
+                        className="font-normal text-[16px] text-gray-500 !cursor-default"
                       >
                         {t(option.label)}
                       </Label>
@@ -124,10 +131,14 @@ const CopyPreviewDetails = ({
                       key={option.value}
                       className="flex items-center space-x-2 mb-2"
                     >
-                      <RadioGroupItem value={option.value} id={option.value} />
+                      <RadioGroupItem
+                        disabled
+                        value={option.value}
+                        id={option.value}
+                      />
                       <Label
                         htmlFor={option.value}
-                        className="font-normal text-[16px]"
+                        className="font-normal text-[16px] text-gray-500 !cursor-default"
                       >
                         {t(option.label)}
                       </Label>
@@ -178,88 +189,111 @@ const CopyPreviewDetails = ({
                 />
 
                 {recurringData?.recurring_type === "week" ? (
-                  <div className="">
+                  <div>
                     <h3 className="text-lg font-medium mt-10 mb-5">
                       {t("select_start_date_and_time")}
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
-                      <DatePicker disabled date={recurringData?.start_date} />
-                      <AppSelect
-                        items={timeOptions}
-                        className="cursor-pointer"
-                        placeholder="00:00"
-                        disabled
-                        value={recurringData?.start_time}
-                        isTime={true}
-                      />
-                    </div>
-
-                    <h3 className="text-lg font-medium mt-10 mb-5">
-                      {t("select_return_time")} :
-                    </h3>
-                    <div className="mb-5 flex w-max gap-4 items-center">
-                      {/* <DatePicker disabled date={recurringData?.return_date} /> */}
-                      <AppSelect
-                        items={timeOptions}
-                        placeholder="00:00"
-                        isTime={true}
-                        value={recurringData?.return_time}
-                        disabled
-                        className="cursor-pointer"
-                      />
-                    </div>
-
-                    <h3 className="text-lg font-medium mb-3 mt-5">
-                      {t("select_weekdays")}
-                      <span className="highlight">
-                        ({t("multiple_selection")})
-                      </span>
-                      :
-                    </h3>
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 mt-2">
-                      {weekdaysOptions.map((option) => (
-                        <div
-                          key={option.value}
-                          className="flex items-center mb-2"
-                        >
-                          <Checkbox
-                            disabled
-                            id={option.value}
-                            checked={recurringData?.multiple_week_days?.includes(
-                              option.value
-                            )}
-                          />
-                          <Label className="ml-2 capitalize" htmlFor={option.value}>
-                            {option.label}
-                          </Label>
-                        </div>
-                      ))}
-                    </div>
-
-                    <h3 className="text-lg font-medium mb-3 mt-5">
-                      {t("ends")}:
-                    </h3>
-                    <RadioGroup disabled value={recurringData?.ends}>
-                      {durationOptions.map((option) => (
-                        <div
-                          key={option.value}
-                          className="flex items-center space-x-2 mb-2"
-                        >
-                          <RadioGroupItem
-                            value={option.value}
-                            id={option.value}
-                          />
-                          <Label htmlFor={option.value}>{option.label}</Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-
-                    <h6 className="text-lg font-semibold mt-5">
-                      {t("summary")}
-                      {calculateMonthlyOccurrences(
-                        recurringData?.multiple_week_days
+                      {recurringData?.start_date && (
+                        <Input
+                          disabled
+                          value={
+                            recurringData?.start_date
+                              ? moment(recurringData?.start_date).format(
+                                  "DD/MM/YYYY"
+                                )
+                              : ""
+                          }
+                        />
                       )}
-                    </h6>
+                      {recurringData?.start_time && (
+                        <Input disabled value={recurringData?.start_time} />
+                      )}
+                    </div>
+                    {recurringData?.return_time && (
+                      <>
+                        <h3 className="text-lg font-medium mt-10 mb-5">
+                          {t("select_return_time")}* :
+                        </h3>
+                        <div className="mb-5 flex w-max gap-4 items-center">
+                          {/* {recurringData?.return_date && (
+                        <Input
+                          disabled
+                          value={moment(recurringData?.return_date).format(
+                            "DD/MM/YYYY"
+                          )}
+                        />
+                      )} */}
+                          <Input
+                            disabled
+                            placeholder="00:00"
+                            value={recurringData?.return_time}
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    {recurringData?.multiple_week_days > 0 && (
+                      <>
+                        <h3 className="text-lg font-medium mb-3 mt-5">
+                          {t("select_weekdays")}
+                          <span className="highlight">
+                            ({t("multiple_selection")})
+                          </span>
+                          :
+                        </h3>
+                        <div className="flex items-center gap-3 mt-2">
+                          {weekdaysOptions.map((option) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center mb-2"
+                            >
+                              <Checkbox
+                                disabled
+                                id={option.value}
+                                checked={recurringData?.multiple_week_days?.includes(
+                                  option.value
+                                )}
+                              />
+                              <Label
+                                className="ml-2 capitalize"
+                                htmlFor={option.value}
+                              >
+                                {option.label}
+                              </Label>
+                            </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {recurringData?.ends && (
+                      <>
+                        <h3 className="text-lg font-medium mb-3 mt-5">
+                          {t("ends")}:
+                        </h3>
+                        <RadioGroup
+                          disabled
+                          value={recurringData?.ends}
+                          className="flex"
+                        >
+                          {durationOptions.map((option) => (
+                            <div
+                              key={option.value}
+                              className="flex items-center space-x-2 mb-2"
+                            >
+                              <RadioGroupItem
+                                value={option.value}
+                                id={option.value}
+                              />
+                              <Label htmlFor={option.value}>
+                                {option.label}
+                              </Label>
+                            </div>
+                          ))}
+                        </RadioGroup>
+                      </>
+                    )}
                   </div>
                 ) : recurringData?.recurring_type === "free" ? (
                   <div className="">
@@ -268,44 +302,40 @@ const CopyPreviewDetails = ({
                         {t("select_start_date_and_time_free")}
                       </h3>
                       <div className="flex w-max gap-4 items-center">
-                        <DatePicker
-                          mode="multiple"
-                          date={recurringData?.free_dates}
-                          disabled
-                        />
-                        {console.log(recurringData?.free_dates_start_time)}
-                        <AppSelect
-                          items={timeOptions}
-                          placeholder="Select a time"
-                          isTime={true}
-                          isTimeSelected={true}
-                          disabled
-                          className="cursor-pointer"
-                          value={recurringData?.free_dates_start_time}
-                        />
+                        {recurringData?.free_dates && (
+                          <DatePicker
+                            mode="multiple"
+                            date={recurringData?.free_dates}
+                            disabled
+                          />
+                        )}
+                        {recurringData?.free_dates_start_time && (
+                          <Input
+                            disabled
+                            value={recurringData?.free_dates_start_time}
+                          />
+                        )}
                       </div>
                     </div>
-                    <div className="mt-5 mb-5 ">
-                      <h3 className="text-lg font-medium mt-10 mb-5">
-                        {t("select_return_time")}
-                      </h3>
-                      <div className="flex w-max gap-4 items-center">
-                        {/* <DatePicker
+                    {recurringData?.free_dates_return_time && (
+                      <div className="mt-5 mb-5 ">
+                        <h3 className="text-lg font-medium mt-10 mb-5">
+                          {t("select_return_time")}
+                        </h3>
+                        <div className="flex w-max gap-4 items-center">
+                          {/* <DatePicker
                           mode="multiple"
                           date={recurringData?.free_dates}
                           disabled
                         /> */}
-
-                        <AppSelect
-                          items={timeOptions}
-                          placeholder="No time selected"
-                          isTime={true}
-                          disabled
-                          className="cursor-pointer"
-                          defaultValue={recurringData?.free_dates_return_time}
-                        />
+                          <Input
+                            disabled
+                            placeholder="No time selected"
+                            value={recurringData?.free_dates_return_time}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 ) : null}
               </div>
@@ -315,7 +345,7 @@ const CopyPreviewDetails = ({
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
-                    {t("name")} <sup className="text-[13px]">*</sup>
+                    {t("name_institution")} <sup className="text-[13px]">*</sup>
                   </Label>
                   <Input
                     disabled
@@ -364,31 +394,23 @@ const CopyPreviewDetails = ({
                     className="border-gray-300"
                   />
                 </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("kostenstelle")} <sup className="text-[13px]">*</sup>
-                  </Label>
-                  <Input
-                    disabled
-                    value={patientData?.cost_center}
-                    placeholder={t("type_your_kostenstelle")}
-                    className="border-gray-300"
-                  />
-                </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("patient_above_90_kg")}
-                  </Label>
-                  <div className="flex items-center">
-                    <Checkbox
-                      checked={patientData?.patient_above_90kg}
-                      disabled
-                    />
-                    <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
-                      {t("no")}
+                <div />
+                {patientData?.patient_above_90kg && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("patient_above_90_kg")}
                     </Label>
+                    <div className="flex items-center">
+                      <Checkbox
+                        checked={patientData?.patient_above_90kg}
+                        disabled
+                      />
+                      <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
+                        {t("no")}
+                      </Label>
+                    </div>
                   </div>
-                </div>
+                )}
                 {patientData?.patient_above_90kg && (
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">
@@ -404,17 +426,19 @@ const CopyPreviewDetails = ({
                 )}
                 <div />
 
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("isolation")}
-                  </Label>
-                  <div className="flex items-center">
-                    <Checkbox checked={patientData?.isolation} disabled />
-                    <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
-                      {t("yes")}
+                {patientData?.isolation && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("isolation")}
                     </Label>
+                    <div className="flex items-center">
+                      <Checkbox checked={patientData?.isolation} disabled />
+                      <Label className="text-gray-500 font-medium text-[15px] cursor-pointer ml-2">
+                        {t("yes")}
+                      </Label>
+                    </div>
                   </div>
-                </div>
+                )}
                 {patientData?.isolation && (
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">
@@ -506,6 +530,7 @@ const CopyPreviewDetails = ({
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">
                       {t("phone")}
+                      <sup className="text-[13px]">*</sup>
                     </Label>
                     <Input
                       disabled
@@ -628,122 +653,148 @@ const CopyPreviewDetails = ({
                         className="border-gray-300"
                       />
                     </div>
-                    <div className="mb-5">
-                      <Label className="block mb-2 font-medium">
-                        {t("phone")}
-                      </Label>
-                      <Input
-                        disabled
-                        value={destinationDetailsData?.drop_off_phone}
-                        placeholder={t("type_the_phone_number")}
-                        className="border-gray-300"
-                      />
-                    </div>
+                    {destinationDetailsData?.drop_off_phone && (
+                      <div className="mb-5">
+                        <Label className="block mb-2 font-medium">
+                          {t("phone")}
+                        </Label>
+                        <Input
+                          disabled
+                          value={destinationDetailsData?.drop_off_phone}
+                          placeholder={t("type_the_phone_number")}
+                          className="border-gray-300"
+                        />
+                      </div>
+                    )}
                   </div>
                   {copiedOrderData?.transportationData?.type_of_transport !==
-                    "recurring" && (
-                    <div>
-                      <h6 className="mb-8 mt-14">{t("return_journey")}</h6>
-                      <div className="mb-5">
-                        <Label className="block mb-2 font-medium">
-                          {t("return_date")}
-                        </Label>
-                        <Input
-                          disabled
-                          value={
-                            destinationDetailsData?.drop_off_return_date
-                              ? moment(
-                                  destinationDetailsData?.drop_off_return_date
-                                ).format("DD MMMM YYYY")
-                              : "Not provided"
-                          }
-                          placeholder={t("type_your_return_date")}
-                          className="border-gray-300"
-                        />
+                    "recurring" &&
+                    destinationDetailsData?.drop_off_return_date && (
+                      <div>
+                        <h6 className="mb-8 mt-14">{t("return_journey")}</h6>
+                        <div className="mb-5">
+                          <Label className="block mb-2 font-medium">
+                            {t("return_date")}
+                          </Label>
+                          <Input
+                            disabled
+                            value={
+                              destinationDetailsData?.drop_off_return_date
+                                ? moment(
+                                    destinationDetailsData?.drop_off_return_date
+                                  ).format("DD MMMM YYYY")
+                                : "Not provided"
+                            }
+                            placeholder={t("type_your_return_date")}
+                            className="border-gray-300"
+                          />
+                        </div>
+                        <div className="mb-5">
+                          <Label className="block mb-2 font-medium">
+                            {t("return_time")}
+                          </Label>
+                          <Input
+                            disabled
+                            value={destinationDetailsData?.return_approx_time}
+                            placeholder={t("enter_time")}
+                            className="border-gray-300"
+                          />
+                        </div>
                       </div>
-                      <div className="mb-5">
-                        <Label className="block mb-2 font-medium">
-                          {t("return_time")}
-                        </Label>
-                        <Input
-                          disabled
-                          value={destinationDetailsData?.return_approx_time}
-                          placeholder={t("enter_time")}
-                          className="border-gray-300"
-                        />
-                      </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               </div>
             </div>
 
             {/* Billing Details */}
             <div>
-              <h6 className="title mb-10">{t("billing_address")}</h6>
+              {billingDetailsData?.pre_name ||
+                billingDetailsData?.name ||
+                billingDetailsData?.street ||
+                billingDetailsData?.place ||
+                billingDetailsData?.contact ||
+                (billingDetailsData?.contact_phone && (
+                  <h6 className="title mb-10">{t("billing_address")}</h6>
+                ))}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("first_name")}
-                  </Label>
-                  <Input
-                    disabled
-                    value={billingDetailsData?.pre_name}
-                    placeholder={t("type_your_prename_or_institution")}
-                    className="border-gray-300"
-                  />
-                </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">{t("name")}</Label>
-                  <Input
-                    disabled
-                    value={billingDetailsData?.name}
-                    placeholder={t("type_your_name")}
-                    className="border-gray-300"
-                  />
-                </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("street")}
-                  </Label>
-                  <Input
-                    disabled
-                    value={billingDetailsData?.street}
-                    placeholder={t("type_your_street")}
-                    className="border-gray-300"
-                  />
-                </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">{t("place")}</Label>
-                  <Input
-                    disabled
-                    value={billingDetailsData?.place}
-                    placeholder={t("type_your_place")}
-                    className="border-gray-300"
-                  />
-                </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("contact")}
-                  </Label>
-                  <Input
-                    disabled
-                    value={billingDetailsData?.contact}
-                    placeholder={t("type_your_contact_number")}
-                    className="border-gray-300"
-                  />
-                </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("contact_phone")}
-                  </Label>
-                  <Input
-                    disabled
-                    value={billingDetailsData?.contact_phone}
-                    placeholder={t("type_your_contact_number")}
-                    className="border-gray-300"
-                  />
-                </div>
+                {billingDetailsData?.pre_name && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("first_name")}
+                    </Label>
+                    <Input
+                      disabled
+                      value={billingDetailsData?.pre_name}
+                      placeholder={t("type_your_prename_or_institution")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                )}
+                {billingDetailsData?.name && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("name_institution")}
+                    </Label>
+                    <Input
+                      disabled
+                      value={billingDetailsData?.name}
+                      placeholder={t("type_your_name")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                )}
+                {billingDetailsData?.street && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("street")}
+                    </Label>
+                    <Input
+                      disabled
+                      value={billingDetailsData?.street}
+                      placeholder={t("type_your_street")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                )}
+                {billingDetailsData?.place && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("place")}
+                    </Label>
+                    <Input
+                      disabled
+                      value={billingDetailsData?.place}
+                      placeholder={t("type_your_place")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                )}
+                {billingDetailsData?.contact && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("contact")}
+                    </Label>
+                    <Input
+                      disabled
+                      value={billingDetailsData?.contact}
+                      placeholder={t("type_your_contact_number")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                )}
+                {billingDetailsData?.contact_phone && (
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("contact_phone")}
+                    </Label>
+                    <Input
+                      disabled
+                      value={billingDetailsData?.contact_phone}
+                      placeholder={t("type_your_contact_number")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -778,6 +829,18 @@ const CopyPreviewDetails = ({
           )}
         </CardContent>
       </Card>
+
+      {/* Progress Modal */}
+      {showProgress && (
+        <Dialog open={showProgress}>
+          <DialogContent>
+            <SubmitProgress
+              setShowProgress={setShowProgress}
+              loading={loading}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

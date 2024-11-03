@@ -25,6 +25,7 @@ import {
 import { t } from "i18next";
 import toast from "react-hot-toast";
 import moment from "moment";
+import { useTimescape } from "timescape/react";
 
 const CopyPatientDetails = ({
   handleFormChange,
@@ -74,51 +75,20 @@ const CopyPatientDetails = ({
     handleFormChange("destinationDetails");
   };
 
-  const handleDateInput = (e, field, setCopiedOrderData, form, path) => {
-    let input = e.target.value.replace(/\D/g, "");
-    let formattedDate = input;
-    const fieldName = e.target.name;
-
-    if (input.length > 2) {
-      formattedDate = `${input.slice(0, 2)}/${input.slice(2)}`;
-    }
-    if (input.length > 4) {
-      formattedDate = `${input.slice(0, 2)}/${input.slice(2, 4)}/${input.slice(
-        4
-      )}`;
-    }
-
-    field?.onChange(formattedDate);
-
-    if (formattedDate.length === 10) {
-      const [day, month, year] = formattedDate.split("/").map(Number);
-
-      if (
-        day >= 1 &&
-        day <= 31 &&
-        month >= 1 &&
-        month <= 12 &&
-        year >= 1900 &&
-        year <= 2024
-      ) {
-        const parsedDate = new Date(year, month - 1, day);
-
-        setCopiedOrderData((prev) => ({
-          ...prev,
-          [path]: {
-            ...prev[path],
-            [fieldName]: parsedDate,
-          },
-        }));
-
-        form.setValue(fieldName, moment(parsedDate).format("DD/MM/YYYY"));
-      } else {
-        toast.error(
-          "Invalid date. Please enter a valid date between 1900 and 2024."
-        );
-      }
-    }
-  };
+  const { getRootProps, getInputProps } = useTimescape({
+    date: new Date(copiedOrderData?.patientData?.date_of_birth),
+    onChangeDate: (nextDate) => {
+      const formattedDate = moment(nextDate).format("DD/MM/YYYY");
+      form.setValue("date_of_birth", formattedDate);
+      setCopiedOrderData((prev) => ({
+        ...prev,
+        patientData: {
+          ...prev.patientData,
+          date_of_birth: nextDate,
+        },
+      }));
+    },
+  });
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -138,7 +108,7 @@ const CopyPatientDetails = ({
                       {copiedOrderData.transportationData?.type_of_transport ===
                       "collection_order"
                         ? t("name_collection")
-                        : t("name")}
+                        : t("name_institution")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
@@ -203,34 +173,36 @@ const CopyPatientDetails = ({
                 <FormField
                   control={form.control}
                   name="date_of_birth"
-                  render={({ field }) => (
+                  render={() => (
                     <FormItem>
                       <FormLabel className="mb-2">
                         {t("date_of_birth")}
                         <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          type="text"
-                          placeholder={t("dd_mm_yyyy")}
-                          maxLength={10}
-                          name={field.name}
-                          value={
-                            field?.value?.includes("T18:00:00.000Z")
-                              ? moment(field.value).format("DD/MM/YYYY")
-                              : field.value || ""
-                          }
-                          onChange={(e) =>
-                            handleDateInput(
-                              e,
-                              field,
-                              setCopiedOrderData,
-                              form,
-                              "patientData"
-                            )
-                          }
-                          className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                        />
+                        <div
+                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
+                            `}
+                          {...getRootProps()}
+                        >
+                          <Input
+                            className="timescape-input !w-6"
+                            {...getInputProps("days")}
+                            placeholder={t("dd")}
+                          />
+                          <span className="text-[#6b7280]">/</span>
+                          <Input
+                            className="timescape-input !w-6"
+                            {...getInputProps("months")}
+                            placeholder={t("mm")}
+                          />
+                          <span className="text-[#6b7280] ">/</span>
+                          <Input
+                            className="timescape-input w-full !px-2"
+                            {...getInputProps("years")}
+                            placeholder={t("yyyy")}
+                          />
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
