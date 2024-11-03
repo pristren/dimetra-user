@@ -391,7 +391,7 @@ const AppUserDetails = ({
             <Button
               type="submit"
               className="block w-2/4 mx-auto mt-10"
-              disabled={!form.getValues().termsAccepted}
+              disabled={!form.getValues().termsAccepted || loading}
             >
               {loading ? (
                 <Loading className="w-6 h-6 mx-auto text-white" />

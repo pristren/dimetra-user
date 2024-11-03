@@ -293,7 +293,7 @@
   "dropoff_country": "Country",
   "dropoff_phone": "Phone",
   "return_approx_time": "Approx. Time",
-"pick_up_name": "Name is required",
+  "pick_up_name": "Name is required",
   "pick_up_address": "Street is required",
   "pick_up_postal_code": "Postal is required",
   "pick_up_city": "City is required",
@@ -360,5 +360,8 @@
   "paused": "Paused",
   "completed": "Completed",
   "rejected": "Rejected",
-  "deleted": "Deleted"
+  "deleted": "Deleted",
+  "password_reset_request_successful": "Password Reset Request Successful",
+  "we_have_successfully_received_your_password_reset_request_please_check_your_email_for_a_link_to_reset_your_password": "We have successfully received your password reset request. Please check your email for a link to reset your password.",
+  "password_reset_successful": "Password reset successful"
 }

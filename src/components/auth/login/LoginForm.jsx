@@ -162,7 +162,11 @@ export default function LoginForm() {
                 {t("forgot_your_password")}
               </Link>
             </div>
-            <Button type="submit" className="block w-2/4 mx-auto">
+            <Button
+              type="submit"
+              className="block w-2/4 mx-auto"
+              disabled={loading}
+            >
               {loading ? (
                 <Loading className="w-6 h-6 mx-auto text-white" />
               ) : (

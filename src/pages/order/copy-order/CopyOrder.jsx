@@ -29,6 +29,8 @@ const CopyOrder = () => {
   const [destinationProgress, setDestinationProgress] = useState(0);
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
+  const [isReturnJourneyHide, setIsReturnJourneyHide] =
+  useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const { id } = useParams();
   const [copiedOrderData, setCopiedOrderData] = useState(
@@ -136,6 +138,7 @@ const CopyOrder = () => {
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       setCopiedOrderData(parsedData);
+      setIsReturnJourneyHide(!!(parsedData?.destinationDetailsData?.return_date || parsedData?.destinationDetailsData?.return_approx_time))
     }
   }, []);
 
@@ -211,6 +214,8 @@ const CopyOrder = () => {
   const destinationProps = {
     destinationProgress,
     setDestinationProgress,
+    isReturnJourneyHide,
+    setIsReturnJourneyHide,
   };
   const billingProps = {
     billingProgress,

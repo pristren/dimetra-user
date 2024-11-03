@@ -24,6 +24,8 @@ const AllOrders = () => {
   const [queryData, setQueryData] = useState({
     filter_by: "all_order",
     page: 1,
+    sort_by: "destinationDetailsData.drop_off_pick_up_date",
+    sort_order: "asc",
   });
   const [totalPage, setTotalPage] = useState(null);
   const [data, setData] = useState([]);
@@ -78,12 +80,23 @@ const AllOrders = () => {
     });
   };
 
+  const handleSort = (field) => {
+    const isAsc = queryData.sort_by === field && queryData.sort_order === "asc";
+    setQueryData({
+      ...queryData,
+      sort_by: field,
+      sort_order: isAsc ? "desc" : "asc",
+    });
+  };
+
   const columns = [
     {
       accessorKey: "destinationDetailsData.drop_off_pick_up_date",
-      header: ({ column }) => (
+      header: () => (
         <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() =>
+            handleSort("destinationDetailsData.drop_off_pick_up_date")
+          }
           className="flex items-center cursor-pointer"
         >
           {t("date_time")}
@@ -95,17 +108,18 @@ const AllOrders = () => {
           row.original?.destinationDetailsData?.drop_off_pick_up_date;
         return (
           <p>
-            {moment(date).format("DD MMMM YYYY")}(
-            {moment(date).format("ddd")})
+            {moment(date).format("DD MMMM YYYY")}({moment(date).format("ddd")})
           </p>
         );
       },
     },
     {
       accessorKey: "destinationDetailsData.drop_off_pick_up_time",
-      header: ({ column }) => (
+      header: () => (
         <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() =>
+            handleSort("destinationDetailsData.drop_off_pick_up_time")
+          }
           className="flex items-center cursor-pointer"
         >
           {t("time")}
@@ -115,9 +129,9 @@ const AllOrders = () => {
     },
     {
       accessorKey: "destinationDetailsData.pick_up_name",
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
+      header: () => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => handleSort("destinationDetailsData.pick_up_name")}
           className="flex items-center cursor-pointer"
         >
           {t("pick_up")}
@@ -127,9 +141,9 @@ const AllOrders = () => {
     },
     {
       accessorKey: "destinationDetailsData.drop_off_name",
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
+      header: () => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => handleSort("destinationDetailsData.drop_off_name")}
           className="flex items-center cursor-pointer"
         >
           {t("destination")}
@@ -139,9 +153,9 @@ const AllOrders = () => {
     },
     {
       accessorKey: "patientData.name",
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
+      header: () => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => handleSort("patientData.name")}
           className="flex items-center cursor-pointer"
         >
           {t("patient_name")}
@@ -158,9 +172,9 @@ const AllOrders = () => {
     },
     {
       accessorKey: "transportationData.type_of_transport",
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
+      header: () => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => handleSort("transportationData.type_of_transport")}
           className="flex items-center cursor-pointer"
         >
           {t("order_type")}
@@ -175,9 +189,9 @@ const AllOrders = () => {
     },
     {
       accessorKey: "status",
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
+      header: () => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => handleSort("status")}
           className="flex items-center cursor-pointer"
         >
           {t("status")}
@@ -203,7 +217,6 @@ const AllOrders = () => {
       header: () => (
         <div className="text-center flex items-center justify-center">
           {t("action")}
-          <ArrowUpDown className="h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
       cell: ({ row }) => {

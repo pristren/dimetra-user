@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
+import { useTimescape } from "timescape/react";
 import { useForm } from "react-hook-form";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,19 +17,21 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { DatePicker } from "@/components/ui/DatePicker";
+import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { useTimescape } from "timescape/react";
 import { formatTimeInput } from "@/utils";
 
-const ReopenDestinationDetails = ({
+const DestinationDetails = ({
   handleFormChange,
   reopenOrderData,
   setReopenOrderData,
   destinationProgress,
+  isReturnJourneyHide,
+  setIsReturnJourneyHide,
 }) => {
   const {
     destinationDetailsData: {
@@ -38,16 +41,19 @@ const ReopenDestinationDetails = ({
       return_date,
     } = {},
   } = reopenOrderData;
-  const checkTrueFalse =
-    reopenOrderData?.transportationData?.type_of_transport ===
-      "investigation_trip" ||
-    reopenOrderData?.transportationData?.type_of_transport === "private_trips";
-  const [isReturnJourneyHide, setIsReturnJourneyHide] =
-    useState(checkTrueFalse);
+  const checkTrueFalse = useMemo(
+    () =>
+      reopenOrderData?.transportationData?.type_of_transport ===
+        "investigation_trip" ||
+      reopenOrderData?.transportationData?.type_of_transport ===
+        "private_trips",
+    [reopenOrderData?.transportationData?.type_of_transport]
+  );
   function timeStringToMinutes(timeString) {
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
   }
+  
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -70,18 +76,6 @@ const ReopenDestinationDetails = ({
       }
     } else if (dropDateFormatted > returnDateFormatted) {
       toast("Return date must be greater than drop-off date.", {
-        icon: "⚠️",
-      });
-      return;
-    }
-
-    if (return_approx_time && !return_date) {
-      toast("Return date is required if return approx time is provided.", {
-        icon: "⚠️",
-      });
-      return;
-    } else if (return_date && !return_approx_time) {
-      toast("Return approx time is required if return date is provided.", {
         icon: "⚠️",
       });
       return;
@@ -118,8 +112,12 @@ const ReopenDestinationDetails = ({
     defaultValues: reopenOrderData.destinationDetailsData,
   });
 
-  const { formState } = form;
+  const { formState, reset } = form;
   const { errors } = formState;
+
+  useEffect(() => {
+    reset(reopenOrderData.destinationDetailsData);
+  }, [reopenOrderData.destinationDetailsData, reset]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -131,12 +129,9 @@ const ReopenDestinationDetails = ({
       },
     }));
   };
-
   // Drop-off time
   const { getInputProps: getDropOffInputProps } = useTimescape({
-    date: new Date(
-      reopenOrderData?.destinationDetailsData?.drop_off_pick_up_time
-    ),
+    date: new Date(),
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -148,9 +143,7 @@ const ReopenDestinationDetails = ({
 
   // Pickup time
   const { getInputProps: getPickupInputProps } = useTimescape({
-    date: new Date(
-      reopenOrderData?.destinationDetailsData?.pickup_appointment_time
-    ),
+    date: new Date(),
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -160,16 +153,19 @@ const ReopenDestinationDetails = ({
       ),
   });
 
-  // Return approximate time
+  // Return approximate time, conditionally applied
   const { getInputProps: getReturnInputProps } = useTimescape({
-    date: new Date(reopenOrderData?.destinationDetailsData?.return_approx_time),
-    onChangeDate: (nextDate) =>
-      formatTimeInput(
-        nextDate,
-        setReopenOrderData,
-        "destinationDetailsData",
-        "return_approx_time"
-      ),
+    date: new Date(),
+    onChangeDate: (nextDate) => {
+      if (checkTrueFalse && !isReturnJourneyHide) {
+        formatTimeInput(
+          nextDate,
+          setReopenOrderData,
+          "destinationDetailsData",
+          "return_approx_time"
+        );
+      }
+    },
   });
 
   return (
@@ -232,10 +228,7 @@ const ReopenDestinationDetails = ({
                         {t("pickup_time")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <div
-                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
-                            `}
-                        >
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                           <Input
                             className="timescape-input !w-6"
                             {...getDropOffInputProps("hours")}
@@ -266,10 +259,7 @@ const ReopenDestinationDetails = ({
                         {t("appointment_time")}
                       </FormLabel>
                       <FormControl>
-                        <div
-                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
-                            `}
-                        >
+                        <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                           <Input
                             className="timescape-input !w-6"
                             {...getPickupInputProps("hours")}
@@ -488,10 +478,17 @@ const ReopenDestinationDetails = ({
                   <div className="flex items-center gap-3">
                     <Checkbox
                       id="returnJourneyCheckbox"
-                      checked={!isReturnJourneyHide}
-                      onClick={() =>
-                        setIsReturnJourneyHide(!isReturnJourneyHide)
-                      }
+                      checked={isReturnJourneyHide}
+                      onClick={() => {
+                        setIsReturnJourneyHide(!isReturnJourneyHide);
+                        setReopenOrderData((prev) => ({
+                          ...prev,
+                          destinationDetailsData: {
+                            ...prev.destinationDetailsData,
+                            return_date: "",
+                          },
+                        }));
+                      }}
                     />
                     <Label htmlFor="returnJourneyCheckbox">
                       {t("return_journey")} ? ({t("optional")})
@@ -504,7 +501,7 @@ const ReopenDestinationDetails = ({
                   "recurring" &&
                   checkTrueFalse && (
                     <div
-                      className={`mt-10 ${isReturnJourneyHide ? "hidden" : ""}`}
+                      className={`mt-10 ${!isReturnJourneyHide ? "hidden" : ""}`}
                     >
                       <h6 className="text-xl font-semibold mb-4">
                         {t("return_journey")}
@@ -551,10 +548,7 @@ const ReopenDestinationDetails = ({
                                 {t("return_approx_time")}
                               </FormLabel>
                               <FormControl>
-                                <div
-                                  className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring
-                            `}
-                                >
+                                <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                                   <Input
                                     className="timescape-input !w-6"
                                     {...getReturnInputProps("hours")}
@@ -760,4 +754,4 @@ const ReopenDestinationDetails = ({
   );
 };
 
-export default ReopenDestinationDetails;
+export default DestinationDetails;
