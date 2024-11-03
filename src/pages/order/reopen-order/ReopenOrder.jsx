@@ -29,6 +29,7 @@ const ReopenOrder = () => {
   const [destinationProgress, setDestinationProgress] = useState(0);
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
+  const [isReturnJourneyHide, setIsReturnJourneyHide] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const { id } = useParams();
   const [reopenOrderData, setReopenOrderData] = useState(
@@ -136,6 +137,12 @@ const ReopenOrder = () => {
     const storedData = localStorage.getItem("reopenOrderData");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
+      setIsReturnJourneyHide(
+        !!(
+          parsedData?.destinationDetailsData?.return_date ||
+          parsedData?.destinationDetailsData?.return_approx_time
+        )
+      );
       setReopenOrderData(parsedData);
     }
   }, []);
@@ -211,7 +218,9 @@ const ReopenOrder = () => {
   };
   const destinationProps = {
     destinationProgress,
+    isReturnJourneyHide,
     setDestinationProgress,
+    setIsReturnJourneyHide,
   };
   const billingProps = {
     billingProgress,
