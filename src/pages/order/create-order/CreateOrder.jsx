@@ -30,8 +30,7 @@ const CreateOrder = () => {
   const [createOrderData, setCreateOrderData] = useState(
     createOrderDefaultState
   );
-  const [isReturnJourneyHide, setIsReturnJourneyHide] =
-  useState(false);
+  const [isReturnJourneyHide, setIsReturnJourneyHide] = useState(false);
   const { patientData } = createOrderData;
   const prevCreateOrderDataRef = useRef(createOrderData);
 
@@ -95,7 +94,12 @@ const CreateOrder = () => {
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       setCreateOrderData(parsedData);
-      setIsReturnJourneyHide(!!(parsedData?.destinationDetailsData?.return_date || parsedData?.destinationDetailsData?.return_approx_time))
+      setIsReturnJourneyHide(
+        !!(
+          parsedData?.destinationDetailsData?.return_date ||
+          parsedData?.destinationDetailsData?.return_approx_time
+        )
+      );
     }
   }, []);
 
@@ -160,24 +164,31 @@ const CreateOrder = () => {
     </div>
   );
 
-  const props = {
+  const transportationProps = {
     transportationProgress,
-    createOrderData,
-    billingProgress,
-    currentStep,
+    setTransportationProgress,
+  };
+  const patientProps = {
     patientProgress,
-    destinationProgress,
-    showPreview,
+    setPatientProgress,
+  };
+  const destinationProps = {
     isReturnJourneyHide,
     setIsReturnJourneyHide,
-    setShowPreview,
-    setCreateOrderData,
-    setCurrentStep,
-    setBillingProgress,
-    handleFormChange,
-    setTransportationProgress,
-    setPatientProgress,
+    destinationProgress,
     setDestinationProgress,
+  };
+  const billingProps = {
+    billingProgress,
+    setBillingProgress,
+  };
+
+  const commonProps = {
+    createOrderData,
+    handleFormChange,
+    setShowPreview,
+    setCurrentStep,
+    setCreateOrderData,
   };
   return (
     <div className="relative overflow-y-auto">
@@ -249,13 +260,18 @@ const CreateOrder = () => {
 
           <div className="lg:w-[70%] px-3 lg:px-0">
             {currentStep === "transportDetails" ? (
-              <TransportationDetails {...props} />
+              <TransportationDetails
+                {...transportationProps}
+                {...commonProps}
+              />
             ) : currentStep === "patientDetails" ? (
-              <PatientDetails {...props} />
+              <PatientDetails {...patientProps} {...commonProps} />
             ) : currentStep === "destinationDetails" ? (
-              <DestinationDetails {...props} />
+              <DestinationDetails {...destinationProps} {...commonProps} />
             ) : (
-              currentStep === "billingDetails" && <BillingDetails {...props} />
+              currentStep === "billingDetails" && (
+                <BillingDetails {...billingProps} {...commonProps} />
+              )
             )}
           </div>
           <Dialog open={showPreview} onOpenChange={setShowPreview}>
@@ -266,7 +282,7 @@ const CreateOrder = () => {
               <DialogHeader>
                 <DialogTitle />
                 <div>
-                  <PreviewDetails {...props} />
+                  <PreviewDetails {...commonProps} />
                 </div>
               </DialogHeader>
             </DialogContent>
