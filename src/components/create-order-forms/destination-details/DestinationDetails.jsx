@@ -105,6 +105,9 @@ const DestinationDetails = ({
     pick_up_postal_code: z.string().min(1, t("postal_is_required")),
     pick_up_city: z.string().min(1, t("city_is_required")),
     pickup_phone: z.string().min(1, t("phone_is_required")),
+    drop_off_postal_code: z
+      .number()
+      .min(1, t("drop_off_postal_code_is_required")),
     pick_up_employee_name: z
       .string()
       .min(1, t("working_employee_name_is_required")),
