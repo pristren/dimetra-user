@@ -19,6 +19,14 @@ import { transportOptions } from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
 import { ResumeIcon } from "@radix-ui/react-icons";
 import toast from "react-hot-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { DatePicker } from "@/components/ui/DatePicker";
 
 const AllOrders = () => {
   const [queryData, setQueryData] = useState({
@@ -73,8 +81,12 @@ const AllOrders = () => {
         return "#FFFFFF";
     }
   };
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [pauseDate, setPauseDate] = useState(null);
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
-  const updateAnOrderStatus = (orderId, status) => {
+  const updateAnOrderStatus = (orderId, status, pauseDate) => {
+    // TODO: add pauseDate to the mutation
     setUpdateOrderStatusLoading(true);
     updateOrderStatus({
       variables: {
@@ -291,7 +303,10 @@ const AllOrders = () => {
                 {row.original.status !== "paused" ? (
                   <DropdownMenuItem
                     className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
-                    onClick={() => updateAnOrderStatus(orderId, "paused")}
+                    onClick={() => {
+                      setSelectedOrderId(row.original.id);
+                      setIsDialogOpen(true);
+                    }}
                     disabled={row.original.status !== "pending"}
                   >
                     <Pause className="size-5" />
@@ -338,6 +353,56 @@ const AllOrders = () => {
         totalPage={totalPage}
         isLoading={loading || updateOrderStatusLoading}
       />
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="mb-2">{t("update_the_order")}</DialogTitle>
+            <p className="text-sm text-gray-600">
+              {t(
+                "please_select_a_date_from_which_you_want_to_pause_this_order_selecting_the_date_is_optional_if_you_leave_it_empty_then_all_the_pending_order_will_be_paused"
+              )}
+              {t("")}
+            </p>
+          </DialogHeader>
+
+          <div className="flex flex-col space-y-2">
+            <label className="text-sm font-medium">
+              {t("pause_from (optional)")}
+            </label>
+            <DatePicker
+              date={pauseDate}
+              setDate={setPauseDate}
+              mode="single"
+              disabled={(date) => date < new Date()}
+            />
+          </div>
+
+          <DialogFooter>
+            <div className="flex justify-end gap-3 mt-4">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setPauseDate(null);
+                  setIsDialogOpen(false);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                onClick={() => {
+                  if (selectedOrderId) {
+                    updateAnOrderStatus(selectedOrderId, "paused", pauseDate);
+                    setPauseDate(null);
+                    setIsDialogOpen(false);
+                  }
+                }}
+              >
+                Submit
+              </Button>
+            </div>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
