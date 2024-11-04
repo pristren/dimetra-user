@@ -29,6 +29,8 @@ const AllOrders = () => {
   });
   const [totalPage, setTotalPage] = useState(null);
   const [data, setData] = useState([]);
+  const [updateOrderStatusLoading, setUpdateOrderStatusLoading] =
+    useState(false);
 
   const [getAllOrders, { loading }] = useLazyQuery(GET_ALL_ORDERS, {
     variables: { queryData },
@@ -50,6 +52,7 @@ const AllOrders = () => {
   const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS, {
     onCompleted: (data) => {
       getAllOrders();
+      setUpdateOrderStatusLoading(false);
     },
     onError: (err) => {
       console.error("Error updating order status:", err);
@@ -72,6 +75,7 @@ const AllOrders = () => {
   };
 
   const updateAnOrderStatus = (orderId, status) => {
+    setUpdateOrderStatusLoading(true);
     updateOrderStatus({
       variables: {
         queryData: { id: orderId },
@@ -332,7 +336,7 @@ const AllOrders = () => {
         isSearchVisible={true}
         isRecurring={false}
         totalPage={totalPage}
-        isLoading={loading}
+        isLoading={loading || updateOrderStatusLoading}
       />
     </div>
   );
