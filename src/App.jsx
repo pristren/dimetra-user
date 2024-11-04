@@ -27,8 +27,9 @@ import TermsConditionPage from "./pages/terms-condition/TermsConditionPage";
 import PrivacyPolicyPage from "./pages/privacy-policy/PrivacyPolicyPage";
 import ForgotPasswordSent from "./pages/authentication/forgot-password-sent/ForgotPasswordSent";
 import VerifyForgotPassword from "./pages/authentication/verify-forgot-password/VerifyForgotPassword";
-
+import { useTranslation } from "react-i18next";
 function App() {
+  useTranslation();
   axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
 
   return (

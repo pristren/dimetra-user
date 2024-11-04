@@ -27,6 +27,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { DatePicker } from "@/components/ui/DatePicker";
+import { PAUSE_ORDER } from "./graphql/mutations/pauseOrder.gql";
 
 const AllOrders = () => {
   const [queryData, setQueryData] = useState({
@@ -37,8 +38,6 @@ const AllOrders = () => {
   });
   const [totalPage, setTotalPage] = useState(null);
   const [data, setData] = useState([]);
-  const [updateOrderStatusLoading, setUpdateOrderStatusLoading] =
-    useState(false);
 
   const [getAllOrders, { loading }] = useLazyQuery(GET_ALL_ORDERS, {
     variables: { queryData },
@@ -57,15 +56,35 @@ const AllOrders = () => {
     getAllOrders();
   }, []);
 
-  const [updateOrderStatus] = useMutation(UPDATE_ORDER_STATUS, {
-    onCompleted: (data) => {
+  const [updateOrderStatus, { loading: updateOrderStatusLoading }] =
+    useMutation(UPDATE_ORDER_STATUS, {
+      onCompleted: () => {
+        getAllOrders();
+        setPauseDate(null);
+        setIsDialogOpen(false);
+      },
+      onError: (err) => {
+        console.error("Error updating order status:", err);
+      },
+    });
+
+  const [pauseOrder] = useMutation(PAUSE_ORDER, {
+    onCompleted: () => {
       getAllOrders();
-      setUpdateOrderStatusLoading(false);
     },
     onError: (err) => {
-      console.error("Error updating order status:", err);
+      console.error("Error pausing order:", err);
+      toast.error(err.message || "There was an error pausing the order");
     },
   });
+
+  const handlePauseOrder = (orderId) => {
+    pauseOrder({
+      variables: {
+        orderId,
+      },
+    });
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -86,11 +105,9 @@ const AllOrders = () => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   const updateAnOrderStatus = (orderId, status, pauseDate) => {
-    // TODO: add pauseDate to the mutation
-    setUpdateOrderStatusLoading(true);
     updateOrderStatus({
       variables: {
-        queryData: { id: orderId },
+        queryData: { id: orderId, ...(pauseDate && { pauseDate }) },
         inputData: { status },
       },
     });
@@ -304,8 +321,12 @@ const AllOrders = () => {
                   <DropdownMenuItem
                     className="flex items-center gap-3 text-[16px] mb-2 py-2 cursor-pointer"
                     onClick={() => {
-                      setSelectedOrderId(row.original.id);
-                      setIsDialogOpen(true);
+                      if (isRecurring) {
+                        setSelectedOrderId(row.original.id);
+                        setIsDialogOpen(true);
+                      } else {
+                        updateAnOrderStatus(orderId, "paused");
+                      }
                     }}
                     disabled={row.original.status !== "pending"}
                   >
@@ -389,13 +410,12 @@ const AllOrders = () => {
                 Cancel
               </Button>
               <Button
-                onClick={() => {
-                  if (selectedOrderId) {
-                    updateAnOrderStatus(selectedOrderId, "paused", pauseDate);
-                    setPauseDate(null);
-                    setIsDialogOpen(false);
-                  }
-                }}
+                disabled={
+                  updateOrderStatusLoading || !selectedOrderId || !pauseDate
+                }
+                onClick={() =>
+                  updateAnOrderStatus(selectedOrderId, "paused", pauseDate)
+                }
               >
                 Submit
               </Button>

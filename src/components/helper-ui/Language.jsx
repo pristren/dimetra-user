@@ -35,8 +35,6 @@ export default function Language() {
     localStorage.setItem("languageCode", language.value);
     changeLanguage(language.value);
     setDefaultLanguage(language);
-    // cc kamruzzaman bhai, rafi bhai, we gonna change this reload method later
-    window.location.reload();
   };
 
   const savedLanguageCode = localStorage.getItem("languageCode");
@@ -47,10 +45,9 @@ export default function Language() {
       );
       if (savedLanguage) {
         setDefaultLanguage(savedLanguage);
-        changeLanguage(savedLanguageCode);
       }
     }
-  }, [i18n, savedLanguageCode]);
+  }, [savedLanguageCode]);
 
   return (
     <Select

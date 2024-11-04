@@ -22,6 +22,8 @@ const OrderHistory = () => {
   const [queryData, setQueryData] = useState({
     filter_by: "all_order",
     page: 1,
+    sort_by: "destinationDetailsData.drop_off_pick_up_date",
+    sort_order: "asc",
   });
   const [totalPage, setTotalPage] = useState(null);
   const [date, setDate] = useState(null);
@@ -73,12 +75,23 @@ const OrderHistory = () => {
     }, 100);
   };
 
+  const handleSort = (field) => {
+    const isAsc = queryData.sort_by === field && queryData.sort_order === "asc";
+    setQueryData({
+      ...queryData,
+      sort_by: field,
+      sort_order: isAsc ? "desc" : "asc",
+    });
+  };
+
   const columns = [
     {
       accessorKey: "destinationDetailsData.drop_off_pick_up_date",
-      header: ({ column }) => (
+      header: () => (
         <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() =>
+            handleSort("destinationDetailsData.drop_off_pick_up_date")
+          }
           className="flex items-center cursor-pointer"
         >
           {t("date_time")}
@@ -93,9 +106,9 @@ const OrderHistory = () => {
     },
     {
       accessorKey: "destinationDetailsData.pick_up_address",
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
+      header: () => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => handleSort("destinationDetailsData.pick_up_address")}
           className="flex items-center cursor-pointer"
         >
           {t("pick_up")}
@@ -105,9 +118,9 @@ const OrderHistory = () => {
     },
     {
       accessorKey: "destinationDetailsData.drop_off_address",
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
+      header: () => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => handleSort("destinationDetailsData.drop_off_address")}
           className="flex items-center cursor-pointer"
         >
           {t("destination")}
@@ -167,7 +180,7 @@ const OrderHistory = () => {
       accessorKey: "status",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => handleSort("status")}
           className="flex items-center cursor-pointer"
         >
           {t("status")}
@@ -224,10 +237,6 @@ const OrderHistory = () => {
       header: () => (
         <p className="text-center flex justify-center items-center">
           {t("action")}
-          <ArrowUpDown
-            className="ml-2 h-4 w-4 cursor-pointer"
-            aria-label="Sort by Action"
-          />
         </p>
       ),
       cell: ({ row }) => {
