@@ -30,7 +30,7 @@ const EditDestinationDetails = ({
     destinationDetailsData: {
       pick_up_name = "",
       pick_up_address = "",
-      pick_up_postal_code = 0,
+      pick_up_postal_code = '',
       pick_up_city = "",
       pick_up_country = "",
       pick_up_employee_name = "",
@@ -49,7 +49,7 @@ const EditDestinationDetails = ({
   const form_schema = z.object({
     pick_up_name: z.string().min(1, t("name_required")),
     pick_up_address: z.string().min(1, t("address_required")),
-    pick_up_postal_code: z.number().min(1, t("postal_code_required")),
+    pick_up_postal_code: z.string().min(1, t("postal_code_required")),
     pick_up_city: z.string().min(1, t("city_required")),
     pick_up_employee_name: z.string().min(1, t("employee_name_required")),
     pickup_phone: z.string().min(1, t("pickup_phone")),
@@ -61,7 +61,7 @@ const EditDestinationDetails = ({
     drop_off_address: z.string().min(1, t("drop_off_address_required")),
     drop_off_city: z.string().min(1, t("drop_off_city_required")),
     drop_off_country: z.string().min(1, t("drop_off_country_required")),
-    drop_off_postal_code: z.number().min(1, t("drop_off_postal_code_required")),
+    drop_off_postal_code: z.string().min(1, t("drop_off_postal_code_required")),
     return_date: z.string().min(1, t("return_date_required")),
     return_day_letter: z.string().min(1, t("day_letter_required")),
     return_approx_time: z.string().min(1, t("approx_time_required")),
@@ -72,7 +72,7 @@ const EditDestinationDetails = ({
     defaultValues: {
       pick_up_name,
       pick_up_address,
-      pick_up_postal_code: Number(pick_up_postal_code), // Convert to number
+      pick_up_postal_code: pick_up_postal_code, // Convert to number
       pick_up_city,
       pick_up_country,
       pick_up_employee_name,
@@ -82,7 +82,7 @@ const EditDestinationDetails = ({
       drop_off_pick_up_date,
       drop_off_name,
       drop_off_address,
-      drop_off_postal_code: Number(drop_off_postal_code), // Convert to number
+      drop_off_postal_code: drop_off_postal_code, // Convert to number
       drop_off_city,
       drop_off_country,
       returnDate,
@@ -229,7 +229,6 @@ const EditDestinationDetails = ({
                           }
                           placeholder="Type your postal code"
                           {...field}
-                          type="number"
                           onChange={(e) => {
                             field.onChange(e);
                             handleInputChange(e);
@@ -476,7 +475,6 @@ const EditDestinationDetails = ({
                           className={
                             errors.drop_off_postal_code ? "border-red-500" : ""
                           }
-                          type="number"
                           placeholder="Type your postal code"
                           {...field}
                           onChange={(e) => {

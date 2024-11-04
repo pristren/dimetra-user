@@ -23,7 +23,7 @@ import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { formatTimeInput } from "@/utils";
+import { formatTimeInput, parseTimeString } from "@/utils";
 
 const CopyDestinationDetails = ({
   handleFormChange,
@@ -97,11 +97,10 @@ const CopyDestinationDetails = ({
     drop_off_pick_up_time: z.string().min(1, t("pick_up_time_is_required")),
     drop_off_name: z.string().min(1, t("name_is_required")),
     drop_off_address: z.string().min(1, t("drop_off_street_is_required")),
+    drop_off_city: z.string().min(1, t("city_is_required")),
     drop_off_postal_code: z
       .number()
       .min(1, t("drop_off_postal_code_is_required")),
-    drop_off_city: z.string().min(1, t("city_is_required")),
-
     return_date: z.string().min(1, t("date_is_required")),
     return_day_letter: z.string().min(1, t("this_field_is_required")),
     return_approx_time: z.string().min(1, t("approx_time_is_required")),
@@ -130,8 +129,11 @@ const CopyDestinationDetails = ({
     }));
   };
   // Drop-off time
+  const initialDropOffDate = parseTimeString(
+    copiedOrderData?.destinationDetailsData?.drop_off_pick_up_time
+  );
   const { getInputProps: getDropOffInputProps } = useTimescape({
-    date: new Date(),
+    date: initialDropOffDate,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -154,8 +156,12 @@ const CopyDestinationDetails = ({
   });
 
   // Return approximate time, conditionally applied
+
+  const initialReturnDate = parseTimeString(
+    copiedOrderData?.destinationDetailsData?.return_approx_time
+  );
   const { getInputProps: getReturnInputProps } = useTimescape({
-    date: new Date(),
+    date: initialReturnDate,
     onChangeDate: (nextDate) => {
       if (checkTrueFalse && !isReturnJourneyHide) {
         formatTimeInput(
@@ -486,6 +492,7 @@ const CopyDestinationDetails = ({
                           destinationDetailsData: {
                             ...prev.destinationDetailsData,
                             return_date: "",
+                            return_approx_time: ""
                           },
                         }));
                       }}
@@ -501,7 +508,9 @@ const CopyDestinationDetails = ({
                   "recurring" &&
                   checkTrueFalse && (
                     <div
-                      className={`mt-10 ${!isReturnJourneyHide ? "hidden" : ""}`}
+                      className={`mt-10 ${
+                        !isReturnJourneyHide ? "hidden" : ""
+                      }`}
                     >
                       <h6 className="text-xl font-semibold mb-4">
                         {t("return_journey")}
@@ -645,7 +654,6 @@ const CopyDestinationDetails = ({
                           className={
                             errors.drop_off_postal_code ? "border-red-500" : ""
                           }
-                          type="number"
                           placeholder="Type your postal code"
                           {...field}
                           onChange={(e) => {

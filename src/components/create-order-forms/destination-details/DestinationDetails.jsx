@@ -23,7 +23,7 @@ import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { formatTimeInput } from "@/utils";
+import { formatTimeInput, parseTimeString } from "@/utils";
 
 const DestinationDetails = ({
   handleFormChange,
@@ -105,6 +105,9 @@ const DestinationDetails = ({
     pick_up_postal_code: z.string().min(1, t("postal_is_required")),
     pick_up_city: z.string().min(1, t("city_is_required")),
     pickup_phone: z.string().min(1, t("phone_is_required")),
+    drop_off_postal_code: z
+      .number()
+      .min(1, t("drop_off_postal_code_is_required")),
     pick_up_employee_name: z
       .string()
       .min(1, t("working_employee_name_is_required")),
@@ -113,9 +116,6 @@ const DestinationDetails = ({
     drop_off_pick_up_time: z.string().min(1, t("pick_up_time_is_required")),
     drop_off_name: z.string().min(1, t("name_is_required")),
     drop_off_address: z.string().min(1, t("drop_off_street_is_required")),
-    drop_off_postal_code: z
-      .number()
-      .min(1, t("drop_off_postal_code_is_required")),
     drop_off_city: z.string().min(1, t("city_is_required")),
 
     return_date: z.string().min(1, t("date_is_required")),
@@ -141,20 +141,26 @@ const DestinationDetails = ({
       ...prev,
       destinationDetailsData: {
         ...prev.destinationDetailsData,
-        [name]: name.includes("postal_code") ? Number(value) : value,
+        [name]: value,
       },
     }));
   };
   // Drop-off time
+  const initialDropOffDate = parseTimeString(
+    createOrderData?.destinationDetailsData?.drop_off_pick_up_time
+  );
   const { getInputProps: getDropOffInputProps } = useTimescape({
-    date: new Date(),
-    onChangeDate: (nextDate) =>
-      formatTimeInput(
-        nextDate,
-        setCreateOrderData,
-        "destinationDetailsData",
-        "drop_off_pick_up_time"
-      ),
+    date: initialDropOffDate,
+    onChangeDate: (nextDate) => {
+      if (nextDate) {
+        formatTimeInput(
+          nextDate,
+          setCreateOrderData,
+          "destinationDetailsData",
+          "drop_off_pick_up_time"
+        );
+      }
+    },
   });
 
   // Pickup time
@@ -170,10 +176,13 @@ const DestinationDetails = ({
   });
 
   // Return approximate time, conditionally applied
+  const initialReturnDate = parseTimeString(
+    createOrderData?.destinationDetailsData?.return_approx_time
+  );
   const { getInputProps: getReturnInputProps } = useTimescape({
-    date: new Date(),
+    date: initialReturnDate,
     onChangeDate: (nextDate) => {
-      if (checkTrueFalse && !isReturnJourneyHide) {
+      if (nextDate) {
         formatTimeInput(
           nextDate,
           setCreateOrderData,
@@ -502,6 +511,7 @@ const DestinationDetails = ({
                           destinationDetailsData: {
                             ...prev.destinationDetailsData,
                             return_date: "",
+                            return_approx_time: ""
                           },
                         }));
                       }}
@@ -517,7 +527,9 @@ const DestinationDetails = ({
                   "recurring" &&
                   checkTrueFalse && (
                     <div
-                      className={`mt-10 ${!isReturnJourneyHide ? "hidden" : ""}`}
+                      className={`mt-10 ${
+                        !isReturnJourneyHide ? "hidden" : ""
+                      }`}
                     >
                       <h6 className="text-xl font-semibold mb-4">
                         {t("return_journey")}
@@ -661,7 +673,7 @@ const DestinationDetails = ({
                           className={
                             errors.drop_off_postal_code ? "border-red-500" : ""
                           }
-                          type="number"
+                          type="text"
                           placeholder="Type your postal code"
                           {...field}
                           onChange={(e) => {
