@@ -309,6 +309,7 @@
   "return_day_letter": "This field is required",
   "return_floor": "Optional",
   "preview_details": "Preview Details",
+  "select_start_date_and_time_free": "Select Start Date and Time (max 60):",
   "select_start_date_time": "Select Start Date and Time is required",
   "summary": "Summary is required",
   "select_start_date_time_free": "Select Start Date and Time (max 60) is required",

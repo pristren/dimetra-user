@@ -41,13 +41,13 @@ const PreviewDetails = ({
 
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [showProgress, setShowProgress] = useState(false);
+  //   const [showProgress, setShowProgress] = useState(false);
   const [createAnOrder] = useMutation(CREATE_AN_ORDER);
   const navigate = useNavigate();
 
   const handleCreateAnOrder = async () => {
     setLoading(true);
-    setShowProgress(true);
+    // setShowProgress(true);
     const updatedData = { ...createOrderData };
 
     if (updatedData?.transportationData?.type_of_transport !== "recurring") {
@@ -70,7 +70,7 @@ const PreviewDetails = ({
       toast.error(message || "Something went wrong");
     } finally {
       setLoading(false);
-      setShowProgress(false); // Hide progress modal
+      //   setShowProgress(false);
     }
   };
 
@@ -78,6 +78,8 @@ const PreviewDetails = ({
     setShowModal(false);
     navigate("/orders/all-orders");
   };
+
+  //   console.log(recurringData, "recurringData");
 
   return (
     <div className="p-2">
@@ -831,7 +833,7 @@ const PreviewDetails = ({
       </Card>
 
       {/* Progress Modal */}
-      {showProgress && (
+      {/* {showProgress && (
         <Dialog open={showProgress}>
           <DialogContent>
             <SubmitProgress
@@ -840,7 +842,7 @@ const PreviewDetails = ({
             />
           </DialogContent>
         </Dialog>
-      )}
+      )} */}
     </div>
   );
 };

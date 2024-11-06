@@ -180,8 +180,7 @@ const TransportationDetails = ({
 
   useEffect(() => {
     const fieldsFilled =
-      transportationData?.type_of_transport === "recurring" &&
-      recurringData?.recurring_type === "week"
+      transportationData?.type_of_transport === "recurring"
         ? [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation,
@@ -190,22 +189,15 @@ const TransportationDetails = ({
                 ? transportationData?.oxygen_quantity > 0
                 : true
               : false,
-            recurringData?.multiple_week_days?.length > 0,
-            recurringData?.start_date,
-            recurringData?.ends,
-          ]
-        : transportationData?.type_of_transport === "recurring" &&
-          recurringData?.recurring_type === "free"
-        ? [
-            transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation,
-            transportationData?.transport_with?.length > 0
-              ? transportationData?.transport_with.includes("oxygen_quantity")
-                ? transportationData?.oxygen_quantity > 0
-                : true
+            recurringData?.recurring_type,
+            recurringData?.recurring_type === "week"
+              ? recurringData?.multiple_week_days?.length > 0 &&
+                recurringData?.start_date &&
+                recurringData?.ends
+              : recurringData?.recurring_type === "free"
+              ? recurringData?.free_dates?.length > 0 &&
+                recurringData?.free_dates_start_time
               : false,
-            recurringData?.free_dates?.length > 0,
-            recurringData?.free_dates_start_time,
           ]
         : [
             transportationData?.type_of_transport,
@@ -238,13 +230,15 @@ const TransportationDetails = ({
           recurringData?.free_dates_start_time.split(":")[1]
         )
       );
-      const returnTime = new Date(
-        new Date().setHours(
-          recurringData?.free_dates_return_time.split(":")[0],
-          recurringData?.free_dates_return_time.split(":")[1]
-        )
-      );
-      if (startTime >= returnTime) {
+      const returnTime = recurringData?.free_dates_return_time
+        ? new Date(
+            new Date().setHours(
+              recurringData?.free_dates_return_time.split(":")[0],
+              recurringData?.free_dates_return_time.split(":")[1]
+            )
+          )
+        : null;
+      if (startTime && returnTime && startTime >= returnTime) {
         toast.error("Return time should be after start time");
         return;
       }
@@ -255,13 +249,15 @@ const TransportationDetails = ({
           recurringData?.start_time.split(":")[1]
         )
       );
-      const returnTime = new Date(
-        new Date().setHours(
-          recurringData?.return_time.split(":")[0],
-          recurringData?.return_time.split(":")[1]
-        )
-      );
-      if (startTime >= returnTime) {
+      const returnTime = recurringData?.return_time
+        ? new Date(
+            new Date().setHours(
+              recurringData?.return_time.split(":")[0],
+              recurringData?.return_time.split(":")[1]
+            )
+          )
+        : null;
+      if (startTime && returnTime && startTime >= returnTime) {
         toast.error("Return time should be after start time");
         return;
       }
@@ -281,7 +277,9 @@ const TransportationDetails = ({
   });
 
   const { getInputProps: recurringReturnTimeInput } = useTimescape({
-    date: new Date(createOrderData?.recurringData?.return_time),
+    date: createOrderData?.recurringData?.return_time
+      ? new Date(createOrderData?.recurringData?.return_time)
+      : undefined,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -303,7 +301,9 @@ const TransportationDetails = ({
   });
 
   const { getInputProps: recurringFreeDateEndTimeInput } = useTimescape({
-    date: new Date(createOrderData?.recurringData?.free_dates_return_time),
+    date: createOrderData?.recurringData?.free_dates_return_time
+      ? new Date(createOrderData?.recurringData?.free_dates_return_time)
+      : undefined,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -520,7 +520,7 @@ const TransportationDetails = ({
                         disabled={{ before: new Date() }}
                       />
                       <div
-                        className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
+                        className={`timescape py-2 pl-2 pr-4 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring w-min`}
                       >
                         <Input
                           className="timescape-input !w-7"
@@ -553,9 +553,9 @@ const TransportationDetails = ({
                       <div>
                         <h3 className="text-lg font-medium mt-5 mb-5">
                           {t("select_return_time")}{" "}
-                          <span className="highlight">({t("optional")})</span>
+                          {/* <span className="highlight">({t("optional")})</span> */}
                         </h3>
-                        <div className="mb-5 flex w-max gap-4 items-center">
+                        <div className=" flex w-max gap-4 items-center">
                           {/* Uncomment if needed */}
                           {/* <DatePicker
             date={recurringData?.return_date || null}
@@ -567,7 +567,7 @@ const TransportationDetails = ({
           /> */}
                         </div>
                         <div
-                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
+                          className={`timescape py-2 pl-2 pr-4 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring w-min`}
                         >
                           <Input
                             className="timescape-input !w-7"
@@ -582,80 +582,76 @@ const TransportationDetails = ({
                             step={5}
                           />
                         </div>
-
-                        <h3 className="text-lg font-medium mb-3 mt-5">
-                          {t("select_weekdays")}{" "}
-                          <span className="highlight">
-                            ({t("multiple_selection")})
-                          </span>
-                          :
-                        </h3>
-                        <div className="flex flex-wrap gap-3 mt-2">
-                          {weekdaysOptions.map((option) => (
-                            <div
-                              key={option.value}
-                              className="flex items-center mb-2"
-                            >
-                              <Checkbox
-                                id={option.value}
-                                checked={recurringData?.multiple_week_days?.includes(
-                                  option.value
-                                )}
-                                className="size-6 capitalize"
-                                onClick={() => handleWeekdayChange(option)}
-                              />
-                              <Label
-                                className="ml-2 text-lg capitalize"
-                                htmlFor={option.value}
-                              >
-                                {option.label}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-
-                        <h3 className="text-lg font-medium mb-3 mt-5">
-                          {t("ends")}{" "}
-                        </h3>
-                        <FormField
-                          control={form.control}
-                          name="duration"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <RadioGroup
-                                  onValueChange={(value) => {
-                                    field.onChange(value);
-                                    updateCreateRecurringOrderData(
-                                      "ends",
-                                      value
-                                    );
-                                  }}
-                                  value={recurringData?.ends}
-                                  className="flex items-center gap-3"
-                                >
-                                  {durationOptions.map((option) => (
-                                    <div
-                                      key={option.value}
-                                      className="flex items-center space-x-2 mb-2"
-                                    >
-                                      <RadioGroupItem
-                                        value={option.value}
-                                        id={option.value}
-                                      />
-                                      <Label htmlFor={option.value}>
-                                        {option.label}
-                                      </Label>
-                                    </div>
-                                  ))}
-                                </RadioGroup>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
                       </div>
                     )}
+                    <h3 className="text-lg font-medium mb-5 mt-5">
+                      {t("select_weekdays")}{" "}
+                      <span className="highlight">
+                        ({t("multiple_selection")})
+                      </span>
+                      :
+                    </h3>
+                    <div className="flex flex-wrap gap-3 mt-2">
+                      {weekdaysOptions.map((option) => (
+                        <div
+                          key={option.value}
+                          className="flex items-center mb-2"
+                        >
+                          <Checkbox
+                            id={option.value}
+                            checked={recurringData?.multiple_week_days?.includes(
+                              option.value
+                            )}
+                            className="size-5 capitalize"
+                            onClick={() => handleWeekdayChange(option)}
+                          />
+                          <Label
+                            className="ml-2 text-lg capitalize"
+                            htmlFor={option.value}
+                          >
+                            {option.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+
+                    <h3 className="text-lg font-medium mb-3 mt-5">
+                      {t("ends")}{" "}
+                    </h3>
+                    <FormField
+                      control={form.control}
+                      name="duration"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                updateCreateRecurringOrderData("ends", value);
+                              }}
+                              value={recurringData?.ends}
+                              className="flex items-center gap-3"
+                            >
+                              {durationOptions.map((option) => (
+                                <div
+                                  key={option.value}
+                                  className="flex items-center space-x-2 mb-2"
+                                >
+                                  <RadioGroupItem
+                                    value={option.value}
+                                    id={option.value}
+                                  />
+                                  <Label htmlFor={option.value}>
+                                    {option.label}
+                                  </Label>
+                                </div>
+                              ))}
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 ) : recurringData?.recurring_type === "free" ? (
                   <div>
@@ -681,7 +677,7 @@ const TransportationDetails = ({
                           max={60}
                         />
                         <div
-                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
+                          className={`timescape py-2 pl-2 pr-4 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring w-min`}
                         >
                           <Input
                             className="timescape-input !w-7"
@@ -719,15 +715,15 @@ const TransportationDetails = ({
                     </div>
                     {returnJourney && (
                       <div className="mb-5">
-                        <h3 className="text-lg font-medium mt-10 mb-5">
+                        <h3 className="text-lg font-medium mt-5 mb-3">
                           {t("select_return_time")}{" "}
-                          <span className="text-sm text-gray-600">
+                          {/* <span className="text-sm text-gray-600">
                             {t("(optional)")}
-                          </span>
+                          </span> */}
                         </h3>
                         <div className="flex w-max gap-4 items-center">
                           <div
-                            className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
+                            className={`timescape py-2 pl-2 pr-4 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring w-min`}
                           >
                             <Input
                               className="timescape-input !w-7"

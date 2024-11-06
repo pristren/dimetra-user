@@ -179,8 +179,7 @@ const CopyTransportationDetails = ({
 
   useEffect(() => {
     const fieldsFilled =
-      transportationData?.type_of_transport === "recurring" &&
-      recurringData?.recurring_type === "week"
+      transportationData?.type_of_transport === "recurring"
         ? [
             transportationData?.type_of_transport,
             transportationData?.mode_of_transportation,
@@ -189,22 +188,15 @@ const CopyTransportationDetails = ({
                 ? transportationData?.oxygen_quantity > 0
                 : true
               : false,
-            recurringData?.multiple_week_days?.length > 0,
-            recurringData?.start_date,
-            recurringData?.ends,
-          ]
-        : transportationData?.type_of_transport === "recurring" &&
-          recurringData?.recurring_type === "free"
-        ? [
-            transportationData?.type_of_transport,
-            transportationData?.mode_of_transportation,
-            transportationData?.transport_with?.length > 0
-              ? transportationData?.transport_with.includes("oxygen_quantity")
-                ? transportationData?.oxygen_quantity > 0
-                : true
+            recurringData?.recurring_type,
+            recurringData?.recurring_type === "week"
+              ? recurringData?.multiple_week_days?.length > 0 &&
+                recurringData?.start_date &&
+                recurringData?.ends
+              : recurringData?.recurring_type === "free"
+              ? recurringData?.free_dates?.length > 0 &&
+                recurringData?.free_dates_start_time
               : false,
-            recurringData?.free_dates?.length > 0,
-            recurringData?.free_dates_start_time,
           ]
         : [
             transportationData?.type_of_transport,
@@ -574,80 +566,76 @@ const CopyTransportationDetails = ({
                             step={5}
                           />
                         </div>
-
-                        <h3 className="text-lg font-medium mb-3 mt-5">
-                          {t("select_weekdays")}{" "}
-                          <span className="highlight">
-                            ({t("multiple_selection")})
-                          </span>
-                          :
-                        </h3>
-                        <div className="flex flex-wrap gap-3 mt-2">
-                          {weekdaysOptions.map((option) => (
-                            <div
-                              key={option.value}
-                              className="flex items-center mb-2"
-                            >
-                              <Checkbox
-                                id={option.value}
-                                checked={recurringData?.multiple_week_days?.includes(
-                                  option.value
-                                )}
-                                className="size-6 capitalize"
-                                onClick={() => handleWeekdayChange(option)}
-                              />
-                              <Label
-                                className="ml-2 text-lg capitalize"
-                                htmlFor={option.value}
-                              >
-                                {option.label}
-                              </Label>
-                            </div>
-                          ))}
-                        </div>
-
-                        <h3 className="text-lg font-medium mb-3 mt-5">
-                          {t("ends")}{" "}
-                        </h3>
-                        <FormField
-                          control={form.control}
-                          name="duration"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <RadioGroup
-                                  onValueChange={(value) => {
-                                    field.onChange(value);
-                                    updateCreateRecurringOrderData(
-                                      "ends",
-                                      value
-                                    );
-                                  }}
-                                  value={recurringData?.ends}
-                                  className="flex items-center gap-3"
-                                >
-                                  {durationOptions.map((option) => (
-                                    <div
-                                      key={option.value}
-                                      className="flex items-center space-x-2 mb-2"
-                                    >
-                                      <RadioGroupItem
-                                        value={option.value}
-                                        id={option.value}
-                                      />
-                                      <Label htmlFor={option.value}>
-                                        {option.label}
-                                      </Label>
-                                    </div>
-                                  ))}
-                                </RadioGroup>
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
                       </div>
                     )}
+                    <h3 className="text-lg font-medium mb-3 mt-5">
+                      {t("select_weekdays")}{" "}
+                      <span className="highlight">
+                        ({t("multiple_selection")})
+                      </span>
+                      :
+                    </h3>
+                    <div className="flex flex-wrap gap-3 mt-2">
+                      {weekdaysOptions.map((option) => (
+                        <div
+                          key={option.value}
+                          className="flex items-center mb-2"
+                        >
+                          <Checkbox
+                            id={option.value}
+                            checked={recurringData?.multiple_week_days?.includes(
+                              option.value
+                            )}
+                            className="size-5 capitalize"
+                            onClick={() => handleWeekdayChange(option)}
+                          />
+                          <Label
+                            className="ml-2 text-lg capitalize"
+                            htmlFor={option.value}
+                          >
+                            {option.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+
+                    <h3 className="text-lg font-medium mb-3 mt-5">
+                      {t("ends")}{" "}
+                    </h3>
+                    <FormField
+                      control={form.control}
+                      name="duration"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                updateCreateRecurringOrderData("ends", value);
+                              }}
+                              value={recurringData?.ends}
+                              className="flex items-center gap-3"
+                            >
+                              {durationOptions.map((option) => (
+                                <div
+                                  key={option.value}
+                                  className="flex items-center space-x-2 mb-2"
+                                >
+                                  <RadioGroupItem
+                                    value={option.value}
+                                    id={option.value}
+                                  />
+                                  <Label htmlFor={option.value}>
+                                    {option.label}
+                                  </Label>
+                                </div>
+                              ))}
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 ) : recurringData?.recurring_type === "free" ? (
                   <div>
