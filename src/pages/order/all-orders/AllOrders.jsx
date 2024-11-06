@@ -27,7 +27,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { DatePicker } from "@/components/ui/DatePicker";
-import { PAUSE_ORDER } from "./graphql/mutations/pauseOrder.gql";
 
 const AllOrders = () => {
   const [queryData, setQueryData] = useState({
@@ -67,24 +66,6 @@ const AllOrders = () => {
         console.error("Error updating order status:", err);
       },
     });
-
-  const [pauseOrder] = useMutation(PAUSE_ORDER, {
-    onCompleted: () => {
-      getAllOrders();
-    },
-    onError: (err) => {
-      console.error("Error pausing order:", err);
-      toast.error(err.message || "There was an error pausing the order");
-    },
-  });
-
-  const handlePauseOrder = (orderId) => {
-    pauseOrder({
-      variables: {
-        orderId,
-      },
-    });
-  };
 
   const getStatusColor = (status) => {
     switch (status) {
