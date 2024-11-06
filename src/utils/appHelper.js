@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment";
 
 export const getApiBaseUrl = () => import.meta.env.VITE_API_BASE_URL;
 export const getAccessToken = () =>
@@ -51,7 +52,6 @@ export const formatTimeInput = (
   }));
 };
 
-
 export const parseTimeString = (timeString) => {
   if (!timeString) return null;
 
@@ -60,4 +60,8 @@ export const parseTimeString = (timeString) => {
   date.setHours(parseInt(hours, 10));
   date.setMinutes(parseInt(minutes, 10));
   return date;
+};
+
+export const formatDate = (date) => {
+  return moment.utc(date).local().format("YYYY-MM-DDTHH:mm:SS.sss");
 };

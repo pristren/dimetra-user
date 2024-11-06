@@ -17,6 +17,7 @@ import useDebounce from "@/hooks/useDebounce";
 import { t } from "i18next";
 import { format } from "date-fns";
 import { DatePicker } from "../ui/DatePicker";
+import { formatDate } from "@/utils";
 
 export default function AppHead({
   pageTitle,
@@ -41,7 +42,7 @@ export default function AppHead({
   const handleSearchInputChange = useDebounce((value) => {
     setQueryData((prev) => ({ ...prev, search_keyword: value || undefined }));
   }, 500);
-
+  const [date, setDate] = useState(new Date());
 
   return (
     <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-5 w-full mb-10">
@@ -68,10 +69,14 @@ export default function AppHead({
         {isDateVisible && (
           <DatePicker
             className="hidden lg:flex"
-            date={queryData?.date}
-            setDate={(value) =>
-              setQueryData((prev) => ({ ...prev, date: value }))
-            }
+            date={date}
+            setDate={(value) => {
+              setDate(value);
+              setQueryData((prev) => ({
+                ...prev,
+                date: formatDate(value),
+              }));
+            }}
           />
         )}
 

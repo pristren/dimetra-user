@@ -88,8 +88,8 @@ const AllOrders = () => {
   const updateAnOrderStatus = (orderId, status, pauseDate) => {
     updateOrderStatus({
       variables: {
-        queryData: { id: orderId, ...(pauseDate && { pauseDate }) },
-        inputData: { status },
+        queryData: { id: orderId },
+        inputData: { status, pauseDate },
       },
     });
   };
