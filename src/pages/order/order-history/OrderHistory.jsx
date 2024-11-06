@@ -309,7 +309,7 @@ const OrderHistory = () => {
       <AppTable
         columns={columns}
         data={data}
-        pageTitle="History"
+        pageTitle={t("history")}
         addButton={{
           visibility: false,
         }}

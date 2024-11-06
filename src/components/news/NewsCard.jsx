@@ -15,12 +15,6 @@ const NewsCard = ({ news }) => {
           <Calender />
           {news?.date}
         </div>
-        <div className="flex items-center gap-2">
-          <Eye />
-          <p className="text-xs">{news?.views} Views</p>
-          <Pencil className="cursor-pointer" />
-          <Bin className="cursor-pointer" />
-        </div>
       </div>
       <p className="text-sm text-gray-500">
         {news?.description?.length > 150

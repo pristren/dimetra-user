@@ -23,6 +23,7 @@ import {
   transportWithOptions,
   weekdaysOptions,
   durationOptions,
+  createOrderDefaultState,
 } from "@/components/create-order-forms/helpers";
 import { useEffect, useState } from "react";
 import { calculateFormProgress, formatTimeInput } from "@/utils";
@@ -312,6 +313,13 @@ const TransportationDetails = ({
       ),
   });
 
+  const handleClearAllForm = (e) => {
+    e.preventDefault();
+    form.reset();
+    setCreateOrderData(createOrderDefaultState);
+    localStorage.removeItem("createOrderData");
+  };
+
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
@@ -515,13 +523,13 @@ const TransportationDetails = ({
                         className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                       >
                         <Input
-                          className="timescape-input !w-6"
+                          className="timescape-input !w-7"
                           {...recurringStartTimeInput("hours")}
                           placeholder="HH"
                         />
                         <span className="separator">:</span>
                         <Input
-                          className="timescape-input !w-6"
+                          className="timescape-input !w-7"
                           {...recurringStartTimeInput("minutes")}
                           placeholder="mm"
                           step={5}
@@ -562,13 +570,13 @@ const TransportationDetails = ({
                           className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                         >
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...recurringReturnTimeInput("hours")}
                             placeholder="HH"
                           />
                           <span className="separator">:</span>
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...recurringReturnTimeInput("minutes")}
                             placeholder="mm"
                             step={5}
@@ -676,13 +684,13 @@ const TransportationDetails = ({
                           className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                         >
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...recurringFreeDateStartTimeInput("hours")}
                             placeholder="HH"
                           />
                           <span className="separator">:</span>
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...recurringFreeDateStartTimeInput("minutes")}
                             placeholder="mm"
                             step={5}
@@ -722,13 +730,13 @@ const TransportationDetails = ({
                             className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                           >
                             <Input
-                              className="timescape-input !w-6"
+                              className="timescape-input !w-7"
                               {...recurringFreeDateEndTimeInput("hours")}
                               placeholder="HH"
                             />
                             <span className="separator">:</span>
                             <Input
-                              className="timescape-input !w-6"
+                              className="timescape-input !w-7"
                               {...recurringFreeDateEndTimeInput("minutes")}
                               placeholder="mm"
                               step={5}
@@ -742,7 +750,16 @@ const TransportationDetails = ({
               </div>
             )}
 
-            <div className="flex items-center justify-center w-full">
+            <div className="flex items-center justify-center w-full gap-3">
+              <Button
+                type="submit"
+                className="mt-5
+                hover:text-black px-12"
+                variant="outline"
+                onClick={(e) => handleClearAllForm(e)}
+              >
+                {t("clear_all")}
+              </Button>
               <Button
                 type="submit"
                 disabled={transportationProgress < 100}

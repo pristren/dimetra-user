@@ -515,13 +515,13 @@ const CopyTransportationDetails = ({
                         className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                       >
                         <Input
-                          className="timescape-input !w-6"
+                          className="timescape-input !w-7"
                           {...recurringStartTimeInput("hours")}
                           placeholder="HH"
                         />
                         <span className="separator">:</span>
                         <Input
-                          className="timescape-input !w-6"
+                          className="timescape-input !w-7"
                           {...recurringStartTimeInput("minutes")}
                           placeholder="mm"
                           step={5}
@@ -562,13 +562,13 @@ const CopyTransportationDetails = ({
                           className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                         >
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...recurringReturnTimeInput("hours")}
                             placeholder="HH"
                           />
                           <span className="separator">:</span>
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...recurringReturnTimeInput("minutes")}
                             placeholder="mm"
                             step={5}
@@ -676,13 +676,13 @@ const CopyTransportationDetails = ({
                           className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                         >
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...recurringFreeDateStartTimeInput("hours")}
                             placeholder="HH"
                           />
                           <span className="separator">:</span>
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...recurringFreeDateStartTimeInput("minutes")}
                             placeholder="mm"
                             step={5}
@@ -722,13 +722,13 @@ const CopyTransportationDetails = ({
                             className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
                           >
                             <Input
-                              className="timescape-input !w-6"
+                              className="timescape-input !w-7"
                               {...recurringFreeDateEndTimeInput("hours")}
                               placeholder="HH"
                             />
                             <span className="separator">:</span>
                             <Input
-                              className="timescape-input !w-6"
+                              className="timescape-input !w-7"
                               {...recurringFreeDateEndTimeInput("minutes")}
                               placeholder="mm"
                               step={5}

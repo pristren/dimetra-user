@@ -29,8 +29,7 @@ const CopyOrder = () => {
   const [destinationProgress, setDestinationProgress] = useState(0);
   const [billingProgress, setBillingProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("transportDetails");
-  const [isReturnJourneyHide, setIsReturnJourneyHide] =
-  useState(false);
+  const [isReturnJourneyHide, setIsReturnJourneyHide] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const { id } = useParams();
   const [copiedOrderData, setCopiedOrderData] = useState(
@@ -138,7 +137,12 @@ const CopyOrder = () => {
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       setCopiedOrderData(parsedData);
-      setIsReturnJourneyHide(!!(parsedData?.destinationDetailsData?.return_date || parsedData?.destinationDetailsData?.return_approx_time))
+      setIsReturnJourneyHide(
+        !!(
+          parsedData?.destinationDetailsData?.return_date ||
+          parsedData?.destinationDetailsData?.return_approx_time
+        )
+      );
     }
   }, []);
 
@@ -333,7 +337,10 @@ const CopyOrder = () => {
                 <p>Loading...</p>
               </div>
             ) : currentStep === "transportDetails" ? (
-              <CopyTransportationDetails {...transportationProps} {...commonProps} />
+              <CopyTransportationDetails
+                {...transportationProps}
+                {...commonProps}
+              />
             ) : currentStep === "patientDetails" ? (
               <CopyPatientDetails {...patientProps} {...commonProps} />
             ) : currentStep === "destinationDetails" ? (

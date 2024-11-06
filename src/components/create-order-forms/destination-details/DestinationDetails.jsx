@@ -255,13 +255,13 @@ const DestinationDetails = ({
                       <FormControl>
                         <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...getDropOffInputProps("hours")}
                             placeholder="HH"
                           />
                           <span className="separator">:</span>
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...getDropOffInputProps("minutes")}
                             placeholder="mm"
                             step={5}
@@ -286,13 +286,13 @@ const DestinationDetails = ({
                       <FormControl>
                         <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...getPickupInputProps("hours")}
                             placeholder="HH"
                           />
                           <span className="separator">:</span>
                           <Input
-                            className="timescape-input !w-6"
+                            className="timescape-input !w-7"
                             {...getPickupInputProps("minutes")}
                             placeholder="mm"
                             step={5}
@@ -511,7 +511,7 @@ const DestinationDetails = ({
                           destinationDetailsData: {
                             ...prev.destinationDetailsData,
                             return_date: "",
-                            return_approx_time: ""
+                            return_approx_time: "",
                           },
                         }));
                       }}
@@ -578,13 +578,13 @@ const DestinationDetails = ({
                               <FormControl>
                                 <div className="timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer  focus-within:border-ring">
                                   <Input
-                                    className="timescape-input !w-6"
+                                    className="timescape-input !w-7"
                                     {...getReturnInputProps("hours")}
                                     placeholder="HH"
                                   />
                                   <span className="separator">:</span>
                                   <Input
-                                    className="timescape-input !w-6"
+                                    className="timescape-input !w-7"
                                     {...getReturnInputProps("minutes")}
                                     placeholder="mm"
                                     step={5}
@@ -674,7 +674,7 @@ const DestinationDetails = ({
                             errors.drop_off_postal_code ? "border-red-500" : ""
                           }
                           type="text"
-                          placeholder="Type your postal code"
+                          placeholder={t("type_your_postal_code")}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);

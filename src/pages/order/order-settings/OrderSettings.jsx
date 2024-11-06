@@ -70,7 +70,6 @@ const OrderSettings = () => {
   const [updateAnUser] = useMutation(UPDATE_AN_USER);
   const [updateUserPassword] = useMutation(UPDATE_AN_USER_PASSWORD);
   const onSubmitUserDetails = async (value) => {
-
     if (
       !value.first_name ||
       !value.last_name ||
@@ -230,7 +229,7 @@ const OrderSettings = () => {
         </div>
         <div className="mt-10 lg:mt-20">
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
-            <p className=" ml-3 text-gray-500 w-40">{t("edit")}</p>
+            <p className=" ml-3 text-gray-500 w-40">{t("email")}</p>
             <p className="font-medium lg:font-normal">{userInfo?.email}</p>
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
