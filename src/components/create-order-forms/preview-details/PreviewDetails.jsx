@@ -235,7 +235,7 @@ const PreviewDetails = ({
                       </>
                     )}
 
-                    {recurringData?.multiple_week_days > 0 && (
+                    {recurringData?.multiple_week_days?.length > 0 && (
                       <>
                         <h3 className="text-lg font-medium mb-3 mt-5">
                           {t("select_weekdays")}

@@ -266,7 +266,14 @@ const TransportationDetails = ({
   };
 
   const { getInputProps: recurringStartTimeInput } = useTimescape({
-    date: new Date(createOrderData?.recurringData?.start_time),
+    date: createOrderData?.recurringData?.start_date
+      ? new Date(
+          new Date().setHours(
+            createOrderData?.recurringData?.start_time.split(":")[0],
+            createOrderData?.recurringData?.start_time.split(":")[1]
+          )
+        )
+      : undefined,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -278,7 +285,12 @@ const TransportationDetails = ({
 
   const { getInputProps: recurringReturnTimeInput } = useTimescape({
     date: createOrderData?.recurringData?.return_time
-      ? new Date(createOrderData?.recurringData?.return_time)
+      ? new Date(
+          new Date().setHours(
+            createOrderData?.recurringData?.return_time.split(":")[0],
+            createOrderData?.recurringData?.return_time.split(":")[1]
+          )
+        )
       : undefined,
     onChangeDate: (nextDate) =>
       formatTimeInput(
@@ -290,7 +302,14 @@ const TransportationDetails = ({
   });
 
   const { getInputProps: recurringFreeDateStartTimeInput } = useTimescape({
-    date: new Date(createOrderData?.recurringData?.free_dates_start_time),
+    date: createOrderData?.recurringData?.free_dates_start_time
+      ? new Date(
+          new Date().setHours(
+            createOrderData?.recurringData?.free_dates_start_time.split(":")[0],
+            createOrderData?.recurringData?.free_dates_start_time.split(":")[1]
+          )
+        )
+      : undefined,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -302,7 +321,14 @@ const TransportationDetails = ({
 
   const { getInputProps: recurringFreeDateEndTimeInput } = useTimescape({
     date: createOrderData?.recurringData?.free_dates_return_time
-      ? new Date(createOrderData?.recurringData?.free_dates_return_time)
+      ? new Date(
+          new Date().setHours(
+            createOrderData?.recurringData?.free_dates_return_time.split(
+              ":"
+            )[0],
+            createOrderData?.recurringData?.free_dates_return_time.split(":")[1]
+          )
+        )
       : undefined,
     onChangeDate: (nextDate) =>
       formatTimeInput(
