@@ -42,7 +42,7 @@ export default function AppHead({
   const handleSearchInputChange = useDebounce((value) => {
     setQueryData((prev) => ({ ...prev, search_keyword: value || undefined }));
   }, 500);
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState();
 
   return (
     <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-5 w-full mb-10">
