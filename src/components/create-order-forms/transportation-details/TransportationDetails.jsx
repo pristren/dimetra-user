@@ -265,15 +265,26 @@ const TransportationDetails = ({
     handleFormChange("patientDetails");
   };
 
+  const storedData = localStorage.getItem("createOrderData");
+
+  const parsedData = storedData && JSON.parse(storedData);
+
   const { getInputProps: recurringStartTimeInput } = useTimescape({
-    date: createOrderData?.recurringData?.start_date
+    date: createOrderData?.recurringData?.start_time
       ? new Date(
           new Date().setHours(
             createOrderData?.recurringData?.start_time.split(":")[0],
             createOrderData?.recurringData?.start_time.split(":")[1]
           )
         )
-      : undefined,
+      : parsedData?.recurringData?.start_time
+      ? new Date(
+          new Date().setHours(
+            parsedData?.recurringData?.start_time.split(":")[0],
+            parsedData?.recurringData?.start_time.split(":")[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -291,7 +302,14 @@ const TransportationDetails = ({
             createOrderData?.recurringData?.return_time.split(":")[1]
           )
         )
-      : undefined,
+      : parsedData?.recurringData?.return_time
+      ? new Date(
+          new Date().setHours(
+            parsedData?.recurringData?.return_time.split(":")[0],
+            parsedData?.recurringData?.return_time.split(":")[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -309,7 +327,14 @@ const TransportationDetails = ({
             createOrderData?.recurringData?.free_dates_start_time.split(":")[1]
           )
         )
-      : undefined,
+      : parsedData?.recurringData?.free_dates_start_time
+      ? new Date(
+          new Date().setHours(
+            parsedData?.recurringData?.free_dates_start_time.split(":")[0],
+            parsedData?.recurringData?.free_dates_start_time.split(":")[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -329,7 +354,14 @@ const TransportationDetails = ({
             createOrderData?.recurringData?.free_dates_return_time.split(":")[1]
           )
         )
-      : undefined,
+      : parsedData?.recurringData?.free_dates_return_time
+      ? new Date(
+          new Date().setHours(
+            parsedData?.recurringData?.free_dates_return_time.split(":")[0],
+            parsedData?.recurringData?.free_dates_return_time.split(":")[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -344,6 +376,7 @@ const TransportationDetails = ({
     form.reset();
     setCreateOrderData(createOrderDefaultState);
     localStorage.removeItem("createOrderData");
+    window.location.reload();
   };
 
   return (
