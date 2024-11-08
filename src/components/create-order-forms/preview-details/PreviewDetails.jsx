@@ -7,6 +7,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import AppSelect from "@/components/common/AppSelect";
 import {
+  createOrderDefaultState,
   durationOptions,
   transportModesOptions,
   transportOptions,
@@ -19,7 +20,7 @@ import { CREATE_AN_ORDER } from "@/pages/order/create-order/graphql/mutations/cr
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import AppModal from "@/components/common/AppModal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loading, SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
 import { t } from "i18next";
 import toast from "react-hot-toast";
@@ -30,6 +31,7 @@ const PreviewDetails = ({
   createOrderData,
   setCurrentStep,
   setShowPreview,
+  setCreateOrderData,
 }) => {
   const {
     transportationData,
@@ -62,6 +64,7 @@ const PreviewDetails = ({
       });
       if (data?.createAnOrder?.id) {
         localStorage.removeItem("createOrderData");
+        setCreateOrderData(createOrderDefaultState);
         setShowModal(true);
       }
     } catch (error) {
@@ -79,7 +82,8 @@ const PreviewDetails = ({
     navigate("/orders/all-orders");
   };
 
-  //   console.log(recurringData, "recurringData");
+  // if there is any undefined:undefined value in any time, start_time, return_time, free_dates_start_time, free_dates_return_time, then make it empty string
+  // ? need to implement this in the future
 
   return (
     <div className="p-2">
