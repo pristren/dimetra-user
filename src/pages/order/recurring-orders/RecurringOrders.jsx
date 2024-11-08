@@ -94,7 +94,7 @@ const RecurringOrders = () => {
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           className="flex items-center cursor-pointer"
         >
-          {t("date_time")}
+          {t("date")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -112,7 +112,21 @@ const RecurringOrders = () => {
       },
     },
     {
-      accessorKey: "destinationDetailsData.pick_up_address",
+      accessorKey: "destinationDetailsData.drop_off_pick_up_time",
+      header: () => (
+        <div
+          //   onClick={() =>
+          //     handleSort("destinationDetailsData.drop_off_pick_up_time")
+          //   }
+          className="flex items-center cursor-pointer"
+        >
+          {t("time")}
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "destinationDetailsData.pick_up_name",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -124,7 +138,7 @@ const RecurringOrders = () => {
       ),
     },
     {
-      accessorKey: "destinationDetailsData.drop_off_address",
+      accessorKey: "destinationDetailsData.drop_off_name",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
           onClick={() => toggleSorting(getIsSorted() === "asc")}
@@ -137,15 +151,22 @@ const RecurringOrders = () => {
     },
     {
       accessorKey: "patientData.name",
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
+      header: () => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          //   onClick={() => handleSort("patientData.name")}
           className="flex items-center cursor-pointer"
         >
           {t("patient_name")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
+      cell: ({ row }) => {
+        const patientName =
+          row?.original?.patientData?.name +
+          " " +
+          row?.original?.patientData?.surname;
+        return <p className="capitalize">{patientName}</p>;
+      },
     },
     {
       accessorKey: "transportationData.type_of_transport",

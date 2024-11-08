@@ -144,7 +144,7 @@ function OrderDetails({ singleRecurring = false }) {
               </div>
               {data?.transportationData?.start_date && (
                 <div className="flex items-center gap-6">
-                  <p>{t("date_time")} : </p>
+                  <p>{t("date")} : </p>
                   <p>{data?.transportationData?.start_date}</p>
                 </div>
               )}

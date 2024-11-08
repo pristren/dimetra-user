@@ -97,7 +97,7 @@ const OrderHistory = () => {
           }
           className="flex items-center cursor-pointer"
         >
-          {t("date_time")}
+          {t("date")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
@@ -108,7 +108,21 @@ const OrderHistory = () => {
       },
     },
     {
-      accessorKey: "destinationDetailsData.pick_up_address",
+      accessorKey: "destinationDetailsData.drop_off_pick_up_time",
+      header: () => (
+        <div
+          onClick={() =>
+            handleSort("destinationDetailsData.drop_off_pick_up_time")
+          }
+          className="flex items-center cursor-pointer"
+        >
+          {t("time")}
+          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+        </div>
+      ),
+    },
+    {
+      accessorKey: "destinationDetailsData.pick_up_name",
       header: () => (
         <div
           onClick={() => handleSort("destinationDetailsData.pick_up_address")}
@@ -120,7 +134,7 @@ const OrderHistory = () => {
       ),
     },
     {
-      accessorKey: "destinationDetailsData.drop_off_address",
+      accessorKey: "destinationDetailsData.drop_off_name",
       header: () => (
         <div
           onClick={() => handleSort("destinationDetailsData.drop_off_address")}
@@ -130,54 +144,6 @@ const OrderHistory = () => {
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
-    },
-    {
-      accessorKey: "vehicle",
-      header: () => (
-        <div className="flex items-center gap-2">
-          {t("vehicle")}
-          <ArrowUpDown
-            className="ml-2 h-4 w-4 cursor-pointer"
-            aria-label="Sort by Vehicle"
-          />
-        </div>
-      ),
-      cell: ({ row }) => {
-        const vehicle = row.getValue("vehicle") || "N/A";
-        return <p className="text-center">{vehicle}</p>;
-      },
-    },
-    {
-      accessorKey: `driver`,
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
-        <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
-          className="flex items-center cursor-pointer"
-        >
-          {t("driver")}
-          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
-        </div>
-      ),
-      cell: ({ row }) => {
-        const driver = row.original?.driver || "N/A";
-        return <p className="text-center">{driver}</p>;
-      },
-    },
-    {
-      accessorKey: "dispatcher",
-      header: () => (
-        <div className="flex items-center gap-2">
-          {t("dispatcher")}
-          <ArrowUpDown
-            className="ml-2 h-4 w-4 cursor-pointer"
-            aria-label="Sort by Dispatcher"
-          />
-        </div>
-      ),
-      cell: ({ row }) => {
-        const dispatcher = row.getValue("dispatcher") || "N/A";
-        return <p className="text-center">{dispatcher}</p>;
-      },
     },
     {
       accessorKey: "status",

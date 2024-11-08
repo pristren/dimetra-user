@@ -113,7 +113,7 @@ const AllOrders = () => {
           }
           className="flex items-center cursor-pointer"
         >
-          {t("date_time")}
+          {t("date")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
       ),
