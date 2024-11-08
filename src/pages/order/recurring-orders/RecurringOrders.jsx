@@ -24,6 +24,8 @@ const RecurringOrders = () => {
     filter_by: "all_order",
     page: 1,
     orderId: id,
+    sort_by: "destinationDetailsData.drop_off_pick_up_date",
+    sort_order: "asc",
   });
   const [totalPage, setTotalPage] = useState(null);
 
@@ -85,13 +87,23 @@ const RecurringOrders = () => {
       },
     });
   };
+  const handleSort = (field) => {
+    const isAsc = queryData.sort_by === field && queryData.sort_order === "asc";
+    setQueryData({
+      ...queryData,
+      sort_by: field,
+      sort_order: isAsc ? "desc" : "asc",
+    });
+  };
 
   const columns = [
     {
       accessorKey: "destinationDetailsData.drop_off_pick_up_date",
       header: ({ column }) => (
         <div
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          onClick={() =>
+            handleSort("destinationDetailsData.drop_off_pick_up_date")
+          }
           className="flex items-center cursor-pointer"
         >
           {t("date")}
@@ -115,9 +127,9 @@ const RecurringOrders = () => {
       accessorKey: "destinationDetailsData.drop_off_pick_up_time",
       header: () => (
         <div
-          //   onClick={() =>
-          //     handleSort("destinationDetailsData.drop_off_pick_up_time")
-          //   }
+          onClick={() =>
+            handleSort("destinationDetailsData.drop_off_pick_up_time")
+          }
           className="flex items-center cursor-pointer"
         >
           {t("time")}
@@ -129,7 +141,7 @@ const RecurringOrders = () => {
       accessorKey: "destinationDetailsData.pick_up_name",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => handleSort("destinationDetailsData.pick_up_name")}
           className="flex items-center cursor-pointer"
         >
           {t("pick_up")}
@@ -141,7 +153,7 @@ const RecurringOrders = () => {
       accessorKey: "destinationDetailsData.drop_off_name",
       header: ({ column: { toggleSorting, getIsSorted } }) => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          onClick={() => handleSort("destinationDetailsData.drop_off_name")}
           className="flex items-center cursor-pointer"
         >
           {t("destination")}
@@ -153,7 +165,7 @@ const RecurringOrders = () => {
       accessorKey: "patientData.name",
       header: () => (
         <div
-          //   onClick={() => handleSort("patientData.name")}
+          onClick={() => handleSort("patientData.name")}
           className="flex items-center cursor-pointer"
         >
           {t("patient_name")}
@@ -170,13 +182,13 @@ const RecurringOrders = () => {
     },
     {
       accessorKey: "transportationData.type_of_transport",
-      header: ({ column: { toggleSorting, getIsSorted } }) => (
+      header: () => (
         <div
-          onClick={() => toggleSorting(getIsSorted() === "asc")}
+          //   onClick={() => handleSort("transportationData.type_of_transport")}
           className="flex items-center cursor-pointer"
         >
           {t("transport_type")}
-          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
+          {/* <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" /> */}
         </div>
       ),
     },
@@ -188,7 +200,10 @@ const RecurringOrders = () => {
     {
       accessorKey: "status",
       header: () => (
-        <div className="flex items-center gap-2">
+        <div
+          onClick={() => handleSort("status")}
+          className="flex items-center gap-2 cursor-pointer"
+        >
           {t("status")}
           <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
         </div>
@@ -212,7 +227,7 @@ const RecurringOrders = () => {
       header: () => (
         <div className="text-center flex items-center justify-center">
           {t("action")}
-          <ArrowUpDown className="h-4 w-4 text-gray-500 cursor-pointer" />
+          {/* <ArrowUpDown className="h-4 w-4 text-gray-500 cursor-pointer" /> */}
         </div>
       ),
       cell: ({ row }) => {
