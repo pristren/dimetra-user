@@ -108,45 +108,125 @@ const EditDestinationDetails = ({
   }, [editOrderData.destinationDetailsData, form]);
 
   // Drop-off time
-  const { getInputProps: getDropOffInputProps } = useTimescape({
-    date: new Date(
-      editOrderData?.destinationDetailsData?.drop_off_pick_up_time
-    ),
-    onChangeDate: (nextDate) =>
-      formatTimeInput(
-        nextDate,
-        setEditOrderData,
-        "destinationDetailsData",
-        "drop_off_pick_up_time"
-      ),
-  });
+  const { getInputProps: getDropOffInputProps, update: updateDropOffOptions } =
+    useTimescape({
+      date: editOrderData?.destinationDetailsData?.drop_off_pick_up_time
+        ? new Date(
+            new Date().setHours(
+              editOrderData?.destinationDetailsData?.drop_off_pick_up_time.split(
+                ":"
+              )[0],
+              editOrderData?.destinationDetailsData?.drop_off_pick_up_time.split(
+                ":"
+              )[1]
+            )
+          )
+        : undefined,
+      onChangeDate: (nextDate) =>
+        formatTimeInput(
+          nextDate,
+          setEditOrderData,
+          "destinationDetailsData",
+          "drop_off_pick_up_time"
+        ),
+    });
 
   // Pickup time
-  const { getInputProps: getPickupInputProps } = useTimescape({
-    date: new Date(
-      editOrderData?.destinationDetailsData?.pickup_appointment_time
-    ),
-    onChangeDate: (nextDate) =>
-      formatTimeInput(
-        nextDate,
-        setEditOrderData,
-        "destinationDetailsData",
-        "pickup_appointment_time"
-      ),
-  });
-
+  const { getInputProps: getPickupInputProps, update: updatePickupOptions } =
+    useTimescape({
+      date: editOrderData?.destinationDetailsData?.pickup_appointment_time
+        ? new Date(
+            new Date().setHours(
+              editOrderData?.destinationDetailsData?.pickup_appointment_time.split(
+                ":"
+              )[0],
+              editOrderData?.destinationDetailsData?.pickup_appointment_time.split(
+                ":"
+              )[1]
+            )
+          )
+        : undefined,
+      onChangeDate: (nextDate) =>
+        formatTimeInput(
+          nextDate,
+          setEditOrderData,
+          "destinationDetailsData",
+          "pickup_appointment_time"
+        ),
+    });
   // Return approximate time, conditionally applied
-  const { getInputProps: getReturnInputProps } = useTimescape({
-    date: new Date(editOrderData?.destinationDetailsData?.return_approx_time),
-    onChangeDate: (nextDate) => {
-      formatTimeInput(
-        nextDate,
-        setEditOrderData,
-        "destinationDetailsData",
-        "return_approx_time"
-      );
-    },
-  });
+  const { getInputProps: getReturnInputProps, update: updateReturnOptions } =
+    useTimescape({
+      date: editOrderData?.destinationDetailsData?.return_approx_time
+        ? new Date(
+            new Date().setHours(
+              editOrderData?.destinationDetailsData?.return_approx_time.split(
+                ":"
+              )[0],
+              editOrderData?.destinationDetailsData?.return_approx_time.split(
+                ":"
+              )[1]
+            )
+          )
+        : undefined,
+      onChangeDate: (nextDate) => {
+        formatTimeInput(
+          nextDate,
+          setEditOrderData,
+          "destinationDetailsData",
+          "return_approx_time"
+        );
+      },
+    });
+
+  useEffect(() => {
+    if (editOrderData?.destinationDetailsData?.drop_off_pick_up_time) {
+      updateDropOffOptions({
+        date: new Date(
+          new Date().setHours(
+            editOrderData?.destinationDetailsData?.drop_off_pick_up_time.split(
+              ":"
+            )[0],
+            editOrderData?.destinationDetailsData?.drop_off_pick_up_time.split(
+              ":"
+            )[1]
+          )
+        ),
+      });
+    }
+    if (editOrderData?.destinationDetailsData?.pickup_appointment_time) {
+      updatePickupOptions({
+        date: new Date(
+          new Date().setHours(
+            editOrderData?.destinationDetailsData?.pickup_appointment_time.split(
+              ":"
+            )[0],
+            editOrderData?.destinationDetailsData?.pickup_appointment_time.split(
+              ":"
+            )[1]
+          )
+        ),
+      });
+    }
+    if (editOrderData?.destinationDetailsData?.return_approx_time) {
+      updateReturnOptions({
+        date: new Date(
+          new Date().setHours(
+            editOrderData?.destinationDetailsData?.return_approx_time.split(
+              ":"
+            )[0],
+            editOrderData?.destinationDetailsData?.return_approx_time.split(
+              ":"
+            )[1]
+          )
+        ),
+      });
+    }
+  }, [
+    editOrderData?.destinationDetailsData?.drop_off_pick_up_time,
+    editOrderData?.destinationDetailsData?.pickup_appointment_time,
+    editOrderData?.destinationDetailsData?.return_approx_time,
+  ]);
 
   return (
     <Card className="p-6 border-none rounded-none">
