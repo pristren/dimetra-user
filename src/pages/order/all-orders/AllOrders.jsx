@@ -27,6 +27,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { DatePicker } from "@/components/ui/DatePicker";
+import { formatDate } from "@/utils";
 
 const AllOrders = () => {
   const [queryData, setQueryData] = useState({
@@ -89,7 +90,7 @@ const AllOrders = () => {
     updateOrderStatus({
       variables: {
         queryData: { id: orderId },
-        inputData: { status, pauseDate },
+        inputData: { status, ...(pauseDate && { pauseDate }) },
       },
     });
   };
@@ -372,8 +373,8 @@ const AllOrders = () => {
               {t("pause_from (optional)")}
             </label>
             <DatePicker
-              date={pauseDate}
-              setDate={setPauseDate}
+              date={pauseDate && new Date(pauseDate)}
+              setDate={(value) => setPauseDate(formatDate(value))}
               mode="single"
               disabled={(date) => date < new Date()}
             />
@@ -391,9 +392,6 @@ const AllOrders = () => {
                 Cancel
               </Button>
               <Button
-                disabled={
-                  updateOrderStatusLoading || !selectedOrderId || !pauseDate
-                }
                 onClick={() =>
                   updateAnOrderStatus(selectedOrderId, "paused", pauseDate)
                 }
