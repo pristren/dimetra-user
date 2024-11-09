@@ -262,6 +262,47 @@ const TransportationDetails = ({
         return;
       }
     }
+    // for extra validation as time comes undefined:undefined when time is not selected
+    if (recurringData?.recurring_type === "free") {
+      if (recurringData?.free_dates_return_time === "undefined:undefined") {
+        setCreateOrderData((prev) => ({
+          ...prev,
+          recurringData: {
+            ...prev.recurringData,
+            start_date: null,
+            return_date: null,
+            start_time: "",
+            return_time: "",
+            multiple_week_days: [],
+            ends: "",
+            free_dates_return_time: "",
+          },
+        }));
+      }
+    } else if (recurringData?.recurring_type === "week") {
+      if (recurringData?.return_time === "undefined:undefined") {
+        setCreateOrderData((prev) => ({
+          ...prev,
+          recurringData: {
+            ...prev.recurringData,
+            free_dates: [new Date()],
+            free_dates_start_time: "",
+            free_dates_return_time: "",
+            return_time: "",
+          },
+        }));
+      } else {
+        setCreateOrderData((prev) => ({
+          ...prev,
+          recurringData: {
+            ...prev.recurringData,
+            free_dates: [new Date()],
+            free_dates_start_time: "",
+            free_dates_return_time: "",
+          },
+        }));
+      }
+    }
     handleFormChange("patientDetails");
   };
 

@@ -24,13 +24,12 @@ const BillingDetails = ({
   const { t } = useTranslation();
   const {
     pre_name = "",
-    contact_phone = "",    
+    contact_phone = "",
     name = "",
     street = "",
     place = "",
     contact = "",
   } = createOrderData.billingDetailsData || {};
-  
 
   const formSchema = z.object({
     preName: z.string().min(1, t("prename_institution_is_required")),
@@ -69,7 +68,9 @@ const BillingDetails = ({
   return (
     <Card className="lg:px-5 lg:py-5">
       <CardHeader>
-        <CardTitle className="title">{t("billing_address")} ({t("optional")})</CardTitle>
+        <CardTitle className="title">
+          {t("billing_address")} ({t("optional")})
+        </CardTitle>
       </CardHeader>
       <CardContent className="lg:px-10">
         <Form {...form}>
@@ -103,7 +104,9 @@ const BillingDetails = ({
                 name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="font-normal">{t("last_name")}</FormLabel>
+                    <FormLabel className="font-normal">
+                      {t("last_name")}
+                    </FormLabel>
                     <FormControl>
                       <Input
                         className={errors.name ? "border-red-500" : ""}
@@ -215,6 +218,54 @@ const BillingDetails = ({
               handleGoPrev={() => handleFormChange("destinationDetails")}
               handleGoNext={(e) => {
                 e.preventDefault();
+                if (createOrderData?.recurringData?.recurring_type === "free") {
+                  if (
+                    createOrderData?.recurringData?.free_dates_return_time ===
+                    "undefined:undefined"
+                  ) {
+                    setCreateOrderData((prev) => ({
+                      ...prev,
+                      recurringData: {
+                        ...prev.recurringData,
+                        start_date: null,
+                        return_date: null,
+                        start_time: "",
+                        return_time: "",
+                        multiple_week_days: [],
+                        ends: "",
+                        free_dates_return_time: "",
+                      },
+                    }));
+                  }
+                } else if (
+                  createOrderData?.recurringData?.recurring_type === "week"
+                ) {
+                  if (
+                    createOrderData?.recurringData?.return_time ===
+                    "undefined:undefined"
+                  ) {
+                    setCreateOrderData((prev) => ({
+                      ...prev,
+                      recurringData: {
+                        ...prev.recurringData,
+                        free_dates: [new Date()],
+                        free_dates_start_time: "",
+                        free_dates_return_time: "",
+                        return_time: "",
+                      },
+                    }));
+                  } else {
+                    setCreateOrderData((prev) => ({
+                      ...prev,
+                      recurringData: {
+                        ...prev.recurringData,
+                        free_dates: [new Date()],
+                        free_dates_start_time: "",
+                        free_dates_return_time: "",
+                      },
+                    }));
+                  }
+                }
                 setShowPreview(true);
               }}
             />
