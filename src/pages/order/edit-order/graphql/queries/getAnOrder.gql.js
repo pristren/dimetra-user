@@ -38,7 +38,7 @@ export const GET_AN_ORDER = gql`
         mode_of_transportation
       }
       patientData {
-        surname        
+        surname
         patient_above_90kg
         name
         isolation
@@ -47,6 +47,18 @@ export const GET_AN_ORDER = gql`
         date_of_birth
         cost_center
         area_room
+      }
+      recurringData {
+        start_date
+        return_date
+        start_time
+        return_time
+        recurring_type
+        multiple_week_days
+        free_dates_start_time
+        free_dates_return_time
+        free_dates
+        ends
       }
     }
   }

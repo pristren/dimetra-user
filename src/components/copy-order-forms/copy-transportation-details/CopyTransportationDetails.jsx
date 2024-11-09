@@ -40,7 +40,13 @@ const CopyTransportationDetails = ({
 }) => {
   const { transportationData, recurringData } = copiedOrderData;
   const [returnJourney, setReturnJourney] = useState(
-    recurringData?.free_dates_return_time ? true : false
+    (copiedOrderData?.recurringData?.return_time !== "undefined:undefined" &&
+      copiedOrderData?.destinationDetailsData?.return_time !== "") ||
+      (copiedOrderData?.recurringData?.free_dates_return_time !==
+        "undefined:undefined" &&
+        copiedOrderData?.destinationDetailsData?.free_dates_return_time !== "")
+      ? true
+      : false
   );
 
   const form_schema = z.object({
@@ -225,14 +231,14 @@ const CopyTransportationDetails = ({
     if (recurringData?.recurring_type === "free") {
       const startTime = new Date(
         new Date().setHours(
-          recurringData?.free_dates_start_time.split(":")[0],
-          recurringData?.free_dates_start_time.split(":")[1]
+          recurringData?.free_dates_start_time?.split(":")[0],
+          recurringData?.free_dates_start_time?.split(":")[1]
         )
       );
       const returnTime = new Date(
         new Date().setHours(
-          recurringData?.free_dates_return_time.split(":")[0],
-          recurringData?.free_dates_return_time.split(":")[1]
+          recurringData?.free_dates_return_time?.split(":")[0],
+          recurringData?.free_dates_return_time?.split(":")[1]
         )
       );
       if (startTime >= returnTime) {
@@ -242,14 +248,14 @@ const CopyTransportationDetails = ({
     } else if (recurringData?.recurring_type === "week") {
       const startTime = new Date(
         new Date().setHours(
-          recurringData?.start_time.split(":")[0],
-          recurringData?.start_time.split(":")[1]
+          recurringData?.start_time?.split(":")[0],
+          recurringData?.start_time?.split(":")[1]
         )
       );
       const returnTime = new Date(
         new Date().setHours(
-          recurringData?.return_time.split(":")[0],
-          recurringData?.return_time.split(":")[1]
+          recurringData?.return_time?.split(":")[0],
+          recurringData?.return_time?.split(":")[1]
         )
       );
       if (startTime >= returnTime) {
@@ -257,11 +263,61 @@ const CopyTransportationDetails = ({
         return;
       }
     }
+    if (recurringData?.recurring_type === "free") {
+      if (recurringData?.free_dates_return_time === "undefined:undefined") {
+        setCopiedOrderData((prev) => ({
+          ...prev,
+          recurringData: {
+            ...prev.recurringData,
+            start_date: null,
+            return_date: null,
+            start_time: "",
+            return_time: "",
+            multiple_week_days: [],
+            ends: "",
+            free_dates_return_time: "",
+          },
+        }));
+      }
+    } else if (recurringData?.recurring_type === "week") {
+      if (recurringData?.return_time === "undefined:undefined") {
+        setCopiedOrderData((prev) => ({
+          ...prev,
+          recurringData: {
+            ...prev.recurringData,
+            free_dates: [new Date()],
+            free_dates_start_time: "",
+            free_dates_return_time: "",
+            return_time: "",
+          },
+        }));
+      } else {
+        setCopiedOrderData((prev) => ({
+          ...prev,
+          recurringData: {
+            ...prev.recurringData,
+            free_dates: [new Date()],
+            free_dates_start_time: "",
+            free_dates_return_time: "",
+          },
+        }));
+      }
+    }
     handleFormChange("patientDetails");
   };
 
-  const { getInputProps: recurringStartTimeInput } = useTimescape({
-    date: new Date(copiedOrderData?.recurringData?.start_time),
+  const {
+    getInputProps: recurringStartTimeInputForCopy,
+    update: updateRecurringStartTimeForCopy,
+  } = useTimescape({
+    date: copiedOrderData?.recurringData?.start_time
+      ? new Date(
+          new Date().setHours(
+            copiedOrderData?.recurringData?.start_time?.split(":")[0],
+            copiedOrderData?.recurringData?.start_time?.split(":")[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -271,8 +327,18 @@ const CopyTransportationDetails = ({
       ),
   });
 
-  const { getInputProps: recurringReturnTimeInput } = useTimescape({
-    date: new Date(copiedOrderData?.recurringData?.return_time),
+  const {
+    getInputProps: recurringReturnTimeInput,
+    update: updateRecurringReturnTime,
+  } = useTimescape({
+    date: copiedOrderData?.recurringData?.return_time
+      ? new Date(
+          new Date().setHours(
+            copiedOrderData?.recurringData?.return_time?.split(":")[0],
+            copiedOrderData?.recurringData?.return_time?.split(":")[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -281,9 +347,20 @@ const CopyTransportationDetails = ({
         "return_time"
       ),
   });
-
-  const { getInputProps: recurringFreeDateStartTimeInput } = useTimescape({
-    date: new Date(copiedOrderData?.recurringData?.free_dates_start_time),
+  const {
+    getInputProps: recurringFreeDateStartTimeInput,
+    update: updateRecurringFreeDateStartTime,
+  } = useTimescape({
+    date: copiedOrderData?.recurringData?.free_dates_start_time
+      ? new Date(
+          new Date().setHours(
+            copiedOrderData?.recurringData?.free_dates_start_time?.split(
+              ":"
+            )[0],
+            copiedOrderData?.recurringData?.free_dates_start_time?.split(":")[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -293,8 +370,22 @@ const CopyTransportationDetails = ({
       ),
   });
 
-  const { getInputProps: recurringFreeDateEndTimeInput } = useTimescape({
-    date: new Date(copiedOrderData?.recurringData?.free_dates_return_time),
+  const {
+    getInputProps: recurringFreeDateEndTimeInput,
+    update: updateRecurringFreeDateEndTime,
+  } = useTimescape({
+    date: copiedOrderData?.recurringData?.free_dates_return_time
+      ? new Date(
+          new Date().setHours(
+            copiedOrderData?.recurringData?.free_dates_return_time.split(
+              ":"
+            )[0],
+            copiedOrderData?.recurringData?.free_dates_return_time?.split(
+              ":"
+            )[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -303,6 +394,70 @@ const CopyTransportationDetails = ({
         "free_dates_return_time"
       ),
   });
+
+  useEffect(() => {
+    if (copiedOrderData?.recurringData?.start_time !== "undefined:undefined") {
+      updateRecurringStartTimeForCopy((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            copiedOrderData?.recurringData?.start_time?.split(":")[0],
+            copiedOrderData?.recurringData?.start_time?.split(":")[1]
+          )
+        ),
+      }));
+    }
+    if (copiedOrderData?.recurringData?.return_time !== "undefined:undefined") {
+      updateRecurringReturnTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            copiedOrderData?.recurringData?.return_time?.split(":")[0],
+            copiedOrderData?.recurringData?.return_time?.split(":")[1]
+          )
+        ),
+      }));
+    }
+    if (
+      copiedOrderData?.recurringData?.free_dates_start_time !==
+      "undefined:undefined"
+    ) {
+      updateRecurringFreeDateStartTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            copiedOrderData?.recurringData?.free_dates_start_time?.split(
+              ":"
+            )[0],
+            copiedOrderData?.recurringData?.free_dates_start_time?.split(":")[1]
+          )
+        ),
+      }));
+    }
+    if (
+      copiedOrderData?.recurringData?.free_dates_return_time !==
+      "undefined:undefined"
+    ) {
+      updateRecurringFreeDateEndTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            copiedOrderData?.recurringData?.free_dates_return_time.split(
+              ":"
+            )[0],
+            copiedOrderData?.recurringData?.free_dates_return_time?.split(
+              ":"
+            )[1]
+          )
+        ),
+      }));
+    }
+  }, [
+    copiedOrderData?.recurringData?.start_time,
+    copiedOrderData?.recurringData?.return_time,
+    copiedOrderData?.recurringData?.free_dates_start_time,
+    copiedOrderData?.recurringData?.free_dates_return_time,
+  ]);
 
   return (
     <Card className="lg:px-5 lg:py-5">
@@ -508,13 +663,13 @@ const CopyTransportationDetails = ({
                       >
                         <Input
                           className="timescape-input !w-7"
-                          {...recurringStartTimeInput("hours")}
+                          {...recurringStartTimeInputForCopy("hours")}
                           placeholder="HH"
                         />
                         <span className="separator">:</span>
                         <Input
                           className="timescape-input !w-7"
-                          {...recurringStartTimeInput("minutes")}
+                          {...recurringStartTimeInputForCopy("minutes")}
                           placeholder="mm"
                           step={5}
                         />
@@ -535,7 +690,7 @@ const CopyTransportationDetails = ({
                     </div>
                     {returnJourney && (
                       <div>
-                        <h3 className="text-lg font-medium mt-5 mb-5">
+                        <h3 className="text-lg font-medium mt-5 ">
                           {t("select_return_time")}{" "}
                           <span className="highlight">({t("optional")})</span>
                         </h3>
@@ -551,7 +706,7 @@ const CopyTransportationDetails = ({
           /> */}
                         </div>
                         <div
-                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring`}
+                          className={`timescape py-2 px-2 focus-within:outline-ring flex items-center gap-0.5 rounded-md bg-white cursor-pointer focus-within:border-ring w-min`}
                         >
                           <Input
                             className="timescape-input !w-7"
@@ -699,7 +854,7 @@ const CopyTransportationDetails = ({
                     </div>
                     {returnJourney && (
                       <div className="mb-5">
-                        <h3 className="text-lg font-medium mt-10 mb-5">
+                        <h3 className="text-lg font-medium mt-5 mb-3">
                           {t("select_return_time")}{" "}
                           <span className="text-sm text-gray-600">
                             {t("(optional)")}

@@ -50,7 +50,7 @@ const DestinationDetails = ({
     [reopenOrderData?.transportationData?.type_of_transport]
   );
   function timeStringToMinutes(timeString) {
-    const [hours, minutes] = timeString.split(":").map(Number);
+    const [hours, minutes] = timeString?.split(":").map(Number);
     return hours * 60 + minutes;
   }
 

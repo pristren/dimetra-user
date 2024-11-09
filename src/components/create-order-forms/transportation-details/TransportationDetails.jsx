@@ -226,15 +226,15 @@ const TransportationDetails = ({
     if (recurringData?.recurring_type === "free") {
       const startTime = new Date(
         new Date().setHours(
-          recurringData?.free_dates_start_time.split(":")[0],
-          recurringData?.free_dates_start_time.split(":")[1]
+          recurringData?.free_dates_start_time?.split(":")[0],
+          recurringData?.free_dates_start_time?.split(":")[1]
         )
       );
       const returnTime = recurringData?.free_dates_return_time
         ? new Date(
             new Date().setHours(
-              recurringData?.free_dates_return_time.split(":")[0],
-              recurringData?.free_dates_return_time.split(":")[1]
+              recurringData?.free_dates_return_time?.split(":")[0],
+              recurringData?.free_dates_return_time?.split(":")[1]
             )
           )
         : null;
@@ -245,15 +245,15 @@ const TransportationDetails = ({
     } else if (recurringData?.recurring_type === "week") {
       const startTime = new Date(
         new Date().setHours(
-          recurringData?.start_time.split(":")[0],
-          recurringData?.start_time.split(":")[1]
+          recurringData?.start_time?.split(":")[0],
+          recurringData?.start_time?.split(":")[1]
         )
       );
       const returnTime = recurringData?.return_time
         ? new Date(
             new Date().setHours(
-              recurringData?.return_time.split(":")[0],
-              recurringData?.return_time.split(":")[1]
+              recurringData?.return_time?.split(":")[0],
+              recurringData?.return_time?.split(":")[1]
             )
           )
         : null;
@@ -306,23 +306,15 @@ const TransportationDetails = ({
     handleFormChange("patientDetails");
   };
 
-  const storedData = localStorage.getItem("createOrderData");
-
-  const parsedData = storedData && JSON.parse(storedData);
-
-  const { getInputProps: recurringStartTimeInput } = useTimescape({
+  const {
+    getInputProps: recurringStartTimeInput,
+    update: updateRecurringStartTime,
+  } = useTimescape({
     date: createOrderData?.recurringData?.start_time
       ? new Date(
           new Date().setHours(
-            createOrderData?.recurringData?.start_time.split(":")[0],
-            createOrderData?.recurringData?.start_time.split(":")[1]
-          )
-        )
-      : parsedData?.recurringData?.start_time
-      ? new Date(
-          new Date().setHours(
-            parsedData?.recurringData?.start_time.split(":")[0],
-            parsedData?.recurringData?.start_time.split(":")[1]
+            createOrderData?.recurringData?.start_time?.split(":")[0],
+            createOrderData?.recurringData?.start_time?.split(":")[1]
           )
         )
       : null,
@@ -335,19 +327,15 @@ const TransportationDetails = ({
       ),
   });
 
-  const { getInputProps: recurringReturnTimeInput } = useTimescape({
+  const {
+    getInputProps: recurringReturnTimeInput,
+    update: updateRecurringReturnTime,
+  } = useTimescape({
     date: createOrderData?.recurringData?.return_time
       ? new Date(
           new Date().setHours(
-            createOrderData?.recurringData?.return_time.split(":")[0],
-            createOrderData?.recurringData?.return_time.split(":")[1]
-          )
-        )
-      : parsedData?.recurringData?.return_time
-      ? new Date(
-          new Date().setHours(
-            parsedData?.recurringData?.return_time.split(":")[0],
-            parsedData?.recurringData?.return_time.split(":")[1]
+            createOrderData?.recurringData?.return_time?.split(":")[0],
+            createOrderData?.recurringData?.return_time?.split(":")[1]
           )
         )
       : null,
@@ -360,19 +348,17 @@ const TransportationDetails = ({
       ),
   });
 
-  const { getInputProps: recurringFreeDateStartTimeInput } = useTimescape({
+  const {
+    getInputProps: recurringFreeDateStartTimeInput,
+    update: updateRecurringFreeDateStartTime,
+  } = useTimescape({
     date: createOrderData?.recurringData?.free_dates_start_time
       ? new Date(
           new Date().setHours(
-            createOrderData?.recurringData?.free_dates_start_time.split(":")[0],
-            createOrderData?.recurringData?.free_dates_start_time.split(":")[1]
-          )
-        )
-      : parsedData?.recurringData?.free_dates_start_time
-      ? new Date(
-          new Date().setHours(
-            parsedData?.recurringData?.free_dates_start_time.split(":")[0],
-            parsedData?.recurringData?.free_dates_start_time.split(":")[1]
+            createOrderData?.recurringData?.free_dates_start_time?.split(
+              ":"
+            )[0],
+            createOrderData?.recurringData?.free_dates_start_time?.split(":")[1]
           )
         )
       : null,
@@ -385,21 +371,19 @@ const TransportationDetails = ({
       ),
   });
 
-  const { getInputProps: recurringFreeDateEndTimeInput } = useTimescape({
+  const {
+    getInputProps: recurringFreeDateEndTimeInput,
+    update: updateRecurringFreeDateEndTime,
+  } = useTimescape({
     date: createOrderData?.recurringData?.free_dates_return_time
       ? new Date(
           new Date().setHours(
             createOrderData?.recurringData?.free_dates_return_time.split(
               ":"
             )[0],
-            createOrderData?.recurringData?.free_dates_return_time.split(":")[1]
-          )
-        )
-      : parsedData?.recurringData?.free_dates_return_time
-      ? new Date(
-          new Date().setHours(
-            parsedData?.recurringData?.free_dates_return_time.split(":")[0],
-            parsedData?.recurringData?.free_dates_return_time.split(":")[1]
+            createOrderData?.recurringData?.free_dates_return_time?.split(
+              ":"
+            )[1]
           )
         )
       : null,
@@ -411,6 +395,70 @@ const TransportationDetails = ({
         "free_dates_return_time"
       ),
   });
+
+  useEffect(() => {
+    if (createOrderData?.recurringData?.start_time !== "undefined:undefined") {
+      updateRecurringStartTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            createOrderData?.recurringData?.start_time?.split(":")[0],
+            createOrderData?.recurringData?.start_time?.split(":")[1]
+          )
+        ),
+      }));
+    }
+    if (createOrderData?.recurringData?.return_time !== "undefined:undefined") {
+      updateRecurringReturnTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            createOrderData?.recurringData?.return_time?.split(":")[0],
+            createOrderData?.recurringData?.return_time?.split(":")[1]
+          )
+        ),
+      }));
+    }
+    if (
+      createOrderData?.recurringData?.free_dates_start_time !==
+      "undefined:undefined"
+    ) {
+      updateRecurringFreeDateStartTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            createOrderData?.recurringData?.free_dates_start_time?.split(
+              ":"
+            )[0],
+            createOrderData?.recurringData?.free_dates_start_time?.split(":")[1]
+          )
+        ),
+      }));
+    }
+    if (
+      createOrderData?.recurringData?.free_dates_return_time !==
+      "undefined:undefined"
+    ) {
+      updateRecurringFreeDateEndTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            createOrderData?.recurringData?.free_dates_return_time.split(
+              ":"
+            )[0],
+            createOrderData?.recurringData?.free_dates_return_time?.split(
+              ":"
+            )[1]
+          )
+        ),
+      }));
+    }
+  }, [
+    createOrderData?.recurringData?.start_time,
+    createOrderData?.recurringData?.return_time,
+    createOrderData?.recurringData?.free_dates_start_time,
+    createOrderData?.recurringData?.free_dates_return_time,
+  ]);
 
   const handleClearAllForm = (e) => {
     e.preventDefault();

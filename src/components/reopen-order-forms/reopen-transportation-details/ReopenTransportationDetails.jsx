@@ -40,7 +40,13 @@ const ReopenTransportationDetails = ({
 }) => {
   const { transportationData, recurringData } = reopenOrderData;
   const [returnJourney, setReturnJourney] = useState(
-    recurringData?.free_dates_return_time ? true : false
+    (reopenOrderData?.recurringData?.return_time !== "undefined:undefined" &&
+      reopenOrderData?.destinationDetailsData?.return_time !== "") ||
+      (reopenOrderData?.recurringData?.free_dates_return_time !==
+        "undefined:undefined" &&
+        reopenOrderData?.destinationDetailsData?.free_dates_return_time !== "")
+      ? true
+      : false
   );
 
   const form_schema = z.object({
@@ -225,14 +231,14 @@ const ReopenTransportationDetails = ({
     if (recurringData?.recurring_type === "free") {
       const startTime = new Date(
         new Date().setHours(
-          recurringData?.free_dates_start_time.split(":")[0],
-          recurringData?.free_dates_start_time.split(":")[1]
+          recurringData?.free_dates_start_time?.split(":")[0],
+          recurringData?.free_dates_start_time?.split(":")[1]
         )
       );
       const returnTime = new Date(
         new Date().setHours(
-          recurringData?.free_dates_return_time.split(":")[0],
-          recurringData?.free_dates_return_time.split(":")[1]
+          recurringData?.free_dates_return_time?.split(":")[0],
+          recurringData?.free_dates_return_time?.split(":")[1]
         )
       );
       if (startTime >= returnTime) {
@@ -242,14 +248,14 @@ const ReopenTransportationDetails = ({
     } else if (recurringData?.recurring_type === "week") {
       const startTime = new Date(
         new Date().setHours(
-          recurringData?.start_time.split(":")[0],
-          recurringData?.start_time.split(":")[1]
+          recurringData?.start_time?.split(":")[0],
+          recurringData?.start_time?.split(":")[1]
         )
       );
       const returnTime = new Date(
         new Date().setHours(
-          recurringData?.return_time.split(":")[0],
-          recurringData?.return_time.split(":")[1]
+          recurringData?.return_time?.split(":")[0],
+          recurringData?.return_time?.split(":")[1]
         )
       );
       if (startTime >= returnTime) {
@@ -257,11 +263,61 @@ const ReopenTransportationDetails = ({
         return;
       }
     }
+    if (recurringData?.recurring_type === "free") {
+      if (recurringData?.free_dates_return_time === "undefined:undefined") {
+        setReopenOrderData((prev) => ({
+          ...prev,
+          recurringData: {
+            ...prev.recurringData,
+            start_date: null,
+            return_date: null,
+            start_time: "",
+            return_time: "",
+            multiple_week_days: [],
+            ends: "",
+            free_dates_return_time: "",
+          },
+        }));
+      }
+    } else if (recurringData?.recurring_type === "week") {
+      if (recurringData?.return_time === "undefined:undefined") {
+        setReopenOrderData((prev) => ({
+          ...prev,
+          recurringData: {
+            ...prev.recurringData,
+            free_dates: [new Date()],
+            free_dates_start_time: "",
+            free_dates_return_time: "",
+            return_time: "",
+          },
+        }));
+      } else {
+        setReopenOrderData((prev) => ({
+          ...prev,
+          recurringData: {
+            ...prev.recurringData,
+            free_dates: [new Date()],
+            free_dates_start_time: "",
+            free_dates_return_time: "",
+          },
+        }));
+      }
+    }
     handleFormChange("patientDetails");
   };
 
-  const { getInputProps: recurringStartTimeInput } = useTimescape({
-    date: new Date(reopenOrderData?.recurringData?.start_time),
+  const {
+    getInputProps: recurringStartTimeInput,
+    update: updateRecurringStartTime,
+  } = useTimescape({
+    date: reopenOrderData?.recurringData?.start_time
+      ? new Date(
+          new Date().setHours(
+            reopenOrderData?.recurringData?.start_time?.split(":")[0],
+            reopenOrderData?.recurringData?.start_time?.split(":")[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -271,8 +327,18 @@ const ReopenTransportationDetails = ({
       ),
   });
 
-  const { getInputProps: recurringReturnTimeInput } = useTimescape({
-    date: new Date(reopenOrderData?.recurringData?.return_time),
+  const {
+    getInputProps: recurringReturnTimeInput,
+    update: updateRecurringReturnTime,
+  } = useTimescape({
+    date: reopenOrderData?.recurringData?.return_time
+      ? new Date(
+          new Date().setHours(
+            reopenOrderData?.recurringData?.return_time?.split(":")[0],
+            reopenOrderData?.recurringData?.return_time?.split(":")[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -282,8 +348,20 @@ const ReopenTransportationDetails = ({
       ),
   });
 
-  const { getInputProps: recurringFreeDateStartTimeInput } = useTimescape({
-    date: new Date(reopenOrderData?.recurringData?.free_dates_start_time),
+  const {
+    getInputProps: recurringFreeDateStartTimeInput,
+    update: updateRecurringFreeDateStartTime,
+  } = useTimescape({
+    date: reopenOrderData?.recurringData?.free_dates_start_time
+      ? new Date(
+          new Date().setHours(
+            reopenOrderData?.recurringData?.free_dates_start_time?.split(
+              ":"
+            )[0],
+            reopenOrderData?.recurringData?.free_dates_start_time?.split(":")[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -293,8 +371,22 @@ const ReopenTransportationDetails = ({
       ),
   });
 
-  const { getInputProps: recurringFreeDateEndTimeInput } = useTimescape({
-    date: new Date(reopenOrderData?.recurringData?.free_dates_return_time),
+  const {
+    getInputProps: recurringFreeDateEndTimeInput,
+    update: updateRecurringFreeDateEndTime,
+  } = useTimescape({
+    date: reopenOrderData?.recurringData?.free_dates_return_time
+      ? new Date(
+          new Date().setHours(
+            reopenOrderData?.recurringData?.free_dates_return_time.split(
+              ":"
+            )[0],
+            reopenOrderData?.recurringData?.free_dates_return_time?.split(
+              ":"
+            )[1]
+          )
+        )
+      : null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -303,6 +395,70 @@ const ReopenTransportationDetails = ({
         "free_dates_return_time"
       ),
   });
+
+  useEffect(() => {
+    if (reopenOrderData?.recurringData?.start_time !== "undefined:undefined") {
+      updateRecurringStartTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            reopenOrderData?.recurringData?.start_time?.split(":")[0],
+            reopenOrderData?.recurringData?.start_time?.split(":")[1]
+          )
+        ),
+      }));
+    }
+    if (reopenOrderData?.recurringData?.return_time !== "undefined:undefined") {
+      updateRecurringReturnTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            reopenOrderData?.recurringData?.return_time?.split(":")[0],
+            reopenOrderData?.recurringData?.return_time?.split(":")[1]
+          )
+        ),
+      }));
+    }
+    if (
+      reopenOrderData?.recurringData?.free_dates_start_time !==
+      "undefined:undefined"
+    ) {
+      updateRecurringFreeDateStartTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            reopenOrderData?.recurringData?.free_dates_start_time?.split(
+              ":"
+            )[0],
+            reopenOrderData?.recurringData?.free_dates_start_time?.split(":")[1]
+          )
+        ),
+      }));
+    }
+    if (
+      reopenOrderData?.recurringData?.free_dates_return_time !==
+      "undefined:undefined"
+    ) {
+      updateRecurringFreeDateEndTime((prev) => ({
+        ...prev,
+        date: new Date(
+          new Date().setHours(
+            reopenOrderData?.recurringData?.free_dates_return_time.split(
+              ":"
+            )[0],
+            reopenOrderData?.recurringData?.free_dates_return_time?.split(
+              ":"
+            )[1]
+          )
+        ),
+      }));
+    }
+  }, [
+    reopenOrderData?.recurringData?.start_time,
+    reopenOrderData?.recurringData?.return_time,
+    reopenOrderData?.recurringData?.free_dates_start_time,
+    reopenOrderData?.recurringData?.free_dates_return_time,
+  ]);
 
   return (
     <Card className="lg:px-5 lg:py-5">
