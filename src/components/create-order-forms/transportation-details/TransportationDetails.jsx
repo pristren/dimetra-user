@@ -26,7 +26,7 @@ import {
   createOrderDefaultState,
 } from "@/components/create-order-forms/helpers";
 import { useEffect, useState } from "react";
-import { calculateFormProgress, formatTimeInput } from "@/utils";
+import { calculateFormProgress, formatDate, formatTimeInput } from "@/utils";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
@@ -571,9 +571,12 @@ const TransportationDetails = ({
                     </h3>
                     <div className="mb-5 flex w-max gap-4 items-center">
                       <DatePicker
-                        date={recurringData?.start_date}
+                        date={
+                          recurringData?.start_date &&
+                          new Date(recurringData?.start_date)
+                        }
                         setDate={(value) =>
-                          handleDateChange("start_date", value)
+                          handleDateChange("start_date", formatDate(value))
                         }
                         startMonth={new Date()}
                         disabled={{ before: new Date() }}

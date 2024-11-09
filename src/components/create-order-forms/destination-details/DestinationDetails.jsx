@@ -23,7 +23,7 @@ import moment from "moment";
 import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { formatTimeInput, parseTimeString } from "@/utils";
+import { formatDate, formatTimeInput, parseTimeString } from "@/utils";
 
 const DestinationDetails = ({
   handleFormChange,
@@ -225,7 +225,7 @@ const DestinationDetails = ({
                               ...prev,
                               destinationDetailsData: {
                                 ...prev.destinationDetailsData,
-                                drop_off_pick_up_date: value,
+                                drop_off_pick_up_date: formatDate(value),
                               },
                             }))
                           }
@@ -545,13 +545,13 @@ const DestinationDetails = ({
                               </FormLabel>
                               <FormControl>
                                 <DatePicker
-                                  date={return_date}
+                                  date={return_date && new Date(return_date)}
                                   setDate={(value) =>
                                     setCreateOrderData((prev) => ({
                                       ...prev,
                                       destinationDetailsData: {
                                         ...prev.destinationDetailsData,
-                                        return_date: value,
+                                        return_date: formatDate(value),
                                       },
                                     }))
                                   }

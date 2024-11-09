@@ -42,7 +42,6 @@ export default function AppHead({
   const handleSearchInputChange = useDebounce((value) => {
     setQueryData((prev) => ({ ...prev, search_keyword: value || undefined }));
   }, 500);
-  const [date, setDate] = useState();
 
   return (
     <div className="flex lg:items-start justify-between flex-col lg:flex-row gap-5 w-full mb-10">
@@ -69,9 +68,8 @@ export default function AppHead({
         {isDateVisible && (
           <DatePicker
             className="hidden lg:flex"
-            date={date}
+            date={queryData?.date && new Date(queryData?.date)}
             setDate={(value) => {
-              setDate(value);
               setQueryData((prev) => ({
                 ...prev,
                 date: value ? formatDate(value) : null,
