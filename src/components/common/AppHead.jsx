@@ -74,7 +74,7 @@ export default function AppHead({
               setDate(value);
               setQueryData((prev) => ({
                 ...prev,
-                date: formatDate(value),
+                date: value ? formatDate(value) : null,
               }));
             }}
           />
