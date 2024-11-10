@@ -23,11 +23,12 @@ import EditRecurringOrder from "@/pages/order/edit-recurring-orders/EditRecurrin
 import News from "@/pages/order/news/News";
 import ReopenOrder from "@/pages/order/reopen-order/ReopenOrder";
 import CopyOrder from "@/pages/order/copy-order/CopyOrder";
-import TermsConditionPage from "./pages/terms-condition/TermsConditionPage";
-import PrivacyPolicyPage from "./pages/privacy-policy/PrivacyPolicyPage";
-import ForgotPasswordSent from "./pages/authentication/forgot-password-sent/ForgotPasswordSent";
-import VerifyForgotPassword from "./pages/authentication/verify-forgot-password/VerifyForgotPassword";
+import TermsConditionPage from "@/pages/terms-condition/TermsConditionPage";
+import PrivacyPolicyPage from "@/pages/privacy-policy/PrivacyPolicyPage";
+import ForgotPasswordSent from "@/pages/authentication/forgot-password-sent/ForgotPasswordSent";
+import VerifyForgotPassword from "@/pages/authentication/verify-forgot-password/VerifyForgotPassword";
 import { useTranslation } from "react-i18next";
+import NewsDetails from "@/pages/order/news-details/NewsDetails";
 function App() {
   useTranslation();
   axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
@@ -87,6 +88,7 @@ function App() {
         <Route path="setting" element={<OrderSettings />} />
         <Route path="sent-requests" element={<SentRequests />} />
         <Route path="news" element={<News />} />
+        <Route path="news/:id" element={<NewsDetails />} />
         <Route
           path="order-details/:id"
           element={<OrderDetails singleRecurring={false} />}

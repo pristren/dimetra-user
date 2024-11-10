@@ -1,9 +1,15 @@
 /* eslint-disable react/prop-types */
 import { Bin, Calender, Eye, Pencil } from "@/assets/icons";
+import { Link, useNavigate } from "react-router-dom";
 
 const NewsCard = ({ news }) => {
+  const navigate = useNavigate();
   return (
-    <div className="border p-4 rounded-lg" key={news?.name}>
+    <Link
+      to={`/orders/news/${news?.id}`}
+      className="border p-4 rounded-lg"
+      key={news?.name}
+    >
       <h3 className="text-xl font-medium mb-3">{news?.name}</h3>
       <img
         src={news?.image}
@@ -21,7 +27,7 @@ const NewsCard = ({ news }) => {
           ? news?.description.slice(0, 150) + "..."
           : news?.description}
       </p>
-    </div>
+    </Link>
   );
 };
 
