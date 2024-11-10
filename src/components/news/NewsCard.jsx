@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
-import { Bin, Calender, Eye, Pencil } from "@/assets/icons";
-import { Link, useNavigate } from "react-router-dom";
+import { Calender } from "@/assets/icons";
+import { Link } from "react-router-dom";
 
 const NewsCard = ({ news }) => {
-  const navigate = useNavigate();
   return (
     <Link
       to={`/orders/news/${news?.id}`}
