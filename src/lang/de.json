@@ -359,5 +359,8 @@
   "please_select_a_date_from_which_you_want_to_pause_this_order_selecting_the_date_is_optional_if_you_leave_it_empty_then_all_the_pending_order_will_be_paused": "Bitte wählen Sie ein Datum aus, von dem Sie diese Bestellung pausieren möchten. Die Auswahl des Datums ist optional, wenn Sie es leer lassen, werden alle ausstehenden Bestellungen pausiert.",
   "update_the_order": "Bestellung aktualisieren",
   "clear_all": "Alles löschen",
-  "previous": "Zurück"
+  "previous": "Zurück",
+  "single_selection": "Einzelauswahl",
+  "oxygen": "Sauerstoff",
+  "kg": "kg"
 }

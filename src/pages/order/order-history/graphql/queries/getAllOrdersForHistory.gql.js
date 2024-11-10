@@ -12,9 +12,20 @@ export const GET_ALL_ORDERS_FOR_HISTORY = gql`
         status
         transportationData {
           type_of_transport
+          mode_of_transportation
+          transport_with
+          oxygen_quantity
         }
         patientData {
           name
+          patient_above_90kg
+          date_of_birth
+          surname
+          area_room
+          cost_center
+          how_much
+          which
+          isolation
         }
         destinationDetailsData {
           pick_up_name

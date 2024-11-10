@@ -1,52 +1,10 @@
-import {
-  ArrowLeft,
-  Calendar,
-  Share2,
-  User,
-  UserCheck,
-  UserRound,
-} from "lucide-react";
+import { Calendar, UserRound } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Link } from "react-router-dom";
 import moment from "moment";
 
 export default function NewsDetails() {
   return (
     <div className="min-h-screen ">
-      {/* <header className="sticky top-0 z-10 border-b bg-background">
-        <div className="container flex h-16 items-center justify-between px-4">
-          <Link href="/news">
-            <Button variant="ghost" size="sm" className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to News
-            </Button>
-          </Link>
-          <div className="flex items-center gap-4">
-            <Button variant="outline" size="sm" className="gap-2">
-              <img
-                src="/placeholder.svg?height=24&width=24"
-                alt="English"
-                width={24}
-                height={24}
-                className="rounded"
-              />
-              English
-            </Button>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <img
-                src="/placeholder.svg?height=32&width=32"
-                alt="Avatar"
-                width={32}
-                height={32}
-                className="rounded-full"
-              />
-              <span className="sr-only">User menu</span>
-            </Button>
-          </div>
-        </div>
-      </header> */}
       <main className="container mx-auto px-4 py-8">
         <article className="mx-auto max-w-5xl">
           <h1 className="mb-4 text-3xl font-bold lg:text-4xl">
@@ -63,16 +21,10 @@ export default function NewsDetails() {
               <Calendar className="h-4 w-4" />
               <span>{moment().format("DD MMM YYYY")}</span>
             </div>
-            {/* <Button variant="outline" size="sm" className="gap-2">
-              <Share2 className="h-4 w-4" />
-              Share
-            </Button> */}
           </div>
           <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzs4DX9SbMr4h0ASCtO1fHXODlCqjLqwzM0w&s"
+            src="https://plus.unsplash.com/premium_photo-1707080369554-359143c6aa0b?q=80&w=2832&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             alt="Service Name 1"
-            // width={1200}
-            // height={600}
             className="mb-8 rounded-lg object-cover w-full h-96"
           />
           <div className=" max-w-none">

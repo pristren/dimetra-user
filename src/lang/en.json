@@ -369,5 +369,8 @@
   "please_select_a_date_from_which_you_want_to_pause_this_order_selecting_the_date_is_optional_if_you_leave_it_empty_then_all_the_pending_order_will_be_paused": "Please select a date from which you want to pause this order. Selecting the date is optional, if you leave it empty then all the pending order will be paused.",
   "update_the_order": "Update The Order",
   "clear_all": "Clear All",
-  "previous": "Previous"
+  "previous": "Previous",
+  "single_selection": "Single Selection",
+  "oxygen": "Oxygen",
+  "kg": "kg"
 }
