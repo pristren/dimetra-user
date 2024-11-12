@@ -237,7 +237,7 @@ function OrderDetails({ singleRecurring = false }) {
                 </div>
                 <div className="flex items-center gap-3 mb-8">
                   <p>{t("name_institution")} :</p>
-                  <p>{data?.destinationDetailsData?.pick_up_name}</p>
+                  <p>{data?.destinationDetailsData?.drop_off_name}</p>
                 </div>
                 <div className="flex items-center gap-3 mb-8">
                   <p>{t("street")} :</p>
