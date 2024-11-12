@@ -29,9 +29,22 @@ export const GET_ALL_ORDERS_FOR_HISTORY = gql`
         }
         destinationDetailsData {
           pick_up_name
-          drop_off_name
+          pick_up_address
+          pick_up_postal_code
+          pick_up_city
+          pick_up_country
+          pickup_phone
           drop_off_pick_up_date
           drop_off_pick_up_time
+          pickup_appointment_time
+          drop_off_name
+          drop_off_address
+          drop_off_postal_code
+          drop_off_city
+          drop_off_country
+          drop_off_phone
+          return_date
+          return_approx_time
         }
         createdAt
         isReviewGiven

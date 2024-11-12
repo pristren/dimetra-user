@@ -15,6 +15,7 @@ export const GET_ALL_RECURRING_ORDERS = gql`
         }
         patientData {
           name
+          surname
         }
         destinationDetailsData {
           pick_up_name
