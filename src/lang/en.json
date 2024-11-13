@@ -376,5 +376,6 @@
   "recurring_type": "Recurring Type",
   "start_date_and_time": "Start Date and Time",
   "ends_in": "Ends in",
-  "weekdays": "Weekdays"
+  "weekdays": "Weekdays",
+  "returns_time": "Return Time"
 }

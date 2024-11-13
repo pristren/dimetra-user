@@ -58,6 +58,7 @@ export const GET_ALL_ORDERS_FOR_HISTORY = gql`
           return_date
           return_approx_time
           pick_up_employee_name
+          pickup_appointment_time
         }
         billingDetailsData {
           pre_name

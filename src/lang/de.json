@@ -366,5 +366,6 @@
   "recurring_type": "Wiederkehrende Typ",
   "start_date_and_time": "Startdatum und -uhrzeit",
   "ends_in": "Endet in",
-  "weekdays": "Wochentage"
+  "weekdays": "Wochentage",
+  "returns_time": "Rückfahrzeit"
 }
