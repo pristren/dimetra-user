@@ -21,7 +21,6 @@ import toast from "react-hot-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { format } from "date-fns";
 
@@ -681,7 +680,6 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
             <p className="border-b pb-2">PICK-UP</p>
             <div className="space-y-2">
               <div className="flex items-end justify-center gap-2">
-                {console.log(order)}
                 <Label className="text-nowrap" htmlFor="pickup-name">
                   Name / Institution
                 </Label>
@@ -909,148 +907,6 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
             </div>
           </div>
         </div>
-
-        {/* <div className="w-full max-w-4xl border border-black p-4">
-          <div className="flex items-center gap-4 mb-6">
-            <Label className="text-sm font-normal text-nowrap">WEEKDAY:</Label>
-            <div className="flex gap-4">
-              {["MO", "TU", "WE", "TH", "FR", "SA", "SU"].map((day) => (
-                <div key={day} className="flex items-center gap-1">
-                  <Checkbox
-                    id={day}
-                    className="rounded-none border-black h-4 w-4 data-[state=checked]:bg-black data-[state=checked]:text-white"
-                  />
-                  <Label
-                    htmlFor={day}
-                    className="text-sm font-normal text-nowrap"
-                  >
-                    {day}
-                  </Label>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-x-8 gap-y-4 mt-5">
-            <div className="flex items-center justify-center gap-2">
-              <div className="flex items-end justify-center gap-2">
-                <Label
-                  htmlFor="departure-date"
-                  className="text-sm font-normal text-nowrap"
-                >
-                  Departure Date
-                </Label>
-                <Input
-                  id="departure-date"
-                  className="border-0 border-b border-black rounded-none w-full"
-                />
-              </div>
-              <div className="flex items-end justify-center gap-2">
-                <Label
-                  htmlFor="appointment-time"
-                  className="text-sm font-normal text-nowrap"
-                >
-                  Appointment Time
-                </Label>
-                <Input
-                  id="appointment-time"
-                  className="border-0 border-b border-black rounded-none w-full"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-end justify-center gap-2">
-              <Label
-                htmlFor="pickup-time"
-                className="text-sm font-normal text-nowrap"
-              >
-                Pickup Time
-              </Label>
-              <Input
-                id="pickup-time"
-                className="border-0 border-b border-black rounded-none w-full"
-              />
-            </div>
-
-            <div className="flex items-end justify-center gap-2">
-              <Label
-                htmlFor="department"
-                className="text-sm font-normal text-nowrap"
-              >
-                Department
-              </Label>
-              <Input
-                id="department"
-                className="border-0 border-b border-black rounded-none w-full"
-              />
-            </div>
-
-            <div className="flex items-end justify-center gap-2">
-              <Label
-                htmlFor="destination"
-                className="text-sm font-normal text-nowrap"
-              >
-                Destination
-              </Label>
-              <Input
-                id="destination"
-                className="border-0 border-b border-black rounded-none w-full"
-              />
-            </div>
-
-            <div className="flex items-end justify-center gap-2">
-              <Label
-                htmlFor="phone"
-                className="text-sm font-normal text-nowrap"
-              >
-                Phone
-              </Label>
-              <Input
-                id="phone"
-                className="border-0 border-b border-black rounded-none w-full"
-              />
-            </div>
-
-            <div className="flex items-end justify-center gap-2">
-              <Label
-                htmlFor="street"
-                className="text-sm font-normal text-nowrap"
-              >
-                Street
-              </Label>
-              <Input
-                id="street"
-                className="border-0 border-b border-black rounded-none w-full"
-              />
-            </div>
-
-            <div className="flex items-end justify-center gap-2">
-              <Label
-                htmlFor="return-date"
-                className="text-sm font-normal text-nowrap"
-              >
-                Return Date
-              </Label>
-              <Input
-                id="return-date"
-                className="border-0 border-b border-black rounded-none w-full"
-              />
-            </div>
-
-            <div className="flex items-end justify-center gap-2">
-              <Label
-                htmlFor="zip-city"
-                className="text-sm font-normal text-nowrap"
-              >
-                ZIP / City
-              </Label>
-              <Input
-                id="zip-city"
-                className="border-0 border-b border-black rounded-none w-full"
-              />
-            </div>
-          </div>
-        </div> */}
 
         {/* <div className="flex justify-end gap-2 mt-8">
           <Button>Print</Button>
