@@ -224,28 +224,16 @@ const OrderHistory = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="-translate-x-5 py-3 px-2 w-48">
                 {isRecurring ? (
-                  <>
-                    <DropdownMenuItem className="py-2 px-3 cursor-pointer">
-                      <Link
-                        to={`/orders/recurring-orders/${orderId}`}
-                        className="flex items-center gap-3 text-[16px] w-full"
-                      >
-                        <span className="text-gray-700 text-sm">
-                          {t("view_order_lists")}
-                        </span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className="py-2 cursor-pointer px-3"
-                      onClick={() => {
-                        handlePrintOrder(row.original);
-                      }}
+                  <DropdownMenuItem className="py-2 px-3 cursor-pointer">
+                    <Link
+                      to={`/orders/recurring-orders/${orderId}`}
+                      className="flex items-center gap-3 text-[16px] w-full"
                     >
                       <span className="text-gray-700 text-sm">
-                        {t("print")}
+                        {t("view_order_lists")}
                       </span>
-                    </DropdownMenuItem>
-                  </>
+                    </Link>
+                  </DropdownMenuItem>
                 ) : (
                   <>
                     <DropdownMenuItem
