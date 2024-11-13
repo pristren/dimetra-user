@@ -362,5 +362,9 @@
   "previous": "Zurück",
   "single_selection": "Einzelauswahl",
   "oxygen": "Sauerstoff",
-  "kg": "kg"
+  "kg": "kg",
+  "recurring_type": "Wiederkehrende Typ",
+  "start_date_and_time": "Startdatum und -uhrzeit",
+  "ends_in": "Endet in",
+  "weekdays": "Wochentage"
 }
