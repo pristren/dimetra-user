@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, useRef, useEffect } from "react";
 import { AppTable } from "@/components/common/AppTable";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,9 @@ import toast from "react-hot-toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { DatePicker } from "@/components/ui/DatePicker";
+import { format } from "date-fns";
 
 const OrderHistory = () => {
   const [queryData, setQueryData] = useState({
@@ -74,7 +78,7 @@ const OrderHistory = () => {
   const handlePrintOrder = (order) => {
     setSelectedOrder(order);
     setTimeout(() => {
-      reactToPrintTriggerRef.current.click();
+      reactToPrintTriggerRef?.current.click();
     }, 100);
   };
 
@@ -220,16 +224,28 @@ const OrderHistory = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="-translate-x-5 py-3 px-2 w-48">
                 {isRecurring ? (
-                  <DropdownMenuItem className="py-2 px-3 cursor-pointer">
-                    <Link
-                      to={`/orders/recurring-orders/${orderId}`}
-                      className="flex items-center gap-3 text-[16px] w-full"
+                  <>
+                    <DropdownMenuItem className="py-2 px-3 cursor-pointer">
+                      <Link
+                        to={`/orders/recurring-orders/${orderId}`}
+                        className="flex items-center gap-3 text-[16px] w-full"
+                      >
+                        <span className="text-gray-700 text-sm">
+                          {t("view_order_lists")}
+                        </span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="py-2 cursor-pointer px-3"
+                      onClick={() => {
+                        handlePrintOrder(row.original);
+                      }}
                     >
                       <span className="text-gray-700 text-sm">
-                        {t("view_order_lists")}
+                        {t("print")}
                       </span>
-                    </Link>
-                  </DropdownMenuItem>
+                    </DropdownMenuItem>
+                  </>
                 ) : (
                   <>
                     <DropdownMenuItem
@@ -326,9 +342,9 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
   return (
     <div className="">
       {/* {content} */}
-      <form className="max-w-4xl mx-auto p-6 space-y-8" ref={ref}>
+      <form className="max-w-4xl mx-auto p-6 space-y-2" ref={ref}>
         <div className="space-y-2">
-          <div className="flex items-center gap-4 mb-10">
+          <div className="flex items-center gap-4 mb-4">
             <img
               src="https://i.ibb.co.com/w7my6KG/Screenshot-18.png"
               alt="MTS Logo"
@@ -348,14 +364,14 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
             </div>
           </div>
           <p className="text-blue-600">YOUR HEALTH IS OUR PRIORITY!</p>
-          <p className="text-3xl text-red-600">
+          <p className="text-2xl text-red-600">
             Order Form for Patient Transport
           </p>
           <div className="border border-red-500 w-full" />
         </div>
 
         <div className="grid gap-6 grid-cols-3">
-          <div className="space-y-4">
+          <div className="space-y-2">
             <p className=" border-b pb-2">{t("type_of_transport")} </p>
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
@@ -370,7 +386,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             <p className=" border-b pb-2"> {t("mode_of_transportation")} </p>
             <div className="space-y-2">
               <div className="flex items-center space-x-2">
@@ -387,7 +403,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
             </div>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-2">
             <p className=" border-b pb-2">{t("transport_with")} </p>
             <div className="space-y-2">
               {order?.transportationData?.transport_with?.map((option, i) => (
@@ -408,10 +424,116 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
           </div>
         </div>
 
-        <div className="w-full">
-          <p className="border-b pb-3 mb-5">{t("patient_details")}</p>
+        {order?.transportationData?.type_of_transport === "recurring" && (
+          <div>
+            <h3 className="text-lg font-medium mb-1 mt-1">
+              {t("select_recurring_type")}
+            </h3>
+            <div className="flex justify-start gap-2">
+              <p>Recurring Type:</p>
+              <p>{order?.recurringData?.recurring_type}</p>
+            </div>
 
-          <div className="space-y-4">
+            {order?.recurringData?.recurring_type === "week" ? (
+              <div>
+                <h3 className="text-lg font-medium mt-2 mb-2">
+                  {t("select_start_date_and_time")}
+                </h3>
+                <div className="mb-2 flex w-max gap-4 items-center">
+                  {order?.recurringData?.start_date && (
+                    <p>
+                      {order?.recurringData?.start_date
+                        ? moment(order?.recurringData?.start_date).format(
+                            "DD/MM/YYYY"
+                          )
+                        : ""}
+                    </p>
+                  )}
+                  {order?.recurringData?.start_time && (
+                    <p>{order?.recurringData?.start_time}</p>
+                  )}
+                </div>
+                {order?.recurringData?.return_time && (
+                  <div className="flex items-center gap-2">
+                    <p className="font-medium">{t("select_return_time")}* :</p>
+                    <p>{order?.recurringData?.return_time}</p>
+                  </div>
+                )}
+
+                {order?.recurringData?.multiple_week_days?.length > 0 && (
+                  <>
+                    <h3 className="text-lg font-medium mb-2 mt-2">
+                      {t("select_weekdays")}
+                      <span className="highlight">
+                        ({t("multiple_selection")})
+                      </span>
+                      :
+                    </h3>
+                    <div className="flex items-center gap-3 mt-2">
+                      {order?.recurringData?.multiple_week_days?.map(
+                        (option) => (
+                          <div key={option} className="flex items-center mb-2">
+                            <Checkbox
+                              disabled
+                              id={option}
+                              checked={order?.recurringData?.multiple_week_days?.includes(
+                                option
+                              )}
+                            />
+                            <Label className="ml-2 capitalize" htmlFor={option}>
+                              {option}
+                            </Label>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </>
+                )}
+
+                {order?.recurringData?.ends && (
+                  <div className="flex items-center gap-2 mt-2">
+                    <h3 className="text-lg font-medium">{t("ends")}:</h3>
+                    <p>{order?.recurringData?.ends}</p>
+                  </div>
+                )}
+              </div>
+            ) : order?.recurringData?.recurring_type === "free" ? (
+              <div className="">
+                <div className="mt-2 mb-2 ">
+                  <h3 className="text-lg font-medium mt-2 mb-2">
+                    {t("select_start_date_and_time_free")}
+                  </h3>
+                  <div className="flex w-max gap-4 items-center">
+                    {order?.recurringData?.free_dates && (
+                      <DatePicker
+                        mode="multiple"
+                        date={order?.recurringData?.free_dates}
+                        disabled
+                      />
+                    )}
+                    {order?.recurringData?.free_dates_start_time && (
+                      <Input
+                        disabled
+                        value={order?.recurringData?.free_dates_start_time}
+                      />
+                    )}
+                  </div>
+                </div>
+                {order?.recurringData?.free_dates_return_time && (
+                  <div className="mt-2 mb-2 flex items-center gap-2">
+                    <p className="font-medium">{t("select_return_time")}</p>
+                    <p>{order?.recurringData?.free_dates_return_time}</p>
+                  </div>
+                )}
+              </div>
+            ) : null}
+          </div>
+        )}
+
+        <div className="w-full">
+          <p className="border-b">{t("patient_details")}</p>
+
+          <div className="space-y-2">
             <div className="grid grid-cols-2 gap-8">
               <div className="flex items-end justify-start gap-3">
                 <Label htmlFor="name" className="text-sm text-nowrap">
@@ -505,7 +627,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                         id="over90"
                         value={order?.patientData?.how_much}
                         disabled
-                        className="border-0 border-b border-black rounded-none w-10 h-8 px-0 pb-0 text-center"
+                        className="border-0 border-b border-black rounded-none w-10 h-6 px-0 pb-0 text-center"
                       />
                       <p>{t("kg")}</p>
                     </div>
@@ -544,7 +666,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                         id="isolation"
                         value={order?.patientData?.which}
                         disabled
-                        className="border-0 border-b border-black rounded-none w-full h-8 pr-0 pl-1 pb-0"
+                        className="border-0 border-b border-black rounded-none w-full h-6 pr-0 pl-1 pb-0"
                       />
                     </div>
                   ) : (
@@ -567,110 +689,240 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
         </div>
 
         <div className="flex flex-row gap-4">
-          <div className="space-y-4 w-1/2">
-            <p className="border-b pb-2">PICK-UP ADDRESS</p>
+          <div className="space-y-2 w-1/2">
+            <p className="border-b pb-2">PICK-UP</p>
             <div className="space-y-2">
               <div className="flex items-end justify-center gap-2">
+                {console.log(order)}
                 <Label className="text-nowrap" htmlFor="pickup-name">
                   Name / Institution
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none w-full"
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
                   id="pickup-name"
-                />
-              </div>
-              <div className="flex items-end justify-center gap-2">
-                <Label className="text-nowrap" htmlFor="pickup-department">
-                  Department / Room
-                </Label>
-                <Input
-                  className="border-0 border-b border-black rounded-none w-full"
-                  id="pickup-department"
+                  value={order?.destinationDetailsData?.pick_up_name}
                 />
               </div>
               <div className="flex items-end justify-center gap-2">
                 <Label className="text-nowrap" htmlFor="pickup-street">
-                  Street / No.
+                  Street
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none w-full"
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
                   id="pickup-street"
+                  value={order?.destinationDetailsData?.pick_up_address}
                 />
               </div>
               <div className="flex items-end justify-center gap-2">
-                <Label className="text-nowrap" htmlFor="pickup-zip">
-                  ZIP / City
+                <Label className="text-nowrap" htmlFor="pickup-city">
+                  City
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none w-full"
-                  id="pickup-zip"
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="pickup-city"
+                  value={order?.destinationDetailsData?.pick_up_city}
                 />
               </div>
               <div className="flex items-end justify-center gap-2">
-                <Label className="text-nowrap" htmlFor="pickup-contact">
-                  Contact Person / Phone
+                <Label className="text-nowrap" htmlFor="pickup-country">
+                  Country
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none w-full"
-                  id="pickup-contact"
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="pickup-country"
+                  value={order?.destinationDetailsData?.pick_up_country}
+                />
+              </div>
+              <div className="flex items-end justify-center gap-2">
+                <Label className="text-nowrap" htmlFor="pickup-employee">
+                  Working employee name
+                </Label>
+                <Input
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="pickup-employee"
+                  value={order?.destinationDetailsData?.pick_up_employee_name}
+                />
+              </div>
+              <div className="flex items-end justify-center gap-2">
+                <Label className="text-nowrap" htmlFor="pickup-phone">
+                  Phone
+                </Label>
+                <Input
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="pickup-phone"
+                  value={order?.destinationDetailsData?.pickup_phone}
                 />
               </div>
             </div>
           </div>
 
-          <div className="space-y-4 w-1/2">
-            <p className=" border-b pb-2">BILLING ADDRESS</p>
+          <div className="space-y-2 w-1/2">
+            <p className="border-b pb-2">DROP OFF</p>
             <div className="space-y-2">
               <div className="flex items-end justify-center gap-2">
-                <Label className="text-nowrap" htmlFor="billing-name">
-                  (First) Name / Institution
+                <Label className="text-nowrap" htmlFor="dropoff-date">
+                  Drop-Off Date
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none w-full"
-                  id="billing-name"
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="dropoff-date"
+                  value={order?.destinationDetailsData?.drop_off_pick_up_date}
                 />
               </div>
               <div className="flex items-end justify-center gap-2">
-                <Label className="text-nowrap" htmlFor="billing-attention">
-                  Attention
+                <Label className="text-nowrap" htmlFor="pickup-time">
+                  Pickup Time
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none w-full"
-                  id="billing-attention"
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="pickup-time"
+                  value={order?.destinationDetailsData?.drop_off_pick_up_time}
                 />
               </div>
               <div className="flex items-end justify-center gap-2">
-                <Label className="text-nowrap" htmlFor="billing-street">
+                <Label className="text-nowrap" htmlFor="dropoff-street">
                   Street / No.
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none w-full"
-                  id="billing-street"
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="dropoff-street"
+                  value={order?.destinationDetailsData?.drop_off_address}
                 />
               </div>
               <div className="flex items-end justify-center gap-2">
-                <Label className="text-nowrap" htmlFor="billing-zip">
+                <Label className="text-nowrap" htmlFor="dropoff-zip-city">
                   ZIP / City
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none w-full"
-                  id="billing-zip"
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="dropoff-zip-city"
+                  value={order?.destinationDetailsData?.drop_off_city}
                 />
               </div>
               <div className="flex items-end justify-center gap-2">
-                <Label className="text-nowrap" htmlFor="billing-phone">
+                <Label className="text-nowrap" htmlFor="dropoff-phone">
                   Phone
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none w-full"
-                  id="billing-phone"
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="dropoff-phone"
+                  value={order?.destinationDetailsData?.drop_off_phone}
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="w-full max-w-4xl border border-black p-4">
+        <div className="flex flex-row gap-4">
+          {order?.destinationDetailsData?.return_date && (
+            <div className="space-y-2 w-1/2">
+              <p className="border-b pb-2">Return Journey</p>
+              <div className="space-y-2">
+                <div className="flex items-end justify-center gap-2">
+                  <Label className="text-nowrap" htmlFor="return-date">
+                    Date
+                  </Label>
+                  <Input
+                    className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                    id="return-date"
+                    value={
+                      order?.destinationDetailsData?.return_date
+                        ? format(
+                            new Date(order.destinationDetailsData.return_date),
+                            "MMMM d, yyyy"
+                          )
+                        : ""
+                    }
+                  />
+                </div>
+                <div className="flex items-end justify-center gap-2">
+                  <Label className="text-nowrap" htmlFor="return-time">
+                    Time
+                  </Label>
+                  <Input
+                    className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                    id="return-time"
+                    value={order?.destinationDetailsData?.return_approx_time}
+                  />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-2 w-1/2">
+            <p className="border-b pb-2">Billing Details</p>
+            <div className="space-y-2">
+              <div className="flex items-end justify-center gap-2">
+                <Label
+                  className="text-nowrap"
+                  htmlFor="billing-institution-firstname"
+                >
+                  Institution / Firstname
+                </Label>
+                <Input
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="billing-institution-firstname"
+                  value={order?.billingDetailsData?.pre_name}
+                />
+              </div>
+              <div className="flex items-end justify-center gap-2">
+                <Label
+                  className="text-nowrap"
+                  htmlFor="billing-institution-name"
+                >
+                  Institution / Name
+                </Label>
+                <Input
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="billing-institution-name"
+                  value={order?.billingDetailsData?.name}
+                />
+              </div>
+              <div className="flex items-end justify-center gap-2">
+                <Label className="text-nowrap" htmlFor="billing-place">
+                  Place
+                </Label>
+                <Input
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="billing-place"
+                  value={order?.billingDetailsData?.place}
+                />
+              </div>
+              <div className="flex items-end justify-center gap-2">
+                <Label className="text-nowrap" htmlFor="billing-contact-phone">
+                  Contact Phone
+                </Label>
+                <Input
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="billing-contact-phone"
+                  value={order?.billingDetailsData?.contact_phone}
+                />
+              </div>
+              <div className="flex items-end justify-center gap-2">
+                <Label className="text-nowrap" htmlFor="billing-street">
+                  Street
+                </Label>
+                <Input
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="billing-street"
+                  value={order?.billingDetailsData?.street}
+                />
+              </div>
+              <div className="flex items-end justify-center gap-2">
+                <Label className="text-nowrap" htmlFor="billing-contact">
+                  Contact
+                </Label>
+                <Input
+                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  id="billing-contact"
+                  value={order?.billingDetailsData?.contact}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* <div className="w-full max-w-4xl border border-black p-4">
           <div className="flex items-center gap-4 mb-6">
             <Label className="text-sm font-normal text-nowrap">WEEKDAY:</Label>
             <div className="flex gap-4">
@@ -810,7 +1062,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
               />
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* <div className="flex justify-end gap-2 mt-8">
           <Button>Print</Button>

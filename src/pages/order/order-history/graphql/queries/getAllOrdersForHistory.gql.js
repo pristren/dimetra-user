@@ -16,6 +16,18 @@ export const GET_ALL_ORDERS_FOR_HISTORY = gql`
           transport_with
           oxygen_quantity
         }
+        recurringData {
+          recurring_type
+          start_date
+          return_date
+          start_time
+          return_time
+          multiple_week_days
+          ends
+          free_dates
+          free_dates_start_time
+          free_dates_return_time
+        }
         patientData {
           name
           patient_above_90kg
@@ -45,6 +57,15 @@ export const GET_ALL_ORDERS_FOR_HISTORY = gql`
           drop_off_phone
           return_date
           return_approx_time
+          pick_up_employee_name
+        }
+        billingDetailsData {
+          pre_name
+          name
+          street
+          place
+          contact
+          contact_phone
         }
         createdAt
         isReviewGiven
