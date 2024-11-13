@@ -372,5 +372,9 @@
   "previous": "Previous",
   "single_selection": "Single Selection",
   "oxygen": "Oxygen",
-  "kg": "kg"
+  "kg": "kg",
+  "recurring_type": "Recurring Type",
+  "start_date_and_time": "Start Date and Time",
+  "ends_in": "Ends in",
+  "weekdays": "Weekdays"
 }

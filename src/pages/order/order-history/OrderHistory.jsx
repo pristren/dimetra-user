@@ -224,16 +224,6 @@ const OrderHistory = () => {
               <DropdownMenuContent className="-translate-x-5 py-3 px-2 w-48">
                 {isRecurring ? (
                   <>
-                    <DropdownMenuItem className="py-2 px-3 cursor-pointer">
-                      <Link
-                        to={`/orders/recurring-orders/${orderId}`}
-                        className="flex items-center gap-3 text-[16px] w-full"
-                      >
-                        <span className="text-gray-700 text-sm">
-                          {t("view_order_lists")}
-                        </span>
-                      </Link>
-                    </DropdownMenuItem>
                     <DropdownMenuItem
                       className="py-2 cursor-pointer px-3"
                       onClick={() => {
@@ -243,6 +233,16 @@ const OrderHistory = () => {
                       <span className="text-gray-700 text-sm">
                         {t("print")}
                       </span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="py-2 px-3 cursor-pointer">
+                      <Link
+                        to={`/orders/recurring-orders/${orderId}`}
+                        className="flex items-center gap-3 text-[16px] w-full"
+                      >
+                        <span className="text-gray-700 text-sm">
+                          {t("view_order_lists")}
+                        </span>
+                      </Link>
                     </DropdownMenuItem>
                   </>
                 ) : (
@@ -354,7 +354,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                 <p className="text-2xl  text-blue-500">MTS</p>
                 <p className="text-red-600">Patient Transport</p>
               </div>
-              <div className="text-sm">
+              <div className="text-base">
                 <p>Tel.: 061 691 06 06</p>
                 <p>Fax: 061 691 05 05</p>
                 <p>Email: info@mts-patiententransport.ch</p>
@@ -411,7 +411,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   <Label htmlFor={option} className="flex items-center gap-2">
                     {option === "oxygen_quantity" ? t("oxygen") : t(option)}
                     {option === "oxygen_quantity" && (
-                      <p className="text-sm ">
+                      <p className="text-base ">
                         : {t(order?.transportationData?.oxygen_quantity)}{" "}
                         (Liter/Min)
                       </p>
@@ -424,33 +424,37 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
         </div>
 
         {order?.transportationData?.type_of_transport === "recurring" && (
-          <div>
-            <h3 className="text-lg font-medium mb-1 mt-1">
-              {t("select_recurring_type")}
-            </h3>
-            <div className="flex justify-start gap-2">
-              <p>Recurring Type:</p>
-              <p>{order?.recurringData?.recurring_type}</p>
-            </div>
-
+          <div className="">
             {order?.recurringData?.recurring_type === "week" ? (
-              <div>
-                <h3 className="text-lg font-medium mt-2 mb-2">
-                  {t("select_start_date_and_time")}
-                </h3>
-                <div className="mb-2 flex w-max gap-4 items-center">
-                  {order?.recurringData?.start_date && (
-                    <p>
-                      {order?.recurringData?.start_date
-                        ? moment(order?.recurringData?.start_date).format(
-                            "DD/MM/YYYY"
-                          )
-                        : ""}
-                    </p>
-                  )}
-                  {order?.recurringData?.start_time && (
-                    <p>{order?.recurringData?.start_time}</p>
-                  )}
+              <div
+                className={`grid grid-cols-${
+                  order?.recurringData?.return_time ? "3" : "2"
+                } gap-6 mt-6`}
+              >
+                <div className="">
+                  <h3 className="text-lg font-medium mb-1 mt-1">
+                    {t("recurring_type")}:
+                  </h3>
+                  <p>{order?.recurringData?.recurring_type}</p>
+                </div>
+                <div className="">
+                  <h3 className="text-lg font-medium mt-1 mb-1">
+                    {t("start_date_and_time")}
+                  </h3>
+                  <div className="mb-1 flex w-max gap-4 items-center">
+                    {order?.recurringData?.start_date && (
+                      <p>
+                        {order?.recurringData?.start_date
+                          ? moment(order?.recurringData?.start_date).format(
+                              "DD/MM/YYYY"
+                            )
+                          : ""}
+                      </p>
+                    )}
+                    {order?.recurringData?.start_time && (
+                      <p>{order?.recurringData?.start_time}</p>
+                    )}
+                  </div>
                 </div>
                 {order?.recurringData?.return_time && (
                   <div className="flex items-center gap-2">
@@ -460,15 +464,15 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                 )}
 
                 {order?.recurringData?.multiple_week_days?.length > 0 && (
-                  <>
-                    <h3 className="text-lg font-medium mb-2 mt-2">
-                      {t("select_weekdays")}
+                  <div className=" mb-2">
+                    <h3 className="text-lg font-medium mb-2 ">
+                      {t("weekdays")}
                       <span className="highlight">
                         ({t("multiple_selection")})
                       </span>
                       :
                     </h3>
-                    <div className="flex items-center gap-3 mt-2">
+                    <div className="flex items-center gap-3 ">
                       {order?.recurringData?.multiple_week_days?.map(
                         (option) => (
                           <div key={option} className="flex items-center mb-2">
@@ -486,12 +490,11 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                         )
                       )}
                     </div>
-                  </>
+                  </div>
                 )}
-
                 {order?.recurringData?.ends && (
-                  <div className="flex items-center gap-2 mt-2">
-                    <h3 className="text-lg font-medium">{t("ends")}:</h3>
+                  <div className=" ">
+                    <h3 className="text-lg font-medium">{t("ends_in")}:</h3>
                     <p>{order?.recurringData?.ends}</p>
                   </div>
                 )}
@@ -530,12 +533,14 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
         )}
 
         <div className="w-full">
-          <p className="border-b">{t("patient_details")}</p>
+          <p className="border-b text-lg pb-1 uppercase mb-4">
+            {t("patient_details")}
+          </p>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="grid grid-cols-2 gap-8">
               <div className="flex items-end justify-start gap-3">
-                <Label htmlFor="name" className="text-sm text-nowrap">
+                <Label htmlFor="name" className="text-base text-nowrap">
                   {order?.transportationData?.type_of_transport ===
                   "collection_order"
                     ? t("name_collection")
@@ -550,11 +555,11 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   }
                   maxLength={20}
                   disabled
-                  className="border-0 border-b border-black rounded-none h-6 pl-1"
+                  className="border-0 border-b border-black rounded-none h-8 pl-1"
                 />
               </div>
               <div className="flex items-end justify-start gap-3">
-                <Label htmlFor="birthdate" className="text-sm text-nowrap">
+                <Label htmlFor="birthdate" className="text-base text-nowrap">
                   {t("date_of_birth")}
                 </Label>
                 <Input
@@ -563,32 +568,32 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                     "DD.MM.YYYY"
                   )}
                   disabled
-                  className="border-0 border-b border-black rounded-none h-6 pl-1"
+                  className="border-0 border-b border-black rounded-none h-8 pl-1"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-8">
               <div className="flex items-end justify-start gap-3">
-                <Label htmlFor="caseNumber" className="text-sm text-nowrap">
+                <Label htmlFor="caseNumber" className="text-base text-nowrap">
                   {t("area_room")}
                 </Label>
                 <Input
                   id="caseNumber"
                   value={order?.patientData?.area_room}
                   disabled
-                  className="border-0 border-b border-black rounded-none h-6 pl-1"
+                  className="border-0 border-b border-black rounded-none h-8 pl-1"
                 />
               </div>
               <div className="flex items-end justify-start gap-3">
-                <Label htmlFor="costCenter" className="text-sm text-nowrap">
+                <Label htmlFor="costCenter" className="text-base text-nowrap">
                   {t("cost_center")}
                 </Label>
                 <Input
                   id="costCenter"
                   value={order?.patientData?.cost_center}
                   disabled
-                  className="border-0 border-b border-black rounded-none h-6 pl-1"
+                  className="border-0 border-b border-black rounded-none h-8 pl-1"
                 />
               </div>
             </div>
@@ -596,7 +601,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
             {/* <div className="flex items-end justify-start gap-3">
               <Label
                 htmlFor="specialConsiderations"
-                className="text-sm text-nowrap"
+                className="text-base text-nowrap"
               >
                 Special Considerations
               </Label>
@@ -606,9 +611,9 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
               />
             </div> */}
 
-            <div className="flex justify-between">
-              <div className="flex items-end gap-4">
-                <Label className="text-sm">{t("patient_above_90kg")}</Label>
+            <div className="grid grid-cols-2 gap-8">
+              <div className="flex items-end gap-4 ">
+                <Label className="text-base">{t("patient_above_90kg")}</Label>
                 <div className="flex items-end gap-2">
                   {order?.patientData?.patient_above_90kg ? (
                     <div className="flex items-end gap-2">
@@ -618,7 +623,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                         checked
                         // disabled
                       />
-                      <Label htmlFor="over90" className="text-sm">
+                      <Label htmlFor="over90" className="text-base">
                         {t("yes")}
                       </Label>
 
@@ -626,7 +631,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                         id="over90"
                         value={order?.patientData?.how_much}
                         disabled
-                        className="border-0 border-b border-black rounded-none w-10 h-6 px-0 pb-0 text-center"
+                        className="border-0 border-b border-black rounded-none w-10 h-8 px-0 pb-0 text-center"
                       />
                       <p>{t("kg")}</p>
                     </div>
@@ -638,7 +643,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                         disabled
                         className="rounded-none border-black h-4 w-4"
                       />
-                      <Label htmlFor="over90" className="text-sm mb-0">
+                      <Label htmlFor="over90" className="text-base mb-0">
                         {t("no")}
                       </Label>
                     </div>
@@ -646,8 +651,8 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                 </div>
               </div>
 
-              <div className="flex items-end gap-4">
-                <Label className="text-sm">{t("isolation")}</Label>
+              <div className="flex items-end gap-4  ">
+                <Label className="text-base">{t("isolation")}</Label>
                 <div className="flex items-end gap-2">
                   {order?.patientData?.isolation ? (
                     <div className="flex items-end gap-2">
@@ -657,7 +662,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                         checked
                         // disabled
                       />
-                      <Label htmlFor="over90" className="text-sm">
+                      <Label htmlFor="over90" className="text-base">
                         {t("yes")}
                       </Label>
 
@@ -665,7 +670,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                         id="isolation"
                         value={order?.patientData?.which}
                         disabled
-                        className="border-0 border-b border-black rounded-none w-full h-6 pr-0 pl-1 pb-0"
+                        className="border-0 border-b border-black rounded-none w-full h-8 pr-0 pl-1 pb-0"
                       />
                     </div>
                   ) : (
@@ -676,7 +681,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                         disabled
                         className="rounded-none border-black h-4 w-4"
                       />
-                      <Label htmlFor="isolation" className="text-sm mb-0">
+                      <Label htmlFor="isolation" className="text-base mb-0">
                         {t("no")}
                       </Label>
                     </div>
@@ -688,15 +693,17 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
         </div>
 
         <div className="flex flex-row gap-4">
-          <div className="space-y-2 w-1/2">
-            <p className="border-b pb-2">PICK-UP</p>
-            <div className="space-y-2">
+          <div className="space-y-3 w-1/2 mt-6">
+            <p className="border-b text-lg pb-1 uppercase mb-4">
+              {t("pick_up")}
+            </p>
+            <div className="space-y-3">
               <div className="flex items-end justify-center gap-2">
                 <Label className="text-nowrap" htmlFor="pickup-name">
                   Name / Institution
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="pickup-name"
                   value={order?.destinationDetailsData?.pick_up_name}
                 />
@@ -706,7 +713,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   Street
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="pickup-street"
                   value={order?.destinationDetailsData?.pick_up_address}
                 />
@@ -716,7 +723,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   City
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="pickup-city"
                   value={order?.destinationDetailsData?.pick_up_city}
                 />
@@ -726,7 +733,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   Country
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="pickup-country"
                   value={order?.destinationDetailsData?.pick_up_country}
                 />
@@ -736,7 +743,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   Working employee name
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="pickup-employee"
                   value={order?.destinationDetailsData?.pick_up_employee_name}
                 />
@@ -746,7 +753,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   Phone
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="pickup-phone"
                   value={order?.destinationDetailsData?.pickup_phone}
                 />
@@ -754,15 +761,17 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
             </div>
           </div>
 
-          <div className="space-y-2 w-1/2">
-            <p className="border-b pb-2">DROP OFF</p>
-            <div className="space-y-2">
+          <div className="space-y-3 w-1/2 mt-6">
+            <p className="border-b text-lg pb-1 uppercase mb-4">
+              {t("drop_off")}
+            </p>
+            <div className="space-y-3">
               <div className="flex items-end justify-center gap-2">
                 <Label className="text-nowrap" htmlFor="dropoff-date">
                   Drop-Off Date
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="dropoff-date"
                   value={order?.destinationDetailsData?.drop_off_pick_up_date}
                 />
@@ -772,17 +781,17 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   Pickup Time
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="pickup-time"
                   value={order?.destinationDetailsData?.drop_off_pick_up_time}
                 />
               </div>
               <div className="flex items-end justify-center gap-2">
                 <Label className="text-nowrap" htmlFor="dropoff-street">
-                  Street / No.
+                  {t("street")}
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="dropoff-street"
                   value={order?.destinationDetailsData?.drop_off_address}
                 />
@@ -792,7 +801,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   ZIP / City
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="dropoff-zip-city"
                   value={order?.destinationDetailsData?.drop_off_city}
                 />
@@ -802,7 +811,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   Phone
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="dropoff-phone"
                   value={order?.destinationDetailsData?.drop_off_phone}
                 />
@@ -813,15 +822,17 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
 
         <div className="flex flex-row gap-4">
           {order?.destinationDetailsData?.return_date && (
-            <div className="space-y-2 w-1/2">
-              <p className="border-b pb-2">Return Journey</p>
-              <div className="space-y-2">
+            <div className="space-y-3 w-1/2">
+              <p className="border-b text-lg pb-1 uppercase mb-4">
+                {t("return_journey")}
+              </p>
+              <div className="space-y-3">
                 <div className="flex items-end justify-center gap-2">
                   <Label className="text-nowrap" htmlFor="return-date">
                     Date
                   </Label>
                   <Input
-                    className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                    className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                     id="return-date"
                     value={
                       order?.destinationDetailsData?.return_date
@@ -838,7 +849,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                     Time
                   </Label>
                   <Input
-                    className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                    className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                     id="return-time"
                     value={order?.destinationDetailsData?.return_approx_time}
                   />
@@ -847,41 +858,31 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
             </div>
           )}
 
-          <div className="space-y-2 w-1/2">
-            <p className="border-b pb-2">Billing Details</p>
-            <div className="space-y-2">
+          <div className="space-y-2 w-1/2 mt-4">
+            <p className="border-b text-lg pb-1 uppercase mb-4">
+              {t("billing_details")}
+            </p>
+            <div className="space-y-3">
               <div className="flex items-end justify-center gap-2">
                 <Label
                   className="text-nowrap"
                   htmlFor="billing-institution-firstname"
                 >
-                  Institution / Firstname
+                  {t("name_institution")}
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="billing-institution-firstname"
-                  value={order?.billingDetailsData?.pre_name}
-                />
-              </div>
-              <div className="flex items-end justify-center gap-2">
-                <Label
-                  className="text-nowrap"
-                  htmlFor="billing-institution-name"
-                >
-                  Institution / Name
-                </Label>
-                <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
-                  id="billing-institution-name"
                   value={order?.billingDetailsData?.name}
                 />
               </div>
+
               <div className="flex items-end justify-center gap-2">
                 <Label className="text-nowrap" htmlFor="billing-place">
                   Place
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="billing-place"
                   value={order?.billingDetailsData?.place}
                 />
@@ -891,7 +892,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   Contact Phone
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="billing-contact-phone"
                   value={order?.billingDetailsData?.contact_phone}
                 />
@@ -901,7 +902,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   Street
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="billing-street"
                   value={order?.billingDetailsData?.street}
                 />
@@ -911,7 +912,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                   Contact
                 </Label>
                 <Input
-                  className="border-0 border-b border-black rounded-none h-6 text-gray-500 w-full"
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="billing-contact"
                   value={order?.billingDetailsData?.contact}
                 />
