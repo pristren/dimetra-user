@@ -313,18 +313,16 @@ const OrderHistory = () => {
         isLoading={loading}
       />
 
-      {/* <ReactToPrint
+      <ReactToPrint
         trigger={() => (
           <button ref={reactToPrintTriggerRef} style={{ display: "none" }}>
             Print
           </button>
         )}
         content={() => printRef.current}
-      /> */}
+      />
       {selectedOrder && (
-        <div
-        // style={{ display: "none" }}
-        >
+        <div style={{ display: "none" }}>
           <OrderPrint ref={printRef} order={selectedOrder} />
         </div>
       )}
@@ -336,13 +334,13 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
   //   console.log(order);
 
   //   // print the order with string
-  const printOrder = JSON.stringify(order, null, 2);
+  //   const printOrder = JSON.stringify(order, null, 2);
 
-  let content = <pre>{printOrder}</pre>;
+  //   let content = <pre>{printOrder}</pre>;
 
   return (
     <div className="">
-      {content}
+      {/* {content} */}
       <form className="max-w-4xl mx-auto p-6 space-y-2" ref={ref}>
         <div className="space-y-2">
           <div className="flex items-center gap-4 mb-4">
@@ -855,6 +853,16 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                 />
               </div>
               <div className="flex items-end justify-center gap-2">
+                <Label className="text-nowrap" htmlFor="return-time">
+                  Appointment Time
+                </Label>
+                <Input
+                  className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
+                  id="return-time"
+                  value={order?.destinationDetailsData?.pickup_appointment_time}
+                />
+              </div>
+              <div className="flex items-end justify-center gap-2">
                 <Label className="text-nowrap" htmlFor="dropoff-street">
                   {t("street")}
                 </Label>
@@ -981,18 +989,6 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                     className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                     id="return-time"
                     value={order?.destinationDetailsData?.return_approx_time}
-                  />
-                </div>
-                <div className="flex items-end justify-center gap-2">
-                  <Label className="text-nowrap" htmlFor="return-time">
-                    Appointment Time
-                  </Label>
-                  <Input
-                    className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
-                    id="return-time"
-                    value={
-                      order?.destinationDetailsData?.pickup_appointment_time
-                    }
                   />
                 </div>
               </div>
