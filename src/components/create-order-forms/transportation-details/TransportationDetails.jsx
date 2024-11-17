@@ -26,7 +26,12 @@ import {
   createOrderDefaultState,
 } from "@/components/create-order-forms/helpers";
 import { useEffect, useState } from "react";
-import { calculateFormProgress, formatDate, formatTimeInput } from "@/utils";
+import {
+  calculateFormProgress,
+  checkTimeValidity,
+  formatDate,
+  formatTimeInput,
+} from "@/utils";
 import { t } from "i18next";
 import toast from "react-hot-toast";
 import { Input } from "@/components/ui/input";
@@ -193,6 +198,7 @@ const TransportationDetails = ({
             recurringData?.recurring_type === "week"
               ? recurringData?.multiple_week_days?.length > 0 &&
                 recurringData?.start_date &&
+                checkTimeValidity(recurringData?.start_time) &&
                 recurringData?.ends
               : recurringData?.recurring_type === "free"
               ? recurringData?.free_dates?.length > 0 &&
@@ -257,6 +263,16 @@ const TransportationDetails = ({
             )
           )
         : null;
+
+      if (
+        returnJourney &&
+        returnTime &&
+        !checkTimeValidity(recurringData.return_time)
+      ) {
+        toast.error("Return time is invalid");
+        return;
+      }
+
       if (startTime && returnTime && startTime >= returnTime) {
         toast.error("Return time should be after start time");
         return;
