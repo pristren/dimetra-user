@@ -14,7 +14,10 @@ import { Link } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { useLazyQuery } from "@apollo/client";
 import { GET_ALL_ORDERS_FOR_HISTORY } from "./graphql/queries/getAllOrdersForHistory.gql";
-import { transportOptions } from "@/components/create-order-forms/helpers";
+import {
+  durationOptions,
+  transportOptions,
+} from "@/components/create-order-forms/helpers";
 import { t } from "i18next";
 import moment from "moment";
 import toast from "react-hot-toast";
@@ -429,18 +432,18 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
               <div
                 className={`grid grid-cols-${
                   order?.recurringData?.return_time ? "3" : "2"
-                } gap-x-6 mt-6 text-sm`}
+                } gap-x-6 mt-4 text-sm`}
               >
                 <div className="">
-                  <h3 className="text-lg font-medium mb-1 mt-1">
+                  <p className="text-md font-medium mb-1 mt-1">
                     {t("recurring_type")}:
-                  </h3>
+                  </p>
                   <p>{order?.recurringData?.recurring_type}</p>
                 </div>
                 <div className="">
-                  <h3 className="text-lg font-medium mt-1 mb-1">
+                  <p className="text-md font-medium mt-1 mb-1">
                     {t("start_date_and_time")}
-                  </h3>
+                  </p>
                   <div className="mb-1 flex w-max gap-4 items-center">
                     {order?.recurringData?.start_date && (
                       <p>
@@ -458,22 +461,22 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                 </div>
                 {order?.recurringData?.return_time && (
                   <div className="">
-                    <h3 className="text-lg font-medium mt-1 mb-1">
+                    <p className="text-md font-medium mt-1 mb-1">
                       {t("returns_time")}* :
-                    </h3>
+                    </p>
                     <p>{order?.recurringData?.return_time}</p>
                   </div>
                 )}
 
                 {order?.recurringData?.multiple_week_days?.length > 0 && (
                   <div className="">
-                    <h3 className="text-lg font-medium mb-2 ">
+                    <p className="text-md font-medium mb-2 ">
                       {t("weekdays")}
                       <span className="highlight">
                         ({t("multiple_selection")})
                       </span>
                       :
-                    </h3>
+                    </p>
                     <div className="flex items-center gap-3 ">
                       {order?.recurringData?.multiple_week_days?.map(
                         (option) => (
@@ -496,17 +499,24 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                 )}
                 {order?.recurringData?.ends && (
                   <div className=" ">
-                    <h3 className="text-lg font-medium">{t("ends_in")}:</h3>
-                    <p>{order?.recurringData?.ends}</p>
+                    <p className="text-md font-medium">{t("ends_in")}:</p>
+                    <p>
+                      {
+                        durationOptions.find(
+                          (option) =>
+                            option.value === order?.recurringData?.ends
+                        )?.label
+                      }
+                    </p>
                   </div>
                 )}
               </div>
             ) : order?.recurringData?.recurring_type === "free" ? (
               <div className="">
                 <div className="mt-2 mb-2 ">
-                  <h3 className="text-lg font-medium mt-2 mb-2">
+                  <p className="text-md font-medium mt-2 mb-2">
                     {t("select_start_date_and_time_free")}
-                  </h3>
+                  </p>
                   <div className="flex w-max gap-4 items-center">
                     {order?.recurringData?.free_dates && (
                       <DatePicker
@@ -535,12 +545,12 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
         )}
 
         <div className="w-full">
-          <p className="border-b text-lg pb-1 uppercase mb-4 mt-6">
+          <p className="border-b text-md pb-1 uppercase mb-4 mt-4">
             {t("patient_details")}
           </p>
 
           <div className="space-y-3">
-            <div className="grid grid-cols-2 gap-8">
+            <div className="grid grid-cols-2 gap-4">
               <div className="flex items-end justify-start gap-3">
                 <Label htmlFor="name" className="text-base text-nowrap">
                   {order?.transportationData?.type_of_transport ===
@@ -758,9 +768,9 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
           </div>
         </div>
 
-        <div className="flex flex-row gap-8">
-          <div className="space-y-3 w-1/2 mt-6">
-            <p className="border-b text-lg pb-1 uppercase mb-4">
+        <div className="flex flex-row gap-4">
+          <div className="space-y-3 w-1/2 mt-4">
+            <p className="border-b text-md pb-1 uppercase mb-4">
               {t("pick_up")}
             </p>
             <div className="space-y-3">
@@ -827,8 +837,8 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
             </div>
           </div>
 
-          <div className="space-y-3 w-1/2 mt-6">
-            <p className="border-b text-lg pb-1 uppercase mb-4">
+          <div className="space-y-3 w-1/2 mt-4">
+            <p className="border-b text-md pb-1 uppercase mb-4">
               {t("drop_off")}
             </p>
             <div className="space-y-3">
@@ -839,7 +849,9 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
                 <Input
                   className="border-0 border-b border-black rounded-none h-8 text-gray-500 w-full"
                   id="dropoff-date"
-                  value={order?.destinationDetailsData?.drop_off_pick_up_date}
+                  value={moment(
+                    order?.destinationDetailsData?.drop_off_pick_up_date
+                  ).format("DD.MM.YYYY")}
                 />
               </div>
               <div className="flex items-end justify-center gap-2">
@@ -896,12 +908,12 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
           </div>
         </div>
 
-        <div className="flex flex-row gap-8">
-          <div className="space-y-2 w-1/2 mt-4">
-            <p className="border-b text-lg pb-1 uppercase mb-4">
+        <div className="flex flex-row gap-4">
+          <div className="space-y-2 mt-4">
+            <p className="border-b text-md pb-1 uppercase mb-4">
               {t("billing_details")}
             </p>
-            <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-4">
               <div className="flex items-end justify-center gap-2">
                 <Label
                   className="text-nowrap"
@@ -960,7 +972,7 @@ const OrderPrint = React.forwardRef(({ order }, ref) => {
           </div>
           {order?.destinationDetailsData?.return_date && (
             <div className="space-y-3 w-1/2 mt-4">
-              <p className="border-b text-lg pb-1 uppercase mb-4">
+              <p className="border-b text-md pb-1 uppercase mb-4">
                 {t("return_journey")}
               </p>
               <div className="space-y-3">
