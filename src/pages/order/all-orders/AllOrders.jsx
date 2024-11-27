@@ -123,24 +123,11 @@ const AllOrders = () => {
           row.original?.destinationDetailsData?.drop_off_pick_up_date;
         return (
           <p>
-            {moment(date).format("DD MMMM YYYY")}({moment(date).format("ddd")})
+            {moment(date).format("DD MMMM YYYY")}({moment(date).format("ddd")}){" "}
+            {row.original?.destinationDetailsData?.drop_off_pick_up_time}
           </p>
         );
       },
-    },
-    {
-      accessorKey: "destinationDetailsData.drop_off_pick_up_time",
-      header: () => (
-        <div
-          onClick={() =>
-            handleSort("destinationDetailsData.drop_off_pick_up_time")
-          }
-          className="flex items-center cursor-pointer"
-        >
-          {t("time")}
-          <ArrowUpDown className="ml-2 h-4 w-4 text-gray-500 cursor-pointer" />
-        </div>
-      ),
     },
     {
       accessorKey: "destinationDetailsData.pick_up_name",

@@ -21,6 +21,7 @@ import { Loading } from "@/assets/icons";
 import { t } from "i18next";
 import { Link } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
+import parse from "html-react-parser";
 
 const AppUserDetails = ({
   onSubmit,
@@ -235,7 +236,7 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t("Code")} <sup className="text-[13px]">*</sup>
+                    {t("code")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
@@ -256,14 +257,14 @@ const AppUserDetails = ({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    {t("Place")} <sup className="text-[13px]">*</sup>
+                    {t("country")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
                     <Input
                       className={
                         form.formState.errors.code ? "border-red-500" : ""
                       }
-                      placeholder="Place"
+                      placeholder="Country"
                       {...field}
                     />
                   </FormControl>
@@ -361,22 +362,7 @@ const AppUserDetails = ({
                       </FormControl>
                       <div className="space-y-1 leading-none">
                         <FormLabel className="text-sm font-normal">
-                          {t("I accept the")}{" "}
-                          <Link
-                            to="/terms-and-conditions"
-                            className="text-primary hover:underline"
-                            target="_blank"
-                          >
-                            {t("terms and conditions")}
-                          </Link>{" "}
-                          {t("and")}{" "}
-                          <Link
-                            to="/privacy-policy"
-                            className="text-primary hover:underline"
-                            target="_blank"
-                          >
-                            {t("privacy policy")}
-                          </Link>
+                          {parse(t("regester_terms_and_condition"))}
                           <sup className="text-[13px]">*</sup>
                         </FormLabel>
                         <FormMessage />

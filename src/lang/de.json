@@ -139,7 +139,7 @@
   "forgot_your_password": "Passwort vergessen?",
   "login": "Einloggen",
   "first_name": "Institution / Vorname",
-  "last_name": "Abteilung / Lastname",
+  "last_name": "Abteilung / Nachname",
   "code": "Plz",
   "internal_cost_center": "Interne kostenstelle",
   "confirm_password": "Passwort bestätigen",
@@ -367,5 +367,6 @@
   "start_date_and_time": "Startdatum und -uhrzeit",
   "ends_in": "Endet in",
   "weekdays": "Wochentage",
-  "returns_time": "Rückfahrzeit"
+  "returns_time": "Rückfahrzeit",
+ "regester_terms_and_condition":"Ich akzeptiere die <a target='_blank' className='text-primary hover:underline' href='/terms-and-conditions'>Allgemeinen Geschäftsbedingungen</a> und <a target='_blank' className='text-primary hover:underline' href='/privacy-policy'>Datenschutzerklärung</a>"
 }

@@ -34,6 +34,7 @@
     "date-fns": "^3.6.0",
     "graphql": "^16.9.0",
     "graphql-ws": "^5.16.0",
+    "html-react-parser": "^5.1.18",
     "i18next": "^23.15.1",
     "lodash": "^4.17.21",
     "lucide-react": "^0.437.0",

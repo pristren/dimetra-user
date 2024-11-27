@@ -108,7 +108,7 @@ const ReopenPatientDetails = ({
                       {reopenOrderData.transportationData?.type_of_transport ===
                       "collection_order"
                         ? t("name_collection")
-                        : t("name_institution")}
+                        : t("name_billing")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>

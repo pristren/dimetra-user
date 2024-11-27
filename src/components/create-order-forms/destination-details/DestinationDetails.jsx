@@ -64,7 +64,8 @@ const DestinationDetails = ({
           pick_up_address: userInfo?.address,
           pick_up_postal_code: userInfo?.code,
           pick_up_city: userInfo?.billing_address,
-          pick_up_country: userInfo?.address,
+          pick_up_country: userInfo?.place,
+          pickup_phone: userInfo?.phone,
         },
       }));
     }
@@ -111,7 +112,7 @@ const DestinationDetails = ({
     pick_up_employee_name: z
       .string()
       .min(1, t("working_employee_name_is_required")),
-
+    area_room: z.string().min(1, t("area_room_required")),
     drop_off_date: z.string().min(1, t("date_is_required")),
     drop_off_pick_up_time: z.string().min(1, t("pick_up_time_is_required")),
     drop_off_name: z.string().min(1, t("name_is_required")),
@@ -165,7 +166,7 @@ const DestinationDetails = ({
 
   // Pickup time
   const { getInputProps: getPickupInputProps } = useTimescape({
-    date: new Date(),
+    date: null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -442,7 +443,35 @@ const DestinationDetails = ({
                     </FormItem>
                   )}
                 />
-
+                {/* Area/Room Name */}
+                <FormField
+                  control={form.control}
+                  name="area_room"
+                  render={({ field }) => (
+                    <FormItem className="mb-7">
+                      <FormLabel className="font-normal">
+                        {t("area_room")}
+                        <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            form.formState.errors.area_room
+                              ? "border-red-500"
+                              : ""
+                          }
+                          placeholder={t("enter_patient_area_room")}
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 {/* Pick-Up Employee Name */}
                 <FormField
                   control={form.control}

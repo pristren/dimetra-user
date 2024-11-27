@@ -351,7 +351,7 @@ const PreviewDetails = ({
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <div className="mb-5">
                   <Label className="block mb-2 font-medium">
-                    {t("name_institution")} <sup className="text-[13px]">*</sup>
+                    {t("name_billing")} <sup className="text-[13px]">*</sup>
                   </Label>
                   <Input
                     disabled

@@ -377,5 +377,6 @@
   "start_date_and_time": "Start Date and Time",
   "ends_in": "Ends in",
   "weekdays": "Weekdays",
-  "returns_time": "Return Time"
+  "returns_time": "Return Time",
+  "regester_terms_and_condition":"I accept the <a target='_blank' className='text-primary hover:underline' href='/terms-and-conditions'>terms and conditions</a> and <a target='_blank' className='text-primary hover:underline' href='/privacy-policy'>privacy policy</a>"
 }

@@ -145,7 +145,7 @@ const CopyDestinationDetails = ({
 
   // Pickup time
   const { getInputProps: getPickupInputProps } = useTimescape({
-    date: new Date(),
+    date: null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,

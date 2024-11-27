@@ -71,7 +71,7 @@ const EditPatientDetails = ({
                       {editOrderData.transportationData?.type_of_transport ===
                       "collection_order"
                         ? t("name_collection")
-                        : t("name_institution")}
+                        : t("name_billing")}
                       <sup className="text-[13px]">*</sup>
                     </FormLabel>
                     <FormControl>
@@ -271,7 +271,7 @@ const EditPatientDetails = ({
                     control={form.control}
                     name="how_much"
                     render={({ field }) => (
-                      <FormItem className='w-9/12 -mt-1'>
+                      <FormItem className="w-9/12 -mt-1">
                         <FormLabel>{t("how_much")}</FormLabel>
                         <FormControl>
                           <Input
@@ -342,9 +342,7 @@ const EditPatientDetails = ({
                     name="which"
                     render={({ field }) => (
                       <FormItem className="w-9/12 -mt-1">
-                        <FormLabel>
-                          {t("which")}
-                        </FormLabel>
+                        <FormLabel>{t("which")}</FormLabel>
                         <FormControl>
                           <Input
                             className={
