@@ -10,7 +10,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }) {
   const locale = savedLanguageCode === "de" ? de : enUS;
   return (
     <DayPicker
-    locale={locale}
+      locale={locale}
       weekStartsOn={1}
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
