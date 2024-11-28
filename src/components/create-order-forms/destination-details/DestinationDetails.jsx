@@ -150,6 +150,9 @@ const DestinationDetails = ({
   const initialDropOffDate = parseTimeString(
     createOrderData?.destinationDetailsData?.drop_off_pick_up_time
   );
+  const initialAppointmentTime = parseTimeString(
+    createOrderData?.destinationDetailsData?.pickup_appointment_time
+  );
   const { getInputProps: getDropOffInputProps } = useTimescape({
     date: initialDropOffDate,
     onChangeDate: (nextDate) => {
@@ -166,7 +169,7 @@ const DestinationDetails = ({
 
   // Pickup time
   const { getInputProps: getPickupInputProps } = useTimescape({
-    date: null,
+    date: initialAppointmentTime,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
