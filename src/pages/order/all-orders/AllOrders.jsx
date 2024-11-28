@@ -75,13 +75,16 @@ const AllOrders = () => {
       case "confirmed":
         return "#D1F8D5";
       case "paused":
-        return "#DCF3FF";
+        return "#FFFF00";
       case "pending":
         return "#DCF3FF";
+      case "deleted":
+        return "#FF0000";
       default:
         return "#FFFFFF";
     }
   };
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [pauseDate, setPauseDate] = useState(null);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
