@@ -110,7 +110,6 @@ const CreateOrder = () => {
       const fieldsFilled = [
         patientData.name,
         patientData.surname,
-        patientData.area_room,
       ];
       setPatientProgress(calculateFormProgress(fieldsFilled));
     } else {
@@ -118,7 +117,6 @@ const CreateOrder = () => {
         patientData.name,
         patientData.surname,
         patientData.date_of_birth,
-        patientData.area_room,
       ];
       setPatientProgress(calculateFormProgress(fieldsFilled));
     }
