@@ -46,6 +46,7 @@ const ReopenOrder = () => {
       pick_up_city,
       pick_up_country,
       pick_up_employee_name = "",
+      area_room = "",
       drop_off_pick_up_time = "",
       drop_off_name = "",
       drop_off_address,
@@ -64,6 +65,7 @@ const ReopenOrder = () => {
     pick_up_postal_code,
     pick_up_city,
     pick_up_employee_name,
+    area_room,
     drop_off_pick_up_time,
     drop_off_name,
     drop_off_address,
@@ -80,6 +82,7 @@ const ReopenOrder = () => {
     pick_up_city,
     pick_up_country,
     pick_up_employee_name,
+    area_room,
     drop_off_name,
     drop_off_address,
     drop_off_postal_code,
@@ -155,7 +158,6 @@ const ReopenOrder = () => {
       const fieldsFilled = [
         patientData.name,
         patientData.surname,
-        patientData.area_room,
       ];
       setPatientProgress(calculateFormProgress(fieldsFilled));
     } else {
@@ -163,7 +165,6 @@ const ReopenOrder = () => {
         patientData.name,
         patientData.surname,
         patientData.date_of_birth,
-        patientData.area_room,
       ];
       setPatientProgress(calculateFormProgress(fieldsFilled));
     }

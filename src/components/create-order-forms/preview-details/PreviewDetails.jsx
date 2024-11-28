@@ -20,12 +20,10 @@ import { CREATE_AN_ORDER } from "@/pages/order/create-order/graphql/mutations/cr
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import AppModal from "@/components/common/AppModal";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Loading, SuccessfullyCreatedOrderModalImage } from "@/assets/icons";
 import { t } from "i18next";
 import toast from "react-hot-toast";
-import SubmitProgress from "@/components/create-order-forms/submit-progress/SubmitProgress"; // Import the SubmitProgress component
-import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const PreviewDetails = ({
   createOrderData,
@@ -389,17 +387,6 @@ const PreviewDetails = ({
                     className="border-gray-300"
                   />
                 </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("area_room")} <sup className="text-[13px]">*</sup>
-                  </Label>
-                  <Input
-                    disabled
-                    value={patientData?.area_room}
-                    placeholder={t("type_your_area_or_room")}
-                    className="border-gray-300"
-                  />
-                </div>
                 <div />
                 {patientData?.patient_above_90kg && (
                   <div className="mb-5">
@@ -533,6 +520,19 @@ const PreviewDetails = ({
                       className="border-gray-300"
                     />
                   </div>
+
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("area_room")} <sup className="text-[13px]">*</sup>
+                    </Label>
+                    <Input
+                      disabled
+                      value={destinationDetailsData?.area_room}
+                      placeholder={t("type_your_area_or_room")}
+                      className="border-gray-300"
+                    />
+                  </div>
+
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">
                       {t("phone")}

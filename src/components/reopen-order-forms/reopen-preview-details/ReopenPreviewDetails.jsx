@@ -383,17 +383,6 @@ const ReopenPreviewDetails = ({
                     className="border-gray-300"
                   />
                 </div>
-                <div className="mb-5">
-                  <Label className="block mb-2 font-medium">
-                    {t("area_room")} <sup className="text-[13px]">*</sup>
-                  </Label>
-                  <Input
-                    disabled
-                    value={patientData?.area_room}
-                    placeholder={t("type_your_area_or_room")}
-                    className="border-gray-300"
-                  />
-                </div>
                 <div />
                 {patientData?.patient_above_90kg && (
                   <div className="mb-5">
@@ -524,6 +513,17 @@ const ReopenPreviewDetails = ({
                       disabled
                       value={destinationDetailsData?.pick_up_employee_name}
                       placeholder={t("type_the_working_employees_name")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
+                      {t("area_room")} <sup className="text-[13px]">*</sup>
+                    </Label>
+                    <Input
+                      disabled
+                      value={destinationDetailsData?.area_room}
+                      placeholder={t("type_your_area_or_room")}
                       className="border-gray-300"
                     />
                   </div>

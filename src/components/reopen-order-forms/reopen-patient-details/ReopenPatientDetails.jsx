@@ -39,7 +39,6 @@ const ReopenPatientDetails = ({
     name: z.string().min(1, t("name_required")),
     surname: z.string().min(1, t("surname_required")),
     date_of_birth: z.string().min(1, t("date_of_birth_required")),
-    area_room: z.string().min(1, t("area_room_required")),
     how_much: z.string().optional(),
     which: z.string().optional(),
     isolation: z.boolean().optional(),
@@ -209,35 +208,6 @@ const ReopenPatientDetails = ({
                   )}
                 />
               )}
-
-              <FormField
-                control={form.control}
-                name="area_room"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="font-normal">
-                      {t("area_room")}
-                      <sup className="text-[13px]">*</sup>
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        className={
-                          form.formState.errors.area_room
-                            ? "border-red-500"
-                            : ""
-                        }
-                        placeholder={t("enter_patient_area_room")}
-                        {...field}
-                        onChange={(e) => {
-                          field.onChange(e);
-                          handleInputChange(e);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
 
               <div className="flex items-start justify-start gap-5">
                 <FormField
