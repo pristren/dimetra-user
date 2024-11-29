@@ -4,7 +4,6 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "@/pages/authentication/login";
 import Register from "@/pages/authentication/register";
 import ForgotPassword from "@/pages/authentication/forgot-password";
-import ResetPassword from "@/pages/authentication/reset-password";
 import OrderHistory from "@/pages/order/order-history/OrderHistory";
 import OrderLayout from "@/layout/order-layout";
 import PrivateRoute from "@/layout/PrivateRoute";

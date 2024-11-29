@@ -49,6 +49,7 @@ const CreateOrder = () => {
       drop_off_city = "",
       pickup_phone = "",
       drop_off_pick_up_date,
+      area_room,
     } = {},
   } = createOrderData;
 
@@ -65,6 +66,7 @@ const CreateOrder = () => {
     drop_off_city,
     pickup_phone,
     drop_off_pick_up_date,
+    area_room
   ];
 
   const fieldsFilledRecurring = [
@@ -78,7 +80,7 @@ const CreateOrder = () => {
     drop_off_address,
     drop_off_postal_code,
     drop_off_city,
-    // drop_off_country,
+    area_room
   ];
 
   useEffect(() => {

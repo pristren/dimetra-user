@@ -92,7 +92,7 @@ const CopyDestinationDetails = ({
     pick_up_employee_name: z
       .string()
       .min(1, t("working_employee_name_is_required")),
-
+    area_room: z.string().min(1, t("area_room_required")),
     drop_off_date: z.string().min(1, t("date_is_required")),
     drop_off_pick_up_time: z.string().min(1, t("pick_up_time_is_required")),
     drop_off_name: z.string().min(1, t("name_is_required")),
@@ -440,6 +440,35 @@ const CopyDestinationDetails = ({
                             errors.pick_up_employee_name ? "border-red-500" : ""
                           }
                           placeholder={t("type_the_employees_name")}
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="area_room"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="font-normal">
+                        {t("area_room")}
+                        <sup className="text-[13px]">*</sup>
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          className={
+                            form.formState.errors.area_room
+                              ? "border-red-500"
+                              : ""
+                          }
+                          placeholder={t("enter_patient_area_room")}
                           {...field}
                           onChange={(e) => {
                             field.onChange(e);
