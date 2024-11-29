@@ -25,6 +25,7 @@ export const GET_AN_ORDER = gql`
         pick_up_postal_code
         pick_up_name
         pick_up_employee_name
+        area_room
         pick_up_country
         pick_up_city
         pick_up_address
@@ -46,7 +47,6 @@ export const GET_AN_ORDER = gql`
         which
         date_of_birth
         cost_center
-        area_room
       }
       recurringData {
         start_date

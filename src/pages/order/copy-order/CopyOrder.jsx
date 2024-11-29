@@ -55,6 +55,7 @@ const CopyOrder = () => {
       drop_off_phone = "",
       pickup_phone = "",
       drop_off_pick_up_date,
+      area_room
     } = {},
   } = copiedOrderData;
 
@@ -71,6 +72,7 @@ const CopyOrder = () => {
     drop_off_city,
     pickup_phone,
     drop_off_pick_up_date,
+    area_room
   ];
 
   const fieldsFilledRecurring = [
@@ -86,6 +88,7 @@ const CopyOrder = () => {
     drop_off_city,
     drop_off_country,
     drop_off_phone,
+    area_room
   ];
 
   function removeTypename(obj) {
@@ -154,7 +157,6 @@ const CopyOrder = () => {
       const fieldsFilled = [
         patientData.name,
         patientData.surname,
-        patientData.area_room,
       ];
       setPatientProgress(calculateFormProgress(fieldsFilled));
     } else {
@@ -162,7 +164,6 @@ const CopyOrder = () => {
         patientData.name,
         patientData.surname,
         patientData.date_of_birth,
-        patientData.area_room,
       ];
       setPatientProgress(calculateFormProgress(fieldsFilled));
     }

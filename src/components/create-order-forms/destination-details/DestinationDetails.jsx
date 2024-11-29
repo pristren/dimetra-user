@@ -33,6 +33,7 @@ const DestinationDetails = ({
   isReturnJourneyHide,
   setIsReturnJourneyHide,
 }) => {
+  const { userInfo } = useSelector((state) => state.user);
   const {
     destinationDetailsData: {
       drop_off_pick_up_time = "",
@@ -53,7 +54,7 @@ const DestinationDetails = ({
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
   }
-  const { userInfo } = useSelector((state) => state.user);
+  
   useEffect(() => {
     if (userInfo) {
       setCreateOrderData((prevState) => ({
@@ -70,7 +71,7 @@ const DestinationDetails = ({
       }));
     }
   }, [userInfo, setCreateOrderData]);
-
+  
   const handleNext = (e) => {
     e.preventDefault();
     const dropDateFormatted = moment(drop_off_pick_up_date).format(
@@ -150,6 +151,9 @@ const DestinationDetails = ({
   const initialDropOffDate = parseTimeString(
     createOrderData?.destinationDetailsData?.drop_off_pick_up_time
   );
+  const initialAppointmentTime = parseTimeString(
+    createOrderData?.destinationDetailsData?.pickup_appointment_time
+  );
   const { getInputProps: getDropOffInputProps } = useTimescape({
     date: initialDropOffDate,
     onChangeDate: (nextDate) => {
@@ -166,7 +170,7 @@ const DestinationDetails = ({
 
   // Pickup time
   const { getInputProps: getPickupInputProps } = useTimescape({
-    date: null,
+    date: initialAppointmentTime,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
@@ -515,7 +519,6 @@ const DestinationDetails = ({
                           className={
                             errors.pickup_phone ? "border-red-500" : ""
                           }
-                          type="number"
                           placeholder={t("type_phone")}
                           {...field}
                           onChange={(e) => {

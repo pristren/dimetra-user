@@ -529,6 +529,17 @@ const CopyPreviewDetails = ({
                   </div>
                   <div className="mb-5">
                     <Label className="block mb-2 font-medium">
+                      {t("area_room")} <sup className="text-[13px]">*</sup>
+                    </Label>
+                    <Input
+                      disabled
+                      value={destinationDetailsData?.area_room}
+                      placeholder={t("type_your_area_or_room")}
+                      className="border-gray-300"
+                    />
+                  </div>
+                  <div className="mb-5">
+                    <Label className="block mb-2 font-medium">
                       {t("phone")}
                       <sup className="text-[13px]">*</sup>
                     </Label>

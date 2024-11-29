@@ -33,7 +33,6 @@ export const GET_ALL_ORDERS_FOR_HISTORY = gql`
           patient_above_90kg
           date_of_birth
           surname
-          area_room
           cost_center
           how_much
           which
@@ -49,6 +48,7 @@ export const GET_ALL_ORDERS_FOR_HISTORY = gql`
           drop_off_pick_up_date
           drop_off_pick_up_time
           pickup_appointment_time
+          area_room
           drop_off_name
           drop_off_address
           drop_off_postal_code

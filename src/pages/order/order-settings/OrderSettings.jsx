@@ -247,7 +247,7 @@ const OrderSettings = () => {
             <p className="font-medium lg:font-normal">{userInfo?.code}</p>
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">
-            <p className=" ml-3 text-gray-500 w-40">{t("place")}</p>
+            <p className=" ml-3 text-gray-500 w-40">{t("country")}</p>
             <p className="font-medium lg:font-normal">{userInfo?.place}</p>
           </div>
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 pb-5 px-5">
