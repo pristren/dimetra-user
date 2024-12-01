@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -17,8 +18,21 @@ export function DatePicker({
   mode = "single",
   ...props
 }) {
+  const [isPopoverOpen, setPopoverOpen] = useState(false);
+
+  const handleDateSelect = (selectedDate) => {
+    if (
+      (selectedDate && date && selectedDate === date) ||
+      selectedDate === undefined
+    ) {
+      setPopoverOpen(false);
+    } else {
+      setDate(selectedDate);
+    }
+  };
+  
   return (
-    <Popover>
+    <Popover open={isPopoverOpen} onOpenChange={setPopoverOpen}>
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
@@ -27,6 +41,7 @@ export function DatePicker({
             !date && "text-muted-foreground ",
             className
           )}
+          onClick={() => setPopoverOpen(!isPopoverOpen)} // Toggle popover visibility
         >
           {mode !== "single" && date?.length > 0 ? (
             <span>
@@ -50,7 +65,7 @@ export function DatePicker({
           ) : (
             <span className="text-black">{t("pick_a_date")}</span>
           )}
-          <div className="w-6 h-6 rounded-full p-1  flex justify-center items-center bg-primary text-white">
+          <div className="w-6 h-6 rounded-full p-1 flex justify-center items-center bg-primary text-white">
             <CalendarIcon className="w-4 h-4" />
           </div>
         </Button>
@@ -59,7 +74,7 @@ export function DatePicker({
         <Calendar
           mode={mode}
           selected={date}
-          onSelect={setDate}
+          onSelect={handleDateSelect} // Use our custom date handler
           initialFocus
           {...props}
         />

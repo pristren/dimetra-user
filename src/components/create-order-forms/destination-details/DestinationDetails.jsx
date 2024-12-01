@@ -217,7 +217,7 @@ const DestinationDetails = ({
 
   // Pickup time
   const { getInputProps: getPickupInputProps } = useTimescape({
-    date: initialAppointmentTime,
+    date: null,
     onChangeDate: (nextDate) =>
       formatTimeInput(
         nextDate,
