@@ -25,6 +25,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { formatDate, formatTimeInput, parseTimeString } from "@/utils";
 import GoogleLocation from "@/components/common/GoogleLocation";
+import {
+  handleLocationChangeForDropOff,
+  handleLocationChangeForPickup,
+} from "@/utils/appGoogleSearchHandler";
 
 const DestinationDetails = ({
   handleFormChange,
@@ -43,7 +47,8 @@ const DestinationDetails = ({
       return_date,
     } = {},
   } = createOrderData;
-  const [changeInput, setChangeInput] = useState("");
+  const [changeInputPickUp, setChangeInputPickUp] = useState("");
+  const [changeInputDropOff, setChangeInputDropOff] = useState("");
 
   const checkTrueFalse = useMemo(
     () =>
@@ -58,7 +63,7 @@ const DestinationDetails = ({
     const [hours, minutes] = timeString.split(":").map(Number);
     return hours * 60 + minutes;
   }
-  
+
   useEffect(() => {
     if (userInfo) {
       setCreateOrderData((prevState) => ({
@@ -75,49 +80,6 @@ const DestinationDetails = ({
       }));
     }
   }, [userInfo, setCreateOrderData]);
-
-  const handleLocationChangeForPickup = (addressValue) => {
-    const autocompleteData = {
-      address: addressValue.formatted_address,
-      country: addressValue?.country,
-      city: addressValue?.city,
-      area: addressValue?.area,
-      postalCode: addressValue?.postalCode,
-      street: addressValue?.street,
-    };
-    setCreateOrderData((prev) => ({
-      ...prev,
-      destinationDetailsData: {
-        ...prev.destinationDetailsData,
-        pick_up_country: autocompleteData.country,
-        pick_up_address: autocompleteData.address,
-        pick_up_postal_code: autocompleteData.postalCode,
-        pick_up_city: autocompleteData.city,
-        area_room: autocompleteData.area,
-      },
-    }));
-  };
-  
-  const handleLocationChangeForDropOff = (addressValue) => {
-    const autocompleteData = {
-      address: addressValue.formatted_address,
-      country: addressValue?.country,
-      city: addressValue?.city,
-      area: addressValue?.area,
-      postalCode: addressValue?.postalCode,
-      street: addressValue?.street,
-    };
-    setCreateOrderData((prev) => ({
-      ...prev,
-      destinationDetailsData: {
-        ...prev.destinationDetailsData,
-        drop_off_country: autocompleteData.country,
-        drop_off_address: autocompleteData.address,
-        drop_off_postal_code: autocompleteData.postalCode,
-        drop_off_city: autocompleteData.city,
-      },
-    }));
-  };
 
   const handleNext = (e) => {
     e.preventDefault();
@@ -398,16 +360,19 @@ const DestinationDetails = ({
                         {t("street")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          className={
-                            errors.pick_up_address ? "border-red-500" : ""
+                        <GoogleLocation
+                          onPlaceSelect={(addressValue) =>
+                            handleLocationChangeForPickup(
+                              addressValue,
+                              setCreateOrderData
+                            )
                           }
-                          placeholder={t("type_your_street")}
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            handleInputChange(e);
-                          }}
+                          selectedPlace={
+                            createOrderData?.destinationDetailsData
+                              ?.pick_up_address
+                          }
+                          setChangeInput={setChangeInputPickUp}
+                          changeInput={changeInputPickUp}
                         />
                       </FormControl>
                       <FormMessage />
@@ -478,14 +443,16 @@ const DestinationDetails = ({
                         {t("country")}
                       </FormLabel>
                       <FormControl>
-                        <GoogleLocation
-                          onPlaceSelect={handleLocationChangeForPickup}
-                          selectedPlace={
-                            createOrderData?.destinationDetailsData
-                              ?.pick_up_country
+                        <Input
+                          className={
+                            errors.pick_up_country ? "border-red-500" : ""
                           }
-                          setChangeInput={setChangeInput}
-                          changeInput={changeInput}
+                          placeholder={t("type_country")}
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
                         />
                       </FormControl>
                       <FormMessage />
@@ -718,16 +685,19 @@ const DestinationDetails = ({
                         <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          className={
-                            errors.drop_off_address ? "border-red-500" : ""
+                        <GoogleLocation
+                          onPlaceSelect={(addressValue) =>
+                            handleLocationChangeForDropOff(
+                              addressValue,
+                              setCreateOrderData
+                            )
                           }
-                          placeholder={t("type_street")}
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            handleInputChange(e);
-                          }}
+                          selectedPlace={
+                            createOrderData?.destinationDetailsData
+                              ?.drop_off_address
+                          }
+                          setChangeInput={setChangeInputDropOff}
+                          changeInput={changeInputDropOff}
                         />
                       </FormControl>
                       <FormMessage />
@@ -801,14 +771,16 @@ const DestinationDetails = ({
                         {t("dropoff_country")}
                       </FormLabel>
                       <FormControl>
-                        <GoogleLocation
-                          onPlaceSelect={handleLocationChangeForDropOff}
-                          selectedPlace={
-                            createOrderData?.destinationDetailsData
-                              ?.drop_off_country
+                        <Input
+                          className={
+                            errors.drop_off_country ? "border-red-500" : ""
                           }
-                          setChangeInput={setChangeInput}
-                          changeInput={changeInput}
+                          placeholder={t("type_country")}
+                          {...field}
+                          onChange={(e) => {
+                            field.onChange(e);
+                            handleInputChange(e);
+                          }}
                         />
                       </FormControl>
                       <FormMessage />

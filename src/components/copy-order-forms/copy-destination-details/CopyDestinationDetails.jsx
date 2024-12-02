@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTimescape } from "timescape/react";
 import { useForm } from "react-hook-form";
 import BackAndNextBtn from "@/components/common/BackAndNextBtn";
@@ -24,6 +24,8 @@ import { t } from "i18next";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { formatTimeInput, parseTimeString } from "@/utils";
+import GoogleLocation from "@/components/common/GoogleLocation";
+import { handleLocationChangeForDropOff, handleLocationChangeForPickup } from "@/utils/appGoogleSearchHandler";
 
 const CopyDestinationDetails = ({
   handleFormChange,
@@ -41,6 +43,8 @@ const CopyDestinationDetails = ({
       return_date,
     } = {},
   } = copiedOrderData;
+  const [changeInputPickUp, setChangeInputPickUp] = useState("");
+  const [changeInputDropOff, setChangeInputDropOff] = useState("");
   const checkTrueFalse = useMemo(
     () =>
       copiedOrderData?.transportationData?.type_of_transport ===
@@ -327,16 +331,19 @@ const CopyDestinationDetails = ({
                         {t("street")} <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          className={
-                            errors.pick_up_address ? "border-red-500" : ""
+                        <GoogleLocation
+                          onPlaceSelect={(addressValue) =>
+                            handleLocationChangeForPickup(
+                              addressValue,
+                              setCopiedOrderData
+                            )
                           }
-                          placeholder={t("type_your_street")}
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            handleInputChange(e);
-                          }}
+                          selectedPlace={
+                            copiedOrderData?.destinationDetailsData
+                              ?.pick_up_address
+                          }
+                          setChangeInput={setChangeInputPickUp}
+                          changeInput={changeInputPickUp}
                         />
                       </FormControl>
                       <FormMessage />
@@ -651,16 +658,19 @@ const CopyDestinationDetails = ({
                         <sup className="text-[13px]">*</sup>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          className={
-                            errors.drop_off_address ? "border-red-500" : ""
+                        <GoogleLocation
+                          onPlaceSelect={(addressValue) =>
+                            handleLocationChangeForDropOff(
+                              addressValue,
+                              setCopiedOrderData
+                            )
                           }
-                          placeholder={t("type_street")}
-                          {...field}
-                          onChange={(e) => {
-                            field.onChange(e);
-                            handleInputChange(e);
-                          }}
+                          selectedPlace={
+                            copiedOrderData?.destinationDetailsData
+                              ?.drop_off_address
+                          }
+                          setChangeInput={setChangeInputDropOff}
+                          changeInput={changeInputDropOff}
                         />
                       </FormControl>
                       <FormMessage />

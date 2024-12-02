@@ -66,13 +66,15 @@ const RegisterForm = () => {
       internal_cost_center: "",
       password: "",
       confirmPassword: "",
+      city: "",
+      geo_location: {}
     },
   });
-
   const onSubmit = async (data) => {
     setLoading(true);
-    const { confirmPassword, ...submitData } = data;
-
+    const getValue = form.getValues()
+    const { confirmPassword, ...submitData } = getValue;
+    console.log(submitData);
     try {
       // Upload the file and register the user
       const profile_image = await uploadFile(selectedFile);
