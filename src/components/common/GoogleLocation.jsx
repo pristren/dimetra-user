@@ -36,7 +36,7 @@ const GoogleLocation = ({
 
     placeAutocomplete.addListener("place_changed", () => {
       const place = placeAutocomplete.getPlace();
-      
+
       const getAddressComponent = (type) =>
         place.address_components.find((component) =>
           component.types.includes(type)
@@ -44,17 +44,17 @@ const GoogleLocation = ({
 
       const street = getAddressComponent("route");
       const postalCode = getAddressComponent("postal_code");
-      const area = getAddressComponent("sublocality") || getAddressComponent("locality");
+      const area =
+        getAddressComponent("sublocality") || getAddressComponent("locality");
       const city = getAddressComponent("administrative_area_level_1");
       const country = getAddressComponent("country");
-
+      
       setChangeInput(place?.formatted_address);
-      
-      
+
       onPlaceSelect({ ...place, country, postalCode, street, area, city });
     });
   }, [onPlaceSelect, placeAutocomplete]);
-  
+
   const handleChange = (e) => {
     setChangeInput(e.target.value);
   };

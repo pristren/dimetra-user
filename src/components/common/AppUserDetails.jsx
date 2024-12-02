@@ -19,9 +19,9 @@ import AuthFooter from "@/components/helper-ui/AuthFooter";
 import { cn } from "@/lib/utils";
 import { Loading } from "@/assets/icons";
 import { t } from "i18next";
-import { Link } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";
 import parse from "html-react-parser";
+import GoogleLocation from "./GoogleLocation";
 
 const AppUserDetails = ({
   onSubmit,
@@ -33,9 +33,23 @@ const AppUserDetails = ({
   loading,
 }) => {
   const [hover, setHover] = useState(false);
+  const [changeInput, setChangeInput] = useState("");
+
   const handleFileInputChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
+
+  const handleLocationChangeForPickup = (locationData) => {
+    form.setValue("address", locationData.formatted_address || "");
+    form.setValue("code", locationData.postalCode || "");
+    form.setValue("place", locationData.country || "");
+    form.setValue("city", locationData.city || "");
+    form.setValue("geo_location", {
+      latitude: locationData.geometry?.location?.lat(),
+      longitude: locationData.geometry?.location?.lng(),
+    });
+  };
+
   return (
     <CardContent
       className={cn(
@@ -197,12 +211,11 @@ const AppUserDetails = ({
                     {t("address")} <sup className="text-[13px]">*</sup>
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      className={
-                        form.formState.errors.address ? "border-red-500" : ""
-                      }
-                      placeholder="123 Main St"
-                      {...field}
+                    <GoogleLocation
+                      onPlaceSelect={handleLocationChangeForPickup}
+                      selectedPlace={form.getValues("address")}
+                      setChangeInput={setChangeInput}
+                      changeInput={changeInput}
                     />
                   </FormControl>
                   <FormMessage />
