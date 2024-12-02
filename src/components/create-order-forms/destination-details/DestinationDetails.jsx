@@ -43,7 +43,8 @@ const DestinationDetails = ({
       return_date,
     } = {},
   } = createOrderData;
-  const [changeInput, setChangeInput] = useState("");
+  const [changeInputPickUp, setChangeInputPickUp] = useState("");
+  const [changeInputDropOff, setChangeInputDropOff] = useState("");
 
   const checkTrueFalse = useMemo(
     () =>
@@ -484,8 +485,8 @@ const DestinationDetails = ({
                             createOrderData?.destinationDetailsData
                               ?.pick_up_country
                           }
-                          setChangeInput={setChangeInput}
-                          changeInput={changeInput}
+                          setChangeInput={setChangeInputPickUp}
+                          changeInput={changeInputPickUp}
                         />
                       </FormControl>
                       <FormMessage />
@@ -807,8 +808,8 @@ const DestinationDetails = ({
                             createOrderData?.destinationDetailsData
                               ?.drop_off_country
                           }
-                          setChangeInput={setChangeInput}
-                          changeInput={changeInput}
+                          setChangeInput={setChangeInputDropOff}
+                          changeInput={changeInputDropOff}
                         />
                       </FormControl>
                       <FormMessage />
