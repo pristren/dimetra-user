@@ -70,12 +70,25 @@ const DestinationDetails = ({
         ...prevState,
         destinationDetailsData: {
           ...prevState.destinationDetailsData,
-          pick_up_name: `${userInfo?.first_name} ${userInfo?.last_name}`,
-          pick_up_address: userInfo?.address,
-          pick_up_postal_code: userInfo?.code,
-          pick_up_city: userInfo?.billing_address,
-          pick_up_country: userInfo?.place,
-          pickup_phone: userInfo?.phone,
+          pick_up_name: prevState.destinationDetailsData?.pick_up_name
+            ? prevState.destinationDetailsData.pick_up_name
+            : `${userInfo?.first_name} ${userInfo?.last_name}`,
+          pick_up_address: prevState.destinationDetailsData?.pick_up_address
+            ? prevState.destinationDetailsData.pick_up_address
+            : userInfo?.address,
+          pick_up_postal_code: prevState.destinationDetailsData
+            ?.pick_up_postal_code
+            ? prevState.destinationDetailsData.pick_up_postal_code
+            : userInfo?.code,
+          pick_up_city: prevState.destinationDetailsData?.pick_up_city
+            ? prevState.destinationDetailsData.pick_up_city
+            : userInfo?.billing_address,
+          pick_up_country: prevState.destinationDetailsData?.pick_up_country
+            ? prevState.destinationDetailsData.pick_up_country
+            : userInfo?.place,
+          pickup_phone: prevState.destinationDetailsData?.pickup_phone
+            ? prevState.destinationDetailsData.pickup_phone
+            : userInfo?.phone,
         },
       }));
     }
@@ -160,9 +173,7 @@ const DestinationDetails = ({
   const initialDropOffDate = parseTimeString(
     createOrderData?.destinationDetailsData?.drop_off_pick_up_time
   );
-  const initialAppointmentTime = parseTimeString(
-    createOrderData?.destinationDetailsData?.pickup_appointment_time
-  );
+
   const { getInputProps: getDropOffInputProps } = useTimescape({
     date: initialDropOffDate,
     onChangeDate: (nextDate) => {
