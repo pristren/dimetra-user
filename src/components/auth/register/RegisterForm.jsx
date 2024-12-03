@@ -74,7 +74,7 @@ const RegisterForm = () => {
     setLoading(true);
     const getValue = form.getValues()
     const { confirmPassword, ...submitData } = getValue;
-    console.log(submitData);
+
     try {
       // Upload the file and register the user
       const profile_image = await uploadFile(selectedFile);
@@ -82,7 +82,6 @@ const RegisterForm = () => {
         ...submitData,
         profile_image: profile_image || "",
       }).then((res) => {
-        console.log(res);
         // when email will work uncomment below code
         navigate(`/verify-email-sent?token=${res.data.token}`);
         // toast.success("Registration successful.Please login to continue!");

@@ -69,14 +69,16 @@ const OrderSettings = () => {
 
   const [updateAnUser] = useMutation(UPDATE_AN_USER);
   const [updateUserPassword] = useMutation(UPDATE_AN_USER_PASSWORD);
-  const onSubmitUserDetails = async (value) => {
+  const formData = form.getValues()
+  const onSubmitUserDetails = async () => {
     if (
-      !value.first_name ||
-      !value.last_name ||
-      !value.email ||
-      !value.phone ||
-      !value.address ||
-      !value.code
+      !formData.first_name ||
+      !formData.last_name ||
+      !formData.email ||
+      !formData.phone ||
+      !formData.address ||
+      !formData.code  ||
+      !formData.geo_location 
     ) {
       toast.error("Fill up the required fields");
       return;
@@ -89,7 +91,7 @@ const OrderSettings = () => {
     await updateAnUser({
       variables: {
         inputData: {
-          ...value,
+          ...formData,
           profile_image: profile_image || "",
         },
       },

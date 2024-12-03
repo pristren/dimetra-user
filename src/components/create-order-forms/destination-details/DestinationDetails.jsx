@@ -378,12 +378,6 @@ const DestinationDetails = ({
                               setCreateOrderData
                             )
                           }
-                          selectedPlace={
-                            createOrderData?.destinationDetailsData
-                              ?.pick_up_address
-                          }
-                          setChangeInput={setChangeInputPickUp}
-                          changeInput={changeInputPickUp}
                         />
                       </FormControl>
                       <FormMessage />
@@ -703,12 +697,6 @@ const DestinationDetails = ({
                               setCreateOrderData
                             )
                           }
-                          selectedPlace={
-                            createOrderData?.destinationDetailsData
-                              ?.drop_off_address
-                          }
-                          setChangeInput={setChangeInputDropOff}
-                          changeInput={changeInputDropOff}
                         />
                       </FormControl>
                       <FormMessage />

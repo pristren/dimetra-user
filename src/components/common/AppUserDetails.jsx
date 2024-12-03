@@ -45,8 +45,8 @@ const AppUserDetails = ({
     form.setValue("place", locationData.country || "");
     form.setValue("city", locationData.city || "");
     form.setValue("geo_location", {
-      latitude: locationData.geometry?.location?.lat(),
-      longitude: locationData.geometry?.location?.lng(),
+      latitude: locationData.geometry?.location?.lat,
+      longitude: locationData.geometry?.location?.lng,
     });
   };
 

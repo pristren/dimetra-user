@@ -13,6 +13,10 @@ export const UPDATE_AN_USER = gql`
       phone
       internal_cost_center
       profile_image
+      geo_location {
+      latitude
+      longitude
+    }
     }
   }
 `;
