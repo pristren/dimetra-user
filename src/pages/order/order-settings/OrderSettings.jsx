@@ -26,7 +26,6 @@ import { t } from "i18next";
 
 const OrderSettings = () => {
   const { userInfo, profileImageLoaded } = useSelector((state) => state.user);
-
   const { getAnUser } = useInitializeUser();
 
   useEffect(() => {
@@ -69,8 +68,11 @@ const OrderSettings = () => {
 
   const [updateAnUser] = useMutation(UPDATE_AN_USER);
   const [updateUserPassword] = useMutation(UPDATE_AN_USER_PASSWORD);
-  const formData = form.getValues()
+
+  
   const onSubmitUserDetails = async () => {
+    const formData = form.getValues()
+    
     if (
       !formData.first_name ||
       !formData.last_name ||
@@ -224,6 +226,7 @@ const OrderSettings = () => {
                   selectedFile={selectedFile}
                   setSelectedFile={setSelectedFile}
                   loading={loading}
+                  userInfo={userInfo}
                 />
               </DialogHeader>
             </DialogContent>

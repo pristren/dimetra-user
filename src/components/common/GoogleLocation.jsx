@@ -4,8 +4,11 @@ import axios from "axios";
 import useDebounce from "@/hooks/useDebounce";
 import Select from "react-select";
 
-const GoogleLocation = ({ onPlaceSelect }) => {
-  const [query, setQuery] = useState("");
+const GoogleLocation = ({ onPlaceSelect, userInfo }) => {
+  const [query, setQuery] = useState({
+    label: userInfo?.address,
+    value: userInfo?.address,
+  });
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -30,10 +33,10 @@ const GoogleLocation = ({ onPlaceSelect }) => {
         setPlaces([]);
       } else {
         setPlaces(
-          response?.data?.map((place) => ({
-            label: place?.name,
-            value: place?.place_id,
-            key: { ...place },
+          response.data.map((place) => ({
+            label: place.description,
+            value: place.place_id,
+            key: place,
           }))
         );
       }
@@ -52,50 +55,14 @@ const GoogleLocation = ({ onPlaceSelect }) => {
 
   const handleSelectPlace = (selectedOption) => {
     setQuery(selectedOption);
-    const { name, formatted_address, geometry, place_id, address_components } =
-      selectedOption.key;
-
-    const addressComponents = address_components
-      ? address_components.reduce((acc, component) => {
-          if (component.types.includes("country")) {
-            acc.country = component.long_name;
-          } else if (component.types.includes("postal_code")) {
-            acc.postalCode = component.long_name;
-          } else if (component.types.includes("route")) {
-            acc.street = component.long_name;
-          } else if (component.types.includes("locality")) {
-            acc.city = component.long_name;
-          } else if (component.types.includes("sublocality")) {
-            acc.area = component.long_name;
-          }
-          return acc;
-        }, {})
-      : {};
-
-    if (Object.keys(addressComponents).length === 0 && formatted_address) {
-      const addressParts = formatted_address
-        .split(",")
-        .map((part) => part.trim());
-
-      if (addressParts.length > 3) {
-        addressComponents.street = addressParts[0];
-        addressComponents.city = addressParts[addressParts.length - 3];
-        addressComponents.country = addressParts[addressParts.length - 1];
-      }
-
-      const postalCodeMatch = formatted_address.match(/\d{4,5}/);
-      if (postalCodeMatch) {
-        addressComponents.postalCode = postalCodeMatch[0];
-      }
-    }
 
     const placeDetails = {
-      name,
-      formatted_address,
-      geometry,
-      place_id,
-      ...addressComponents,
+      description: selectedOption.key.description,
+      place_id: selectedOption.key.place_id,
+      terms: selectedOption.key.terms,
+      types: selectedOption.key.types,
     };
+
     onPlaceSelect(placeDetails);
     setPlaces([]);
     setLoading(false);

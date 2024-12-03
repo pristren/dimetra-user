@@ -31,15 +31,16 @@ const AppUserDetails = ({
   selectedFile,
   setSelectedFile,
   loading,
+  userInfo = {},
 }) => {
   const [hover, setHover] = useState(false);
-  const [changeInput, setChangeInput] = useState("");
 
   const handleFileInputChange = (event) => {
     setSelectedFile(event.target.files[0]);
   };
 
   const handleLocationChangeForPickup = (locationData) => {
+    console.log(locationData);
     form.setValue("address", locationData.formatted_address || "");
     form.setValue("code", locationData.postalCode || "");
     form.setValue("place", locationData.country || "");
@@ -205,7 +206,7 @@ const AppUserDetails = ({
             <FormField
               control={form.control}
               name="address"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>
                     {t("address")} <sup className="text-[13px]">*</sup>
@@ -213,9 +214,7 @@ const AppUserDetails = ({
                   <FormControl>
                     <GoogleLocation
                       onPlaceSelect={handleLocationChangeForPickup}
-                      selectedPlace={form.getValues("address")}
-                      setChangeInput={setChangeInput}
-                      changeInput={changeInput}
+                      userInfo={userInfo}
                     />
                   </FormControl>
                   <FormMessage />

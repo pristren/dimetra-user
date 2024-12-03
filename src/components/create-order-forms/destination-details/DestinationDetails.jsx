@@ -378,6 +378,7 @@ const DestinationDetails = ({
                               setCreateOrderData
                             )
                           }
+                          userInfo={userInfo}
                         />
                       </FormControl>
                       <FormMessage />

@@ -9,8 +9,6 @@ import AppUserDetails from "@/components/common/AppUserDetails";
 import { registerAnUser } from "../apis/register";
 import { useNavigate } from "react-router-dom";
 import { uploadFile } from "@/utils";
-import AppModal from "@/components/common/AppModal";
-import { TickMarkImage } from "@/assets/icons";
 import toast from "react-hot-toast";
 import { t } from "i18next";
 
@@ -51,7 +49,7 @@ const RegisterForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -94,11 +92,6 @@ const RegisterForm = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    navigate("/login");
   };
 
   return (
