@@ -48,7 +48,7 @@ const GoogleLocation = ({
         getAddressComponent("sublocality") || getAddressComponent("locality");
       const city = getAddressComponent("administrative_area_level_1");
       const country = getAddressComponent("country");
-      
+
       setChangeInput(place?.formatted_address);
 
       onPlaceSelect({ ...place, country, postalCode, street, area, city });
@@ -60,12 +60,17 @@ const GoogleLocation = ({
   };
 
   return (
-    <Input
-      ref={inputRef}
-      placeholder={t("Choose your location")}
-      value={changeInput}
-      onChange={handleChange}
-    />
+    <div>
+      <input type="text" style={{ display: "none" }} />
+      <Input
+        ref={inputRef}
+        placeholder={t("Choose your location")}
+        value={changeInput}
+        onChange={handleChange}
+        name="username"
+        autoComplete="new-password"
+      />
+    </div>
   );
 };
 

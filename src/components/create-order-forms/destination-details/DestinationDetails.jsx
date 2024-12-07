@@ -214,7 +214,7 @@ const DestinationDetails = ({
       </CardHeader>
       <CardContent className="lg:px-10">
         <Form {...form}>
-          <form>
+          <form autoComplete="off">
             <div className="flex items-center justify-start gap-10">
               {/* Drop-Off Date */}
               {createOrderData?.transportationData?.type_of_transport !==
@@ -817,14 +817,14 @@ const DestinationDetails = ({
                 />
               </div>
             </div>
-            <BackAndNextBtn
-              isFillForm={true}
-              isDisabled={destinationProgress < 100}
-              handleGoPrev={() => handleFormChange("patientDetails")}
-              handleGoNext={handleNext}
-            />
           </form>
         </Form>
+        <BackAndNextBtn
+          isFillForm={true}
+          isDisabled={destinationProgress < 100}
+          handleGoPrev={() => handleFormChange("patientDetails")}
+          handleGoNext={handleNext}
+        />
       </CardContent>
     </Card>
   );
