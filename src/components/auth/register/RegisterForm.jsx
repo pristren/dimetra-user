@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
-import axios from "axios";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -49,7 +48,7 @@ const RegisterForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,12 +64,12 @@ const RegisterForm = () => {
       password: "",
       confirmPassword: "",
       city: "",
-      geo_location: {}
+      geo_location: {},
     },
   });
   const onSubmit = async (data) => {
     setLoading(true);
-    const getValue = form.getValues()
+    const getValue = form.getValues();
     const { confirmPassword, ...submitData } = getValue;
 
     try {

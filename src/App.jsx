@@ -28,6 +28,8 @@ import ForgotPasswordSent from "@/pages/authentication/forgot-password-sent/Forg
 import VerifyForgotPassword from "@/pages/authentication/verify-forgot-password/VerifyForgotPassword";
 import { useTranslation } from "react-i18next";
 import NewsDetails from "@/pages/order/news-details/NewsDetails";
+import EditProfile from "@/pages/order/order-settings/EditProfile";
+
 function App() {
   useTranslation();
   axios.defaults.baseURL = `${import.meta.env.VITE_API_BASE_URL}`;
@@ -85,6 +87,7 @@ function App() {
         <Route path="all-orders" element={<AllOrders />} />
         <Route path="history" element={<OrderHistory />} />
         <Route path="setting" element={<OrderSettings />} />
+        <Route path="setting/edit" element={<EditProfile />} />
         <Route path="sent-requests" element={<SentRequests />} />
         <Route path="news" element={<News />} />
         <Route path="news/:id" element={<NewsDetails />} />

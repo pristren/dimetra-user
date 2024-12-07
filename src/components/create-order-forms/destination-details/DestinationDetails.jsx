@@ -47,8 +47,6 @@ const DestinationDetails = ({
       return_date,
     } = {},
   } = createOrderData;
-  const [changeInputPickUp, setChangeInputPickUp] = useState("");
-  const [changeInputDropOff, setChangeInputDropOff] = useState("");
 
   const checkTrueFalse = useMemo(
     () =>
@@ -70,25 +68,12 @@ const DestinationDetails = ({
         ...prevState,
         destinationDetailsData: {
           ...prevState.destinationDetailsData,
-          pick_up_name: prevState.destinationDetailsData?.pick_up_name
-            ? prevState.destinationDetailsData.pick_up_name
-            : `${userInfo?.first_name} ${userInfo?.last_name}`,
-          pick_up_address: prevState.destinationDetailsData?.pick_up_address
-            ? prevState.destinationDetailsData.pick_up_address
-            : userInfo?.address,
-          pick_up_postal_code: prevState.destinationDetailsData
-            ?.pick_up_postal_code
-            ? prevState.destinationDetailsData.pick_up_postal_code
-            : userInfo?.code,
-          pick_up_city: prevState.destinationDetailsData?.pick_up_city
-            ? prevState.destinationDetailsData.pick_up_city
-            : userInfo?.billing_address,
-          pick_up_country: prevState.destinationDetailsData?.pick_up_country
-            ? prevState.destinationDetailsData.pick_up_country
-            : userInfo?.place,
-          pickup_phone: prevState.destinationDetailsData?.pickup_phone
-            ? prevState.destinationDetailsData.pickup_phone
-            : userInfo?.phone,
+          pick_up_name: `${userInfo?.first_name} ${userInfo?.last_name}`,
+          pick_up_address: userInfo?.address,
+          pick_up_postal_code: userInfo?.code,
+          pick_up_city: userInfo?.billing_address,
+          pick_up_country: userInfo?.place,
+          pickup_phone: userInfo?.phone,
         },
       }));
     }
@@ -378,7 +363,10 @@ const DestinationDetails = ({
                               setCreateOrderData
                             )
                           }
-                          userInfo={userInfo}
+                          selectedPlace={
+                            createOrderData?.destinationDetailsData
+                              ?.pick_up_address
+                          }
                         />
                       </FormControl>
                       <FormMessage />
@@ -697,6 +685,10 @@ const DestinationDetails = ({
                               addressValue,
                               setCreateOrderData
                             )
+                          }
+                          selectedPlace={
+                            createOrderData?.destinationDetailsData
+                              ?.drop_off_address
                           }
                         />
                       </FormControl>

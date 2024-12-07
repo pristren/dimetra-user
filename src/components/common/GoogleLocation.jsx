@@ -1,90 +1,62 @@
-/* eslint-disable react/prop-types */
-import { useState } from "react";
-import axios from "axios";
-import useDebounce from "@/hooks/useDebounce";
-import Select from "react-select";
+import React, { useState, useEffect, useRef } from "react";
+import { useMapsLibrary } from "@vis.gl/react-google-maps";
+import { useTranslation } from "react-i18next";
+import { Input } from "@/components/ui/input";
+import { forEach } from "lodash";
 
-const GoogleLocation = ({ onPlaceSelect, userInfo }) => {
-  const [query, setQuery] = useState({
-    label: userInfo?.address,
-    value: userInfo?.address,
-  });
-  const [places, setPlaces] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+const GoogleLocationInput = ({ onPlaceSelect, selectedPlace }) => {
+  const { t } = useTranslation();
+  const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
+  const inputRef = useRef(null);
+  const places = useMapsLibrary("places"); // Use Google Maps Places library
+  const [changeInput, setChangeInput] = useState("");
 
-  const debouncedSearch = useDebounce(async (query) => {
-    setLoading(true);
-    setError(null);
-
-    if (query.trim() === "") {
-      setPlaces([]);
-      setLoading(false);
-      return;
+  useEffect(() => {
+    if (selectedPlace) {
+      setChangeInput(selectedPlace);
     }
+  }, [selectedPlace]);
 
-    try {
-      const response = await axios.get("/search/google-location", {
-        params: { query },
-      });
+  useEffect(() => {
+    if (!places || !inputRef.current) return;
 
-      if (response.data.length === 0) {
-        setError("No places found for this search.");
-        setPlaces([]);
-      } else {
-        setPlaces(
-          response.data.map((place) => ({
-            label: place.description,
-            value: place.place_id,
-            key: place,
-          }))
-        );
-      }
-    } catch (err) {
-      console.error("Error fetching places:", err);
-      setError("Failed to fetch places. Please try again later.");
-      setPlaces([]);
-    } finally {
-      setLoading(false);
-    }
-  }, 500);
-
-  const handleQueryChange = (newQuery) => {
-    debouncedSearch(newQuery);
-  };
-
-  const handleSelectPlace = (selectedOption) => {
-    setQuery(selectedOption);
-
-    const placeDetails = {
-      description: selectedOption.key.description,
-      place_id: selectedOption.key.place_id,
-      terms: selectedOption.key.terms,
-      types: selectedOption.key.types,
+    const options = {
+      fields: ["geometry", "name", "formatted_address", "address_components"], // Include address_components
     };
 
-    onPlaceSelect(placeDetails);
-    setPlaces([]);
-    setLoading(false);
-  };
+    setPlaceAutocomplete(new places.Autocomplete(inputRef.current, options));
+  }, [places]);
+
+  useEffect(() => {
+    if (!placeAutocomplete) return;
+
+    placeAutocomplete.addListener("place_changed", () => {
+      const place = placeAutocomplete.getPlace();
+      const addressComponents = place.address_components;
+      let country = null;
+      let city = null;
+      let postalCode = null;
+
+      forEach(addressComponents, (component) => {
+        if (component.types.includes("country")) country = component.long_name;
+        if (component.types.includes("locality")) city = component.long_name;
+        if (component.types.includes("postal_code"))
+          postalCode = component.long_name;
+      });
+      setChangeInput(place?.formatted_address);
+      // Call the onPlaceSelect callback with the place and country
+      onPlaceSelect({ ...place, country, city, postalCode });
+    });
+  }, [onPlaceSelect, placeAutocomplete]);
 
   return (
-    <div>
-      <Select
-        className="basic-single"
-        classNamePrefix="select"
-        value={query}
-        onInputChange={handleQueryChange}
-        onChange={handleSelectPlace}
-        isLoading={loading}
-        isClearable
-        placeholder="Search for a place"
-        options={places}
-      />
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-    </div>
+    <Input
+      ref={inputRef}
+      placeholder={t("Choose your location")}
+      value={changeInput}
+      onChange={(e) => setChangeInput(e.target.value)}
+    />
   );
 };
 
-export default GoogleLocation;
+export default GoogleLocationInput;
