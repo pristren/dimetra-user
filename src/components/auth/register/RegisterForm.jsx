@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { z } from "zod";
-import axios from "axios";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -9,8 +8,6 @@ import AppUserDetails from "@/components/common/AppUserDetails";
 import { registerAnUser } from "../apis/register";
 import { useNavigate } from "react-router-dom";
 import { uploadFile } from "@/utils";
-import AppModal from "@/components/common/AppModal";
-import { TickMarkImage } from "@/assets/icons";
 import toast from "react-hot-toast";
 import { t } from "i18next";
 
@@ -51,7 +48,7 @@ const RegisterForm = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,14 +64,14 @@ const RegisterForm = () => {
       password: "",
       confirmPassword: "",
       city: "",
-      geo_location: {}
+      geo_location: {},
     },
   });
   const onSubmit = async (data) => {
     setLoading(true);
-    const getValue = form.getValues()
+    const getValue = form.getValues();
     const { confirmPassword, ...submitData } = getValue;
-    console.log(submitData);
+
     try {
       // Upload the file and register the user
       const profile_image = await uploadFile(selectedFile);
@@ -82,7 +79,6 @@ const RegisterForm = () => {
         ...submitData,
         profile_image: profile_image || "",
       }).then((res) => {
-        console.log(res);
         // when email will work uncomment below code
         navigate(`/verify-email-sent?token=${res.data.token}`);
         // toast.success("Registration successful.Please login to continue!");
@@ -95,11 +91,6 @@ const RegisterForm = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    navigate("/login");
   };
 
   return (
