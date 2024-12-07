@@ -1,127 +1,29 @@
 import { Human, PhoneCall, Security } from "@/assets/icons";
 import AppDialog from "@/components/common/AppDialog";
-import AppUserDetails from "@/components/common/AppUserDetails";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { useForm } from "react-hook-form";
 import PasswordChangeForm from "./PasswordChangeForm";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useInitializeUser from "@/hooks/useInitializeUser";
-import { UPDATE_AN_USER } from "./graphql/mutations/updateAnUser.gql";
 import { useMutation } from "@apollo/client";
-import {
-  setProfileImageLoaded,
-  setUserInfo,
-} from "@/redux/slices/user/userSlice";
+import { setProfileImageLoaded } from "@/redux/slices/user/userSlice";
 import { UPDATE_AN_USER_PASSWORD } from "./graphql/mutations/updateUserPassword.gql";
 import toast from "react-hot-toast";
-import { uploadFile } from "@/utils";
 import { t } from "i18next";
+import { Link } from "react-router-dom";
 
 const OrderSettings = () => {
   const { userInfo, profileImageLoaded } = useSelector((state) => state.user);
-
   const { getAnUser } = useInitializeUser();
 
   useEffect(() => {
     getAnUser();
   }, []);
 
-  const form = useForm({
-    defaultValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone: "",
-      address: "",
-      billing_address: "",
-      code: "",
-      place: "",
-      internal_cost_center: "",
-      profile_image: "",
-    },
-    values: {
-      first_name: userInfo?.first_name,
-      last_name: userInfo?.last_name,
-      email: userInfo?.email,
-      phone: userInfo?.phone,
-      address: userInfo?.address,
-      billing_address: userInfo?.billing_address,
-      code: userInfo?.code,
-      place: userInfo?.place,
-      internal_cost_center: userInfo?.internal_cost_center,
-      profile_image: userInfo?.profile_image || "",
-    },
-    mode: "onSubmit",
-  });
   const dispatch = useDispatch();
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [passwordChangeLoading, setPasswordChangeLoading] = useState(false);
-  const [editModalOpen, setEditModalOpen] = useState(false);
   const [appDialougeOpen, setAppDialougeOpen] = useState(false);
 
-  const [updateAnUser] = useMutation(UPDATE_AN_USER);
   const [updateUserPassword] = useMutation(UPDATE_AN_USER_PASSWORD);
-  const onSubmitUserDetails = async (value) => {
-    if (
-      !value.first_name ||
-      !value.last_name ||
-      !value.email ||
-      !value.phone ||
-      !value.address ||
-      !value.code
-    ) {
-      toast.error("Fill up the required fields");
-      return;
-    }
-
-    setLoading(true);
-    const profile_image =
-      (await uploadFile(selectedFile)) || userInfo?.profile_image;
-
-    await updateAnUser({
-      variables: {
-        inputData: {
-          ...value,
-          profile_image: profile_image || "",
-        },
-      },
-    })
-      .then(({ data }) => {
-        if (data) {
-          dispatch(setUserInfo(data.updateAnUser));
-          setEditModalOpen(false);
-          toast.success(t("profile_updated_successfully"), {
-            icon: "🔒",
-          });
-        }
-      })
-      .catch((error) => {
-        toast.error(error.message || t("profile_update_error"));
-      })
-      .finally(() => {
-        setLoading(false);
-        if (selectedFile) {
-          dispatch(setProfileImageLoaded(false));
-          const query = document.getElementsByClassName(
-            "profile_image_class_to_hide"
-          );
-          query?.length > 0 &&
-            [...query].forEach((query) => {
-              query.classList.add("hidden");
-            });
-        }
-
-        setSelectedFile(null);
-      });
-  };
 
   const onSubmitPasswordChange = async (data) => {
     const { new_password, current_password } = data;
@@ -209,23 +111,12 @@ const OrderSettings = () => {
               </div>
             </div>
           </div>
-          <Dialog open={editModalOpen} onOpenChange={setEditModalOpen}>
-            <DialogTrigger className="bg-gray-100 hover:bg-gray-200 shadow-xl rounded-full py-2 px-5 text-blue-500 hidden lg:block">
-              {t("edit")}
-            </DialogTrigger>
-            <DialogContent className="w-[90%] max-w-3xl">
-              <DialogHeader>
-                <DialogTitle>{t("edit_profile")}</DialogTitle>
-                <AppUserDetails
-                  form={form}
-                  onSubmit={onSubmitUserDetails}
-                  selectedFile={selectedFile}
-                  setSelectedFile={setSelectedFile}
-                  loading={loading}
-                />
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <Link
+            to={"/orders/setting/edit"}
+            className="bg-gray-100 hover:bg-gray-200 shadow-xl rounded-full py-2 px-5 text-blue-500 hidden lg:block"
+          >
+            {t("edit")}
+          </Link>
         </div>
         <div className="mt-10 lg:mt-20">
           <div className="flex justify-between lg:justify-start items-center gap-5 lg:gap-20 border-b border-gray-300 mb-5 pb-5 px-5">

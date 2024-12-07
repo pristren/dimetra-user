@@ -1,19 +1,15 @@
-/* eslint-disable react/prop-types */
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useMapsLibrary } from "@vis.gl/react-google-maps";
 import { useTranslation } from "react-i18next";
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
+import { forEach } from "lodash";
 
-const GoogleLocation = ({
-  onPlaceSelect,
-  selectedPlace,
-  setChangeInput,
-  changeInput,
-}) => {
+const GoogleLocationInput = ({ onPlaceSelect, selectedPlace }) => {
   const { t } = useTranslation();
   const [placeAutocomplete, setPlaceAutocomplete] = useState(null);
   const inputRef = useRef(null);
   const places = useMapsLibrary("places"); // Use Google Maps Places library
+  const [changeInput, setChangeInput] = useState("");
 
   useEffect(() => {
     if (selectedPlace) {
@@ -36,37 +32,31 @@ const GoogleLocation = ({
 
     placeAutocomplete.addListener("place_changed", () => {
       const place = placeAutocomplete.getPlace();
+      const addressComponents = place.address_components;
+      let country = null;
+      let city = null;
+      let postalCode = null;
 
-      const getAddressComponent = (type) =>
-        place.address_components.find((component) =>
-          component.types.includes(type)
-        )?.long_name || null;
-
-      const street = getAddressComponent("route");
-      const postalCode = getAddressComponent("postal_code");
-      const area =
-        getAddressComponent("sublocality") || getAddressComponent("locality");
-      const city = getAddressComponent("administrative_area_level_1");
-      const country = getAddressComponent("country");
-      
+      forEach(addressComponents, (component) => {
+        if (component.types.includes("country")) country = component.long_name;
+        if (component.types.includes("locality")) city = component.long_name;
+        if (component.types.includes("postal_code"))
+          postalCode = component.long_name;
+      });
       setChangeInput(place?.formatted_address);
-
-      onPlaceSelect({ ...place, country, postalCode, street, area, city });
+      // Call the onPlaceSelect callback with the place and country
+      onPlaceSelect({ ...place, country, city, postalCode });
     });
   }, [onPlaceSelect, placeAutocomplete]);
-
-  const handleChange = (e) => {
-    setChangeInput(e.target.value);
-  };
 
   return (
     <Input
       ref={inputRef}
       placeholder={t("Choose your location")}
       value={changeInput}
-      onChange={handleChange}
+      onChange={(e) => setChangeInput(e.target.value)}
     />
   );
 };
 
-export default GoogleLocation;
+export default GoogleLocationInput;

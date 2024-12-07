@@ -47,8 +47,6 @@ const DestinationDetails = ({
       return_date,
     } = {},
   } = createOrderData;
-  const [changeInputPickUp, setChangeInputPickUp] = useState("");
-  const [changeInputDropOff, setChangeInputDropOff] = useState("");
 
   const checkTrueFalse = useMemo(
     () =>
@@ -160,9 +158,7 @@ const DestinationDetails = ({
   const initialDropOffDate = parseTimeString(
     createOrderData?.destinationDetailsData?.drop_off_pick_up_time
   );
-  const initialAppointmentTime = parseTimeString(
-    createOrderData?.destinationDetailsData?.pickup_appointment_time
-  );
+
   const { getInputProps: getDropOffInputProps } = useTimescape({
     date: initialDropOffDate,
     onChangeDate: (nextDate) => {
@@ -371,8 +367,6 @@ const DestinationDetails = ({
                             createOrderData?.destinationDetailsData
                               ?.pick_up_address
                           }
-                          setChangeInput={setChangeInputPickUp}
-                          changeInput={changeInputPickUp}
                         />
                       </FormControl>
                       <FormMessage />
@@ -696,8 +690,6 @@ const DestinationDetails = ({
                             createOrderData?.destinationDetailsData
                               ?.drop_off_address
                           }
-                          setChangeInput={setChangeInputDropOff}
-                          changeInput={changeInputDropOff}
                         />
                       </FormControl>
                       <FormMessage />

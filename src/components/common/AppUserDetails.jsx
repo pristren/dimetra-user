@@ -31,9 +31,10 @@ const AppUserDetails = ({
   selectedFile,
   setSelectedFile,
   loading,
+  userInfo = {},
+  isFromEdit = false,
 }) => {
   const [hover, setHover] = useState(false);
-  const [changeInput, setChangeInput] = useState("");
 
   const handleFileInputChange = (event) => {
     setSelectedFile(event.target.files[0]);
@@ -53,9 +54,9 @@ const AppUserDetails = ({
   return (
     <CardContent
       className={cn(
-        `lg:px-10 max-h-[90vh] overflow-y-auto hide-scrollbar ${
-          !isRegister && "pb-0"
-        }`,
+        `lg:px-10 ${
+          !isFromEdit ? "max-h-[90vh] overflow-y-auto hide-scrollbar" : ""
+        } ${!isRegister && "pb-0"}`,
         customClass
       )}
     >
@@ -205,7 +206,7 @@ const AppUserDetails = ({
             <FormField
               control={form.control}
               name="address"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>
                     {t("address")} <sup className="text-[13px]">*</sup>
@@ -213,9 +214,7 @@ const AppUserDetails = ({
                   <FormControl>
                     <GoogleLocation
                       onPlaceSelect={handleLocationChangeForPickup}
-                      selectedPlace={form.getValues("address")}
-                      setChangeInput={setChangeInput}
-                      changeInput={changeInput}
+                      selectedPlace={userInfo?.address}
                     />
                   </FormControl>
                   <FormMessage />
@@ -225,18 +224,18 @@ const AppUserDetails = ({
             <FormField
               control={form.control}
               name="billing_address"
-              render={({ field }) => (
+              render={() => (
                 <FormItem>
                   <FormLabel>{t("billing_address")}</FormLabel>
                   <FormControl>
-                    <Input
-                      className={
-                        form.formState.errors.billing_address
-                          ? "border-red-500"
-                          : ""
-                      }
-                      placeholder="456 Elm St"
-                      {...field}
+                    <GoogleLocation
+                      onPlaceSelect={(locationData) => {
+                        form.setValue(
+                          "billing_address",
+                          locationData.formatted_address || ""
+                        );
+                      }}
+                      selectedPlace={userInfo?.billing_address}
                     />
                   </FormControl>
                   <FormMessage />
