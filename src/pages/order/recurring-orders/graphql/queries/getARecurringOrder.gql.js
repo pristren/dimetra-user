@@ -30,14 +30,14 @@ export const GET_A_RECURRING_ORDER = gql`
         name
         surname
         date_of_birth
-        area_room
         cost_center
         how_much
-        which        
+        which
         isolation
         patient_above_90kg
       }
       destinationDetailsData {
+        area_room
         pick_up_name
         pick_up_address
         pick_up_city
