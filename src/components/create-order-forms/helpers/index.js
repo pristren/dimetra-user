@@ -3,6 +3,7 @@ export const transportOptions = [
   { value: "investigation_trip", label: "investigation_trip" },
   { value: "private_trips", label: "private_trips" },
   { value: "relocation", label: "relocation" },
+  { value: "collection_order", label: "collection_order" },
   { value: "recurring", label: "recurring" },
 ];
 
@@ -123,7 +124,7 @@ export const createOrderDefaultState = {
   destinationDetailsData: {
     pick_up_name: "",
     pick_up_address: "",
-    pick_up_postal_code: '',
+    pick_up_postal_code: "",
     pick_up_city: "",
     pick_up_country: "",
     pickup_phone: "",
