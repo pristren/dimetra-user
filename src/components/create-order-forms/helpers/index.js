@@ -18,7 +18,7 @@ export const transportWithOptions = [
   { value: "none_of_that", label: "none_of_that" },
   { value: "infusion", label: "infusion" },
   { value: "infusomat", label: "infusomat" },
-  { value: "accompanying_reason", label: "accompanying_reason" },
+  { value: "accompanying_person", label: "accompanying_person" },
   { value: "oxygen_quantity", label: "oxygen_liters_per_min" },
   { value: "second_transport_helper", label: "second_transport_helper" },
   { value: "carrying_chair", label: "carrying_chair" },

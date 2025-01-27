@@ -34,7 +34,7 @@
   "none_of_that": "None of That",
   "infusion": "Infusion",
   "infusomat": "Infusomat",
-  "accompanying_reason": "Accompanying Reason",
+  "accompanying_person": "Accompanying Person",
   "oxygen_liters_per_min": "Oxygen (Liters/Min)",
   "monday": "Monday",
   "tuesday": "Tuesday",
@@ -378,5 +378,5 @@
   "ends_in": "Ends in",
   "weekdays": "Weekdays",
   "returns_time": "Return Time",
-  "regester_terms_and_condition":"I accept the <a target='_blank' className='text-primary hover:underline' href='/terms-and-conditions'>terms and conditions</a> and <a target='_blank' className='text-primary hover:underline' href='/privacy-policy'>privacy policy</a>"
+  "regester_terms_and_condition": "I accept the <a target='_blank' className='text-primary hover:underline' href='/terms-and-conditions'>terms and conditions</a> and <a target='_blank' className='text-primary hover:underline' href='/privacy-policy'>privacy policy</a>"
 }
